@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import AppProvider from './AppProvider';
+import { SnackbarProvider } from "notistack";
 
 // Get the element to prepend our app to. This could be any element on a specific website or even just `document.body`.
 const viewport = document.getElementById('viewport');
@@ -17,5 +19,25 @@ app.id = 'root';
 if (viewport) viewport.prepend(app);
 
 // Render the <App /> component.
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.render(
+    <React.StrictMode>
+        <SnackbarProvider maxSnack={4}
+            disableWindowBlurListener
+            autoHideDuration={5000}
+            iconVariant={{
+                success: '⚔️',
+                error: '✖️',
+                warning: '⚠️',
+                info: 'ℹ️',
+            }}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}>
+            <AppProvider >
+                <App />
+            </AppProvider>
+        </SnackbarProvider>
+    </React.StrictMode>,
+    document.getElementById('root')
+); registerServiceWorker();

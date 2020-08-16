@@ -1,12 +1,28 @@
 {
   "manifest_version": 2,
-  "name": "React Content Script",
-  "version": "0.1",
+  "name": "Facet.ninja",
+  "version": "0.0.1",
+  "description": "Facet.ninja | Deploy - Learn - Adapt",
+  "icons": {
+    "512": "facet_ninja_logo.png"
+  },
+  "browser_action": {
+    "default_icon": "facet_ninja_logo.png",
+    "default_popup": "index.html"
+  },
+  "content_security_policy": "script-src 'self' 'sha256-B+Qe/KNUDtGDd/m1g5ycAq1DgpLs9ubKmYTlOHBogC8='; object-src 'self'",
   "content_scripts": [
     {
-      "matches": ["https://www.google.com/"],
-      "css": ["/static/css/main.css"],
-      "js": ["/static/js/main.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "/static/css/main.css"
+      ],
+      "js": [
+        "/static/js/main.js",
+        "/highlighter.js"
+      ]
     }
   ]
 }
