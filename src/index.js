@@ -21,23 +21,25 @@ if (viewport) viewport.prepend(app);
 // Render the <App /> component.
 ReactDOM.render(
     <React.StrictMode>
-        <SnackbarProvider maxSnack={4}
-            disableWindowBlurListener
-            autoHideDuration={5000}
-            iconVariant={{
-                success: '⚔️',
-                error: '✖️',
-                warning: '⚠️',
-                info: 'ℹ️',
-            }}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}>
-            <AppProvider >
-                <App />
-            </AppProvider>
-        </SnackbarProvider>
+        <div id='facet-sidebar'>
+            <SnackbarProvider maxSnack={4}
+                disableWindowBlurListener
+                autoHideDuration={5000}
+                iconVariant={{
+                    success: '⚔️',
+                    error: '✖️',
+                    warning: '⚠️',
+                    info: 'ℹ️',
+                }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}>
+                <AppProvider >
+                    <App />
+                </AppProvider>
+            </SnackbarProvider>
+        </div>
     </React.StrictMode>,
     document.getElementById('root')
 ); registerServiceWorker();

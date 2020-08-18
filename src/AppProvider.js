@@ -9,13 +9,18 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [isAddingFacet, setIsAddingFacet] = useState(false);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
     const [disabledFacets, setDisabledFacets] = useState([]);
-    const [url, setUrl] = useState('www.google.com');
-
+    const [showSideBar, setShowSideBar] = useState(true);
     // const [shouldDisplay, setShouldDisplay] = useState(false);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     // String "Key", Array Values
+    // TODO depracate this to use addedFacets
+    // SAFE to delete / replace bu addedFacets
     const [addedElements, setAddedElements] = useState(new Map());
 
+    window.facetNinjaObject = {
+        setAddedFacets
+    };
+    console.log('addedElements',addedElements, addedFacets);
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
             enqueueSnackbar(`Please choose a unique name for your Facet.`, { variant: "error" });
@@ -33,7 +38,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         isAddingFacet, setIsAddingFacet, newlyAddedFacet,
         setNewlyAddedFacet, addedElements, setAddedElements,
         canDeleteElement, setCanDeleteElement, disabledFacets,
-        setDisabledFacets, url, setUrl
+        setDisabledFacets, showSideBar, setShowSideBar
     }}>
         {children}
     </AppContext.Provider>

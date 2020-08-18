@@ -12,6 +12,8 @@ console.log('@highlighter');
 //     }
 // });
 
+window.highlightMode = false;
+
 var onMouseEnterHandle = function (event) {
     event.target.style.border = '1px solid black';
     event.target.style.cursor = "pointer";
@@ -22,9 +24,10 @@ var onMouseLeaveHandle = function (event) {
 }
 
 var onMouseClickHandle = function (event) {
+    console.log('mode', window.highlightMode);
     console.log('@CLICK', event.target.id);
-    event.preventDefault();
-    event.stopPropagation();
+    // event.preventDefault();
+    // event.stopPropagation();
     if (!event.target.id) return;
     window.selectedDOM = event.target.id;
     window.postMessage(event.target.id, "*");
@@ -33,13 +36,28 @@ var onMouseClickHandle = function (event) {
 
 try {
     console.log('RUNNING SCRIPT @LOAD');
+    //moving #root into body
+
+    // $("body").prepend($("#root"))
     // var iframe = document.getElementById("fixed-container");
     var innerDoc = document;
-    innerDoc.querySelectorAll('*').forEach(e => {
-        e.addEventListener("mouseenter", onMouseEnterHandle, false);
-        e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-        e.addEventListener("click", onMouseClickHandle, false);
-    });
+    // var body = innerDoc.body;
+    // var root = innerDoc.getElementById('root');
+    // body.prepend(root);
+    let count = 0;
+
+    [...document.querySelectorAll('*')].
+        filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
+            console.log('kappa!')
+            e.addEventListener("click", onMouseClickHandle, false);
+            e.addEventListener("mouseenter", onMouseEnterHandle, false);
+            e.addEventListener("mouseleave", onMouseLeaveHandle, false);
+        });
+    // document.querySelectorAll('#viewport *').forEach(e => {
+    // e.addEventListener("click", onMouseClickHandle, false);
+    // count += 1;
+    // });
+    console.log('count!', count);
 } catch (e) {
     console.log('@CATCH', e)
 }

@@ -23,7 +23,7 @@ export default function NestedGrid() {
         return (
             <React.Fragment>
                 <Grid item xs={2}>
-                    <ComplexGrid></ComplexGrid>
+                    {/* <ComplexGrid></ComplexGrid> */}
                     <GmailTreeView />
                 </Grid>
             </React.Fragment>
