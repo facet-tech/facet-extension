@@ -46,7 +46,7 @@ try {
     // body.prepend(root);
     let count = 0;
 
-    [...document.querySelectorAll('*')].
+    [...document.querySelectorAll('body * > :not(#root)')].
         filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
             console.log('kappa!')
             e.addEventListener("click", onMouseClickHandle, false);
