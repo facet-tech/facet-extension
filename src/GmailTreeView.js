@@ -6,7 +6,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import BasicTextField from './BasicTextField';
 import AppContext from './AppContext';
-import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import StyledTreeItem from './StyledTreeItem';
 
@@ -19,7 +18,6 @@ const useStyles = makeStyles({
 });
 
 export default function GmailTreeView() {
-    const { enqueueSnackbar } = useSnackbar();
     const { isAddingFacet, addedFacets, setAddedElements, newlyAddedFacet, setNewlyAddedFacet,
         addedElements, setCanDeleteElement } = useContext(AppContext);
 
@@ -41,7 +39,6 @@ export default function GmailTreeView() {
             return <StyledTreeItem
                 onClick={() => {
                     deleteItem(facetLabel, element);
-                    enqueueSnackbar(`Selected "${element}"!`, { variant: "success" });
                 }}
                 facetLabel={facetLabel}
                 elementLabel={element}
@@ -64,19 +61,17 @@ export default function GmailTreeView() {
 
     const addingFacetInput = <BasicTextField />;
     const allKeys = addedElements.keys();
-    console.log("@RENDER gmailtreeview:", addedElements);
     return (
         <TreeView
             key='FacetTreeView'
-            // defaultSelected={['Facets']}
             expanded={['Facets', ...allKeys]}
             selected={[newlyAddedFacet]}
             className={classes.root}
             defaultCollapseIcon={<ArrowDropDownIcon />}
             defaultExpandIcon={<ArrowRightIcon />}
-            defaultEndIcon={<div style={{ width: 24 }} />}
         >
-            <StyledTreeItem hasPlusBtn nodeId="Facets" labelText="Facets" labelIcon={MailIcon} >{isAddingFacet ? addingFacetInput : null}
+            <StyledTreeItem hasPlusBtn nodeId="Facets" labelText="Facets"
+                labelIcon={MailIcon} >{isAddingFacet ? addingFacetInput : null}
                 {addedFacetsStyledTreeItems}
             </StyledTreeItem>
         </TreeView>

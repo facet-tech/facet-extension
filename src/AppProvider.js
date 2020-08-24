@@ -5,22 +5,25 @@ import { useSnackbar } from 'notistack';
 const AppProvider = ({ children, hiddenElementsArray }) => {
 
     const { enqueueSnackbar } = useSnackbar();
+    const [isEnabled, setIsEnabled] = useState(false);
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [isAddingFacet, setIsAddingFacet] = useState(false);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
     const [disabledFacets, setDisabledFacets] = useState([]);
     const [showSideBar, setShowSideBar] = useState(true);
-    // const [shouldDisplay, setShouldDisplay] = useState(false);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     // String "Key", Array Values
     // TODO depracate this to use addedFacets
     // SAFE to delete / replace bu addedFacets
     const [addedElements, setAddedElements] = useState(new Map());
 
+    window.facetProvider = {
+        isEnabled, setIsEnabled
+    }
+
     window.facetNinjaObject = {
         setAddedFacets
     };
-    console.log('addedElements',addedElements, addedFacets);
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
             enqueueSnackbar(`Please choose a unique name for your Facet.`, { variant: "error" });
@@ -38,7 +41,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         isAddingFacet, setIsAddingFacet, newlyAddedFacet,
         setNewlyAddedFacet, addedElements, setAddedElements,
         canDeleteElement, setCanDeleteElement, disabledFacets,
-        setDisabledFacets, showSideBar, setShowSideBar
+        setDisabledFacets, showSideBar, setShowSideBar,
+        isEnabled, setIsEnabled
     }}>
         {children}
     </AppContext.Provider>

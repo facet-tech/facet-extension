@@ -5,12 +5,13 @@ import FacetButton from './FacetButton';
 import AppContext from './AppContext';
 
 function App() {
-  const { showSideBar } = useContext(AppContext);
+  const { showSideBar, isEnabled } = useContext(AppContext);
   return (
-    <div>
-      <FacetButton></FacetButton>
-      {showSideBar ? <NestedGrid /> : <FacetButton />}
-    </div >
+    true ?
+      <div>
+        <FacetButton></FacetButton>
+        {/* {showSideBar ? <NestedGrid /> : <FacetButton />} */}
+      </div > : null
   );
 }
 

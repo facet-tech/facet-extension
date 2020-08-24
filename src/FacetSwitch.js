@@ -8,12 +8,9 @@ import AppContext from './AppContext';
 
 const StyledDiv = styled.div`
     width: 15rem;
-`
-// window.facetProvider = {
-//     isEnabled, setIsEnabled
-// }
+`;
 
-function Popup() {
+function FacetSwitch() {
     // const { isEnabled, setIsEnabled } = useContext(AppContext);
     // console.log('CHECKE2!!', isEnabled);
 
@@ -25,10 +22,6 @@ function Popup() {
         // setIsEnabled(!isEnabled);
         window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
         setIsEnabled(!isEnabled);
-        chrome.browserAction.onClicked.addListener(function (tab) {
-            console.log('HEYY', tab);
-            chrome.tabs.sendMessage(tab.id, { ldawdw: 'ela malaka' });
-        });
     };
 
     return (
