@@ -3,14 +3,23 @@ import './App.css';
 import NestedGrid from './NestedGrid';
 import FacetButton from './FacetButton';
 import AppContext from './AppContext';
+import { updateEvents } from './highlighter';
 
 function App() {
-  const { showSideBar } = useContext(AppContext);
+  const { showSideBar, isEnabled } = useContext(AppContext);
+  // updateEvents();
+  if (showSideBar) {
+    updateEvents(true);
+  } else {
+    updateEvents();
+  }
+
   return (
-    <div>
-      <FacetButton></FacetButton>
-      {showSideBar ? <NestedGrid /> : <FacetButton />}
-    </div >
+    true ?
+      <div>
+        <FacetButton></FacetButton>
+        {/* {showSideBar ? <NestedGrid /> : <FacetButton />} */}
+      </div > : null
   );
 }
 

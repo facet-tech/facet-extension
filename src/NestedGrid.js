@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import GmailTreeView from './GmailTreeView';
+import TreeView from './TreeView';
 import ImageAvatar from './ImageAvatar';
 import ComplexGrid from './ComplexGrid';
 
@@ -23,7 +24,6 @@ export default function NestedGrid() {
         return (
             <React.Fragment>
                 <Grid item xs={2}>
-                    {/* <ComplexGrid></ComplexGrid> */}
                     <GmailTreeView />
                 </Grid>
             </React.Fragment>
