@@ -35,6 +35,9 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         window.selectedDOM = 'main';
         setIsAddingFacet(false);
     }
+    window.addedElements = addedElements;
+    window.setAddedElements = setAddedElements;
+    console.log('hey', window.addedElements);
 
     return <AppContext.Provider value={{
         hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,
