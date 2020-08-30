@@ -13,35 +13,22 @@ var onMouseLeaveHandle = function (event) {
 var onMouseClickHandle = function (event) {
     console.log('mode', window.highlightMode);
     console.log('@CLICK', event.target.id);
+    console.log(window.setAddedElements);
+    var newMap = new Map(window.addedElements);
+    window.setAddedElements(newMap);
     // event.preventDefault();
     // event.stopPropagation();
     if (!event.target.id) return;
     window.selectedDOM = event.target.id;
     window.postMessage(event.target.id, "*");
-    // onAddElement();
 }
 
 // flag: true => add event; else remove event
 const updateEvents = (flag) => {
 
-
-    //simple vers:
-    // [...document.querySelectorAll('body * > :not(#root)')].forEach(e => {
-    //      if (flag) {
-    //             e.addEventListener("click", onMouseClickHandle, false);
-    //             e.addEventListener("mouseenter", onMouseEnterHandle, false);
-    //             e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-    //         } else {
-    //             e.removeEventListener("click", onMouseClickHandle, false);
-    //             e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-    //             e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-    //         }
-    // })
-
     [...document.querySelectorAll('body * > :not(#root)')].
         filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
-
-            console.log('kappa!')
+            console.log('kappa!');
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);
@@ -51,61 +38,8 @@ const updateEvents = (flag) => {
                 e.removeEventListener("mouseenter", onMouseEnterHandle, false);
                 e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
             }
-            // e.removeEventListener("click", onMouseClickHandle, false);
-            // e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-            // e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-
         });
-
-    // [...document.querySelectorAll('body * > :not(#root)')].
-    //     filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
-
-    //         console.log('kappa!')
-    //         if (flag) {
-    //             e.addEventListener("click", onMouseClickHandle, false);
-    //             e.addEventListener("mouseenter", onMouseEnterHandle, false);
-    //             e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-    //         } else {
-    //             e.removeEventListener("click", onMouseClickHandle, false);
-    //             e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-    //             e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-    //         }
-    //         // e.removeEventListener("click", onMouseClickHandle, false);
-    //         // e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-    //         // e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-
-    //     });
 }
 updateEvents(true);
-
-// try {
-//     console.log('RUNNING SCRIPT @LOAD');
-//     //moving #root into body
-
-//     // $("body").prepend($("#root"))
-//     // var iframe = document.getElementById("fixed-container");
-//     var innerDoc = document;
-//     // var body = innerDoc.body;
-//     // var root = innerDoc.getElementById('root');
-//     // body.prepend(root);
-//     let count = 0;
-
-//     [...document.querySelectorAll('body * > :not(#root)')].
-//         filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
-//             console.log('kappa!')
-//             e.addEventListener("click", onMouseClickHandle, false);
-//             e.addEventListener("mouseenter", onMouseEnterHandle, false);
-//             e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-
-//             // e.removeEventListener("click", onMouseClickHandle, false);
-//             // e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-//             // e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-
-//         });
-//     console.log('count!', count);
-// console.log('count!', count);
-// } catch (e) {
-//     console.log('@CATCH', e)
-// }
 
 export { updateEvents };
