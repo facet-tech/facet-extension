@@ -11,8 +11,13 @@ var onMouseLeaveHandle = function (event) {
 }
 
 var onMouseClickHandle = function (event) {
-    console.log('mode', window.highlightMode);
-    console.log('@CLICK', event.target.id);
+    //Usage:
+    var path = getDomPath(event.target);
+    var res = path.join(' > ');
+    console.log('RES', res);
+    var mmap = new Map();
+    mmap.set('Default-Facet', [res]);
+    window.setAddedElements(mmap);
     // event.preventDefault();
     // event.stopPropagation();
     if (!event.target.id) return;
@@ -21,10 +26,35 @@ var onMouseClickHandle = function (event) {
     // onAddElement();
 }
 
+function getDomPath(el) {
+    var stack = [];
+    while (el.parentNode != null) {
+        console.log(el.nodeName);
+        var sibCount = 0;
+        var sibIndex = 0;
+        for (var i = 0; i < el.parentNode.childNodes.length; i++) {
+            var sib = el.parentNode.childNodes[i];
+            if (sib.nodeName == el.nodeName) {
+                if (sib === el) {
+                    sibIndex = sibCount;
+                }
+                sibCount++;
+            }
+        }
+        if (el.hasAttribute('id') && el.id != '') {
+            stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
+        } else if (sibCount > 1) {
+            stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
+        } else {
+            stack.unshift(el.nodeName.toLowerCase());
+        }
+        el = el.parentNode;
+    }
+    return stack.slice(1); // removes the html element
+}
+
 // flag: true => add event; else remove event
 const updateEvents = (flag) => {
-
-
     //simple vers:
     // [...document.querySelectorAll('body * > :not(#root)')].forEach(e => {
     //      if (flag) {
@@ -41,7 +71,7 @@ const updateEvents = (flag) => {
     [...document.querySelectorAll('body * > :not(#root)')].
         filter(e => ![...document.querySelectorAll("#root *")].includes(e)).forEach(e => {
 
-            console.log('kappa!')
+            // console.log('kappa!')
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);

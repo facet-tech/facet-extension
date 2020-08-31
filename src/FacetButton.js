@@ -8,10 +8,16 @@ import Divider from '@material-ui/core/Divider';
 
 export default function FacetButton() {
 
+    const sideBarHanlder = () => {
+        window.highlightMode = showSideBar;
+        setShowSideBar(!showSideBar);
+    }
+
     const { showSideBar, setShowSideBar } = useContext(AppContext);
+
     return <div>
         <div className="sidenav">
-            <Button style={{ width: '20rem' }} onClick={() => { window.highlightMode = showSideBar; setShowSideBar(!showSideBar) }}>
+            <Button style={{ width: '20rem' }} onClick={() => sideBarHanlder()}>
                 <img width="10%" src={facetSrc}></img>
                 {showSideBar ? 'facet.ninja | hide' : 'facet.ninja | display'}
             </Button>
