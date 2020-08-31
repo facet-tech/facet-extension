@@ -6,7 +6,7 @@
 
 ## Installation
 
-- Fork or clone `https://github.com/bantuist/react-content-script.git`
+- Fork or clone `git@github.com:facets-io/facet-extension.git`
 - `yarn run install`
 - `yarn run build`
 - Navigate to `chrome://extensions`
