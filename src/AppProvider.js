@@ -37,7 +37,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     }
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
-    console.log('@APPPROVIDER', window.addedElements);
+    console.log('@ela', window.addedElements);
 
     return <AppContext.Provider value={{
         hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,

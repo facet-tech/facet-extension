@@ -11,14 +11,9 @@ const StyledDiv = styled.div`
 `;
 
 function FacetSwitch() {
-    // const { isEnabled, setIsEnabled } = useContext(AppContext);
-    // console.log('CHECKE2!!', isEnabled);
-
-    // console.log('isEnabled', isEnabled)
     const [isEnabled, setIsEnabled] = React.useState(true);
 
     const handleChange = () => {
-        console.log('ela man kappa?', chrome.browserAction)
         // setIsEnabled(!isEnabled);
         window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
         setIsEnabled(!isEnabled);

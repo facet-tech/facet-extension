@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
-import facetSrc from './static/images/facet_ninja_logo.png';
 import AppContext from './AppContext';
 import NestedGrid from './NestedGrid';
-// TODO add divider
-import Divider from '@material-ui/core/Divider';
+import styled from 'styled-components';
+
+const StyledBtn = styled.div`
+    display: unset;
+`;
 
 export default function FacetButton() {
 
@@ -16,9 +18,8 @@ export default function FacetButton() {
     const { showSideBar, setShowSideBar } = useContext(AppContext);
 
     return <div>
-        <div className="sidenav">
-            <Button style={{ width: '20rem' }} onClick={() => sideBarHanlder()}>
-                <img width="10%" src={facetSrc}></img>
+        <div>
+            <Button style={{ textAlign: 'left', width: '100%' }} onClick={() => sideBarHanlder()}>
                 {showSideBar ? 'facet.ninja | hide' : 'facet.ninja | display'}
             </Button>
             {showSideBar ? <NestedGrid /> : null}

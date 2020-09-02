@@ -11,25 +11,29 @@ var onMouseLeaveHandle = function (event) {
 }
 
 var onMouseClickHandle = function (event) {
-    //Usage:
+    console.log('window!', window);
+    // Usage:
     var path = getDomPath(event.target);
     var res = path.join(' > ');
     console.log('RES', res);
-    var mmap = new Map();
-    mmap.set('Default-Facet', [res]);
+    console.log('window.addedElements', window.addedElements);
+    var mmap = new Map(window.addedElements);
+    var existingVals = window.addedElements && window.addedElements.get('Default-Facet') ? window.addedElements.get('Default-Facet') : [];
+    console.log('existingVals', existingVals);
+    mmap.set('Default-Facet', [...existingVals, [path[path.length - 1]]]);
     window.setAddedElements(mmap);
-    // event.preventDefault();
-    // event.stopPropagation();
-    if (!event.target.id) return;
-    window.selectedDOM = event.target.id;
-    window.postMessage(event.target.id, "*");
+    event.preventDefault();
+    event.stopPropagation();
+    // if (!event.target.id) return;
+    // window.selectedDOM = event.target.id;
+    // window.postMessage(event.target.id, "*");
     // onAddElement();
 }
 
 function getDomPath(el) {
     var stack = [];
     while (el.parentNode != null) {
-        console.log(el.nodeName);
+        // console.log(el.nodeName);
         var sibCount = 0;
         var sibIndex = 0;
         for (var i = 0; i < el.parentNode.childNodes.length; i++) {
