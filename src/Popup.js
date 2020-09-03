@@ -21,7 +21,6 @@ function Popup() {
     const [isEnabled, setIsEnabled] = React.useState(true);
 
     const handleChange = () => {
-        console.log('ela man kappa?', chrome.browserAction)
         // setIsEnabled(!isEnabled);
         window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
         setIsEnabled(!isEnabled);

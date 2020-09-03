@@ -8,6 +8,7 @@ import AppContext from './AppContext';
 
 const StyledDiv = styled.div`
     width: 15rem;
+    color: white;
 `;
 
 function FacetSwitch() {
@@ -21,15 +22,14 @@ function FacetSwitch() {
 
     return (
         <StyledDiv>
-            <h2>Facet Mode:</h2>
             <FormGroup row>
                 <FormControlLabel
                     control={<Switch checked={isEnabled} onChange={handleChange} />}
-                    label={isEnabled ? "Turn Off" : "Turn On"}
+                    label={isEnabled ? "Navigate" : "Edit"}
                 />
             </FormGroup>
         </StyledDiv >
     );
 }
 
-export default Popup;
+export default FacetSwitch;
