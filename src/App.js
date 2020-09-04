@@ -19,7 +19,6 @@ function App() {
   return (
     <div>
       <FacetButton></FacetButton>
-      <MenuPopupState></MenuPopupState>
       {/* {showSideBar ? <NestedGrid /> : <FacetButton />} */}
     </div >
   );
