@@ -5,8 +5,7 @@ import FacetButton from './FacetButton';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import styled from 'styled-components';
-
-const StickyDiv = styled.div``
+import MenuPopupState from './MenuPopupState';
 
 function App() {
   const { showSideBar, isEnabled } = useContext(AppContext);
@@ -18,10 +17,11 @@ function App() {
   }
 
   return (
-    <StickyDiv>
+    <div>
       <FacetButton></FacetButton>
+      <MenuPopupState></MenuPopupState>
       {/* {showSideBar ? <NestedGrid /> : <FacetButton />} */}
-    </StickyDiv >
+    </div >
   );
 }
 
