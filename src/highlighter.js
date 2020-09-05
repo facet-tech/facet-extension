@@ -1,5 +1,5 @@
-console.log('@highlighter');
 window.highlightMode = false;
+let hiddenPaths = [];
 
 var onMouseEnterHandle = function (event) {
     event.target.style.border = '1px solid black';
@@ -11,23 +11,24 @@ var onMouseLeaveHandle = function (event) {
 }
 
 var onMouseClickHandle = function (event) {
-    console.log('window!', window);
     // Usage:
     var path = getDomPath(event.target);
     var res = path.join(' > ');
-    console.log('RES', res);
-    console.log('window.addedElements', window.addedElements);
+    if (hiddenPaths.includes(res)) {
+        hiddenPaths = hiddenPaths.filter(e => e !== res);
+        event.target.style.setProperty("background-color", "unset");
+        // event.target.style.backgroundColor = "unset";
+    } else {
+        event.target.style.setProperty("background-color", "red", "important");
+        // event.target.style.backgroundColor = "red";
+        hiddenPaths.push(res);
+    }
     var mmap = new Map(window.addedElements);
     var existingVals = window.addedElements && window.addedElements.get('Default-Facet') ? window.addedElements.get('Default-Facet') : [];
-    console.log('existingVals', existingVals);
     mmap.set('Default-Facet', [...existingVals, [path[path.length - 1]]]);
     window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
-    // if (!event.target.id) return;
-    // window.selectedDOM = event.target.id;
-    // window.postMessage(event.target.id, "*");
-    // onAddElement();
 }
 
 function getDomPath(el) {

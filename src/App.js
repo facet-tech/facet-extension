@@ -19,7 +19,6 @@ function App() {
   return (
     <div>
       <FacetButton></FacetButton>
-      {/* {showSideBar ? <NestedGrid /> : <FacetButton />} */}
     </div >
   );
 }
