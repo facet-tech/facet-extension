@@ -17,10 +17,10 @@ var onMouseClickHandle = function (event) {
     if (hiddenPaths.includes(res)) {
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("background-color", "unset");
-        // event.target.style.backgroundColor = "unset";
+        window.enqueueSnackbar(`Facet has been removed.`, { variant: "success" });
     } else {
         event.target.style.setProperty("background-color", "red", "important");
-        // event.target.style.backgroundColor = "red";
+        window.enqueueSnackbar(`Facethas been created!`, { variant: "success" });
         hiddenPaths.push(res);
     }
     var mmap = new Map(window.addedElements);

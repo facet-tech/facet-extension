@@ -35,9 +35,11 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         window.selectedDOM = 'main';
         setIsAddingFacet(false);
     }
+
+    // sharing stuff among content script
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
-    console.log('@ela', window.addedElements);
+    window.enqueueSnackbar = enqueueSnackbar;
 
     return <AppContext.Provider value={{
         hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,

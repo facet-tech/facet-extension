@@ -41,7 +41,7 @@ ReactDOM.render(
                     info: 'ℹ️',
                 }}
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'right',
                 }}>
                 <AppProvider >

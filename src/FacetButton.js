@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import FacetSwitch from './FacetSwitch';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 60% 20% 20%;
+    grid-template-columns: 40% 20% 20% 20%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
 `;
@@ -35,6 +36,11 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetButton() {
+    const { enqueueSnackbar } = useSnackbar();
+
+    const onSaveClick = () => {
+        enqueueSnackbar(`Hooray🙌 Configuration has been saved!`, { variant: "success" });
+    }
 
     const useStyles = makeStyles((theme) => ({
         divider: {
@@ -49,7 +55,6 @@ export default function FacetButton() {
     }
 
     const classes = useStyles();
-
     const { showSideBar, setShowSideBar } = useContext(AppContext);
 
     return <div>
@@ -63,7 +68,8 @@ export default function FacetButton() {
                 </StyledButton>
             </StyledDiv>
             <FacetSwitch></FacetSwitch>
-            <StyledButton>{'Preview'}</StyledButton>
+            <StyledButton>{'Preview 🚀'}</StyledButton>
+            <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />
     </div>
