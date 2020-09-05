@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 40% 20% 20% 20%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
 `;
@@ -39,7 +39,8 @@ export default function FacetButton() {
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = () => {
-        enqueueSnackbar(`Hooray🙌 Configuration has been saved!`, { variant: "success" });
+        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+        console.log('CHECK', window.hiddenPaths);
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -67,6 +68,7 @@ export default function FacetButton() {
                     {showSideBar ? '⚔ facet.ninja | DEACTIVATE' : '⚔ facet.ninja | ACTIVATE'}
                 </StyledButton>
             </StyledDiv>
+            <StyledButton onClick={() => onSaveClick()}>{'Reset All'}</StyledButton>
             <FacetSwitch></FacetSwitch>
             <StyledButton>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>

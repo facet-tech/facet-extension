@@ -17,10 +17,8 @@ var onMouseClickHandle = function (event) {
     if (hiddenPaths.includes(res)) {
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("background-color", "unset");
-        window.enqueueSnackbar(`Facet has been removed.`, { variant: "success" });
     } else {
         event.target.style.setProperty("background-color", "red", "important");
-        window.enqueueSnackbar(`Facethas been created!`, { variant: "success" });
         hiddenPaths.push(res);
     }
     var mmap = new Map(window.addedElements);
@@ -29,6 +27,8 @@ var onMouseClickHandle = function (event) {
     window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
+    console.log('hiddenPaths', hiddenPaths)
+    window.hiddenPaths = hiddenPaths;
 }
 
 function getDomPath(el) {

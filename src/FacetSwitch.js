@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import AppContext from './AppContext';
 
 const StyledDiv = styled.div`
-    width: 15rem;
+    width: 100%;
     color: white;
 `;
 
