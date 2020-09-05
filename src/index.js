@@ -9,7 +9,7 @@ import { SnackbarProvider } from "notistack";
 import Popup from './Popup';
 
 const displayingElement = document.getElementById('popup') ? <Popup /> : <App />;
-let displayId = document.getElementById('popup') ? 'popup' : 'root';
+let displayId = document.getElementById('popup') ? 'popup' : 'facetizer';
 console.log('displayId!', displayId)
 
 if (!document.getElementById('popup')) {
@@ -21,7 +21,7 @@ if (!document.getElementById('popup')) {
     const facetDiv = document.createElement('div');
 
     // Set the app element's id to `root`. This is the same as the element that create-react-app renders to by default so it will work on the local server too.
-    facetDiv.id = 'root';
+    facetDiv.id = 'facetizer';
 
     // Prepend the <App /> component to the viewport element if it exists. You could also use `appendChild` depending on your needs.
     if (body) body.prepend(facetDiv);

@@ -7,6 +7,7 @@ import FacetSwitch from './FacetSwitch';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
+import $ from 'jquery';
 
 const GridDiv = styled.div`
     display: grid;
@@ -38,9 +39,29 @@ const StyledButton = withStyles({
 export default function FacetButton() {
     const { enqueueSnackbar } = useSnackbar();
 
-    const onSaveClick = () => {
+    const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-        console.log('CHECK', window.hiddenPaths);
+
+        const payload = {
+            "site": "mene9", "facet": [{
+                "name": "myfacet", "enabled": "false", "id": window.hiddenPaths
+            }]
+        };
+        const url = "https://drdsebmbv2.execute-api.us-west-2.amazonaws.com/live/facet/mene9";
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(payload) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    const reset = () => {
+        window.hiddenPaths.forEach(element => {
+            const domElement = $(element)[0];
+            console.log('HEY', domElement);
+            domElement.style.setProperty("background-color", "unset");
+        });
+        window.hiddenPaths = [];
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -53,6 +74,9 @@ export default function FacetButton() {
     const sideBarHanlder = () => {
         window.highlightMode = showSideBar;
         setShowSideBar(!showSideBar);
+        if (!showSideBar) {
+            // TODO removeEventListeners
+        }
     }
 
     const classes = useStyles();
@@ -68,7 +92,7 @@ export default function FacetButton() {
                     {showSideBar ? '⚔ facet.ninja | DEACTIVATE' : '⚔ facet.ninja | ACTIVATE'}
                 </StyledButton>
             </StyledDiv>
-            <StyledButton onClick={() => onSaveClick()}>{'Reset All'}</StyledButton>
+            <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <FacetSwitch></FacetSwitch>
             <StyledButton>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
