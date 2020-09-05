@@ -34,7 +34,6 @@ var onMouseClickHandle = function (event) {
 function getDomPath(el) {
     var stack = [];
     while (el.parentNode != null) {
-        // console.log(el.nodeName);
         var sibCount = 0;
         var sibIndex = 0;
         for (var i = 0; i < el.parentNode.childNodes.length; i++) {
