@@ -1,6 +1,6 @@
 /*global chrome*/
 import React, { Component, useContext } from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import styled from 'styled-components';
@@ -22,12 +22,19 @@ function FacetSwitch() {
 
     return (
         <StyledDiv>
-            <FormGroup row>
+            <Grid
+                style={{ height: '100%' }}
+                container
+                justify="center"
+                container>
                 <FormControlLabel
-                    control={<Switch checked={isEnabled} onChange={handleChange} />}
+                    control={
+                        <Switch
+                            checked={isEnabled}
+                            onChange={handleChange} />}
                     label={isEnabled ? "Navigate" : "Edit"}
                 />
-            </FormGroup>
+            </Grid>
         </StyledDiv >
     );
 }

@@ -39,6 +39,10 @@ const StyledButton = withStyles({
 export default function FacetButton() {
     const { enqueueSnackbar } = useSnackbar();
 
+    const onPreviewClick = () => {
+        enqueueSnackbar(`👷‍♂️⚒ Feature coming soon! 👷‍♂️⚒`, { variant: "info" });
+    }
+
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
 
@@ -94,7 +98,7 @@ export default function FacetButton() {
             </StyledDiv>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <FacetSwitch></FacetSwitch>
-            <StyledButton>{'Preview 🚀'}</StyledButton>
+            <StyledButton onClick={() => { onPreviewClick() }}>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />
