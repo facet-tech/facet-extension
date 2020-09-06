@@ -28,7 +28,6 @@ var onMouseClickHandle = function (event) {
     window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
-    console.log('hiddenPaths', hiddenPaths)
     window.hiddenPaths = hiddenPaths;
 }
 
@@ -59,10 +58,8 @@ function getDomPath(el) {
 }
 
 const updateEvents = (flag) => {
-    console.log('@UPDATE EVENTS', flag);
     [...document.querySelectorAll('body * > :not(#facetizer)')].
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
-            console.log('eee', e)
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);
