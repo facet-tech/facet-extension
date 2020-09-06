@@ -10,7 +10,6 @@ import Popup from './Popup';
 
 const displayingElement = document.getElementById('popup') ? <Popup /> : <App />;
 let displayId = document.getElementById('popup') ? 'popup' : 'facetizer';
-console.log('displayId!', displayId)
 
 if (!document.getElementById('popup')) {
 
@@ -35,7 +34,7 @@ ReactDOM.render(
                 disableWindowBlurListener
                 autoHideDuration={5000}
                 iconVariant={{
-                    success: '⚔️',
+                    success: '🐱‍👤',
                     error: '✖️',
                     warning: '⚠️',
                     info: 'ℹ️',

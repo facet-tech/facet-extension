@@ -1,17 +1,28 @@
-# How to Inject a React app into a Chrome Extension as a content script
+# Facetizer Chrome extension
 
-![screenshot](/screenshot.png)
+Control your release 🚀 lifecycle and embrace trunk based development with 🐱‍👤 facet.ninja 🐱‍👤
 
 ## [Read the tutorial on Medium](https://medium.com/@yosevu/how-to-inject-a-react-app-into-a-chrome-extension-as-a-content-script-3a038f611067)
 
 ## Installation
 
-- Fork or clone `git@github.com:facets-io/facet-extension.git`
-- `yarn run install`
-- `yarn run build`
-- Navigate to `chrome://extensions`
-- Check the _Developer mode_ checkbox
-- Click _Load unpacked extension..._
-- Find and select the `build` folder
-- Navigate to `https://www.google.com` 
+-   Fork or clone `git@github.com:facets-io/facet-extension.git`
+-   `yarn run install`
+-   `yarn run build`
+-   Navigate to `chrome://extensions`
+-   Check the _Developer mode_ checkbox
+-   Click _Load unpacked extension..._
+-   Find and select the `build` folder
+-   Navigate to your website (e.g.,: `https://www.google.com`)
+-   Select the elements which you want to display and/or hide.
+-   Click Save
+-   Inject script into your server (`require(facet.ninja)`)
+-   Deploy and see results in production
 
+## Tutorials:
+
+https://www.youtube.com/watch?v=E85GKyn-PNA&feature=youtu.be
+
+## Demo:
+
+// TODO (coming soon)

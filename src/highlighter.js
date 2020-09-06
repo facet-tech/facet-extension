@@ -74,4 +74,11 @@ const updateEvents = (flag) => {
 }
 updateEvents(true);
 
+const pushDown = () => {
+    [...document.querySelectorAll('body * > :not(#facetizer)')].
+        filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
+            console.log('ELEME', e);
+        });
+}
+
 export { updateEvents };
