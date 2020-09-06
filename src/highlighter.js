@@ -7,7 +7,7 @@ var onMouseEnterHandle = function (event) {
 };
 
 var onMouseLeaveHandle = function (event) {
-    event.target.style.border = "none";
+    event.target.style.setProperty("border", "unset");
     event.target.style.setProperty("cursor", "unset");
 }
 

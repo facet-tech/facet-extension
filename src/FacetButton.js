@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import AppContext from './AppContext';
-import NestedGrid from './NestedGrid';
 import styled from 'styled-components';
 import FacetSwitch from './FacetSwitch';
 import Divider from '@material-ui/core/Divider';
