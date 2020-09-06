@@ -58,10 +58,10 @@ export default function FacetButton() {
     const reset = () => {
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
-            console.log('HEY', domElement);
             domElement.style.setProperty("background-color", "unset");
         });
         window.hiddenPaths = [];
+        enqueueSnackbar(`Reset all facets.`, { variant: "success" });
     }
 
     const useStyles = makeStyles((theme) => ({

@@ -8,6 +8,7 @@ var onMouseEnterHandle = function (event) {
 
 var onMouseLeaveHandle = function (event) {
     event.target.style.border = "none";
+    event.target.style.setProperty("cursor", "unset");
 }
 
 var onMouseClickHandle = function (event) {
@@ -58,9 +59,10 @@ function getDomPath(el) {
 }
 
 const updateEvents = (flag) => {
+    console.log('@UPDATE EVENTS', flag);
     [...document.querySelectorAll('body * > :not(#facetizer)')].
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
-
+            console.log('eee', e)
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);
@@ -68,6 +70,7 @@ const updateEvents = (flag) => {
             } else {
                 e.removeEventListener("click", onMouseClickHandle, false);
                 e.removeEventListener("mouseenter", onMouseEnterHandle, false);
+                e.style.cursor = "cursor";
                 e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
             }
         });
