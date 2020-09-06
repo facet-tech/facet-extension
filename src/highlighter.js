@@ -74,11 +74,17 @@ const updateEvents = (flag) => {
 }
 updateEvents(true);
 
-const pushDown = () => {
+const pushDownFixedElement = () => {
     [...document.querySelectorAll('body * > :not(#facetizer)')].
-        filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
-            console.log('ELEME', e);
+        filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
+            // console.log('ELEME', element);
+            if (element.style.position === 'fixed' || getComputedStyle(element).position === 'fixed') {
+                console.log('MPIKA', element);
+                // element.style.top = '45px';
+                element.style.setProperty("top", "45px");
+                element.style.setProperty("position", "absolute");
+            }
         });
 }
 
-export { updateEvents };
+export { updateEvents, pushDownFixedElement };

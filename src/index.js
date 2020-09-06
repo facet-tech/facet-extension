@@ -43,7 +43,7 @@ ReactDOM.render(
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <AppProvider >
+                <AppProvider>
                     {displayingElement}
                 </AppProvider>
             </SnackbarProvider>

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
-
     const { enqueueSnackbar } = useSnackbar();
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [isEnabled, setIsEnabled] = useState(false);
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [isAddingFacet, setIsAddingFacet] = useState(false);
@@ -24,6 +24,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.facetNinjaObject = {
         setAddedFacets
     };
+    
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
             enqueueSnackbar(`Please choose a unique name for your Facet.`, { variant: "error" });
@@ -48,7 +49,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setNewlyAddedFacet, addedElements, setAddedElements,
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,
-        isEnabled, setIsEnabled
+        isEnabled, setIsEnabled, shouldDisplayFacetizer,
+        setShouldDisplayFacetizer
     }}>
         {children}
     </AppContext.Provider>
