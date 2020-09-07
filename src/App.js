@@ -11,9 +11,8 @@ function App() {
   const handleUserKeyPress = useCallback(event => {
     if (event.ctrlKey) {
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
-      // setUserText(prevUserText => `${prevUserText}${key}`);
     }
-  }, []);
+  }, [shouldDisplayFacetizer, setShouldDisplayFacetizer]);
 
   useEffect(() => {
     pushDownFixedElement();
