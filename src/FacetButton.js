@@ -46,11 +46,12 @@ export default function FacetButton() {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
 
         const payload = {
-            "site": atob(window.location.href), "facet": [{
+            "site": window.btoa(window.location.href), "facet": [{
                 "name": "myfacet", "enabled": "false", "id": window.hiddenPaths
             }]
         };
-        const url = `https://api.facet.ninja/facet/${atob(window.location.href)}`;
+        // console.log('atob', window.btoa(window.location.href))
+        const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(payload) // body data type must match "Content-Type" header

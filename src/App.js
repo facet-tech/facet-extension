@@ -6,17 +6,6 @@ import { updateEvents, pushDownFixedElement } from './highlighter';
 
 function App() {
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(AppContext);
-  // TODO improve later on
-  // function keyDownTextField(e) {
-  //   if (e.ctrlKey) {
-  //     // alert("You hit the control key.");
-  //     console.log('alternating...', shouldDisplayFacetizer);
-  //     setShouldDisplayFacetizer(!shouldDisplayFacetizer);
-  //   }
-  // }
-  // useEffect(() => {
-  //   document.addEventListener("keydown", keyDownTextField, false);
-  // }, []);
 
   // TODO https://stackoverflow.com/a/55566585/1373465
   const handleUserKeyPress = useCallback(event => {
@@ -27,6 +16,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    pushDownFixedElement();
     window.addEventListener('keydown', handleUserKeyPress);
     return () => {
       window.removeEventListener('keydown', handleUserKeyPress);

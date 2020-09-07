@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 
@@ -24,7 +24,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.facetNinjaObject = {
         setAddedFacets
     };
-    
+
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
             enqueueSnackbar(`Please choose a unique name for your Facet.`, { variant: "error" });
