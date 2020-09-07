@@ -17,14 +17,6 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     // SAFE to delete / replace bu addedFacets
     const [addedElements, setAddedElements] = useState(new Map());
 
-    window.facetProvider = {
-        isEnabled, setIsEnabled
-    }
-
-    window.facetNinjaObject = {
-        setAddedFacets
-    };
-
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
             enqueueSnackbar(`Please choose a unique name for your Facet.`, { variant: "error" });

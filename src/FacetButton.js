@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
+import { computeWithoutFacetizer } from './highlighter';
 
 const GridDiv = styled.div`
     display: grid;
@@ -42,15 +43,28 @@ export default function FacetButton() {
         enqueueSnackbar(`👷‍♂️⚒ Feature coming soon! 👷‍♂️⚒`, { variant: "info" });
     }
 
+    const parsePath = (payload) => {
+        console.log('RECEIVED', payload);
+        var newPayload = [];
+        for (var i = 0; i < payload.length; i++) {
+            var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
+            var split1 = payload[i].split('>');
+            split1[1] = secondParthWithoutFacetizer;
+            newPayload.push(split1.join('>'));
+        }
+        console.log('newPayload CHECK', newPayload);
+        return newPayload;
+    }
+
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-
+        const parsedPath = parsePath(window.hiddenPaths);
         const payload = {
             "site": window.btoa(window.location.href), "facet": [{
-                "name": "myfacet", "enabled": "false", "id": window.hiddenPaths
+                "name": "myfacet", "enabled": "false", "id": parsedPath
             }]
         };
-        // console.log('atob', window.btoa(window.location.href))
+        console.log('window.hiddenPaths', window.hiddenPaths);
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',

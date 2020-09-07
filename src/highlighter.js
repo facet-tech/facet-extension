@@ -13,8 +13,8 @@ var onMouseLeaveHandle = function (event) {
 
 var onMouseClickHandle = function (event) {
     // Usage:
-    var path = getDomPath(event.target);
-    var res = path.join(' > ');
+    var res = getDomPath(event.target);
+    console.log('FINAL!', res);
     if (hiddenPaths.includes(res)) {
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("background-color", "unset");
@@ -24,7 +24,7 @@ var onMouseClickHandle = function (event) {
     }
     var mmap = new Map(window.addedElements);
     var existingVals = window.addedElements && window.addedElements.get('Default-Facet') ? window.addedElements.get('Default-Facet') : [];
-    mmap.set('Default-Facet', [...existingVals, [path[path.length - 1]]]);
+    // mmap.set('Default-Facet', [...existingVals, [path[path.length - 1]]]);
     window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
@@ -54,7 +54,42 @@ function getDomPath(el) {
         }
         el = el.parentNode;
     }
-    return stack.slice(1); // removes the html element
+    var res = stack.slice(1).join(' > '); // removes the html element
+    // var secondParthWithoutFacetizer = computeWithoutFacetizer(res);
+    // var split1 = res.split('>');
+    // split1[1] = secondParthWithoutFacetizer;
+    // return split1.join('>')
+    return res;
+}
+
+var computeWithoutFacetizer = (res) => {
+    var splitStr = res.split('>');
+    if (splitStr.length < 2) {
+        return res;
+    }
+    var secondPathSplit = splitStr[1].split(':eq');
+    console.log('secondPathSplit', secondPathSplit)
+    if (secondPathSplit.length < 2) {
+        return res;
+    }
+    var mStr = secondPathSplit[1].trim();
+    console.log('MSTR', mStr);
+    var newRes = ':eq';
+    let rightNumber;
+    for (let i = 0; i < mStr.length; i++) {
+        if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
+            newRes += mStr.charAt(i);
+        } else {
+            // console.log('EHE', mStr.charAt(i));
+            let seeme = parseInt(mStr.charAt(i) - 1);
+            rightNumber = seeme;
+            console.log('SEEME?', seeme)
+            newRes += seeme;
+        }
+    }
+    let wanted = `${secondPathSplit[0].trim()}:eq(${rightNumber})`;
+    console.log('WANTED', wanted);
+    return wanted;
 }
 
 const updateEvents = (flag) => {
@@ -87,4 +122,4 @@ const pushDownFixedElement = () => {
         });
 }
 
-export { updateEvents, pushDownFixedElement };
+export { updateEvents, pushDownFixedElement, computeWithoutFacetizer };
