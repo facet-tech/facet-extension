@@ -44,7 +44,6 @@ export default function FacetButton() {
     }
 
     const parsePath = (payload) => {
-        console.log('RECEIVED', payload);
         var newPayload = [];
         for (var i = 0; i < payload.length; i++) {
             var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
@@ -52,13 +51,14 @@ export default function FacetButton() {
             split1[1] = secondParthWithoutFacetizer;
             newPayload.push(split1.join('>'));
         }
-        console.log('newPayload CHECK', newPayload);
         return newPayload;
     }
 
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-        const parsedPath = parsePath(window.hiddenPaths);
+        // TODO fix this is buggy
+        // const parsedPath = parsePath(window.hiddenPaths);
+        const parsedPath = window.hiddenPaths;
         const payload = {
             "site": window.btoa(window.location.href), "facet": [{
                 "name": "myfacet", "enabled": "false", "id": parsedPath

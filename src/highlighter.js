@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 window.highlightMode = false;
 let hiddenPaths = [];
 
@@ -14,7 +16,6 @@ var onMouseLeaveHandle = function (event) {
 var onMouseClickHandle = function (event) {
     // Usage:
     var res = getDomPath(event.target);
-    console.log('FINAL!', res);
     if (hiddenPaths.includes(res)) {
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("background-color", "unset");
@@ -23,8 +24,6 @@ var onMouseClickHandle = function (event) {
         hiddenPaths.push(res);
     }
     var mmap = new Map(window.addedElements);
-    var existingVals = window.addedElements && window.addedElements.get('Default-Facet') ? window.addedElements.get('Default-Facet') : [];
-    // mmap.set('Default-Facet', [...existingVals, [path[path.length - 1]]]);
     window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
@@ -83,7 +82,6 @@ var computeWithoutFacetizer = (res) => {
             // console.log('EHE', mStr.charAt(i));
             let seeme = parseInt(mStr.charAt(i) - 1);
             rightNumber = seeme;
-            console.log('SEEME?', seeme)
             newRes += seeme;
         }
     }
@@ -92,7 +90,33 @@ var computeWithoutFacetizer = (res) => {
     return wanted;
 }
 
-const updateEvents = (flag) => {
+const fetchFacets = async () => {
+    // HTTP CALL
+    const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
+    const response = await fetch(url, {
+        method: 'GET',
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+}
+
+const updateEvents = async (flag) => {
+    const facets = await fetchFacets();
+    let facetsArr = [];
+    facets && facets.facet.forEach(f => {
+        console.log('f', f)
+        f.id.forEach(ff => {
+            console.log('wdaddwaf', ff)
+            $(ff).css('background-color', 'red');
+            console.log(ff)
+            facetsArr.push(ff)
+        })
+    })
+    // var mmap = new Map(facetsArr);
+    // window.setAddedElements(mmap);
+    console.log('FACETS', facets);
+    // preload
+
+
     [...document.querySelectorAll('body * > :not(#facetizer)')].
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
             if (flag) {
@@ -114,7 +138,6 @@ const pushDownFixedElement = () => {
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
             // console.log('ELEME', element);
             if (element.style.position === 'fixed' || getComputedStyle(element).position === 'fixed') {
-                console.log('MPIKA', element);
                 // element.style.top = '45px';
                 element.style.setProperty("top", "45px");
                 element.style.setProperty("position", "absolute");
