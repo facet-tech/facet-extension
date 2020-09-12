@@ -8,9 +8,6 @@ import AppProvider from './AppProvider';
 import { SnackbarProvider } from "notistack";
 import Popup from './Popup';
 
-const displayingElement = document.getElementById('popup') ? <Popup /> : <App />;
-let displayId = document.getElementById('popup') ? 'popup' : 'facetizer';
-
 if (!document.getElementById('popup')) {
 
     // Get the element to prepend our app to. This could be any element on a specific website or even just `document.body`.
@@ -44,12 +41,12 @@ ReactDOM.render(
                     horizontal: 'right',
                 }}>
                 <AppProvider>
-                    {displayingElement}
+                    <App />
                 </AppProvider>
             </SnackbarProvider>
         </div>
     </React.StrictMode>,
-    document.getElementById(displayId)
+    document.getElementById('facetizer')
 );
 
 

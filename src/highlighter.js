@@ -84,12 +84,11 @@ var computeWithoutFacetizer = (res) => {
 }
 
 const fetchFacets = async () => {
-    // HTTP CALL
     const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
     const response = await fetch(url, {
         method: 'GET',
     });
-    return response.json(); // parses JSON response into native JavaScript objects
+    return response.json();
 }
 
 const updateEvents = async (flag) => {
@@ -101,10 +100,8 @@ const updateEvents = async (flag) => {
             facetsArr.push(ff);
         })
     })
-    // window.setAddedElements(new Map());
     window.hiddenPaths = [...facetsArr];
     // preload
-
 
     [...document.querySelectorAll('body * > :not(#facetizer)')].
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {

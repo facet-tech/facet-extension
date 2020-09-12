@@ -57,14 +57,12 @@ export default function FacetButton() {
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         // TODO fix this is buggy
-        // const parsedPath = parsePath(window.hiddenPaths);
         const parsedPath = window.hiddenPaths;
         const payload = {
             "site": window.btoa(window.location.href), "facet": [{
                 "name": "myfacet", "enabled": "false", "id": parsedPath
             }]
         };
-        console.log('window.hiddenPaths', window.hiddenPaths);
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
