@@ -33,8 +33,6 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
     window.enqueueSnackbar = enqueueSnackbar;
-    // window.hiddenPaths = [];
-
     return <AppContext.Provider value={{
         hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,
         isAddingFacet, setIsAddingFacet, newlyAddedFacet,

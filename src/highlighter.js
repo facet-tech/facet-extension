@@ -16,18 +16,15 @@ var onMouseLeaveHandle = function (event) {
 var onMouseClickHandle = function (event) {
     // Usage:
     var res = getDomPath(event.target);
-    if (hiddenPaths.includes(res)) {
-        hiddenPaths = hiddenPaths.filter(e => e !== res);
+    if (window.hiddenPaths.includes(res)) {
+        window.hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("background-color", "unset");
     } else {
         event.target.style.setProperty("background-color", "red", "important");
-        hiddenPaths.push(res);
+        window.hiddenPaths.push(res);
     }
-    var mmap = new Map(window.addedElements);
-    window.setAddedElements(mmap);
     event.preventDefault();
     event.stopPropagation();
-    window.hiddenPaths = hiddenPaths;
 }
 
 function getDomPath(el) {
@@ -67,26 +64,22 @@ var computeWithoutFacetizer = (res) => {
         return res;
     }
     var secondPathSplit = splitStr[1].split(':eq');
-    console.log('secondPathSplit', secondPathSplit)
     if (secondPathSplit.length < 2) {
         return res;
     }
     var mStr = secondPathSplit[1].trim();
-    console.log('MSTR', mStr);
     var newRes = ':eq';
     let rightNumber;
     for (let i = 0; i < mStr.length; i++) {
         if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
             newRes += mStr.charAt(i);
         } else {
-            // console.log('EHE', mStr.charAt(i));
             let seeme = parseInt(mStr.charAt(i) - 1);
             rightNumber = seeme;
             newRes += seeme;
         }
     }
     let wanted = `${secondPathSplit[0].trim()}:eq(${rightNumber})`;
-    console.log('WANTED', wanted);
     return wanted;
 }
 
@@ -103,17 +96,13 @@ const updateEvents = async (flag) => {
     const facets = await fetchFacets();
     let facetsArr = [];
     facets && facets.facet.forEach(f => {
-        console.log('f', f)
-        f.id.forEach(ff => {
-            console.log('wdaddwaf', ff)
+        f && f.id && f.id.forEach(ff => {
             $(ff).css('background-color', 'red');
-            console.log(ff)
-            facetsArr.push(ff)
+            facetsArr.push(ff);
         })
     })
-    // var mmap = new Map(facetsArr);
-    // window.setAddedElements(mmap);
-    console.log('FACETS', facets);
+    // window.setAddedElements(new Map());
+    window.hiddenPaths = [...facetsArr];
     // preload
 
 
@@ -136,9 +125,7 @@ updateEvents(true);
 const pushDownFixedElement = () => {
     [...document.querySelectorAll('body * > :not(#facetizer)')].
         filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
-            // console.log('ELEME', element);
             if (element.style.position === 'fixed' || getComputedStyle(element).position === 'fixed') {
-                // element.style.top = '45px';
                 element.style.setProperty("top", "45px");
                 element.style.setProperty("position", "absolute");
             }
