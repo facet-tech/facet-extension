@@ -1,5 +1,5 @@
 import $ from 'jquery';
-
+console.log('@HIGHLIGHTER');
 window.highlightMode = false;
 let hiddenPaths = [];
 
@@ -51,10 +51,6 @@ function getDomPath(el) {
         el = el.parentNode;
     }
     var res = stack.slice(1).join(' > '); // removes the html element
-    // var secondParthWithoutFacetizer = computeWithoutFacetizer(res);
-    // var split1 = res.split('>');
-    // split1[1] = secondParthWithoutFacetizer;
-    // return split1.join('>')
     return res;
 }
 
@@ -101,10 +97,8 @@ const updateEvents = async (flag) => {
         })
     })
     window.hiddenPaths = [...facetsArr];
-    // preload
-
-    [...document.querySelectorAll('body * > :not(#facetizer)')].
-        filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(e => {
+    [...document.querySelectorAll('body * > :not(#facetizer) :not(#popup)')].
+        filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);

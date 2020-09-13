@@ -31,7 +31,7 @@ if (!document.getElementById('popup')) {
 }
 
 if (document.getElementById('facetizer')) {
-
+    console.log('@loaded facetizer');
     ReactDOM.render(
         <React.StrictMode>
             <div id='facet-sidebar'>
@@ -60,6 +60,7 @@ if (document.getElementById('facetizer')) {
 
 
 if (document.getElementById('popup')) {
+    console.log('@loaded popup');
     ReactDOM.render(
         <React.StrictMode>
             <Auth0Provider
