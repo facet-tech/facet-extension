@@ -7,13 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 import AppProvider from './AppProvider';
 import { SnackbarProvider } from "notistack";
 import Popup from './popup/Popup';
-import { Auth0Provider } from '@auth0/auth0-react';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
+import PopupProvider from './popup/PopupProvider'
 
 if (!document.getElementById('popup')) {
 
@@ -63,15 +57,11 @@ if (document.getElementById('popup')) {
     console.log('@loaded popup');
     ReactDOM.render(
         <React.StrictMode>
-            <Auth0Provider
-                domain="dev-rp2pqit4.auth0.com"
-                clientId="mwufYehukQrNlt6URsO5sR8k9JExgfP1"
-                redirectUri="http://localhost:3000/callback"
-            >
+            <PopupProvider>
                 <div id='popup-container'>
                     <Popup />
                 </div>
-            </Auth0Provider>
+            </PopupProvider>
         </React.StrictMode>,
         document.getElementById('popup')
     );
