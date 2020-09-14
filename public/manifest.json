@@ -17,5 +17,13 @@
             "css": ["/static/css/main.css"],
             "js": ["/static/js/main.js"]
         }
-    ]
+    ],
+    "oauth2": {
+        "client_id": "499854537033-lacte4gvfvi5hbehl7bg8js3agmqpnhp.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+        ]
+    },
+    "permissions": ["identity", "https://accounts.google.com/"]
 }
