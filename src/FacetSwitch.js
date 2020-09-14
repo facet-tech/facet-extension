@@ -10,11 +10,11 @@ const StyledDiv = styled.div`
     color: white;
 `;
 
-function FacetSwitch() {
+function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit' }) {
     const [isEnabled, setIsEnabled] = React.useState(true);
 
     const handleChange = () => {
-        window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
+        // window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
         setIsEnabled(!isEnabled);
     };
 
@@ -31,7 +31,7 @@ function FacetSwitch() {
                             checked={isEnabled}
                             onChange={handleChange} />
                     }
-                    label={isEnabled ? "Navigate" : "Edit"}
+                    label={isEnabled ? labelOn : labelOff}
                 />
             </Grid>
         </StyledDiv >
