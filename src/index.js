@@ -6,7 +6,8 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import AppProvider from './AppProvider';
 import { SnackbarProvider } from "notistack";
-import Popup from './Popup';
+import Popup from './popup/Popup';
+import PopupProvider from './popup/PopupProvider'
 
 if (!document.getElementById('popup')) {
 
@@ -23,32 +24,45 @@ if (!document.getElementById('popup')) {
     if (body) body.prepend(facetDiv);
 }
 
-// Render the <App /> component.
-ReactDOM.render(
-    <React.StrictMode>
-        <div id='facet-sidebar'>
-            <SnackbarProvider maxSnack={4}
-                disableWindowBlurListener
-                autoHideDuration={5000}
-                iconVariant={{
-                    success: '🐱‍👤',
-                    error: '✖️',
-                    warning: '⚠️',
-                    info: 'ℹ️',
-                }}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
-                <AppProvider>
-                    <App />
-                </AppProvider>
-            </SnackbarProvider>
-        </div>
-    </React.StrictMode>,
-    document.getElementById('facetizer')
-);
+if (document.getElementById('facetizer')) {
+    ReactDOM.render(
+        <React.StrictMode>
+            <div id='facet-sidebar'>
+                <SnackbarProvider maxSnack={4}
+                    disableWindowBlurListener
+                    autoHideDuration={5000}
+                    iconVariant={{
+                        success: '🐱‍👤',
+                        error: '✖️',
+                        warning: '⚠️',
+                        info: 'ℹ️',
+                    }}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}>
+                    <AppProvider>
+                        <App />
+                    </AppProvider>
+                </SnackbarProvider>
+            </div>
+        </React.StrictMode>,
+        document.getElementById('facetizer')
+    );
+}
 
 
+if (document.getElementById('popup')) {
+    ReactDOM.render(
+        <React.StrictMode>
+            <PopupProvider>
+                <div id='popup-container'>
+                    <Popup />
+                </div>
+            </PopupProvider>
+        </React.StrictMode>,
+        document.getElementById('popup')
+    );
+}
 
 registerServiceWorker();
