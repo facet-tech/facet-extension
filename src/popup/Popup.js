@@ -21,9 +21,13 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { loggedInUser, setLoggedInUser } = useContext(PopupContext);
-
     const login = () => {
-        chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) { });
+        chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+            console.log('produced token', token);
+        });
+    }
+
+    const logout = () => {
     }
 
     // loggedInUser, setLoggedInUser
@@ -31,19 +35,20 @@ export default () => {
         const getProfile = () => {
             // getProfileUserInfo
             chrome && chrome.identity && chrome.identity.getProfileUserInfo(undefined, function (rr) {
+                console.log('IN USERPROFILEINFO', rr);
                 setLoggedInUser(rr);
             });
         }
         getProfile();
     }, []);
 
-    // loggedInUser && loggedInUser.email
-    const element = true ?
+    // 
+    const element = loggedInUser && loggedInUser.email ?
         <div>
             <Typography variant="h6" gutterBottom>
                 {'email:'} {loggedInUser.email}
             </Typography>
-            < GridDiv >
+            <GridDiv>
                 <div>
                     <Typography variant="h6" gutterBottom>
                         {'Facetize: '}
@@ -52,7 +57,8 @@ export default () => {
                 <div>
                     <FacetSwitch labelOn='On' labelOff='Off' />
                 </div>
-            </GridDiv >
+            </GridDiv>
+            <Button style={{ width: '100%' }} variant="contained" color="secondary" onClick={() => logout()}>Logout</Button>
         </div> : <Button variant="contained" color="secondary" onClick={() => login()}>
             Login </Button>;
     return <StyledDiv>

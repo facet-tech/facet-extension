@@ -13,14 +13,28 @@
     "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "css": ["/static/css/main.css"],
-            "js": ["/static/js/main.js"]
+            "matches": [
+                "<all_urls>"
+            ],
+            "css": [
+                "/static/css/main.css"
+            ],
+            "js": [
+                "/static/js/main.js"
+            ]
         }
     ],
     "oauth2": {
-        "client_id": "499854537033-lacte4gvfvi5hbehl7bg8js3agmqpnhp.apps.googleusercontent.com",
-        "scopes": ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"]
+        "client_id": "499854537033-htjn2is1b7o0iu0r5bi8rdkgmcjcb2ul.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+        ]
     },
-    "permissions": ["identity", "identity.email"]
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtpHJYcmc183uMd5SDTtcrSuF2XEc4w9TLBcdmBv+FfmizfnOKoIWjYrLIJ00+biWic7xfepjpEqi9e7coYozWrSUlQ3Nvfwe6xpBwIFkX2X5venwbmro5G1BZVGuN1FhIJ6HxKS5sN/dvPm/g7HCGTvbn5ajPdAIVi7Vujz+iJSmMVF4XWaWVXIFPERBnwssPDZ6KL2WrCfp/MXxxhIwAFLCC8kSS5FwMakjrpo1BAOAbi54c9PWuTzPpAS3DTZ5WRP3rhlJLSgbFFCDt+ai1nRRYTG9F610Hb4mnFRJhFXkGeFkOsLqioOFBpVleGCWy2SItUrGcf2RlxJtMqwR+wIDAQAB",
+    "permissions": [
+        "<all_urls>",
+        "identity",
+        "identity.email"
+    ]
 }
