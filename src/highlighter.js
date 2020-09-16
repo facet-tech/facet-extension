@@ -55,33 +55,41 @@ function getDomPath(el) {
 }
 
 var computeWithoutFacetizer = (res) => {
+    console.log('MPIKA',res);
     var splitStr = res.split('>');
-    console.log('ELAAA',splitStr.length);
-    if (splitStr.length < 2) {
-        console.log('BGIKA1')
-        return res;
-    }
     var secondPathSplit = splitStr[1].split(':eq');
-    if (secondPathSplit.length < 2) {
+    console.log('@secondPathSplit',secondPathSplit,secondPathSplit.length,'CONTAINS',splitStr[0].includes('div'));
+    if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
         console.log('BGIKA2')
-        return res;
+        return splitStr[1];
     }
-    var mStr = secondPathSplit[1].trim();
-    var newRes = ':eq';
-    let rightNumber;
-    for (let i = 0; i < mStr.length; i++) {
-        if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
-            newRes += mStr.charAt(i);
-            console.log('mpika1!', newRes);
-        } else {
-            console.log('mpika2!', newRes);
-            let seeme = parseInt(mStr.charAt(i) - 1);
-            rightNumber = seeme;
-            newRes += seeme;
-        }
-    }
-    let wanted = `${secondPathSplit[0].trim()}:eq(${rightNumber})`;
-    return wanted;
+    var regExp = /\(([^)]+)\)/;
+    var matches = regExp.exec(secondPathSplit[1]);
+
+    //matches[1] contains the value between the parentheses
+    console.log(matches[1]);
+    const currNumber = parseInt(matches[1]);
+
+    const wantedNumber = currNumber - 1;
+    const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
+    console.log('RESULT', result);
+    return result;
+    // var mStr = secondPathSplit[1].trim();
+    // var newRes = ':eq';
+    // let rightNumber;
+    // for (let i = 0; i < mStr.length; i++) {
+    //     if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
+    //         newRes += mStr.charAt(i);
+    //         console.log('mpika1!', newRes);
+    //     } else {
+    //         console.log('mpika2!', newRes);
+    //         let seeme = parseInt(mStr.charAt(i) - 1);
+    //         rightNumber = seeme;
+    //         newRes += seeme;
+    //     }
+    // }
+    // let wanted = `${secondPathSplit[0].trim()}:eq(${rightNumber})`;
+    // return wanted;
 }
 
 const fetchFacets = async () => {

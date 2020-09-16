@@ -46,11 +46,15 @@ export default function FacetButton() {
     const parsePath = (payload) => {
         var newPayload = [];
         for (var i = 0; i < payload.length; i++) {
-            var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
             var split1 = payload[i].split('>');
+            var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
+            console.log('SPLIT1',split1);
+            console.log('secondParthWithoutFacetizer',secondParthWithoutFacetizer);
             split1[1] = secondParthWithoutFacetizer;
+            console.log('PUSHING',split1);
             newPayload.push(split1.join('>'));
         }
+        console.log('NEWPAYLOAD',newPayload);
         return newPayload;
     }
 
@@ -75,7 +79,7 @@ export default function FacetButton() {
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify(payload) // body data type must match "Content-Type" header
+            body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
@@ -84,7 +88,7 @@ export default function FacetButton() {
         // console.log('@RESET', window.hiddenPaths);
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
-            if(!domElement) {
+            if (!domElement) {
                 return;
             }
             domElement.style.setProperty("background-color", "unset");

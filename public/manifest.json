@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Facet.ninja",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Facet.ninja | Deploy - Learn - Adapt",
     "icons": {
         "512": "facet_ninja_logo.png"
