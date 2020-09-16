@@ -58,11 +58,20 @@ export default function FacetButton() {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         // TODO fix this is buggy
         const parsedPath = window.hiddenPaths;
+        const withoutSpaces = window.hiddenPaths && window.hiddenPaths.map(el => el.replace(/ /g, ""))
         const payload = {
             "site": window.btoa(window.location.href), "facet": [{
-                "name": "myfacet", "enabled": "false", "id": parsedPath
+                "name": "myfacet", "enabled": "false", "id": withoutSpaces
             }]
         };
+        const rightParsedPath = parsePath(window.hiddenPaths);
+        const rightParsedPayload = {
+            "site": window.btoa(window.location.href), "facet": [{
+                "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
+            }]
+        }
+        console.log('PAYLOAD', parsedPath);
+        console.log('rightParsedPayload', rightParsedPath);
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
@@ -72,8 +81,12 @@ export default function FacetButton() {
     }
 
     const reset = () => {
+        // console.log('@RESET', window.hiddenPaths);
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
+            if(!domElement) {
+                return;
+            }
             domElement.style.setProperty("background-color", "unset");
         });
         window.hiddenPaths = [];

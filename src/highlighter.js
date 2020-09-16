@@ -56,11 +56,14 @@ function getDomPath(el) {
 
 var computeWithoutFacetizer = (res) => {
     var splitStr = res.split('>');
+    console.log('ELAAA',splitStr.length);
     if (splitStr.length < 2) {
+        console.log('BGIKA1')
         return res;
     }
     var secondPathSplit = splitStr[1].split(':eq');
     if (secondPathSplit.length < 2) {
+        console.log('BGIKA2')
         return res;
     }
     var mStr = secondPathSplit[1].trim();
@@ -69,7 +72,9 @@ var computeWithoutFacetizer = (res) => {
     for (let i = 0; i < mStr.length; i++) {
         if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
             newRes += mStr.charAt(i);
+            console.log('mpika1!', newRes);
         } else {
+            console.log('mpika2!', newRes);
             let seeme = parseInt(mStr.charAt(i) - 1);
             rightNumber = seeme;
             newRes += seeme;
@@ -97,8 +102,8 @@ const updateEvents = async (flag) => {
         })
     })
     window.hiddenPaths = [...facetsArr];
-    [...document.querySelectorAll('body * > :not(#facetizer) :not(#popup)')].
-        filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
+    [...document.querySelectorAll('body * > :not(#facetizer) :not(#popup)')]
+        .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
                 e.addEventListener("mouseenter", onMouseEnterHandle, false);
@@ -114,8 +119,8 @@ const updateEvents = async (flag) => {
 updateEvents(true);
 
 const pushDownFixedElement = () => {
-    [...document.querySelectorAll('body * > :not(#facetizer)')].
-        filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
+    [...document.querySelectorAll('body * > :not(#facetizer)')]
+        .filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
             if (element.style.position === 'fixed' || getComputedStyle(element).position === 'fixed') {
                 element.style.setProperty("top", "45px");
                 element.style.setProperty("position", "absolute");
