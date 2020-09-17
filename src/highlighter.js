@@ -1,15 +1,16 @@
 import $ from 'jquery';
-console.log('@HIGHLIGHTER');
 window.highlightMode = false;
 let hiddenPaths = [];
 
 var onMouseEnterHandle = function (event) {
-    event.target.style.border = '1px solid black';
-    event.target.style.cursor = "pointer";
+    // event.target.style.borderBottom = '1px solid black';
+    // event.target.style.cursor = "pointer";
+    event.target.style.setProperty("outline", "5px ridge #c25d29");
+    event.target.style.setProperty("cursor", "pointer");
 };
 
 var onMouseLeaveHandle = function (event) {
-    event.target.style.setProperty("border", "unset");
+    event.target.style.setProperty("outline", "unset");
     event.target.style.setProperty("cursor", "unset");
 }
 
@@ -55,41 +56,18 @@ function getDomPath(el) {
 }
 
 var computeWithoutFacetizer = (res) => {
-    console.log('MPIKA',res);
     var splitStr = res.split('>');
     var secondPathSplit = splitStr[1].split(':eq');
-    console.log('@secondPathSplit',secondPathSplit,secondPathSplit.length,'CONTAINS',splitStr[0].includes('div'));
     if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
-        console.log('BGIKA2')
         return splitStr[1];
     }
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(secondPathSplit[1]);
-
-    //matches[1] contains the value between the parentheses
-    console.log(matches[1]);
     const currNumber = parseInt(matches[1]);
-
     const wantedNumber = currNumber - 1;
     const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
-    console.log('RESULT', result);
+
     return result;
-    // var mStr = secondPathSplit[1].trim();
-    // var newRes = ':eq';
-    // let rightNumber;
-    // for (let i = 0; i < mStr.length; i++) {
-    //     if (mStr.charAt(i) === ")" || mStr.charAt(i) === "(") {
-    //         newRes += mStr.charAt(i);
-    //         console.log('mpika1!', newRes);
-    //     } else {
-    //         console.log('mpika2!', newRes);
-    //         let seeme = parseInt(mStr.charAt(i) - 1);
-    //         rightNumber = seeme;
-    //         newRes += seeme;
-    //     }
-    // }
-    // let wanted = `${secondPathSplit[0].trim()}:eq(${rightNumber})`;
-    // return wanted;
 }
 
 const fetchFacets = async () => {
@@ -126,14 +104,4 @@ const updateEvents = async (flag) => {
 }
 updateEvents(true);
 
-const pushDownFixedElement = () => {
-    [...document.querySelectorAll('body * > :not(#facetizer)')]
-        .filter(e => ![...document.querySelectorAll("#facetizer *")].includes(e)).forEach(element => {
-            if (element.style.position === 'fixed' || getComputedStyle(element).position === 'fixed') {
-                element.style.setProperty("top", "45px");
-                element.style.setProperty("position", "absolute");
-            }
-        });
-}
-
-export { updateEvents, pushDownFixedElement, computeWithoutFacetizer };
+export { updateEvents, computeWithoutFacetizer };

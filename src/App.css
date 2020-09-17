@@ -12,12 +12,3 @@
     background-color: transparent !important;
     z-index: 99999999;
 }
-
-body {
-    top: 45px !important;
-    position: absolute !important;
-    left: 0px !important;
-    right: 0px !important;
-    min-height: calc(100% - 96px) !important;
-    overflow-x: initial !important;
-}

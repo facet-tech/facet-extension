@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useCallback } from 'react';
 import './App.css';
 import FacetButton from './FacetButton';
 import AppContext from './AppContext';
-import { updateEvents, pushDownFixedElement } from './highlighter';
+import { updateEvents } from './highlighter';
 
 function App() {
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(AppContext);
@@ -15,7 +15,6 @@ function App() {
   }, [shouldDisplayFacetizer, setShouldDisplayFacetizer]);
 
   useEffect(() => {
-    pushDownFixedElement();
     window.addEventListener('keydown', handleUserKeyPress);
     return () => {
       window.removeEventListener('keydown', handleUserKeyPress);
