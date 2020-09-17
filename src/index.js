@@ -39,7 +39,7 @@ if (document.getElementById('facetizer')) {
                     }}
                     anchorOrigin={{
                         vertical: 'top',
-                        horizontal: 'right',
+                        horizontal: 'left',
                     }}>
                     <AppProvider>
                         <App />
