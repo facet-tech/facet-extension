@@ -33,6 +33,9 @@ export default () => {
     // loggedInUser, setLoggedInUser
     useEffect(() => {
         const getProfile = () => {
+            chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+                console.log('produced token', token);
+            });
             // getProfileUserInfo
             chrome && chrome.identity && chrome.identity.getProfileUserInfo(undefined, function (rr) {
                 console.log('IN USERPROFILEINFO', rr);

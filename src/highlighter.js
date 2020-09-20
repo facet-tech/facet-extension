@@ -19,9 +19,9 @@ var onMouseClickHandle = function (event) {
     var res = getDomPath(event.target);
     if (window.hiddenPaths.includes(res)) {
         window.hiddenPaths = hiddenPaths.filter(e => e !== res);
-        event.target.style.setProperty("background-color", "unset");
+        event.target.style.setProperty("opacity", "unset");
     } else {
-        event.target.style.setProperty("background-color", "red", "important");
+        event.target.style.setProperty("opacity", "0.3", "important");
         window.hiddenPaths.push(res);
     }
     event.preventDefault();
@@ -83,12 +83,12 @@ const updateEvents = async (flag) => {
     let facetsArr = [];
     facets && facets.facet.forEach(f => {
         f && f.id && f.id.forEach(ff => {
-            $(ff).css('background-color', 'red');
+            $(ff).css("opacity", "0.3", "important");
             facetsArr.push(ff);
         })
     })
     window.hiddenPaths = [...facetsArr];
-    [...document.querySelectorAll('body * > :not(#facetizer) :not(#popup)')]
+    [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
         .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
             if (flag) {
                 e.addEventListener("click", onMouseClickHandle, false);
@@ -102,6 +102,5 @@ const updateEvents = async (flag) => {
             }
         });
 }
-updateEvents(true);
 
 export { updateEvents, computeWithoutFacetizer };

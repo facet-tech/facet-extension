@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
-
+ 
 const AppProvider = ({ children, hiddenElementsArray }) => {
     const { enqueueSnackbar } = useSnackbar();
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);

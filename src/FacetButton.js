@@ -48,13 +48,9 @@ export default function FacetButton() {
         for (var i = 0; i < payload.length; i++) {
             var split1 = payload[i].split('>');
             var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
-            console.log('SPLIT1',split1);
-            console.log('secondParthWithoutFacetizer',secondParthWithoutFacetizer);
             split1[1] = secondParthWithoutFacetizer;
-            console.log('PUSHING',split1);
             newPayload.push(split1.join('>'));
         }
-        console.log('NEWPAYLOAD',newPayload);
         return newPayload;
     }
 
@@ -74,8 +70,6 @@ export default function FacetButton() {
                 "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
             }]
         }
-        console.log('PAYLOAD', parsedPath);
-        console.log('rightParsedPayload', rightParsedPath);
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
@@ -85,13 +79,12 @@ export default function FacetButton() {
     }
 
     const reset = () => {
-        // console.log('@RESET', window.hiddenPaths);
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
             if (!domElement) {
                 return;
             }
-            domElement.style.setProperty("background-color", "unset");
+            domElement.style.setProperty("opacity", "unset");
         });
         window.hiddenPaths = [];
         enqueueSnackbar(`Reset all facets.`, { variant: "success" });
