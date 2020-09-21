@@ -57,13 +57,6 @@ export default function FacetButton() {
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         // TODO fix this is buggy
-        const parsedPath = window.hiddenPaths;
-        const withoutSpaces = window.hiddenPaths && window.hiddenPaths.map(el => el.replace(/ /g, ""))
-        const payload = {
-            "site": window.btoa(window.location.href), "facet": [{
-                "name": "myfacet", "enabled": "false", "id": withoutSpaces
-            }]
-        };
         const rightParsedPath = parsePath(window.hiddenPaths);
         const rightParsedPayload = {
             "site": window.btoa(window.location.href), "facet": [{
