@@ -1,3 +1,7 @@
+## Demo:
+
+https://video.facet.ninja/vision
+
 # Facetizer Chrome extension
 
 Control your release 🚀 lifecycle and embrace trunk based development with ⚔️ facet.ninja ⚔️
@@ -25,7 +29,3 @@ Control your release 🚀 lifecycle and embrace trunk based development with ⚔
 3. Click the reload button next to the facet.ninja plugin and you are settled.
 
 ![Facetizer](./readme_assets/chrome_installation.png)
-
-## Demo:
-
-https://www.youtube.com/watch?v=E85GKyn-PNA&feature=youtu.be
