@@ -1,5 +1,5 @@
 /*global chrome*/
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -50,7 +50,6 @@ if (document.getElementById('facetizer')) {
         document.getElementById('facetizer')
     );
 }
-
 
 if (document.getElementById('popup')) {
     ReactDOM.render(

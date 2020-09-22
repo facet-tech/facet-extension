@@ -10,12 +10,13 @@ const StyledDiv = styled.div`
     color: white;
 `;
 
-function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit' }) {
+function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack }) {
     const [isEnabled, setIsEnabled] = React.useState(true);
 
-    const handleChange = () => {
-        // window.facetProvider.setIsEnabled(!window.facetProvider.isEnabled);
+    // spits out true/false depending reflecting switch state
+    const handleChange = (e) => {
         setIsEnabled(!isEnabled);
+        callBack(!isEnabled);
     };
 
     return (

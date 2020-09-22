@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
- 
+
 const AppProvider = ({ children, hiddenElementsArray }) => {
     const { enqueueSnackbar } = useSnackbar();
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
     const [isEnabled, setIsEnabled] = useState(false);
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [isAddingFacet, setIsAddingFacet] = useState(false);
@@ -12,10 +12,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [disabledFacets, setDisabledFacets] = useState([]);
     const [showSideBar, setShowSideBar] = useState(false);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
-    // String "Key", Array Values
-    // TODO depracate this to use addedFacets
-    // SAFE to delete / replace bu addedFacets
     const [addedElements, setAddedElements] = useState(new Map());
+    const [showToolbox, setShowToolbox] = useState(true);
 
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {
@@ -40,7 +38,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer
+        setShouldDisplayFacetizer, showToolbox, setShowToolbox
     }}>
         {children}
     </AppContext.Provider>

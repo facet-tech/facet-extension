@@ -36,7 +36,7 @@ const StyledButton = withStyles({
     },
 })(Button);
 
-export default function FacetButton() {
+export default function FacetToolbar() {
     const { enqueueSnackbar } = useSnackbar();
 
     const onPreviewClick = () => {
@@ -98,8 +98,12 @@ export default function FacetButton() {
         }
     }
 
+    const cb = (e) => {
+        setShouldDisplayFacetizer(e);
+    };
+
     const classes = useStyles();
-    const { showSideBar, setShowSideBar } = useContext(AppContext);
+    const { showSideBar, setShowSideBar, setShouldDisplayFacetizer } = useContext(AppContext);
 
     return <div>
         <GridDiv>
@@ -112,7 +116,7 @@ export default function FacetButton() {
                 </StyledButton>
             </StyledDiv>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
-            <FacetSwitch></FacetSwitch>
+            <FacetSwitch callBack={cb} />
             <StyledButton onClick={() => { onPreviewClick() }}>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>

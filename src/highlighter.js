@@ -3,8 +3,6 @@ window.highlightMode = false;
 let hiddenPaths = [];
 
 var onMouseEnterHandle = function (event) {
-    // event.target.style.borderBottom = '1px solid black';
-    // event.target.style.cursor = "pointer";
     event.target.style.setProperty("outline", "5px ridge #c25d29");
     event.target.style.setProperty("cursor", "pointer");
 };
@@ -15,7 +13,6 @@ var onMouseLeaveHandle = function (event) {
 }
 
 var onMouseClickHandle = function (event) {
-    // Usage:
     var res = getDomPath(event.target);
     if (window.hiddenPaths.includes(res)) {
         window.hiddenPaths = hiddenPaths.filter(e => e !== res);

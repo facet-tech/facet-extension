@@ -20,7 +20,8 @@ const StyledDiv = styled.div`
 `;
 
 export default () => {
-    const { loggedInUser, setLoggedInUser } = useContext(PopupContext);
+
+    const { loggedInUser, setLoggedInUser, setShouldDisplayFacetizer } = useContext(PopupContext);
     const login = () => {
         chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
             console.log('produced token', token);
@@ -45,7 +46,16 @@ export default () => {
         getProfile();
     }, []);
 
-    // 
+    const cb = (e) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { 'showFacetizer': e }, function (response) {
+                console.log('SENDING...', e)
+            });
+        });
+        console.log('@popupCB', e);
+        setShouldDisplayFacetizer(e);
+    }
+
     const element = loggedInUser && loggedInUser.email ?
         <div>
             <Typography variant="h6" gutterBottom>
@@ -58,7 +68,7 @@ export default () => {
                     </Typography>
                 </div>
                 <div>
-                    <FacetSwitch labelOn='On' labelOff='Off' />
+                    <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} />
                 </div>
             </GridDiv>
             <Button style={{ width: '100%' }} variant="contained" color="secondary" onClick={() => logout()}>Logout</Button>

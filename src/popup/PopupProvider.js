@@ -5,7 +5,8 @@ export default ({ children }) => {
 
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
-    return <PopupContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
+    return <PopupContext.Provider value={{ loggedInUser, setLoggedInUser, shouldDisplayFacetizer, setShouldDisplayFacetizer }}>
         {children}
     </PopupContext.Provider>
 }

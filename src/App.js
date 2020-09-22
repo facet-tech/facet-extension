@@ -1,13 +1,20 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+/*global chrome*/
+import React, { useContext, useEffect, useCallback, useState } from 'react';
 import './App.css';
-import FacetButton from './FacetButton';
+import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 
 function App() {
-  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(AppContext);
 
-  // TODO https://stackoverflow.com/a/55566585/1373465
+  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer, showToolbox } = useContext(AppContext);
+
+  chrome.runtime.onMessage.addListener(
+    function (request, sendResponse) {
+      console.log('RECIEVED', shouldDisplayFacetizer)
+      setShouldDisplayFacetizer(request.showFacetizer);
+    });
+
   const handleUserKeyPress = useCallback(event => {
     if (event.ctrlKey) {
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
@@ -21,7 +28,6 @@ function App() {
     };
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
 
-
   if (showSideBar) {
     updateEvents(true);
   } else {
@@ -30,7 +36,7 @@ function App() {
 
   return (
     <div>
-      {shouldDisplayFacetizer ? <FacetButton /> : null}
+      {shouldDisplayFacetizer ? <FacetToolbar /> : null}
     </div >
   );
 }
