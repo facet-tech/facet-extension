@@ -10,13 +10,13 @@ const StyledDiv = styled.div`
     color: white;
 `;
 
-function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', defaultValue = true, callBack }) {
-    const [isEnabled, setIsEnabled] = useState(defaultValue);
-
+function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value }) {
+    // const [isEnabled, setIsEnabled] = useState(false);
     // spits out true/false depending reflecting switch state
     const handleChange = (e) => {
-        setIsEnabled(!isEnabled);
-        callBack(!isEnabled);
+        console.log('MPIKA@HANDLE', e)
+        // setIsEnabled(!isEnabled);
+        callBack(!value);
     };
 
     return (
@@ -28,10 +28,10 @@ function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', defaultValue = t
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={isEnabled}
+                            checked={value}
                             onChange={handleChange} />
                     }
-                    label={isEnabled ? labelOn : labelOff}
+                    label={value ? labelOn : labelOff}
                 />
             </Grid>
         </StyledDiv >
