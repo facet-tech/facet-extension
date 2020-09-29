@@ -4,7 +4,6 @@ import React, { useContext, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FacetSwitch from '../FacetSwitch';
 
@@ -28,29 +27,9 @@ export default () => {
         });
     }
 
-    const logout = () => {
-    }
+    const logout = () => { }
 
-    // loggedInUser, setLoggedInUser
     useEffect(() => {
-
-        const loadLocalStorge = () => {
-            const facetKey = 'facet-settings';
-            chrome.storage.sync.get(facetKey, function (obj) {
-                console.log('oBj', obj);
-                if (!obj) {
-                    console.log('setting defaults!');
-                    // set defaults
-                    chrome.storage.sync.set({
-                        [facetKey]: {
-                            enabled: false
-                        }
-                    }, function () {
-                        console.log('Value is set.');
-                    });
-                }
-            });
-        }
 
         const getProfile = () => {
             chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
@@ -63,7 +42,6 @@ export default () => {
             });
         }
         getProfile();
-        loadLocalStorge();
     }, []);
 
     const cb = (e) => {

@@ -1,5 +1,5 @@
 /*global chrome*/
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -10,8 +10,8 @@ const StyledDiv = styled.div`
     color: white;
 `;
 
-function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack }) {
-    const [isEnabled, setIsEnabled] = React.useState(true);
+function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', defaultValue = true, callBack }) {
+    const [isEnabled, setIsEnabled] = useState(defaultValue);
 
     // spits out true/false depending reflecting switch state
     const handleChange = (e) => {
@@ -23,7 +23,6 @@ function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack }) {
         <StyledDiv>
             <Grid
                 style={{ height: '100%' }}
-                container
                 justify="center"
                 container>
                 <FormControlLabel
