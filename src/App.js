@@ -9,7 +9,7 @@ function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer, showToolbox } = useContext(AppContext);
 
-  chrome.runtime.onMessage.addListener(
+  chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     function (request, sendResponse) {
       console.log('RECIEVED', shouldDisplayFacetizer)
       setShouldDisplayFacetizer(request.showFacetizer);

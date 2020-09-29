@@ -33,6 +33,25 @@ export default () => {
 
     // loggedInUser, setLoggedInUser
     useEffect(() => {
+
+        const loadLocalStorge = () => {
+            const facetKey = 'facet-settings';
+            chrome.storage.sync.get(facetKey, function (obj) {
+                console.log('oBj', obj);
+                if (!obj) {
+                    console.log('setting defaults!');
+                    // set defaults
+                    chrome.storage.sync.set({
+                        [facetKey]: {
+                            enabled: false
+                        }
+                    }, function () {
+                        console.log('Value is set.');
+                    });
+                }
+            });
+        }
+
         const getProfile = () => {
             chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
                 console.log('produced token', token);
@@ -44,6 +63,7 @@ export default () => {
             });
         }
         getProfile();
+        loadLocalStorge();
     }, []);
 
     const cb = (e) => {
