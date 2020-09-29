@@ -6,8 +6,6 @@ https://video.facet.ninja/vision
 
 Control your release 🚀 lifecycle and embrace trunk based development with ⚔️ facet.ninja ⚔️
 
-## [Read the tutorial on Medium](https://medium.com/@yosevu/how-to-inject-a-react-app-into-a-chrome-extension-as-a-content-script-3a038f611067)
-
 ## Installation
 
 - Fork or clone `git@github.com:facets-io/facet-extension.git`
