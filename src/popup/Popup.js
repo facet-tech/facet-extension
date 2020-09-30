@@ -6,20 +6,31 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import FacetSwitch from '../FacetSwitch';
+import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-gap: .5rem;
+    grid-template-columns: 45% 45%;
+    grid-gap: 5%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const MarginTop = styled.div`
+    margin-top: 2rem;
 `;
 
 const StyledDiv = styled.div`
     width: 20rem;
-    height: 10rem;
+`;
+
+const StyledSpan = styled.span`
+    font-size: .5rem;
 `;
 
 export default () => {
-    const { loggedInUser, setLoggedInUser, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(PopupContext);
+    const { loggedInUser, setLoggedInUser, shouldDisplayFacetizer, setShouldDisplayFacetizer, url } = useContext(PopupContext);
     console.log('check ME @popup!', shouldDisplayFacetizer);
     const login = () => {
         chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
@@ -62,22 +73,40 @@ export default () => {
         setShouldDisplayFacetizer(e);
     }
 
-    const element = loggedInUser && loggedInUser.email ?
+    //loggedInUser && loggedInUser.email
+    const element = true ?
         <div>
-            <Typography variant="h6" gutterBottom>
+            <Typography gutterBottom>
                 {'email:'} {loggedInUser.email}
+            </Typography>
+            <Divider />
+            <Typography gutterBottom>
+                {'URL:'} <StyledSpan>{url}</StyledSpan>
             </Typography>
             <GridDiv>
                 <div>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="primary" gutterBottom>
                         {'Facetize: '}
                     </Typography>
                 </div>
                 <div>
                     <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
                 </div>
+
             </GridDiv>
+            <GridDiv>
+                <div>
+                    <TextField id="outlined-basic" variant="outlined" type='email' placeholder="example@email.com" />
+                </div>
+                <div>
+                    <Button style={{ width: '100%' }} variant="contained" color="primary">Invite</Button>
+                </div>
+            </GridDiv>
+            <MarginTop />
+            <Button style={{ width: '100%' }} variant="contained" color="primary" onClick={() => logout()}>Copy Snippet</Button>
+            <MarginTop />
             <Button style={{ width: '100%' }} variant="contained" color="secondary" onClick={() => logout()}>Logout</Button>
+            <MarginTop />
         </div> : <Button variant="contained" color="secondary" onClick={() => login()}>
             Login </Button>;
     return <StyledDiv>
