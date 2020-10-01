@@ -45,20 +45,33 @@ if (document.getElementById('facetizer')) {
                         <App />
                     </AppProvider>
                 </SnackbarProvider>
-            </div>
-        </React.StrictMode>,
+            </div >
+        </React.StrictMode >,
         document.getElementById('facetizer')
     );
 }
 
+// TODO fix duplication
 if (document.getElementById('popup')) {
     ReactDOM.render(
         <React.StrictMode>
-            <PopupProvider>
-                <div id='popup-container'>
-                    <Popup />
-                </div>
-            </PopupProvider>
+            <SnackbarProvider maxSnack={4}
+                disableWindowBlurListener
+                autoHideDuration={5000}
+                iconVariant={{
+                    error: '✖️',
+                    warning: '⚠️',
+                }}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}>
+                <PopupProvider>
+                    <div id='popup-container'>
+                        <Popup />
+                    </div>
+                </PopupProvider>
+            </SnackbarProvider>
         </React.StrictMode>,
         document.getElementById('popup')
     );
