@@ -45,7 +45,6 @@ export default () => {
 
     const invite = () => {
         // TODO http call
-        console.log('HEYEYEYE')
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 

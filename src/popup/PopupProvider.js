@@ -9,15 +9,11 @@ export default ({ children }) => {
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [url, setUrl] = useState('');
 
-    console.log('@provider? ', shouldDisplayFacetizer);
     useEffect(() => {
         const loadLocalStorage = () => {
-            console.log('@RUnning localstorage');
             const facetKey = 'facet-settings';
             chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
-                console.log('@obj', obj);
                 if (!obj) {
-                    console.log('setting defaults!');
                     // set defaults
                     chrome.storage && chrome.storage.sync.set({
                         [facetKey]: {
@@ -25,10 +21,8 @@ export default ({ children }) => {
                         }
                     }, function () {
                         setShouldDisplayFacetizer(false);
-                        console.log('Value is set TO FALSE');
                     });
                 } else {
-                    console.log('SETTING TO TRUE');
                     setShouldDisplayFacetizer(obj[facetKey]['enabled']);
                 }
             });

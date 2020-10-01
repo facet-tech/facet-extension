@@ -11,7 +11,6 @@ function App() {
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     function (request, sendResponse) {
-      console.log('RECIEVED', shouldDisplayFacetizer)
       setShouldDisplayFacetizer(request.showFacetizer);
     });
 

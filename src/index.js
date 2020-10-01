@@ -1,4 +1,5 @@
 /*global chrome*/
+
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -32,10 +33,8 @@ if (document.getElementById('facetizer')) {
                     disableWindowBlurListener
                     autoHideDuration={5000}
                     iconVariant={{
-                        success: '🐱‍👤',
                         error: '✖️',
                         warning: '⚠️',
-                        info: 'ℹ️',
                     }}
                     anchorOrigin={{
                         vertical: 'top',

@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { useState } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -14,8 +14,6 @@ function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value 
     // const [isEnabled, setIsEnabled] = useState(false);
     // spits out true/false depending reflecting switch state
     const handleChange = (e) => {
-        console.log('MPIKA@HANDLE', e)
-        // setIsEnabled(!isEnabled);
         callBack(!value);
     };
 
