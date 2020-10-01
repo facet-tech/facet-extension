@@ -45,6 +45,7 @@ export default () => {
 
     const invite = () => {
         // TODO http call
+        console.log('HEYEYEYE')
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
@@ -115,7 +116,8 @@ export default () => {
                     <TextField id="outlined-basic" variant="outlined" type='email' placeholder="example@email.com" />
                 </div>
                 <div>
-                    <Button style={{ width: '100%' }}
+                    <Button
+                        style={{ width: '100%' }}
                         onClick={() => invite()}
                         startIcon={<ContactMailIcon />}
                         variant="contained"
