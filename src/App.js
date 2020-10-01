@@ -17,6 +17,14 @@ function App() {
   const handleUserKeyPress = useCallback(event => {
     if (event.ctrlKey) {
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
+      const facetKey = 'facet-settings';
+      chrome.storage && chrome.storage.sync.set({
+        [facetKey]: {
+          enabled: !shouldDisplayFacetizer
+        }
+      }, function () {
+        console.log('updating local storage');
+      });
     }
   }, [shouldDisplayFacetizer, setShouldDisplayFacetizer]);
 
