@@ -12,6 +12,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const GridDiv = styled.div`
     display: grid;
@@ -89,6 +90,8 @@ export default () => {
         setShouldDisplayFacetizer(e);
     }
 
+    const textToCopy = `<script src="https://api.facet.ninja/js/aHR0cHM6Ly9teXdlYnNpdGUuZmFjZXQubmluamEv/facet.ninja.js"></script>`;
+
     //loggedInUser && loggedInUser.email
     const element = true ?
         <div>
@@ -108,7 +111,6 @@ export default () => {
                 <div>
                     <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
                 </div>
-
             </GridDiv>
             <GridDiv>
                 <div>
@@ -121,17 +123,21 @@ export default () => {
                         startIcon={<ContactMailIcon />}
                         variant="contained"
                         color="primary"
-                        size="small">Invite</Button>
+                        size="small">Invite
+                    </Button>
                 </div>
             </GridDiv>
             <MarginTop />
-            <Button startIcon={<FileCopyIcon />} style={{ width: '100%' }} variant="contained"
-                color="primary"
-                size="small" onClick={() => copySnippet()}>Copy Snippet</Button>
+            <CopyToClipboard text={textToCopy}
+                onCopy={() => enqueueSnackbar(`Copied snippet`, { variant: "info" })}>
+                <Button startIcon={<FileCopyIcon />} style={{ width: '100%' }} variant="contained"
+                    color="primary" size="small">Copy Snippet</Button>
+            </CopyToClipboard>
+
             <MarginTop />
             <Button startIcon={<ExitToAppIcon />} style={{ width: '100%' }} variant="contained" color="secondary" onClick={() => logout()}>Logout</Button>
             <MarginTop />
-        </div> : <Button variant="contained" color="secondary" onClick={() => login()}>
+        </div > : <Button variant="contained" color="secondary" onClick={() => login()}>
             Login </Button>;
     return <StyledDiv>
         {element}

@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { useContext, useEffect, useCallback, useState } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
@@ -7,7 +7,7 @@ import { updateEvents } from './highlighter';
 
 function App() {
 
-  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer, showToolbox } = useContext(AppContext);
+  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(AppContext);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     function (request, sendResponse) {

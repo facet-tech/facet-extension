@@ -12,8 +12,6 @@ const StyledDiv = styled.div`
 `;
 
 function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value }) {
-    // const [isEnabled, setIsEnabled] = useState(false);
-    // spits out true/false depending reflecting switch state
     const handleChange = (e) => {
         callBack(!value);
     };

@@ -53,7 +53,8 @@
     "fontsource-roboto": "^3.0.3",
     "jquery": "^3.5.1",
     "material-ui-popup-state": "^1.6.1",
-    "notistack": "^0.9.17"
+    "notistack": "^0.9.17",
+    "react-copy-to-clipboard": "^5.0.2"
   },
   "scripts": {
     "start": "node scripts/start.js",
