@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+/*global chrome*/
+
+import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
+import loadLocalStorage from './shared/loadLocalStorage'
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -14,6 +17,10 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
     const [showToolbox, setShowToolbox] = useState(true);
+
+    useEffect(() => {
+        loadLocalStorage();
+    }, []);
 
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {

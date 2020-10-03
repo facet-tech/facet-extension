@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
+import loadLocalStorage from '../shared/loadLocalStorage'
 
 export default ({ children }) => {
     // email,id:  
@@ -10,23 +11,9 @@ export default ({ children }) => {
     const [url, setUrl] = useState('');
 
     useEffect(() => {
-        const loadLocalStorage = () => {
-            const facetKey = 'facet-settings';
-            chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
-                if (!obj) {
-                    // set defaults
-                    chrome.storage && chrome.storage.sync.set({
-                        [facetKey]: {
-                            enabled: false
-                        }
-                    }, function () {
-                        setShouldDisplayFacetizer(false);
-                    });
-                } else {
-                    setShouldDisplayFacetizer(obj[facetKey]['enabled']);
-                }
-            });
-        }
+
+        loadLocalStorage(setShouldDisplayFacetizer);
+
         const loadURL = () => {
             chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
                 let websiteUrl = tabs[0].url;

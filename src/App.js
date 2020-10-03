@@ -41,6 +41,7 @@ function App() {
     updateEvents();
   }
 
+  console.log('shouldDisplayFacetizer', shouldDisplayFacetizer)
   return (
     <div>
       {shouldDisplayFacetizer ? <FacetToolbar /> : null}
