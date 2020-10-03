@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
-import loadLocalStorage from './shared/loadLocalStorage'
+import loadLocalStorage from './shared/loadLocalStorage';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -19,7 +19,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [showToolbox, setShowToolbox] = useState(true);
 
     useEffect(() => {
-        loadLocalStorage();
+        loadLocalStorage(setShouldDisplayFacetizer);
     }, []);
 
     const onFacetAdd = (label) => {
