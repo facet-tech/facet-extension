@@ -1,3 +1,13 @@
+<div align="center">
+  <a href="https://github.com/webpack/webpack">
+    <img width="150" src="https://facet.ninja/images/facet-logo.png">
+  </a>
+  <br>
+  <br>
+</div>
+
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/facet)
+
 ## Demo:
 
 https://video.facet.ninja/vision
@@ -27,3 +37,7 @@ Control your release 🚀 lifecycle and embrace trunk based development with ⚔
 3. Click the reload button next to the facet.ninja plugin and you are settled.
 
 ![Facetizer](./readme_assets/chrome_installation.png)
+
+## Contribute
+
+Thanks for contributing! Read the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md). You can ask any question through our [spectrum.chat](https://spectrum.chat/facet) space.

@@ -20,6 +20,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
 # env
 .env
+
+# google web store deployment
+build.zip
