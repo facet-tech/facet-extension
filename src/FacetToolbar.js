@@ -7,7 +7,8 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
-import { computeWithoutFacetizer } from './highlighter';
+import { computeWithOrWithoutFacetizer } from './highlighter';
+import parsePath from './shared/parsePath';
 
 const GridDiv = styled.div`
     display: grid;
@@ -43,16 +44,16 @@ export default function FacetToolbar() {
         enqueueSnackbar(`👷‍♂️⚒ Feature coming soon! 👷‍♂️⚒`, { variant: "info" });
     }
 
-    const parsePath = (payload) => {
-        var newPayload = [];
-        for (var i = 0; i < payload.length; i++) {
-            var split1 = payload[i].split('>');
-            var secondParthWithoutFacetizer = computeWithoutFacetizer(payload[i]);
-            split1[1] = secondParthWithoutFacetizer;
-            newPayload.push(split1.join('>'));
-        }
-        return newPayload;
-    }
+    // const parsePath = (payload) => {
+    //     var newPayload = [];
+    //     for (var i = 0; i < payload.length; i++) {
+    //         var split1 = payload[i].split('>');
+    //         var secondParthWithoutFacetizer = computeWithOrWithoutFacetizer(payload[i]);
+    //         split1[1] = secondParthWithoutFacetizer;
+    //         newPayload.push(split1.join('>'));
+    //     }
+    //     return newPayload;
+    // }
 
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
