@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import parsePath from './shared/parsePath';
+
 window.highlightMode = false;
 window.hiddenPaths = [];
 
@@ -52,8 +54,8 @@ function getDomPath(el) {
     return res;
 }
 
-var computeWithoutFacetizer = (res) => {
-    var splitStr = res.split('>');
+var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
+    var splitStr = strPath.split('>');
     var secondPathSplit = splitStr[1].split(':eq');
     if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
         return splitStr[1];
@@ -61,7 +63,7 @@ var computeWithoutFacetizer = (res) => {
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(secondPathSplit[1]);
     const currNumber = parseInt(matches[1]);
-    const wantedNumber = currNumber - 1;
+    const wantedNumber = facetizerIsPresent ? currNumber - 1 : currNumber + 1;
     const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
 
     return result;
@@ -78,13 +80,12 @@ const fetchFacets = async () => {
 const updateEvents = async (flag) => {
 
     const facets = await fetchFacets();
+    const properFacetArr = parsePath(facets && facets.facet[0] && facets.facet[0].id, false);
     let facetsArr = [];
-    facets && facets.facet.forEach(f => {
-        f && f.id && f.id.forEach(ff => {
-            $(ff).css("opacity", "0.3", "important");
-            facetsArr.push(ff);
-        })
-    })
+    properFacetArr && properFacetArr.forEach(ff => {
+        $(ff).css("opacity", "0.3", "important");
+        facetsArr.push(ff);
+    });
     const all = [...facetsArr, ...window.hiddenPaths];
     // getting rid of duplicates
     window.hiddenPaths = [...new Set(all)];
@@ -104,4 +105,4 @@ const updateEvents = async (flag) => {
         });
 }
 
-export { updateEvents, computeWithoutFacetizer };
+export { updateEvents, computeWithOrWithoutFacetizer };
