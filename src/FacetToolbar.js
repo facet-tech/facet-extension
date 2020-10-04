@@ -58,6 +58,7 @@ export default function FacetToolbar() {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         // TODO fix this is buggy
         const rightParsedPath = parsePath(window.hiddenPaths);
+        console.log('@parsePath', rightParsedPath);
         const rightParsedPayload = {
             "site": window.btoa(window.location.href), "facet": [{
                 "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))

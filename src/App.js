@@ -7,7 +7,8 @@ import { updateEvents } from './highlighter';
 
 function App() {
 
-  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer } = useContext(AppContext);
+  const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
+    hasLoadedHighlighter, setHasLoadedHighlighter } = useContext(AppContext);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     function (request, sendResponse) {
@@ -41,7 +42,6 @@ function App() {
     updateEvents();
   }
 
-  console.log('shouldDisplayFacetizer', shouldDisplayFacetizer)
   return (
     <div>
       {shouldDisplayFacetizer ? <FacetToolbar /> : null}

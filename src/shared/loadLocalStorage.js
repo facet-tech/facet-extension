@@ -1,4 +1,5 @@
 /*global chrome*/
+
 import React from 'react';
 
 const loadLocalStorage = (setShouldDisplayFacetizer) => {

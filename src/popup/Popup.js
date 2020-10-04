@@ -53,10 +53,6 @@ export default () => {
         enqueueSnackbar(`Logged out.`, { variant: "success" });
     }
 
-    const copySnippet = () => {
-        enqueueSnackbar(`Copied snippet`, { variant: "info" });
-    }
-
     useEffect(() => {
         const getProfile = () => {
             chrome && chrome.identity && chrome.identity.getAuthToken({ 'interactive': true }, function (token) {

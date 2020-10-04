@@ -1,6 +1,6 @@
 import $ from 'jquery';
 window.highlightMode = false;
-let hiddenPaths = [];
+window.hiddenPaths = [];
 
 var onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
@@ -15,7 +15,7 @@ var onMouseLeaveHandle = function (event) {
 var onMouseClickHandle = function (event) {
     var res = getDomPath(event.target);
     if (window.hiddenPaths.includes(res)) {
-        window.hiddenPaths = hiddenPaths.filter(e => e !== res);
+        window.hiddenPaths = window.hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("opacity", "unset");
     } else {
         event.target.style.setProperty("opacity", "0.3", "important");
@@ -76,6 +76,7 @@ const fetchFacets = async () => {
 }
 
 const updateEvents = async (flag) => {
+
     const facets = await fetchFacets();
     let facetsArr = [];
     facets && facets.facet.forEach(f => {
@@ -84,7 +85,10 @@ const updateEvents = async (flag) => {
             facetsArr.push(ff);
         })
     })
-    window.hiddenPaths = [...facetsArr];
+    const all = [...facetsArr, ...window.hiddenPaths];
+    // getting rid of duplicates
+    window.hiddenPaths = [...new Set(all)];
+
     [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
         .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
             if (flag) {
