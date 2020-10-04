@@ -1,6 +1,6 @@
 <div align="center">
-  <a href="https://github.com/webpack/webpack">
-    <img width="150" src="https://facet.ninja/images/facet-logo.png">
+  <a href="https://github.com/facets-io/facet-extension">
+    <img width="200" src="https://facet.ninja/images/facet-logo.png">
   </a>
   <br>
   <br>
