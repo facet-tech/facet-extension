@@ -5,17 +5,18 @@ import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import loadLocalStorage from './shared/loadLocalStorage';
 import { setKeyInLocalStorage } from './shared/loadLocalStorage';
 
 function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-    hasLoadedHighlighter, setHasLoadedHighlighter, isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
+    isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
+
+  console.log('isPluginEnabled', isPluginEnabled);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-
+      console.log('retrieved msg.');
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
       const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
       setShouldDisplayFacetizer(showFacetizerValue);
@@ -36,15 +37,18 @@ function App() {
     };
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
 
-  if (showSideBar) {
-    updateEvents(true);
-  } else {
-    updateEvents();
+  if (isPluginEnabled) {
+    if (showSideBar) {
+      updateEvents(true);
+    } else {
+      updateEvents();
+    }
   }
+
 
   return (
     <div>
-      {shouldDisplayFacetizer ? <FacetToolbar /> : null}
+      {isPluginEnabled && shouldDisplayFacetizer ? <FacetToolbar /> : null}
     </div >
   );
 }
