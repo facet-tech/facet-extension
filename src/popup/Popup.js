@@ -12,7 +12,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage';
+import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage';
 
 const GridDiv = styled.div`
     display: grid;
@@ -46,8 +46,16 @@ export default () => {
 
     const cb = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { 'showFacetizer': e }, function (response) {
-                setKeyInLocalStorage('showFacetizer', e);
+            chrome.tabs.sendMessage(tabs[0].id, { 'showFacetizer': e }, async function (response) {
+                // const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
+                // const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
+                const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
+                const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
+                // console.log('trigger1. showFacetizerValue', showFacetizerValue, 'isPluginEnabledValue', isPluginEnabledValue);
+                setKeyInLocalStorage('showFacetizer', showFacetizerValue);
+                setKeyInLocalStorage('isPluginEnabled', isPluginEnabledValue);
+                setShouldDisplayFacetizer(showFacetizerValue);
+                setIsPluginEnabled(isPluginEnabledValue);
             });
         });
         // updating chrome storage
@@ -57,8 +65,16 @@ export default () => {
 
     const onEnablePluginCB = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { 'isPluginEnabled': e }, function (response) {
+            chrome.tabs.sendMessage(tabs[0].id, { 'isPluginEnabled': e }, async function (response) {
                 setKeyInLocalStorage('isPluginEnabled', e);
+
+                const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
+                const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
+                // console.log('trigger2. showFacetizerValue', showFacetizerValue, 'isPluginEnabledValue', isPluginEnabledValue);
+                setKeyInLocalStorage('showFacetizer', showFacetizerValue);
+                setKeyInLocalStorage('isPluginEnabled', isPluginEnabledValue);
+                setShouldDisplayFacetizer(showFacetizerValue);
+                setIsPluginEnabled(isPluginEnabledValue);
             });
         });
         // update storage
