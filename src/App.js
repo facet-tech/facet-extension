@@ -12,11 +12,11 @@ function App() {
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
     isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
 
-  console.log('isPluginEnabled', isPluginEnabled);
+  // console.log('isPluginEnabled', isPluginEnabled);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-      console.log('retrieved msg.');
+      // console.log('retrieved msg.');
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
       const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
       setShouldDisplayFacetizer(showFacetizerValue);
