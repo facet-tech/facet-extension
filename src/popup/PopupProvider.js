@@ -9,27 +9,27 @@ export default ({ children }) => {
     const [loggedInUser, setLoggedInUser] = useState({});
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [url, setUrl] = useState('');
+    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
 
+    // THIS NEEDS TO RUN EVERYTIME.
     useEffect(() => {
-
-        loadLocalStorage(setShouldDisplayFacetizer);
+        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
 
         const loadURL = () => {
             chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
-                let websiteUrl = tabs[0].url;
+                let websiteUrl = tabs[0] && tabs[0].url;
                 setUrl(websiteUrl);
             });
         }
 
         loadURL();
         loadLocalStorage();
-    }, []);
-
+    }, [setShouldDisplayFacetizer, setIsPluginEnabled]);
 
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser,
         shouldDisplayFacetizer, setShouldDisplayFacetizer,
-        url, setUrl
+        url, setUrl, isPluginEnabled, setIsPluginEnabled
     }}>
         {children}
     </PopupContext.Provider>

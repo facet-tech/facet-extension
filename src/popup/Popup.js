@@ -7,10 +7,12 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import FacetSwitch from '../FacetSwitch';
 import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage';
 
 const GridDiv = styled.div`
     display: grid;
@@ -21,7 +23,7 @@ const GridDiv = styled.div`
 `;
 
 const MarginTop = styled.div`
-    margin-top: 2rem;
+    margin-top: ${props => props.value};
 `;
 
 const StyledDiv = styled.div`
@@ -34,7 +36,8 @@ const StyledSpan = styled.span`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { shouldDisplayFacetizer, setShouldDisplayFacetizer, url } = useContext(PopupContext);
+
+    const { shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
 
     const invite = () => {
         // TODO http call
@@ -42,34 +45,61 @@ export default () => {
     }
 
     const cb = (e) => {
-        // sending message down to background script
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { 'showFacetizer': e }, function (response) {
-                console.log('SENDING...', e)
+                setKeyInLocalStorage('showFacetizer', e);
             });
         });
         // updating chrome storage
-        const facetKey = 'facet-settings';
-        chrome.storage.sync.set({
-            [facetKey]: {
-                enabled: e
-            }
-        }, function () {
-            console.log('Value is set to:', e);
-        });
+        setKeyInLocalStorage('showFacetizer', e);
         setShouldDisplayFacetizer(e);
+    }
+
+    const onEnablePluginCB = (e) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { 'isPluginEnabled': e }, function (response) {
+                setKeyInLocalStorage('isPluginEnabled', e);
+            });
+        });
+        // update storage
+        setKeyInLocalStorage('isPluginEnabled', e);
+        if (!e) {
+            setKeyInLocalStorage('showFacetizer', e);
+        }
+        setIsPluginEnabled(e);
     }
 
     const textToCopy = `<script src="https://api.facet.ninja/js/aHR0cHM6Ly9teXdlYnNpdGUuZmFjZXQubmluamEv/facet.ninja.js"></script>`;
 
-    const element = <div>
-        <Typography gutterBottom>
-            {'URL:'} <StyledSpan>{url}</StyledSpan>
-        </Typography>
+    const enableFacetizerElement = <GridDiv>
+        <div>
+            <Typography gutterBottom>
+                {'Enable Plugin:'}
+            </Typography>
+        </div>
+        <div>
+            <FacetSwitch labelOn='On' labelOff='Off' callBack={onEnablePluginCB} value={isPluginEnabled} />
+        </div>
+    </GridDiv>;
+
+    const element = isPluginEnabled ? <div>
+        {enableFacetizerElement}
+        <Divider />
+        <MarginTop value=".5rem" />
         <GridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
-                    {'Facetize: '}
+                    {'URL:'}
+                </Typography>
+            </div>
+            <div>
+                <StyledSpan>{url}</StyledSpan>
+            </div>
+        </GridDiv>
+        <GridDiv>
+            <div>
+                <Typography variant="primary" gutterBottom>
+                    {'Show Toolbar: '}
                 </Typography>
             </div>
             <div>
@@ -91,13 +121,13 @@ export default () => {
                     </Button>
             </div>
         </GridDiv>
-        <MarginTop />
+        <MarginTop value="2rem" />
         <CopyToClipboard text={textToCopy}
             onCopy={() => enqueueSnackbar(`Copied snippet`, { variant: "info" })}>
             <Button startIcon={<FileCopyIcon />} style={{ width: '100%' }} variant="contained"
                 color="primary" size="small">Copy Snippet</Button>
         </CopyToClipboard>
-    </div >;
+    </div > : enableFacetizerElement;
     return <StyledDiv>
         {element}
     </StyledDiv>

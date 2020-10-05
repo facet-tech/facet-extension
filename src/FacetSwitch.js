@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
 `;
 
 function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value }) {
-    const handleChange = (e) => {
+    const handleChange = () => {
         callBack(!value);
     };
 
@@ -26,7 +26,7 @@ function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value 
                     control={
                         <Switch
                             checked={value}
-                            onChange={handleChange} />
+                            onChange={() => handleChange()} />
                     }
                     label={value ? labelOn : labelOff}
                 />
