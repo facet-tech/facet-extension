@@ -115,7 +115,7 @@ export default () => {
         <GridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
-                    {'Show Toolbar: '}
+                    {'Show Toolbar: (Ctrl+E)'}
                 </Typography>
             </div>
             <div>
