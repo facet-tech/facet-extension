@@ -8,6 +8,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
+import { constructPayload } from './servives/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;
@@ -52,6 +53,7 @@ export default function FacetToolbar() {
                 "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
             }]
         }
+        const payload = constructPayload()
         const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
         const response = await fetch(url, {
             method: 'POST',
