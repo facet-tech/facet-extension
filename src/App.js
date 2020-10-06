@@ -4,15 +4,12 @@ import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
-import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { setKeyInLocalStorage } from './shared/loadLocalStorage';
+import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
 
 function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
     isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
-
-  // console.log('isPluginEnabled', isPluginEnabled);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
@@ -25,7 +22,7 @@ function App() {
     });
 
   const handleUserKeyPress = useCallback(event => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey && event.keyCode === 69) {
       setKeyInLocalStorage('showFacetizer', !shouldDisplayFacetizer);
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
     };
@@ -39,10 +36,11 @@ function App() {
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
 
   if (isPluginEnabled) {
+    console.log('LOADING REGISTER EVENTS')
     if (showSideBar) {
       updateEvents(true);
     } else {
-      updateEvents();
+      updateEvents(false);
     }
   }
 

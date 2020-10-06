@@ -17,14 +17,15 @@ export default function BasicTextField() {
     const classes = useStyles();
 
     const keyPress = (e) => {
-        if (e.keyCode === 13) {
-            onFacetAdd(e.target.value);
-        }
+        // if (e.keyCode === 13) {
+        //     onFacetAdd(e.target.value);
+        // }
     }
 
     return (
-        <div onKeyDown={keyPress} className={classes.root}>
-            <TextField inputRef={input => input && input.focus()} autoFocus id="standard-basic" label="Name your Facet" />
-        </div>
+        <div></div>
+        // <div onKeyDown={keyPress} className={classes.root}>
+        //     <TextField inputRef={input => input && input.focus()} autoFocus id="standard-basic" label="Name your Facet" />
+        // </div>
     );
 }

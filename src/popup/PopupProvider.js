@@ -7,9 +7,9 @@ import loadLocalStorage from '../shared/loadLocalStorage'
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
     const [url, setUrl] = useState('');
-    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
+    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
 
     // THIS NEEDS TO RUN EVERYTIME.
     useEffect(() => {

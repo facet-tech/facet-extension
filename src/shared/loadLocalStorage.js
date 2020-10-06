@@ -49,10 +49,10 @@ const getKeyFromLocalStorage = async (key) => {
 };
 
 const setKeyInLocalStorage = async (key, value) => {
-    const spreaddd = await getLocalStorageObject();
+    const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
         [facetKey]: {
-            ...spreaddd,
+            ...localStorageObj,
             [key]: value
         }
     };
