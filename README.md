@@ -3,14 +3,15 @@
     <img width="200" src="https://facet.ninja/images/facet-logo.png">
   </a>
   <br>
-  <br>
+  <a href='https://spectrum.chat/facet'>
+  <img src='https://withspectrum.github.io/badge/badge.svg' alt='Join the community on Spectrum'></a>
 </div>
-
-[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/facet)
 
 ## Demo:
 
-https://video.facet.ninja/vision
+Project demo: https://video.facet.ninja/mvp
+
+Project vision: https://video.facet.ninja/vision
 
 # Facetizer Chrome extension
 
