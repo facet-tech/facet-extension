@@ -31,7 +31,7 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
 const getLocalStorageObject = async () => {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.sync.get(facetKey, function (value) {
+            chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey]);
             })
         }

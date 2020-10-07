@@ -1,5 +1,8 @@
 import $ from 'jquery';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { constructPayload, triggerApiCall } from './servives/facetApiService';
 import parsePath from './shared/parsePath';
+import { HTTPMethods, facetApiConstants } from './shared/constant';
 
 window.highlightMode = false;
 window.hiddenPaths = [];
@@ -70,16 +73,26 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
 }
 
 const fetchFacets = async () => {
-    const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-    const response = await fetch(url, {
-        method: 'GET',
-    });
-    return response.json();
+    let siteId = getKeyFromLocalStorage(facetApiConstants.userId);
+    if (!siteId) {
+        // siteId = createNewSiteId()
+    }
+    const suffix = `/facet?siteId=${siteId}&urlPath=${window.location.pathname}`;
+    const response = await triggerApiCall(HTTPMethods.GET, suffix);
+    // const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
+    // const response = await fetch(url, {
+    //     method: 'GET',
+    // });
+    // return response.json();
+    const result = await response.json();
+    console.log('RESULT!', result);
+    return result && result.domElement[0] && result.domElement[0].path;
 }
 
 const updateEvents = async (flag) => {
 
     const facets = await fetchFacets();
+
     const properFacetArr = parsePath(facets && facets.facet[0] && facets.facet[0].id, false);
     let facetsArr = [];
     properFacetArr && properFacetArr.forEach(ff => {

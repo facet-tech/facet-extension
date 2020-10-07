@@ -1,4 +1,11 @@
-const constructPayload = (site = '', urlPath = '', path = []) => {
+import { HTTPMethods } from "../shared/constant";
+
+/**
+ * @param {siteId}
+ * @param {urlPath} urlSuffix default empty value = ''
+ * @param {body} body the body of the request
+ */
+const constructPayload = (siteId = '', urlPath = '', path = []) => {
 
     return {
         domElements: [
@@ -6,7 +13,7 @@ const constructPayload = (site = '', urlPath = '', path = []) => {
                 enabled: true,
                 path,
             },
-            site,
+            siteId,
             urlPath
         ]
     }
@@ -18,11 +25,23 @@ const constructPayload = (site = '', urlPath = '', path = []) => {
  * @param {body} body the body of the request
  */
 const triggerApiCall = (method, urlSuffix = '', body) => {
-    const url = `https://api.facet.ninja/facet${urlSuffix}`;
-    return fetch(url, {
-        method,
-        body
-    })
+    try {
+        const url = `https://api.facet.ninja${urlSuffix}`;
+        let obj = HTTPMethods.GET === method ? { method } : { method, body };
+        console.log('[API] triggering call', url, obj);
+        return fetch(url, obj);
+    } catch (e) {
+        console.log('[triggerApiCall]', e)
+    }
+}
+
+const createNewUser = (email) => {
+    const body = {
+        email
+    }
+    const suffix = '/user';
+    return triggerApiCall(HTTPMethods.POST, suffix, body);
+
 }
 
 export { constructPayload, triggerApiCall };

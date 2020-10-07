@@ -8,7 +8,8 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
-import { constructPayload } from './servives/facetApiService';
+import { HTTPMethods } from './shared/constant';
+import { constructPayload, triggerApiCall } from './servives/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;
@@ -47,20 +48,28 @@ export default function FacetToolbar() {
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         // TODO fix this is buggy
-        const rightParsedPath = parsePath(window.hiddenPaths);
-        const rightParsedPayload = {
-            "site": window.btoa(window.location.href), "facet": [{
-                "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
-            }]
-        }
-        const payload = constructPayload()
-        const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
+        // const rightParsedPath = parsePath(window.hiddenPaths);
+        // const rightParsedPayload = {
+        //     "site": window.btoa(window.location.href), "facet": [{
+        //         "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
+        //     }]
+        // }
+        // const payload = constructPayload()
+        // const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
+        // const response = await fetch(url, {
+        //     method: 'POST',
+        //     body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
+        // });
+        // return response.json(); // parses JSON response into native JavaScript objects
+
+        // new
+        const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+        const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
+        const response = triggerApiCall(HTTPMethods.POST, '/facet', body);
+        const result = response.json();
+        console.log('result!');
     }
+
 
     const reset = () => {
         window.hiddenPaths.forEach(element => {
@@ -95,7 +104,6 @@ export default function FacetToolbar() {
 
     const classes = useStyles();
     const { showSideBar, setShowSideBar, setShouldDisplayFacetizer } = useContext(AppContext);
-
     return <div>
         <GridDiv>
             <StyledDiv>

@@ -17,7 +17,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
     const [showToolbox, setShowToolbox] = useState(true);
-    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
+    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
 
     useEffect(() => {
         loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
