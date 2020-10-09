@@ -10,10 +10,17 @@ export default ({ children }) => {
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
     const [url, setUrl] = useState('');
     const [isPluginEnabled, setIsPluginEnabled] = useState(false);
+    const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+    const [selectedWayOfLogin, setSelectedWayOfLogin] = useState('')
+    const [email, setEmail] = useState('');
 
-    // THIS NEEDS TO RUN EVERYTIME.
+    const login = () => {
+        // api call goes here
+        setIsUserAuthenticated(true);
+    }
+
     useEffect(() => {
-        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
+        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated);
 
         const loadURL = () => {
             chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
@@ -27,9 +34,10 @@ export default ({ children }) => {
     }, [setShouldDisplayFacetizer, setIsPluginEnabled]);
 
     return <PopupContext.Provider value={{
-        loggedInUser, setLoggedInUser,
-        shouldDisplayFacetizer, setShouldDisplayFacetizer,
-        url, setUrl, isPluginEnabled, setIsPluginEnabled
+        loggedInUser, setLoggedInUser, shouldDisplayFacetizer,
+        setShouldDisplayFacetizer, url, setUrl, isPluginEnabled,
+        setIsPluginEnabled, selectedWayOfLogin, setSelectedWayOfLogin,
+        login, isUserAuthenticated, setIsUserAuthenticated, email, setEmail
     }}>
         {children}
     </PopupContext.Provider>

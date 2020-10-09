@@ -2,7 +2,12 @@
 
 const facetKey = 'facet-settings';
 
-const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled) => {
+/**
+ * @param {setShouldDisplayFacetizer} setShouldDisplayFacetizer
+ * @param {*} setIsPluginEnabled 
+ * @param {*} setIsUserAuthenticated 
+ */
+const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
         if (!obj) {
             // setting defaults
@@ -17,6 +22,7 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled) =
             setKeyInLocalStorage('isPluginEnabled', true, cb2);
         } else {
             setShouldDisplayFacetizer(obj[facetKey]['showFacetizer']);
+            setIsPluginEnabled(obj[facetKey]['isPluginEnabled']);
             setIsPluginEnabled(obj[facetKey]['isPluginEnabled']);
         }
     });
@@ -48,6 +54,12 @@ const getKeyFromLocalStorage = async (key) => {
     });
 };
 
+/**
+ * Updates key in storage
+ * 
+ * @param {*} key 
+ * @param {*} value 
+ */
 const setKeyInLocalStorage = async (key, value) => {
     const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
@@ -63,6 +75,15 @@ const setKeyInLocalStorage = async (key, value) => {
     });
 }
 
-export { getKeyFromLocalStorage, setKeyInLocalStorage };
+const clearStorage = () => {
+    chrome.storage.local.clear(function () {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        }
+    });
+}
+
+export { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage };
 
 export default loadLocalStorage;
