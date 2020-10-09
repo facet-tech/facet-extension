@@ -42,7 +42,7 @@ export default () => {
     }
 
     return <div>
-        <form>
+        {/* <form> */}
             <GridDiv>
                 <div className={classes.span}>
                     <span >Please enter your email:</span>
@@ -60,7 +60,7 @@ export default () => {
                 </div>
                 <div>
                     <Button
-                        type="submit"
+                        // type="submit"
                         disabled={!isValidEmail()}
                         style={{ width: '100%' }}
                         onClick={() => login()}
@@ -70,6 +70,6 @@ export default () => {
                 </Button>
                 </div>
             </GridDiv>
-        </form>
+        {/* </form> */}
     </div>
 }

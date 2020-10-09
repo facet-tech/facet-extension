@@ -29,7 +29,9 @@ const triggerApiCall = (method, urlSuffix = '', body) => {
         const url = `https://api.facet.ninja${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body };
         console.log('[API] triggering call', url, obj);
-        return fetch(url, obj);
+        const res = fetch(url, obj);
+        console.log('res!',res);
+        return res;
     } catch (e) {
         console.log('[triggerApiCall]', e)
     }
