@@ -42,31 +42,34 @@ export default () => {
     }
 
     return <div>
-        <GridDiv>
-            <div className={classes.span}>
-                <span >Please enter your email:</span>
-            </div>
-            <div>
-                <TextField
-                    error={!isValidEmail()}
-                    helperText={!isValidEmail() ? 'Please insert a valid email.' : ''}
-                    errorText=''
-                    className={classes.button}
-                    onChange={(e) => { setEmail(e.target.value) }}
-                    id="outlined-basic"
-                    variant="outlined" type='email'
-                    placeholder="example@email.com" />
-            </div>
-            <div>
-                <Button
-                    disabled={!isValidEmail()}
-                    style={{ width: '100%' }}
-                    onClick={() => login()}
-                    variant="contained"
-                    color="secondary"
-                    size="small">Login
+        <form>
+            <GridDiv>
+                <div className={classes.span}>
+                    <span >Please enter your email:</span>
+                </div>
+                <div>
+                    <TextField
+                        error={!isValidEmail()}
+                        helperText={!isValidEmail() ? 'Please insert a valid email.' : ''}
+                        errorText=''
+                        className={classes.button}
+                        onChange={(e) => { setEmail(e.target.value) }}
+                        id="outlined-basic"
+                        variant="outlined" type='email'
+                        placeholder="example@email.com" />
+                </div>
+                <div>
+                    <Button
+                        type="submit"
+                        disabled={!isValidEmail()}
+                        style={{ width: '100%' }}
+                        onClick={() => login()}
+                        variant="contained"
+                        color="secondary"
+                        size="small">Login
                 </Button>
-            </div>
-        </GridDiv>
+                </div>
+            </GridDiv>
+        </form>
     </div>
 }

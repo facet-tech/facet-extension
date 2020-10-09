@@ -2,21 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
-import loadLocalStorage from '../shared/loadLocalStorage'
+import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
+import { LoginTypes, storage } from '../shared/constant';
 
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
     const [url, setUrl] = useState('');
-    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
+    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
     const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-    const [selectedWayOfLogin, setSelectedWayOfLogin] = useState('')
     const [email, setEmail] = useState('');
 
-    const login = () => {
+    const login = async () => {
         // api call goes here
         setIsUserAuthenticated(true);
+        await setKeyInLocalStorage(storage.isPluginEnabled, true);
+        await setKeyInLocalStorage(LoginTypes.email, email);
+
     }
 
     useEffect(() => {
@@ -30,14 +33,14 @@ export default ({ children }) => {
         }
 
         loadURL();
-        loadLocalStorage();
-    }, [setShouldDisplayFacetizer, setIsPluginEnabled]);
+        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated);
+    }, [setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated]);
 
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, url, setUrl, isPluginEnabled,
-        setIsPluginEnabled, selectedWayOfLogin, setSelectedWayOfLogin,
-        login, isUserAuthenticated, setIsUserAuthenticated, email, setEmail
+        setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
+        email, setEmail
     }}>
         {children}
     </PopupContext.Provider>

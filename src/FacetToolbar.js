@@ -67,7 +67,7 @@ export default function FacetToolbar() {
         const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
         const response = triggerApiCall(HTTPMethods.POST, '/facet', body);
         const result = response.json();
-        console.log('result!');
+        // console.log('result!');
     }
 
 

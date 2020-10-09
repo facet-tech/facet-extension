@@ -22,6 +22,14 @@ const GridDiv = styled.div`
     justify-content: center;
 `;
 
+const TwoGridDiv = styled.div`
+    display: grid;
+    grid-template-columns: 60% 30%;
+    grid-gap: 5%;
+    align-items: center;
+    justify-content: center;
+`;
+
 const MarginTop = styled.div`
     margin-top: ${props => props.value};
 `;
@@ -100,7 +108,10 @@ export default () => {
             <div>
                 <Button
                     variant="contained"
-                    color="secondary" onClick={() => logout()}>logout</Button>
+                    color="secondary"
+                    onClick={() => logout()}>
+                    logout
+                </Button>
             </div>
         </GridDiv>
     </div>;
@@ -109,7 +120,7 @@ export default () => {
         {enableFacetizerElement}
         <Divider />
         <MarginTop value=".5rem" />
-        <GridDiv>
+        <TwoGridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
                     {'URL:'}
@@ -118,8 +129,8 @@ export default () => {
             <div>
                 <StyledSpan>{url}</StyledSpan>
             </div>
-        </GridDiv>
-        <GridDiv>
+        </TwoGridDiv>
+        <TwoGridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
                     {'Show Toolbar: (Ctrl+E)'}
@@ -128,8 +139,8 @@ export default () => {
             <div>
                 <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
             </div>
-        </GridDiv>
-        <GridDiv>
+        </TwoGridDiv>
+        <TwoGridDiv>
             <div>
                 <TextField id="outlined-basic" variant="outlined" type='email' placeholder="example@email.com" />
             </div>
@@ -143,7 +154,7 @@ export default () => {
                     size="small">Invite
                 </Button>
             </div>
-        </GridDiv>
+        </TwoGridDiv>
         <MarginTop value="2rem" />
         <CopyToClipboard text={textToCopy}
             onCopy={() => enqueueSnackbar(`Copied snippet`, { variant: "info" })}>

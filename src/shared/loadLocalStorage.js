@@ -1,4 +1,5 @@
 /*global chrome*/
+import { LoginTypes } from './constant';
 
 const facetKey = 'facet-settings';
 
@@ -9,6 +10,7 @@ const facetKey = 'facet-settings';
  */
 const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
+        console.log('HI MOM', obj);
         if (!obj) {
             // setting defaults
             const cb1 = function () {
@@ -18,12 +20,17 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
             const cb2 = function () {
                 setIsPluginEnabled(true);
             };
+
+            const cb3 = function () {
+                setIsUserAuthenticated(false);
+            }
             setKeyInLocalStorage('showFacetizer', cb1);
             setKeyInLocalStorage('isPluginEnabled', true, cb2);
+            setIsUserAuthenticated(LoginTypes.email, false, cb3);
         } else {
             setShouldDisplayFacetizer(obj[facetKey]['showFacetizer']);
             setIsPluginEnabled(obj[facetKey]['isPluginEnabled']);
-            setIsPluginEnabled(obj[facetKey]['isPluginEnabled']);
+            setIsUserAuthenticated(obj[facetKey][LoginTypes.email]);
         }
     });
 }
@@ -44,7 +51,7 @@ const getLocalStorageObject = async () => {
 const getKeyFromLocalStorage = async (key) => {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.sync.get(facetKey, function (value) {
+            chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey][key]);
             })
         }
@@ -61,6 +68,7 @@ const getKeyFromLocalStorage = async (key) => {
  * @param {*} value 
  */
 const setKeyInLocalStorage = async (key, value) => {
+    console.log('SETTING', key, value)
     const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
         [facetKey]: {
@@ -76,7 +84,7 @@ const setKeyInLocalStorage = async (key, value) => {
 }
 
 const clearStorage = () => {
-    chrome.storage.local.clear(function () {
+    chrome.storage.sync.clear(function () {
         var error = chrome.runtime.lastError;
         if (error) {
             console.error(error);

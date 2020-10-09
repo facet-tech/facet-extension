@@ -86,7 +86,7 @@ const fetchFacets = async () => {
     // return response.json();
     const result = await response.json();
     console.log('RESULT!', result);
-    return result && result.domElement[0] && result.domElement[0].path;
+    return result && result.domElement && result.domElement[0] && result.domElement[0].path;
 }
 
 const updateEvents = async (flag) => {

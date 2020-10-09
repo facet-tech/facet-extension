@@ -1,7 +1,7 @@
 import { computeWithOrWithoutFacetizer } from "../highlighter.js";
 
 export default (arr, withoutFacetizer = true) => {
-    if (arr === null || arr.length === 0) {
+    if (arr === null || !arr || arr.length === 0) {
         return [];
     }
     var newPayload = [];
