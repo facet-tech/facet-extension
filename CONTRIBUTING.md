@@ -10,6 +10,14 @@ Run tests with `yarn test`.
 
 ## Storage
 
+Read values from local storage:
+
+```
+ chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
+        console.log('HI MOM', obj);
+ });
+```
+
 Clean local storage:
 
 ```

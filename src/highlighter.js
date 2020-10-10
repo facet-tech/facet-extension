@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { constructPayload, triggerApiCall } from './services/facetApiService';
+import { constructPayload, triggerApiCall, getFacet, getDomain, createDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
-import { HTTPMethods, api } from './shared/constant';
+import { HTTPMethods, api, storage } from './shared/constant';
 
 window.highlightMode = false;
 window.hiddenPaths = [];
@@ -72,30 +72,25 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     return result;
 }
 
-const fetchFacets = async () => {
-    // let domainId = await getKeyFromLocalStorage(api.);
-    // if (!domainId) {
-    //     // siteId = createNewSiteId()
-    // }
-    // const suffix = `/facet?domainId=${domainId}&urlPath=${window.location.pathname}`;
-    // const response = await triggerApiCall(HTTPMethods.GET, suffix);
-    // // const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-    // // const response = await fetch(url, {
-    // //     method: 'GET',
-    // // });
-    // // return response.json();
-    // // const result = await response.json();
-    // console.log('RESULT!', response);
-    // return response && response.domElement && response.domElement[0] && response.domElement[0].path;
-    return [];
-}
-
 const updateEvents = async (flag) => {
+    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    let getDomainRes = await getDomain(window.location.hostname, workspaceId);
 
-    const facets = await fetchFacets();
-
-    const properFacetArr = [];
-    // const properFacetArr = parsePath(facets && facets.facet[0] && facets.facet[0].id, false);
+    // duplicate code to be fixed...
+    let domainId;
+    const domainExists = getDomainRes && getDomainRes.id !== undefined;
+    // create domain if it doesn't exist
+    if (domainExists) {
+        domainId = getDomainRes.id
+    } else {
+        const domainRes = await createDomain(window.location.hostname, workspaceId);
+        domainId = domainRes.id;
+    }
+    console.log('@highlighter workspaceId', workspaceId, 'getDomainRes', getDomainRes);
+    const facets = await getFacet(domainId, window.location.pathname);
+    console.log('facets!', facets && facets.domElement[0]);
+    const properFacetArr = parsePath(facets && facets.domElement && facets.domElement[0] && facets.domElement[0].path, false);
+    console.log('properFacetArr', properFacetArr)
     let facetsArr = [];
     properFacetArr && properFacetArr.forEach(ff => {
         $(ff).css("opacity", "0.3", "important");

@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
-import { constructPayload, triggerApiCall, createDomain, getDomain } from './services/facetApiService';
+import { triggerApiCall, createDomain, getDomain } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 
@@ -52,7 +52,7 @@ export default function FacetToolbar() {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = getDomain(window.location.hostname);
-        const domainExists = getDomainRes.id !== undefined;
+        const domainExists = getDomainRes && getDomainRes.id !== undefined;
         console.log('@domainExists', domainExists);
         let domainId;
 

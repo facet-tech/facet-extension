@@ -64,4 +64,10 @@ const getDomain = async (domainName, workspaceId) => {
     return apiResponse;
 }
 
-export { constructPayload, triggerApiCall, createDomain, getDomain };
+const getFacet = async (domainId, urlPath) => {
+    const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
+    const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+    return apiResponse;
+}
+
+export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet };
