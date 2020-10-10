@@ -1,5 +1,5 @@
 /*global chrome*/
-import { LoginTypes } from './constant';
+import { api, isPluginEnabled, LoginTypes, showFacetizer } from './constant';
 
 const facetKey = 'facet-settings';
 
@@ -8,6 +8,7 @@ const facetKey = 'facet-settings';
  * @param {*} setIsPluginEnabled 
  * @param {*} setIsUserAuthenticated 
  */
+// TODO clean up
 const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
         console.log('HI MOM', obj);
@@ -21,16 +22,16 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
                 setIsPluginEnabled(true);
             };
 
-            const cb3 = function () {
-                setIsUserAuthenticated(false);
-            }
-            setKeyInLocalStorage('showFacetizer', cb1);
-            setKeyInLocalStorage('isPluginEnabled', true, cb2);
-            setIsUserAuthenticated(LoginTypes.email, false, cb3);
+            setKeyInLocalStorage(showFacetizer, cb1);
+            setKeyInLocalStorage(isPluginEnabled, false);
+            // setKeyInLocalStorage(LoginTypes.email, undefined);
+            // setKeyInLocalStorage(api.workspace.workspaceId, undefined);
         } else {
-            setShouldDisplayFacetizer(obj[facetKey]['showFacetizer']);
-            setIsPluginEnabled(obj[facetKey]['isPluginEnabled']);
-            setIsUserAuthenticated(obj[facetKey][LoginTypes.email]);
+            // setWorkspaceId(obj[facetKey][api.workspace.workspaceId]);
+            setShouldDisplayFacetizer(obj[facetKey][showFacetizer]);
+            setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
+            setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
+            console.log('[STORAGE] Loaded.')
         }
     });
 }

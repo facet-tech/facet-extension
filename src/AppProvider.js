@@ -19,8 +19,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [showToolbox, setShowToolbox] = useState(true);
     const [isPluginEnabled, setIsPluginEnabled] = useState(true);
 
-    useEffect(() => {
-        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
+    useEffect(async () => {
+        await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
     }, []);
 
     const onFacetAdd = (label) => {

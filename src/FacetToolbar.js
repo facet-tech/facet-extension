@@ -9,9 +9,9 @@ import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
-import { triggerApiCall, createDomain, getDomain } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
+import { createDomain, getDomain, triggerApiCall } from './services/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;
@@ -48,37 +48,38 @@ export default function FacetToolbar() {
     }
 
     const onSaveClick = async () => {
-        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-        // check if domain exists
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        let getDomainRes = getDomain(window.location.hostname);
-        const domainExists = getDomainRes && getDomainRes.id !== undefined;
-        console.log('@domainExists', domainExists);
-        let domainId;
+        try {
+            // check if domain exists
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            let getDomainRes = await getDomain(window.location.hostname, workspaceId);
 
-        // create domain if it doesn't exist
-        if (domainExists) {
-            domainId = getDomainRes.id
-        } else {
-            const domainRes = await createDomain(window.location.hostname, workspaceId);
-            domainId = domainRes.id;
+            const domainExists = getDomainRes && getDomainRes.id !== undefined;
+            let domainId;
+
+            // create domain if it doesn't exist
+            if (domainExists) {
+                domainId = getDomainRes.id
+            } else {
+                const domainRes = await createDomain(window.location.hostname, workspaceId);
+                domainId = domainRes.id;
+            }
+            // TODO add this inside parse path
+            const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+
+            const body = {
+                domainId,
+                domElement: [{
+                    enabled: "true",
+                    path: rightParsedPath
+                }],
+                urlPath: window.location.pathname
+            }
+            const response = await triggerApiCall(HTTPMethods.POST, '/facet', body);
+            enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+        } catch (e) {
+            enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
         }
 
-        // new
-        const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
-
-        const body = {
-            domainId,
-            domElement: [{
-                enabled: "true",
-                path: rightParsedPath
-            }],
-            urlPath: window.location.pathname
-        }
-        // const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
-        const response = await triggerApiCall(HTTPMethods.POST, '/facet', body);
-        // const result = response.json();
-        console.log('result!', response);
     }
 
 
@@ -126,8 +127,6 @@ export default function FacetToolbar() {
                 </StyledButton>
             </StyledDiv>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
-            <FacetSwitch callBack={cb} />
-            <StyledButton onClick={() => { onPreviewClick() }}>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />

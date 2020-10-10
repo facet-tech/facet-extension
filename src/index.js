@@ -26,6 +26,7 @@ if (!document.getElementById('popup')) {
 }
 
 if (document.getElementById('facetizer')) {
+    console.log('MPIKA1 @IF');
     ReactDOM.render(
         <React.StrictMode>
             <div id='facet-sidebar'>
@@ -56,6 +57,7 @@ if (document.getElementById('facetizer')) {
 
 // TODO fix duplication
 if (document.getElementById('popup')) {
+    console.log('MPIKA2 @IF');
     ReactDOM.render(
         <React.StrictMode>
             <SnackbarProvider maxSnack={4}
