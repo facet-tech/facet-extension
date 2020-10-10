@@ -30,9 +30,8 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         console.log('[API] triggering call', url, obj);
         const res = await fetch(url, obj);
-        console.log('res!', res);
         const resjson = await res.json();
-        console.log('resjson', resjson);
+        console.log('[API] result:', resjson);
         return resjson;
     } catch (e) {
         console.log('[triggerApiCall]', e)
@@ -55,8 +54,14 @@ const createDomain = async (domain, workspaceId) => {
     console.log('body', body);
     const suffix = '/domain';
     const apiResponse = await triggerApiCall(HTTPMethods.POST, suffix, body);
-    console.log('apirespose', apiResponse);
-    return apiResponse.json();
+    return apiResponse;
 }
 
-export { constructPayload, triggerApiCall, createDomain };
+//http://localhost:3000/domain?domain=pornhub.com&workspaceId=NWVhMDExM2YtZjBmZi00NzIyLWIzYjctNjZlYzdiMjk1Nzc3
+const getDomain = async (domainName, workspaceId) => {
+    const suffix = `/domain?domain=${domainName}&workspaceId=${workspaceId}`;
+    const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+    return apiResponse;
+}
+
+export { constructPayload, triggerApiCall, createDomain, getDomain };

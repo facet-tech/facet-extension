@@ -51,7 +51,6 @@ const getLocalStorageObject = async () => {
 const getKeyFromLocalStorage = async (key) => {
     return new Promise((resolve, reject) => {
         try {
-            console.log('chromestorge', chrome.storage);
             chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey][key]);
             })
@@ -69,7 +68,6 @@ const getKeyFromLocalStorage = async (key) => {
  * @param {*} value 
  */
 const setKeyInLocalStorage = async (key, value) => {
-    console.log('SETTING', key, value)
     const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
         [facetKey]: {

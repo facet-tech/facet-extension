@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api } from '../shared/constant';
-import { constructPayload, triggerApiCall } from '../servives/facetApiService';
+import { constructPayload, triggerApiCall } from '../services/facetApiService';
 
 export default ({ children }) => {
     // email,id:  

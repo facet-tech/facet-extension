@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
-import { constructPayload, triggerApiCall, createDomain } from './servives/facetApiService';
+import { constructPayload, triggerApiCall, createDomain, getDomain } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 
@@ -49,33 +49,36 @@ export default function FacetToolbar() {
 
     const onSaveClick = async () => {
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-        // TODO fix this is buggy
-        // const rightParsedPath = parsePath(window.hiddenPaths);
-        // const rightParsedPayload = {
-        //     "site": window.btoa(window.location.href), "facet": [{
-        //         "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
-        //     }]
-        // }
-        // const payload = constructPayload()
-        // const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-        // const response = await fetch(url, {
-        //     method: 'POST',
-        //     body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
-        // });
-        // return response.json(); // parses JSON response into native JavaScript objects
-        console.log('mpenw', createDomain)
-        // create domain
+        // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        console.log('workspaceId!!', workspaceId);
-        const domainRes = await createDomain(window.location.hostname, workspaceId);
-        console.log('DOMAINRES!!', domainRes);
+        let getDomainRes = getDomain(window.location.hostname);
+        const domainExists = getDomainRes.id !== undefined;
+        console.log('@domainExists', domainExists);
+        let domainId;
+
+        // create domain if it doesn't exist
+        if (domainExists) {
+            domainId = getDomainRes.id
+        } else {
+            const domainRes = await createDomain(window.location.hostname, workspaceId);
+            domainId = domainRes.id;
+        }
 
         // new
-        // const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+        const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+
+        const body = {
+            domainId,
+            domElement: [{
+                enabled: "true",
+                path: rightParsedPath
+            }],
+            urlPath: window.location.pathname
+        }
         // const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
-        // const response = triggerApiCall(HTTPMethods.POST, '/facet', body);
+        const response = await triggerApiCall(HTTPMethods.POST, '/facet', body);
         // const result = response.json();
-        // console.log('result!');
+        console.log('result!', response);
     }
 
 

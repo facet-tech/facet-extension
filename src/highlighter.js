@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { constructPayload, triggerApiCall } from './servives/facetApiService';
+import { constructPayload, triggerApiCall } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { HTTPMethods, api } from './shared/constant';
 
