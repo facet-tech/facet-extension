@@ -86,11 +86,8 @@ const updateEvents = async (flag) => {
         const domainRes = await createDomain(window.location.hostname, workspaceId);
         domainId = domainRes.id;
     }
-    console.log('@highlighter workspaceId', workspaceId, 'getDomainRes', getDomainRes);
     const facets = await getFacet(domainId, window.location.pathname);
-    console.log('facets!', facets && facets.domElement[0]);
     const properFacetArr = parsePath(facets && facets.domElement && facets.domElement[0] && facets.domElement[0].path, false);
-    console.log('properFacetArr', properFacetArr)
     let facetsArr = [];
     properFacetArr && properFacetArr.forEach(ff => {
         $(ff).css("opacity", "0.3", "important");

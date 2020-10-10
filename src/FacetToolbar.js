@@ -11,11 +11,11 @@ import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
-import { createDomain, getDomain, triggerApiCall } from './services/facetApiService';
+import { createDomain, getOrPostDomain, triggerApiCall, deleteFacet } from './services/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 33% 33% 34%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
 `;
@@ -43,38 +43,24 @@ const StyledButton = withStyles({
 export default function FacetToolbar() {
     const { enqueueSnackbar } = useSnackbar();
 
-    const onPreviewClick = () => {
-        enqueueSnackbar(`👷‍♂️⚒ Feature coming soon! 👷‍♂️⚒`, { variant: "info" });
-    }
-
     const onSaveClick = async () => {
         try {
             // check if domain exists
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getDomain(window.location.hostname, workspaceId);
+            let getDomainRes = await getOrPostDomain(window.location.hostname, workspaceId);
 
-            const domainExists = getDomainRes && getDomainRes.id !== undefined;
-            let domainId;
-
-            // create domain if it doesn't exist
-            if (domainExists) {
-                domainId = getDomainRes.id
-            } else {
-                const domainRes = await createDomain(window.location.hostname, workspaceId);
-                domainId = domainRes.id;
-            }
             // TODO add this inside parse path
             const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
 
             const body = {
-                domainId,
+                domainId: getDomainRes.id,
                 domElement: [{
                     enabled: "true",
                     path: rightParsedPath
                 }],
                 urlPath: window.location.pathname
             }
-            const response = await triggerApiCall(HTTPMethods.POST, '/facet', body);
+            await triggerApiCall(HTTPMethods.POST, '/facet', body);
             enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
         } catch (e) {
             enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
@@ -82,8 +68,7 @@ export default function FacetToolbar() {
 
     }
 
-
-    const reset = () => {
+    const reset = async () => {
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
             if (!domElement) {
@@ -92,6 +77,17 @@ export default function FacetToolbar() {
             domElement.style.setProperty("opacity", "unset");
         });
         window.hiddenPaths = [];
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        let domainRes = await getOrPostDomain(window.location.hostname, workspaceId);
+
+        const body = {
+            domainId: domainRes.id,
+            domElement: [],
+            urlPath: window.location.pathname
+        }
+        // await deleteFacet(body);
+        await triggerApiCall(HTTPMethods.POST, '/facet', body);
+
         enqueueSnackbar(`Reset all facets.`, { variant: "success" });
     }
 

@@ -64,10 +64,39 @@ const getDomain = async (domainName, workspaceId) => {
     return apiResponse;
 }
 
+const getOrPostDomain = async (domainName, workspaceId) => {
+
+    let domainRes = await getDomain(window.location.hostname, workspaceId);
+    const domainExists = domainRes && domainRes.id !== undefined;
+
+    // create domain if it doesn't exist
+    if (domainExists) {
+        return domainRes;
+    }
+    domainRes = await createDomain(window.location.hostname, workspaceId);
+    return domainRes;
+}
+
 const getFacet = async (domainId, urlPath) => {
     const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;
 }
 
-export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet };
+// TODO browser issues fix
+const deleteFacet = async (body) => {
+    const url = 'https://api.facet.ninja/facet'
+    const deleteMethod = {
+        method: 'DELETE', // Method itself
+        body: JSON.stringify({
+            "domainId": "YzU2NmUxYTktZGIwZC00Y2Y1LTlmYTMtMWI5YTdlODIyNTRj", "domElement": [], "urlPath": "/"
+        }) // We send data in JSON format
+    };
+
+    const res = await fetch(url, deleteMethod);
+    const res1 = await res.json();
+
+    return res1;
+}
+
+export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet, getOrPostDomain, deleteFacet };
