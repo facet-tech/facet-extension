@@ -36,10 +36,11 @@ function App() {
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
 
   if (isPluginEnabled) {
-    console.log('LOADING REGISTER EVENTS')
     if (showSideBar) {
+      console.log('LOADING REGISTER EVENTS', true)
       updateEvents(true);
     } else {
+      console.log('LOADING REGISTER EVENTS', true)
       updateEvents(false);
     }
   }

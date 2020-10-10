@@ -15,8 +15,11 @@ const storage = {
     isUserAuthenticated
 };
 
-const facetApiConstants = {
-    userId: 'userId'
+const api = {
+    userId: 'userId',
+    workspace: {
+        workspaceId: 'workspaceId'
+    }
 };
 
 const HTTPMethods = {
@@ -29,5 +32,5 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, showFacetizer,
     isPluginEnabled, storage, LoginTypes,
-    facetApiConstants, HTTPMethods
+    api, HTTPMethods
 };

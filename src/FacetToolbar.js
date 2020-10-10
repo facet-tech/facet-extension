@@ -9,7 +9,9 @@ import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
-import { constructPayload, triggerApiCall } from './servives/facetApiService';
+import { constructPayload, triggerApiCall, createDomain } from './servives/facetApiService';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { api } from './shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
@@ -61,12 +63,18 @@ export default function FacetToolbar() {
         //     body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
         // });
         // return response.json(); // parses JSON response into native JavaScript objects
+        console.log('mpenw', createDomain)
+        // create domain
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        console.log('workspaceId!!', workspaceId);
+        const domainRes = await createDomain(window.location.hostname, workspaceId);
+        console.log('DOMAINRES!!', domainRes);
 
         // new
-        const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
-        const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
-        const response = triggerApiCall(HTTPMethods.POST, '/facet', body);
-        const result = response.json();
+        // const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+        // const body = constructPayload(window.location.hostname, window.location.pathname, rightParsedPath);
+        // const response = triggerApiCall(HTTPMethods.POST, '/facet', body);
+        // const result = response.json();
         // console.log('result!');
     }
 

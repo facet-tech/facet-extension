@@ -51,6 +51,7 @@ const getLocalStorageObject = async () => {
 const getKeyFromLocalStorage = async (key) => {
     return new Promise((resolve, reject) => {
         try {
+            console.log('chromestorge', chrome.storage);
             chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey][key]);
             })

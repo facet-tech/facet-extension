@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
-import { LoginTypes, storage } from '../shared/constant';
+import { LoginTypes, storage, api } from '../shared/constant';
 import { constructPayload, triggerApiCall } from '../servives/facetApiService';
 
 export default ({ children }) => {
@@ -22,27 +22,14 @@ export default ({ children }) => {
             domain: window.location.hostname,
         }
         const res1 = await triggerApiCall('POST', '/workspace', body1);
-        console.log('res1', res1)
-        const res2 = await res1.json();
-        console.log('res2',res2)
-        // {
-        //     "email" : "hello@gmail.com",
-        //     "workspaceId" : "NWNkZmI2ZGMtNzQxOS00MzgxLThkNmUtMmEzNzY2MzUxNjIw",
-        //     "attribute" : {
-        //        "name" : "mene",
-        //        "desc" : "pussy"
-        //     }
-        // }
+        // const res2 = await res1.json();
 
-        const body = {
-            email
-        }
         // const res = await triggerApiCall('POST', '/user', body);
-        // console.log('RES!', res);
+        console.log('RES!', res1);
         setIsUserAuthenticated(true);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
-
+        await setKeyInLocalStorage(api.workspace.workspaceId, res1.id);
     }
 
     useEffect(() => {
