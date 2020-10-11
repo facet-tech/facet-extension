@@ -1,5 +1,8 @@
 import $ from 'jquery';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { constructPayload, triggerApiCall, getFacet, getDomain, createDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
+import { HTTPMethods, api, storage } from './shared/constant';
 
 window.highlightMode = false;
 window.hiddenPaths = [];
@@ -69,18 +72,22 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     return result;
 }
 
-const fetchFacets = async () => {
-    const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-    const response = await fetch(url, {
-        method: 'GET',
-    });
-    return response.json();
-}
-
 const updateEvents = async (flag) => {
+    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    let getDomainRes = await getDomain(window.location.hostname, workspaceId);
 
-    const facets = await fetchFacets();
-    const properFacetArr = parsePath(facets && facets.facet[0] && facets.facet[0].id, false);
+    // duplicate code to be fixed...
+    let domainId;
+    const domainExists = getDomainRes && getDomainRes.id !== undefined;
+    // create domain if it doesn't exist
+    if (domainExists) {
+        domainId = getDomainRes.id
+    } else {
+        const domainRes = await createDomain(window.location.hostname, workspaceId);
+        domainId = domainRes.id;
+    }
+    const facets = await getFacet(domainId, window.location.pathname);
+    const properFacetArr = parsePath(facets && facets.domElement && facets.domElement[0] && facets.domElement[0].path, false);
     let facetsArr = [];
     properFacetArr && properFacetArr.forEach(ff => {
         $(ff).css("opacity", "0.3", "important");

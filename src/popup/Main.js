@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PopupContext from './PopupContext';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -13,10 +13,20 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
+import { getDomain } from '../services/facetApiService';
+import { api } from '../shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
     grid-template-columns: 30% 30% 30%;
+    grid-gap: 5%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const TwoGridDiv = styled.div`
+    display: grid;
+    grid-template-columns: 60% 30%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
@@ -32,18 +42,21 @@ const StyledDiv = styled.div`
 
 const StyledSpan = styled.span`
     font-size: .5rem;
+    word-break: break-all;
 `;
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const [invitee, setInvitee] = useState('');
+    const [textToCopy, setTextToCopy] = useState('');
 
     const logout = () => {
         clearStorage();
         setIsUserAuthenticated(false);
     }
 
-    const invite = () => {
+    const invite = async () => {
         // TODO http call
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
@@ -85,7 +98,12 @@ export default () => {
         setIsPluginEnabled(e);
     }
 
-    const textToCopy = `<script src="https://api.facet.ninja/js/aHR0cHM6Ly9teXdlYnNpdGUuZmFjZXQubmluamEv/facet.ninja.js"></script>`;
+    useEffect(async () => {
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        var loc = new URL(url);
+        let domainRes = await getDomain(loc.hostname, workspaceId);
+        setTextToCopy(`<script src="https://api.facet.ninja/js/${domainRes.id}/facet.ninja.js"></script>`);
+    }, [setTextToCopy]);
 
     const enableFacetizerElement = <div>
         <GridDiv>
@@ -100,7 +118,10 @@ export default () => {
             <div>
                 <Button
                     variant="contained"
-                    color="secondary" onClick={() => logout()}>logout</Button>
+                    color="secondary"
+                    onClick={() => logout()}>
+                    logout
+                </Button>
             </div>
         </GridDiv>
     </div>;
@@ -109,7 +130,7 @@ export default () => {
         {enableFacetizerElement}
         <Divider />
         <MarginTop value=".5rem" />
-        <GridDiv>
+        <TwoGridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
                     {'URL:'}
@@ -118,8 +139,8 @@ export default () => {
             <div>
                 <StyledSpan>{url}</StyledSpan>
             </div>
-        </GridDiv>
-        <GridDiv>
+        </TwoGridDiv>
+        <TwoGridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
                     {'Show Toolbar: (Ctrl+E)'}
@@ -128,10 +149,15 @@ export default () => {
             <div>
                 <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
             </div>
-        </GridDiv>
-        <GridDiv>
+        </TwoGridDiv>
+        <TwoGridDiv>
             <div>
-                <TextField id="outlined-basic" variant="outlined" type='email' placeholder="example@email.com" />
+                <TextField
+                    onChange={(e) => { setInvitee(e.target.value) }}
+                    id="outlined-basic"
+                    variant="outlined" type='email'
+                    placeholder="example@email.com"
+                />
             </div>
             <div>
                 <Button
@@ -143,7 +169,7 @@ export default () => {
                     size="small">Invite
                 </Button>
             </div>
-        </GridDiv>
+        </TwoGridDiv>
         <MarginTop value="2rem" />
         <CopyToClipboard text={textToCopy}
             onCopy={() => enqueueSnackbar(`Copied snippet`, { variant: "info" })}>

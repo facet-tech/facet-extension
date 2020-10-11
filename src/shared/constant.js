@@ -1,6 +1,5 @@
 const facetizerId = 'facetizer';
 const facetKey = 'facet-settings'
-
 const showFacetizer = 'showFacetizer';
 const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
@@ -16,7 +15,22 @@ const storage = {
     isUserAuthenticated
 };
 
+const api = {
+    userId: 'userId',
+    workspace: {
+        workspaceId: 'workspaceId'
+    }
+};
+
+const HTTPMethods = {
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT',
+    DELETE: 'DELETE'
+};
+
 export {
     facetizerId, facetKey, showFacetizer,
-    isPluginEnabled, storage, LoginTypes
+    isPluginEnabled, storage, LoginTypes,
+    api, HTTPMethods
 };

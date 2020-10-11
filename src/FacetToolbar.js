@@ -8,10 +8,14 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
 import parsePath from './shared/parsePath';
+import { HTTPMethods } from './shared/constant';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { api } from './shared/constant';
+import { createDomain, getOrPostDomain, triggerApiCall, deleteFacet } from './services/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 33% 33% 34%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
 `;
@@ -39,28 +43,32 @@ const StyledButton = withStyles({
 export default function FacetToolbar() {
     const { enqueueSnackbar } = useSnackbar();
 
-    const onPreviewClick = () => {
-        enqueueSnackbar(`👷‍♂️⚒ Feature coming soon! 👷‍♂️⚒`, { variant: "info" });
-    }
-
     const onSaveClick = async () => {
-        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-        // TODO fix this is buggy
-        const rightParsedPath = parsePath(window.hiddenPaths);
-        const rightParsedPayload = {
-            "site": window.btoa(window.location.href), "facet": [{
-                "name": "myfacet", "enabled": "false", "id": rightParsedPath.map(el => el.replace(/ /g, ""))
-            }]
+        try {
+            // check if domain exists
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            let getDomainRes = await getOrPostDomain(workspaceId);
+
+            // TODO add this inside parse path
+            const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+
+            const body = {
+                domainId: getDomainRes.id,
+                domElement: [{
+                    enabled: "true",
+                    path: rightParsedPath
+                }],
+                urlPath: window.location.pathname
+            }
+            await triggerApiCall(HTTPMethods.POST, '/facet', body);
+            enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+        } catch (e) {
+            enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
         }
-        const url = `https://api.facet.ninja/facet/${window.btoa(window.location.href)}`;
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(rightParsedPayload) // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
+
     }
 
-    const reset = () => {
+    const reset = async () => {
         window.hiddenPaths.forEach(element => {
             const domElement = $(element)[0];
             if (!domElement) {
@@ -69,7 +77,17 @@ export default function FacetToolbar() {
             domElement.style.setProperty("opacity", "unset");
         });
         window.hiddenPaths = [];
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        let domainRes = await getOrPostDomain(workspaceId);
+
+        const body = {
+            domainId: domainRes.id,
+            domElement: [],
+            urlPath: window.location.pathname
+        }
+        // deleteFacet(body);
         enqueueSnackbar(`Reset all facets.`, { variant: "success" });
+        await triggerApiCall(HTTPMethods.POST, '/facet', body);
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -93,7 +111,6 @@ export default function FacetToolbar() {
 
     const classes = useStyles();
     const { showSideBar, setShowSideBar, setShouldDisplayFacetizer } = useContext(AppContext);
-
     return <div>
         <GridDiv>
             <StyledDiv>
@@ -105,8 +122,6 @@ export default function FacetToolbar() {
                 </StyledButton>
             </StyledDiv>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
-            <FacetSwitch callBack={cb} />
-            <StyledButton onClick={() => { onPreviewClick() }}>{'Preview 🚀'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />

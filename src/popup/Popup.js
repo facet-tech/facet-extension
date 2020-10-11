@@ -24,6 +24,7 @@ const StyledDiv = styled.div`
 
 const StyledSpan = styled.span`
     font-size: .5rem;
+    word-break: break-all;
 `;
 
 export default () => {

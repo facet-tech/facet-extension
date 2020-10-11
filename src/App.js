@@ -16,7 +16,6 @@ function App() {
 
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
       const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
-      // console.log('retrieved msg. showFacetizerValue', showFacetizerValue, 'isPluginEnabledValue', isPluginEnabledValue);
       setShouldDisplayFacetizer(showFacetizerValue);
       setIsPluginEnabled(isPluginEnabledValue);
     });
@@ -36,10 +35,11 @@ function App() {
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
 
   if (isPluginEnabled) {
-    console.log('LOADING REGISTER EVENTS')
     if (showSideBar) {
+      console.log('[LOADING REGISTER EVENTS] true', true)
       updateEvents(true);
     } else {
+      console.log('[LOADING REGISTER EVENTS] false', false)
       updateEvents(false);
     }
   }
