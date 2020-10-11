@@ -49,7 +49,7 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
-    const [textToCopy, setTextToCopy] = useState('');
+    const [textToCopy, setTextToCopy] = useState('<script src="https://api.facet.ninja/js/{DOMAIN_ID}/facet.ninja.js"></script>');
 
     const logout = () => {
         clearStorage();
