@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api } from '../shared/constant';
-import { constructPayload, triggerApiCall } from '../services/facetApiService';
+import { constructPayload, triggerApiCall, getOrCreateWorkspace } from '../services/facetApiService';
 
 export default ({ children }) => {
     // email,id:  
@@ -18,14 +18,10 @@ export default ({ children }) => {
 
     const login = async () => {
         // api call goes here
-        const body1 = {
-            domain: window.location.hostname,
-        }
-        const res1 = await triggerApiCall('POST', '/workspace', body1);
+        // const res1 = await triggerApiCall('POST', '/workspace', body1);
+        const res1 = await getOrCreateWorkspace(email);
         // const res2 = await res1.json();
-
         // const res = await triggerApiCall('POST', '/user', body);
-        console.log('RES!', res1);
         setIsUserAuthenticated(true);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);

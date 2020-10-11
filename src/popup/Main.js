@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PopupContext from './PopupContext';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,7 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
+import isValidEmail from './isValidEmail';
 
 const GridDiv = styled.div`
     display: grid;
@@ -46,6 +47,7 @@ const StyledSpan = styled.span`
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const [invitee, setInvitee] = useState('');
 
     const logout = () => {
         clearStorage();
@@ -143,7 +145,12 @@ export default () => {
         </TwoGridDiv>
         <TwoGridDiv>
             <div>
-                <TextField id="outlined-basic" variant="outlined" type='email' placeholder="example@email.com" />
+                <TextField
+                    onChange={(e) => { setInvitee(e.target.value) }}
+                    id="outlined-basic"
+                    variant="outlined" type='email'
+                    placeholder="example@email.com"
+                />
             </div>
             <div>
                 <Button

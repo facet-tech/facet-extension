@@ -85,10 +85,9 @@ export default function FacetToolbar() {
             domElement: [],
             urlPath: window.location.pathname
         }
-        // await deleteFacet(body);
-        await triggerApiCall(HTTPMethods.POST, '/facet', body);
-
+        // deleteFacet(body);
         enqueueSnackbar(`Reset all facets.`, { variant: "success" });
+        await triggerApiCall(HTTPMethods.POST, '/facet', body);
     }
 
     const useStyles = makeStyles((theme) => ({

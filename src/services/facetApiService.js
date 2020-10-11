@@ -38,9 +38,10 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
     }
 }
 
-const createNewUser = (email) => {
+const createNewUser = (email, workspaceId) => {
     const body = {
-        email
+        email,
+        workspaceId
     }
     const suffix = '/user';
     return triggerApiCall(HTTPMethods.POST, suffix, body);
@@ -77,6 +78,25 @@ const getOrPostDomain = async (domainName, workspaceId) => {
     return domainRes;
 }
 
+const getOrCreateWorkspace = async (email) => {
+    //https://api.facet.ninja/user?email=hello@gmail.com
+    let suffix = `/user?email=${email}`;
+    const getUser = await triggerApiCall(HTTPMethods.GET, suffix);
+    if (getUser) {
+        const workspaceSuffix = `/workspace?id=${getUser.workspaceId}`;
+        let workspaceResponse = await triggerApiCall(HTTPMethods.GET, workspaceSuffix)
+        console.log('workspaceResponse', workspaceResponse);
+        return workspaceResponse;
+    }
+    const body = {
+        domain: window.location.hostname,
+    }
+    const workspaceResponse = await triggerApiCall('POST', '/workspace', body);
+    console.log('@workspaceResponse', workspaceResponse);
+    let newUserResponse = await createNewUser(email, workspaceResponse.id);
+    return workspaceResponse;
+}
+
 const getFacet = async (domainId, urlPath) => {
     const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
@@ -85,18 +105,16 @@ const getFacet = async (domainId, urlPath) => {
 
 // TODO browser issues fix
 const deleteFacet = async (body) => {
-    const url = 'https://api.facet.ninja/facet'
-    const deleteMethod = {
-        method: 'DELETE', // Method itself
-        body: JSON.stringify({
-            "domainId": "YzU2NmUxYTktZGIwZC00Y2Y1LTlmYTMtMWI5YTdlODIyNTRj", "domElement": [], "urlPath": "/"
-        }) // We send data in JSON format
+
+    let url = 'https://facet.ninja/facet';
+    let options = {
+        method: 'DELETE'
     };
 
-    const res = await fetch(url, deleteMethod);
-    const res1 = await res.json();
-
-    return res1;
+    options.body = JSON.stringify(body);
+    let deleteResponse = await fetch(url, options);
+    const jsonResponse = deleteResponse.json();
+    return jsonResponse;
 }
 
-export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet, getOrPostDomain, deleteFacet };
+export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet, getOrPostDomain, deleteFacet, getOrCreateWorkspace };
