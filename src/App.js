@@ -36,10 +36,10 @@ function App() {
 
   if (isPluginEnabled) {
     if (showSideBar) {
-      console.log('LOADING REGISTER EVENTS', true)
+      console.log('[LOADING REGISTER EVENTS] true', true)
       updateEvents(true);
     } else {
-      console.log('LOADING REGISTER EVENTS', true)
+      console.log('[LOADING REGISTER EVENTS] false', false)
       updateEvents(false);
     }
   }

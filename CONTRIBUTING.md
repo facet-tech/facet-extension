@@ -14,7 +14,7 @@ Read values from local storage:
 
 ```
  chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
-        console.log('HI MOM', obj);
+        console.log('[local storage]:', obj);
  });
 ```
 

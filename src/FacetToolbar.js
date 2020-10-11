@@ -47,7 +47,7 @@ export default function FacetToolbar() {
         try {
             // check if domain exists
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getOrPostDomain(window.location.hostname, workspaceId);
+            let getDomainRes = await getOrPostDomain(workspaceId);
 
             // TODO add this inside parse path
             const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
@@ -78,7 +78,7 @@ export default function FacetToolbar() {
         });
         window.hiddenPaths = [];
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        let domainRes = await getOrPostDomain(window.location.hostname, workspaceId);
+        let domainRes = await getOrPostDomain(workspaceId);
 
         const body = {
             domainId: domainRes.id,

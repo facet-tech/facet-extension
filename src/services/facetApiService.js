@@ -52,7 +52,6 @@ const createDomain = async (domain, workspaceId) => {
         domain,
         workspaceId
     };
-    console.log('body', body);
     const suffix = '/domain';
     const apiResponse = await triggerApiCall(HTTPMethods.POST, suffix, body);
     return apiResponse;
@@ -65,7 +64,7 @@ const getDomain = async (domainName, workspaceId) => {
     return apiResponse;
 }
 
-const getOrPostDomain = async (domainName, workspaceId) => {
+const getOrPostDomain = async (workspaceId) => {
 
     let domainRes = await getDomain(window.location.hostname, workspaceId);
     const domainExists = domainRes && domainRes.id !== undefined;

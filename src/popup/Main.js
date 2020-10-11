@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PopupContext from './PopupContext';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +13,8 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
-import isValidEmail from './isValidEmail';
+import { getDomain } from '../services/facetApiService';
+import { api } from '../shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
@@ -48,13 +49,14 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
+    const [textToCopy, setTextToCopy] = useState('');
 
     const logout = () => {
         clearStorage();
         setIsUserAuthenticated(false);
     }
 
-    const invite = () => {
+    const invite = async () => {
         // TODO http call
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
@@ -96,7 +98,12 @@ export default () => {
         setIsPluginEnabled(e);
     }
 
-    const textToCopy = `<script src="https://api.facet.ninja/js/aHR0cHM6Ly9teXdlYnNpdGUuZmFjZXQubmluamEv/facet.ninja.js"></script>`;
+    useEffect(async () => {
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        var loc = new URL(url);
+        let domainRes = await getDomain(loc.hostname, workspaceId);
+        setTextToCopy(`<script src="https://api.facet.ninja/js/${domainRes.id}/facet.ninja.js"></script>`);
+    }, [setTextToCopy]);
 
     const enableFacetizerElement = <div>
         <GridDiv>

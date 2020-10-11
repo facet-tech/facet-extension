@@ -50,10 +50,6 @@ if (document.getElementById('facetizer')) {
     );
 }
 
-// chrome.storage && chrome.storage.sync.set({ 'facet-settings': {} }, async function () {
-//     console.log('fresh')
-// });
-
 // TODO fix duplication
 if (document.getElementById('popup')) {
     ReactDOM.render(
