@@ -54,7 +54,8 @@ function getDomPath(el) {
         el = el.parentNode;
     }
     var res = stack.slice(1).join(' > '); // removes the html element
-    return res;
+    var withoutSpaces = res.replace(/ /g, "");
+    return withoutSpaces;
 }
 
 var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
