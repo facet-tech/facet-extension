@@ -49,7 +49,7 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
-    const [textToCopy, setTextToCopy] = useState('<script src="https://api.facet.ninja/js/{DOMAIN_ID}/facet.ninja.js"></script>');
+    const [textToCopy, setTextToCopy] = useState('https://api.facet.ninja/facet.ninja.js?id={ID}');
 
     const logout = () => {
         clearStorage();
@@ -106,7 +106,7 @@ export default () => {
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         var loc = new URL(url);
         let domainRes = await getDomain(loc.hostname, workspaceId);
-        setTextToCopy(`<script src="https://api.facet.ninja/js/${domainRes.id}/facet.ninja.js"></script>`);
+        setTextToCopy(`https://api.facet.ninja/facet.ninja.js?id=${domainRes.id}`);
     }, [setTextToCopy]);
 
     const enableFacetizerElement = <div>
