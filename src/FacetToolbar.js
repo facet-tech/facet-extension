@@ -33,7 +33,9 @@ const StyledButton = withStyles({
         height: 48,
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-        color: 'white'
+        color: 'white',
+        fontSize: '1.5rem',
+        width: '100%'
     },
     label: {
         textTransform: 'capitalize',
@@ -62,6 +64,7 @@ export default function FacetToolbar() {
             }
             await triggerApiCall(HTTPMethods.POST, '/facet', body);
             enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+            window.location.reload();
         } catch (e) {
             enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
         }

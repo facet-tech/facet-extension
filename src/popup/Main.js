@@ -137,16 +137,6 @@ export default () => {
         <TwoGridDiv>
             <div>
                 <Typography variant="primary" gutterBottom>
-                    {'URL:'}
-                </Typography>
-            </div>
-            <div>
-                <StyledSpan>{url}</StyledSpan>
-            </div>
-        </TwoGridDiv>
-        <TwoGridDiv>
-            <div>
-                <Typography variant="primary" gutterBottom>
                     {'Show Toolbar: (Ctrl+E)'}
                 </Typography>
             </div>
@@ -154,6 +144,7 @@ export default () => {
                 <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
             </div>
         </TwoGridDiv>
+        <Divider />
         <TwoGridDiv>
             <div>
                 <TextField
@@ -174,7 +165,8 @@ export default () => {
                 </Button>
             </div>
         </TwoGridDiv>
-        <MarginTop value="2rem" />
+        <Divider />
+        <MarginTop value=".5rem" />
         <CopyToClipboard text={textToCopy}
             onCopy={() => enqueueSnackbar(`Copied snippet`, { variant: "info" })}>
             <Button startIcon={<FileCopyIcon />} style={{ width: '100%' }} variant="contained"
