@@ -47,6 +47,22 @@ const createNewUser = (email, workspaceId) => {
     return triggerApiCall(HTTPMethods.POST, suffix, body);
 }
 
+const deleteUser = async (email, workspaceId) => {
+    const body = {
+        email,
+        workspaceId
+    }
+    let url = 'https://api.facet.ninja/user';
+    let options = {
+        method: 'DELETE'
+    };
+
+    options.body = JSON.stringify(body);
+    let deleteResponse = await fetch(url, options);
+    const jsonResponse = deleteResponse.json();
+    return jsonResponse;
+}
+
 const createDomain = async (domain, workspaceId) => {
     const body = {
         domain,
@@ -105,7 +121,7 @@ const getFacet = async (domainId, urlPath) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = 'https://facet.ninja/facet';
+    let url = 'https://api.facet.ninja/facet';
     let options = {
         method: 'DELETE'
     };
@@ -116,4 +132,8 @@ const deleteFacet = async (body) => {
     return jsonResponse;
 }
 
-export { constructPayload, triggerApiCall, createDomain, getDomain, getFacet, getOrPostDomain, deleteFacet, getOrCreateWorkspace };
+export {
+    constructPayload, triggerApiCall, createDomain,
+    getDomain, getFacet, getOrPostDomain, deleteFacet,
+    getOrCreateWorkspace, deleteUser, createNewUser
+};

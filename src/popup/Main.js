@@ -13,7 +13,7 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
-import { getDomain } from '../services/facetApiService';
+import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
 import { api } from '../shared/constant';
 
 const GridDiv = styled.div`
@@ -58,6 +58,10 @@ export default () => {
 
     const invite = async () => {
         // TODO http call
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        deleteUser(invitee, workspaceId);
+        createNewUser(invitee, workspaceId);
+
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
