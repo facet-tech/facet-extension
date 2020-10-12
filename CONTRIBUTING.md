@@ -21,10 +21,10 @@ Read values from local storage:
 Clean local storage:
 
 ```
-    chrome.storage.sync.clear(function () {
-        var error = chrome.runtime.lastError;
-        if (error) {
-            console.error(error);
-        }
-    });
+chrome.storage.sync.clear(function () {
+    var error = chrome.runtime.lastError;
+    if (error) {
+        console.error(error);
+    }
+});
 ```

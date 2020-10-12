@@ -8,7 +8,22 @@ import registerServiceWorker from './registerServiceWorker';
 import AppProvider from './AppProvider';
 import { SnackbarProvider } from "notistack";
 import Popup from './popup/Popup';
-import PopupProvider from './popup/PopupProvider'
+import PopupProvider from './popup/PopupProvider';
+
+import * as Sentry from "@sentry/browser";
+import { Integrations } from "@sentry/tracing";
+
+Sentry.init({
+    dsn: 'https://1060dd3ea4384475b0e957d971fa376b@o460218.ingest.sentry.io/5460107',
+    integrations: [
+        new Integrations.BrowserTracing(),
+    ],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+});
+
 
 if (!document.getElementById('popup')) {
 
