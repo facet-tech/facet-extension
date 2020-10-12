@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import AppContext from './AppContext';
 import styled from 'styled-components';
-import FacetSwitch from './FacetSwitch';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';

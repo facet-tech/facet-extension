@@ -72,7 +72,6 @@ const createDomain = async (domain, workspaceId) => {
     return apiResponse;
 }
 
-//http://localhost:3000/domain?domain=pornhub.com&workspaceId=NWVhMDExM2YtZjBmZi00NzIyLWIzYjctNjZlYzdiMjk1Nzc3
 const getDomain = async (domainName, workspaceId) => {
     const suffix = `/domain?domain=${domainName}&workspaceId=${workspaceId}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
@@ -93,7 +92,6 @@ const getOrPostDomain = async (workspaceId) => {
 }
 
 const getOrCreateWorkspace = async (email) => {
-    //https://api.facet.ninja/user?email=hello@gmail.com
     let suffix = `/user?email=${email}`;
     const getUser = await triggerApiCall(HTTPMethods.GET, suffix);
     if (getUser) {
@@ -105,7 +103,7 @@ const getOrCreateWorkspace = async (email) => {
         domain: window.location.hostname,
     }
     const workspaceResponse = await triggerApiCall('POST', '/workspace', body);
-    let newUserResponse = await createNewUser(email, workspaceResponse.id);
+    await createNewUser(email, workspaceResponse.id);
     return workspaceResponse;
 }
 
