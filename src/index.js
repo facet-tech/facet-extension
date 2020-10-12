@@ -91,4 +91,4 @@ if (document.getElementById('popup')) {
     );
 }
 
-registerServiceWorker();
+// registerServiceWorker();
