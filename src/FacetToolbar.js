@@ -49,10 +49,8 @@ export default function FacetToolbar() {
             // check if domain exists
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
-
             // TODO add this inside parse path
             const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
-
             const body = {
                 domainId: getDomainRes.id,
                 domElement: [{
@@ -71,25 +69,29 @@ export default function FacetToolbar() {
     }
 
     const reset = async () => {
-        window.hiddenPaths.forEach(element => {
-            const domElement = $(element)[0];
-            if (!domElement) {
-                return;
-            }
-            domElement.style.setProperty("opacity", "unset");
-        });
-        window.hiddenPaths = [];
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        let domainRes = await getOrPostDomain(workspaceId);
+        try {
+            window.hiddenPaths.forEach(element => {
+                const domElement = $(element)[0];
+                if (!domElement) {
+                    return;
+                }
+                domElement.style.setProperty("opacity", "unset");
+            });
+            window.hiddenPaths = [];
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            let domainRes = await getOrPostDomain(workspaceId);
 
-        const body = {
-            domainId: domainRes.id,
-            domElement: [],
-            urlPath: window.location.pathname
+            const body = {
+                domainId: domainRes.id,
+                domElement: [],
+                urlPath: window.location.pathname
+            }
+            enqueueSnackbar(`Reset all facets.`, { variant: "success" });
+            await triggerApiCall(HTTPMethods.POST, '/facet', body);
+            window.location.reload();
+        } catch (e) {
+            console.log('[ERROR]', e);
         }
-        // deleteFacet(body);
-        enqueueSnackbar(`Reset all facets.`, { variant: "success" });
-        await triggerApiCall(HTTPMethods.POST, '/facet', body);
     }
 
     const useStyles = makeStyles((theme) => ({
