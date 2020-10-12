@@ -11,7 +11,7 @@ import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
-import { createDomain, getOrPostDomain, triggerApiCall, deleteFacet } from './services/facetApiService';
+import { getOrPostDomain, triggerApiCall } from './services/facetApiService';
 
 const GridDiv = styled.div`
     display: grid;

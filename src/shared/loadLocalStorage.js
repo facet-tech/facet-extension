@@ -22,7 +22,9 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
             } else {
                 setShouldDisplayFacetizer(obj[facetKey][showFacetizer]);
                 setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
-                setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
+                if (setIsUserAuthenticated) {
+                    setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
+                }
             }
             console.log('[STORAGE] Loaded', obj);
         } catch (e) {

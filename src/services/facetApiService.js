@@ -28,13 +28,12 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
         const url = `https://api.facet.ninja${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
-        console.log('[API] triggering call', url, obj);
         const res = await fetch(url, obj);
         const resjson = await res.json();
         console.log('[API] result:', resjson);
         return resjson;
     } catch (e) {
-        console.log('[triggerApiCall]', e)
+        console.log('[API][Error]', e)
     }
 }
 
@@ -100,14 +99,12 @@ const getOrCreateWorkspace = async (email) => {
     if (getUser) {
         const workspaceSuffix = `/workspace?id=${getUser.workspaceId}`;
         let workspaceResponse = await triggerApiCall(HTTPMethods.GET, workspaceSuffix)
-        console.log('workspaceResponse', workspaceResponse);
         return workspaceResponse;
     }
     const body = {
         domain: window.location.hostname,
     }
     const workspaceResponse = await triggerApiCall('POST', '/workspace', body);
-    console.log('@workspaceResponse', workspaceResponse);
     let newUserResponse = await createNewUser(email, workspaceResponse.id);
     return workspaceResponse;
 }
