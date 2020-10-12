@@ -15,11 +15,11 @@ jobs:
         run: yarn
 
       - name: Building the Application
+        env:
+          CI: false
         run: yarn build
 
       - name: Rename folder, Install zip and zip
-        env:
-          CI: false
         run: mv /build /extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/
 
       - name: Upload to S3
