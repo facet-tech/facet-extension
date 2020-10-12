@@ -20,7 +20,7 @@ jobs:
         run: yarn build
 
       - name: Building the Application, Rename folder, Install zip and zip
-        run: mv build extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/
+        run: mv build extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/ && ls -al
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@v0.5.0
@@ -30,3 +30,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-west-2"
           SOURCE_DIR: "extension-chrome-facet-ninja.zip"
+          DEST_DIR: "."
