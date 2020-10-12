@@ -11,16 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Installing dependencies
-        run: yarn
-
-      - name: Building the Application
+      - name: Installing dependencies && Building the Application, Rename folder, Install zip and zip
         env:
           CI: false
-        run: yarn build
-
-      - name: Rename folder, Install zip and zip
-        run: mv /build /extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/
+        run: yarn && yarn build && mv /build /extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@v0.5.0
