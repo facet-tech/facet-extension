@@ -1,6 +1,6 @@
 ## Install plugin
 
-1. Download extension by navigating to https://cdn.facet.ninja/extension-chrome-facet-ninja.zip your google chrome browser. 
+1. Navigate to https://cdn.facet.ninja/extension-chrome-facet-ninja.zip to download the extension via your google chrome browser. 
     1. test
     1. test
 1. Unzip facet-extension.zip
