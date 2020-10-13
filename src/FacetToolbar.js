@@ -86,7 +86,7 @@ export default function FacetToolbar() {
                 domElement: [],
                 urlPath: window.location.pathname
             }
-            enqueueSnackbar(`Reset all facets.`, { variant: "success" });
+            enqueueSnackbar(`Facets reset.`, { variant: "success" });
             await triggerApiCall(HTTPMethods.POST, '/facet', body);
             window.location.reload();
         } catch (e) {
@@ -125,7 +125,7 @@ export default function FacetToolbar() {
                     {showSideBar ? '⚔ facet.ninja | DEACTIVATE' : '⚔ facet.ninja | ACTIVATE'}
                 </StyledButton>
             </StyledDiv>
-            <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
+            <StyledButton onClick={() => reset()}>{'Reset'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />
