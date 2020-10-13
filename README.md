@@ -19,7 +19,7 @@ Control your release 🚀 lifecycle and embrace trunk based development with ⚔
 
 ## Installation
 
-Read installation steps in [INSTALL_PLUGIN.md]('./readme_assets/INSTALL_PLUGIN.md')
+Read installation steps in [INSTALL_PLUGIN.md](./readme_assets/INSTALL_PLUGIN.md)
 
 ## See changes in chrome:
 
