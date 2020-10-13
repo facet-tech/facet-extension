@@ -28,6 +28,12 @@ Read installation steps in [INSTALL_PLUGIN.md](./readme_assets/INSTALL_PLUGIN.md
 
 ![Facetizer](./readme_assets/chrome_installation.png)
 
+## Test facet-extension Live
+
+You can test facet-extension end-to-end, through this already-integrated website: https://mywebsite.facet.ninja.
+
+You will need to authenticate with `team@facet.ninja` in the facet-extension to see your changes apply.
+
 ## Contribute
 
 Thanks for contributing! Read the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md). You can ask any question through our [spectrum.chat](https://spectrum.chat/facet) space.
