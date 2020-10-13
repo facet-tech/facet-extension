@@ -22,11 +22,13 @@ jobs:
       - name: Building the Application, Rename folder, Install zip and zip
         run: mv build extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/ && ls -d $PWD/*
 
-      - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@v0.5.0
+      - name: Upload file to bucket
+        uses: zdurham/s3-upload-github-action@master
+        with:
+          args: --acl public-read
         env:
-          AWS_S3_BUCKET: cdn.facet.ninja
+          FILE: extension-chrome-facet-ninja.zip
+          AWS_REGION: "us-west-2"
+          S3_BUCKET: cdn.facet.ninja
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-west-2"
-          SOURCE_DIR: "./extension-chrome-facet-ninja"
