@@ -1,8 +1,8 @@
 ## Install plugin
 
 1. Download extension by navigating to https://cdn.facet.ninja/extension-chrome-facet-ninja.zip your google chrome browser. 
-  a. test
-  a. test
+  1. test
+  1. test
 1. Unzip facet-extension.zip
 1. Navigate to `chrome://extensions` and enable "Developer mode":
 
