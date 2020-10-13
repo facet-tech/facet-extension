@@ -1,25 +1,22 @@
 ## Install plugin
 
-1. Navigate to https://cdn.facet.ninja/extension-chrome-facet-ninja.zip to download the extension via your google chrome browser. 
-    1. test
-    1. test
 1. Unzip facet-extension.zip
-1. Navigate to `chrome://extensions` and enable "Developer mode":
+2. Navigate to `chrome://extensions` and enable "Developer mode":
 
    ![Developer mode](./developer_mode.png)
-
-1. Click Load unpacked extension
-1. Select the unzipped facet-extension folder
-1. Click on Manage Extensions and Pin the facet-extension
+   
+3. Click Load unpacked extension
+4. Select the unzipped facet-extension folder
+5. Click on Manage Extensions and Pin the facet-extension
 
 ## How to use the Facet-extension
 
 1. Navigate to your website
-1. Click on the Plugin popup and sign up.
-1. Click on Enable Plugin and Enable Toolbar
-1. Select the elements which you want to display and/or hide.
-1. Click Save
-1. Open popup and click on copy snippet
+2. Click on the Plugin popup and sign up.
+3. Click on Enable Plugin and Enable Toolbar
+4. Select the elements which you want to display and/or hide.
+5. Click Save
+6. Open popup and click on copy snippet
 
 See a demonstration of the product here: https://video.facet.ninja/vision
 
