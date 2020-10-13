@@ -19,18 +19,7 @@ Control your release 🚀 lifecycle and embrace trunk based development with ⚔
 
 ## Installation
 
-- Fork or clone `git@github.com:facets-io/facet-extension.git`
-- `yarn run install`
-- `yarn run build`
-- Navigate to `chrome://extensions`
-- Check the _Developer mode_ checkbox
-- Click _Load unpacked extension..._
-- Find and select the `build` folder
-- Navigate to your website (e.g.,: `https://www.google.com`)
-- Select the elements which you want to display and/or hide.
-- Click Save
-- Inject script into your server (`require(facet.ninja)`)
-- Deploy and see results in production
+Read installation steps in [INSTALL_PLUGIN.md]('./readme_assets/INSTALL_PLUGIN.md')
 
 ## See changes in chrome:
 
