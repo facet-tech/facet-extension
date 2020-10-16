@@ -1,4 +1,8 @@
-## Install plugin
+## Install via Google Web Store
+
+Check the plugin live from the Google Web Store: https://chrome.google.com/webstore/detail/facetninja/hpkpjkdhgldjhcopdkmljdgceeojoglh
+
+## Install plugin (guarantees latest version)
 
 1. Unzip facet-extension.zip
 2. Navigate to `chrome://extensions` and enable "Developer mode":
