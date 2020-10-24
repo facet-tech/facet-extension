@@ -1,4 +1,4 @@
-import { HTTPMethods } from "../shared/constant";
+import { HTTPMethods, APIUrl } from "../shared/constant";
 
 /**
  * @param {domainId}
@@ -26,7 +26,7 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `https://api.facet.ninja${urlSuffix}`;
+        const url = `${APIUrl.testBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const resjson = await res.json();
@@ -51,7 +51,7 @@ const deleteUser = async (email, workspaceId) => {
         email,
         workspaceId
     }
-    let url = 'https://api.facet.ninja/user';
+    let url = `${APIUrl.testBaseURL}/user`;
     let options = {
         method: 'DELETE'
     };
@@ -116,7 +116,7 @@ const getFacet = async (domainId, urlPath) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = 'https://api.facet.ninja/facet';
+    let url = `${APIUrl.testBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };
