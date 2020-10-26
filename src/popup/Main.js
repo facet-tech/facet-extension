@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
-import { api } from '../shared/constant';
+import { api, APIUrl } from '../shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
@@ -49,7 +49,7 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
-    const [textToCopy, setTextToCopy] = useState('<script src="https://api.facet.ninja/facet.ninja.js?id={ID}"></script>');
+    const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
     const logout = () => {
         clearStorage();
@@ -106,9 +106,9 @@ export default () => {
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         var loc = new URL(url);
         let domainRes = await getDomain(loc.hostname, workspaceId);
-        setTextToCopy(`<script src="https://api.facet.ninja/facet.ninja.js?id=${domainRes.id}"></script>`);
+        const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+        setTextToCopy(text);
     }, [setTextToCopy]);
-
     const enableFacetizerElement = <div>
         <GridDiv>
             <div>

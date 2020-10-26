@@ -3,6 +3,13 @@ const facetKey = 'facet-settings'
 const showFacetizer = 'showFacetizer';
 const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
+const apiBaseURL = 'https://api.facet.ninja';
+const testBaseURL = 'https://test.api.facet.ninja';
+
+const APIUrl = {
+    apiBaseURL,
+    testBaseURL
+}
 
 const LoginTypes = {
     email: 'email',
@@ -32,5 +39,5 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, showFacetizer,
     isPluginEnabled, storage, LoginTypes,
-    api, HTTPMethods
+    api, HTTPMethods, APIUrl
 };

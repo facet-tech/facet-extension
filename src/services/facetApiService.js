@@ -1,4 +1,4 @@
-import { HTTPMethods } from "../shared/constant";
+import { HTTPMethods, APIUrl } from "../shared/constant";
 
 /**
  * @param {domainId}
@@ -26,12 +26,16 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `https://api.facet.ninja${urlSuffix}`;
+        const url = `${APIUrl.apiBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const resjson = await res.json();
-        console.log('[API] result:', resjson);
-        return resjson;
+        const result = {
+            response: resjson,
+            status: res.status
+        };
+        console.log('[API] result:', result);
+        return result;
     } catch (e) {
         console.log('[API][Error]', e)
     }
@@ -51,7 +55,7 @@ const deleteUser = async (email, workspaceId) => {
         email,
         workspaceId
     }
-    let url = 'https://api.facet.ninja/user';
+    let url = `${APIUrl.apiBaseURL}/user`;
     let options = {
         method: 'DELETE'
     };
@@ -79,32 +83,41 @@ const getDomain = async (domainName, workspaceId) => {
 }
 
 const getOrPostDomain = async (workspaceId) => {
-
-    let domainRes = await getDomain(window.location.hostname, workspaceId);
-    const domainExists = domainRes && domainRes.id !== undefined;
-
-    // create domain if it doesn't exist
-    if (domainExists) {
+    try {
+        let domainRes = await getDomain(window.location.hostname, workspaceId);
+        const domainExists = domainRes && domainRes.response.id !== undefined;
+        // create domain if it doesn't exist
+        if (domainExists) {
+            return domainRes;
+        }
+        domainRes = await createDomain(window.location.hostname, workspaceId);
         return domainRes;
+    } catch (e) {
+        console.log(`[ERROR] [getOrPostDomain] `, e);
     }
-    domainRes = await createDomain(window.location.hostname, workspaceId);
-    return domainRes;
 }
 
 const getOrCreateWorkspace = async (email) => {
-    let suffix = `/user?email=${email}`;
-    const getUser = await triggerApiCall(HTTPMethods.GET, suffix);
-    if (getUser) {
-        const workspaceSuffix = `/workspace?id=${getUser.workspaceId}`;
-        let workspaceResponse = await triggerApiCall(HTTPMethods.GET, workspaceSuffix)
-        return workspaceResponse;
+    try {
+        let suffix = `/user?email=${email}`;
+        const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+        // create new user
+        if (getUserResponse && getUserResponse.status >= 400 && getUserResponse.status <= 500) {
+            // post workspace
+            const createWorkspaceResponse = await triggerApiCall(HTTPMethods.POST, '/workspace');
+            // post user
+            let createUserBody = {
+                email,
+                workspaceId: createWorkspaceResponse.response.id
+            }
+            await triggerApiCall(HTTPMethods.POST, '/user', createUserBody);
+            return createWorkspaceResponse;
+        }
+        // user exists
+        return getUserResponse;
+    } catch (e) {
+        console.log('[error] getOrCreateWorkspace', e);
     }
-    const body = {
-        domain: window.location.hostname,
-    }
-    const workspaceResponse = await triggerApiCall('POST', '/workspace', body);
-    await createNewUser(email, workspaceResponse.id);
-    return workspaceResponse;
 }
 
 const getFacet = async (domainId, urlPath) => {
@@ -116,7 +129,7 @@ const getFacet = async (domainId, urlPath) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = 'https://api.facet.ninja/facet';
+    let url = `${APIUrl.apiBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };

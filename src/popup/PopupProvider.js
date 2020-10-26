@@ -21,7 +21,7 @@ export default ({ children }) => {
         setIsUserAuthenticated(true);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
-        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.id);
+        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
     }
 
     useEffect(() => {
