@@ -49,10 +49,9 @@ export default function FacetToolbar() {
             // check if domain exists
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
-            // TODO add this inside parse path
             const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
             const body = {
-                domainId: getDomainRes.id,
+                domainId: getDomainRes.response.id,
                 domElement: [{
                     enabled: "true",
                     path: rightParsedPath
@@ -64,8 +63,8 @@ export default function FacetToolbar() {
             window.location.reload();
         } catch (e) {
             enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
+            console.log(`[ERROR] [onSaveClick] `, e)
         }
-
     }
 
     const reset = async () => {
@@ -82,12 +81,11 @@ export default function FacetToolbar() {
             let domainRes = await getOrPostDomain(workspaceId);
 
             const body = {
-                domainId: domainRes.id,
-                domElement: [],
+                domainId: domainRes.response.id,
                 urlPath: window.location.pathname
             }
             enqueueSnackbar(`Facets reset.`, { variant: "success" });
-            await triggerApiCall(HTTPMethods.POST, '/facet', body);
+            await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
             window.location.reload();
         } catch (e) {
             console.log('[ERROR]', e);

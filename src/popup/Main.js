@@ -106,9 +106,9 @@ export default () => {
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         var loc = new URL(url);
         let domainRes = await getDomain(loc.hostname, workspaceId);
-        setTextToCopy(`<script src="${APIUrl.testBaseURL}/facet.ninja.js?id=${domainRes.id}"></script>`);
+        const text = `<script src="${APIUrl.testBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+        setTextToCopy(text);
     }, [setTextToCopy]);
-
     const enableFacetizerElement = <div>
         <GridDiv>
             <div>

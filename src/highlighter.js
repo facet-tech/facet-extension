@@ -74,43 +74,47 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
 }
 
 const updateEvents = async (flag) => {
-    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-    let getDomainRes = await getDomain(window.location.hostname, workspaceId);
+    try {
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        let getDomainRes = await getDomain(window.location.hostname, workspaceId);
 
-    // duplicate code to be fixed...
-    let domainId;
-    const domainExists = getDomainRes && getDomainRes.id !== undefined;
-    // create domain if it doesn't exist
-    if (domainExists) {
-        domainId = getDomainRes.id
-    } else {
-        const domainRes = await createDomain(window.location.hostname, workspaceId);
-        domainId = domainRes.id;
-    }
-    const facets = await getFacet(domainId, window.location.pathname);
-    const properFacetArr = parsePath(facets && facets.domElement && facets.domElement[0] && facets.domElement[0].path, false);
-    let facetsArr = [];
-    properFacetArr && properFacetArr.forEach(ff => {
-        $(ff).css("opacity", "0.3", "important");
-        facetsArr.push(ff);
-    });
-    const all = [...facetsArr, ...window.hiddenPaths];
-    // getting rid of duplicates
-    window.hiddenPaths = [...new Set(all)];
-
-    [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
-        .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
-            if (flag) {
-                e.addEventListener("click", onMouseClickHandle, false);
-                e.addEventListener("mouseenter", onMouseEnterHandle, false);
-                e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-            } else {
-                e.removeEventListener("click", onMouseClickHandle, false);
-                e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-                e.style.cursor = "cursor";
-                e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-            }
+        // duplicate code to be fixed...
+        let domainId;
+        const domainExists = getDomainRes && getDomainRes.response.id !== undefined;
+        // create domain if it doesn't exist
+        if (domainExists) {
+            domainId = getDomainRes.response.id
+        } else {
+            const domainRes = await createDomain(window.location.hostname, workspaceId);
+            domainId = domainRes.response.id;
+        }
+        const getFacetResponse = await getFacet(domainId, window.location.pathname);
+        const properFacetArr = parsePath(getFacetResponse && getFacetResponse.response.domElement && getFacetResponse.response.domElement[0] && getFacetResponse.response.domElement[0].path, false);
+        let facetsArr = [];
+        properFacetArr && properFacetArr.forEach(ff => {
+            $(ff).css("opacity", "0.3", "important");
+            facetsArr.push(ff);
         });
+        const all = [...facetsArr, ...window.hiddenPaths];
+        // getting rid of duplicates
+        window.hiddenPaths = [...new Set(all)];
+
+        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
+            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
+                if (flag) {
+                    e.addEventListener("click", onMouseClickHandle, false);
+                    e.addEventListener("mouseenter", onMouseEnterHandle, false);
+                    e.addEventListener("mouseleave", onMouseLeaveHandle, false);
+                } else {
+                    e.removeEventListener("click", onMouseClickHandle, false);
+                    e.removeEventListener("mouseenter", onMouseEnterHandle, false);
+                    e.style.cursor = "cursor";
+                    e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
+                }
+            });
+    } catch (e) {
+        console.log(`[ERROR] [updateEvents] `, e);
+    }
 }
 
 export { updateEvents, computeWithOrWithoutFacetizer };
