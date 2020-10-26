@@ -4,7 +4,7 @@ Check the plugin live from the Google Web Store: https://chrome.google.com/webst
 
 ## Install plugin (guarantees latest version)
 
-1. Unzip facet-extension.zip
+1. Download the zip [from this link](https://cdn.facet.ninja/extension-chrome-facet-ninja.zip), and Unzip facet-extension.zip.
 2. Navigate to `chrome://extensions` and enable "Developer mode":
 
    ![Developer mode](./developer_mode.png)
