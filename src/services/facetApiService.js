@@ -114,7 +114,7 @@ const getOrCreateWorkspace = async (email) => {
             return createWorkspaceResponse;
         }
         // user exists
-        return getUserResponse.response;
+        return getUserResponse;
     } catch (e) {
         console.log('[error] getOrCreateWorkspace', e);
     }
