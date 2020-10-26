@@ -26,7 +26,7 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `${APIUrl.testBaseURL}${urlSuffix}`;
+        const url = `${APIUrl.apiBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const resjson = await res.json();
@@ -55,7 +55,7 @@ const deleteUser = async (email, workspaceId) => {
         email,
         workspaceId
     }
-    let url = `${APIUrl.testBaseURL}/user`;
+    let url = `${APIUrl.apiBaseURL}/user`;
     let options = {
         method: 'DELETE'
     };
@@ -129,7 +129,7 @@ const getFacet = async (domainId, urlPath) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = `${APIUrl.testBaseURL}/facet`;
+    let url = `${APIUrl.apiBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };
