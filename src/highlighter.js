@@ -3,6 +3,7 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { getFacet, getDomain, createDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { HTTPMethods, api, storage } from './shared/constant';
+import get from 'lodash/get';
 
 window.highlightMode = false;
 window.hiddenPaths = [];
@@ -77,19 +78,18 @@ const updateEvents = async (flag) => {
     try {
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getDomain(window.location.hostname, workspaceId);
-
         // duplicate code to be fixed...
         let domainId;
         const domainExists = getDomainRes && getDomainRes.response.id !== undefined;
         // create domain if it doesn't exist
         if (domainExists) {
-            domainId = getDomainRes.response.id
+            domainId = get(getDomainRes, 'response.id');
         } else {
             const domainRes = await createDomain(window.location.hostname, workspaceId);
-            domainId = domainRes.response.id;
+            domainId = get(domainRes, 'response.id');
         }
         const getFacetResponse = await getFacet(domainId, window.location.pathname);
-        const properFacetArr = parsePath(getFacetResponse && getFacetResponse.response.domElement && getFacetResponse.response.domElement[0] && getFacetResponse.response.domElement[0].path, false);
+        const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
         let facetsArr = [];
         properFacetArr && properFacetArr.forEach(ff => {
             $(ff).css("opacity", "0.3", "important");
@@ -98,7 +98,6 @@ const updateEvents = async (flag) => {
         const all = [...facetsArr, ...window.hiddenPaths];
         // getting rid of duplicates
         window.hiddenPaths = [...new Set(all)];
-
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
                 if (flag) {

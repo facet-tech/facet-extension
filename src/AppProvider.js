@@ -7,17 +7,17 @@ import loadLocalStorage from './shared/loadLocalStorage';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
     const { enqueueSnackbar } = useSnackbar();
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
+
     const [isEnabled, setIsEnabled] = useState(false);
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [isAddingFacet, setIsAddingFacet] = useState(false);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
     const [disabledFacets, setDisabledFacets] = useState([]);
-    const [showSideBar, setShowSideBar] = useState(false);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
-    const [showToolbox, setShowToolbox] = useState(false);
-    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
+    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
+    const [showSideBar, setShowSideBar] = useState(true);
 
     useEffect(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
@@ -46,8 +46,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, showToolbox, setShowToolbox,
-        isPluginEnabled, setIsPluginEnabled
+        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled
     }}>
         {children}
     </AppContext.Provider>
