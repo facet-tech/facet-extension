@@ -5,7 +5,6 @@ import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import FacetTreeSideBar from './facetTreeSideBar';
 
 function App() {
 

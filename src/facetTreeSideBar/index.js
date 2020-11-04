@@ -10,8 +10,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
+import HighlightIcon from '@material-ui/icons/Highlight';
 
 const drawerWidth = 240;
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         flexShrink: 0,
     },
     drawerPaper: {
-        width: drawerWidth,
+        width: drawerWidth
     },
     drawerHeader: {
         display: 'flex',
@@ -33,10 +33,17 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
-    },
+    }
 }));
 
 export default function FacetTreeSideBar() {
+
+    function onFocusClick(index) {
+        // TODO focus functionality
+        // Focus selected continuous movement around DOM element
+        // so that it's easy to be declared
+    }
+
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -77,22 +84,21 @@ export default function FacetTreeSideBar() {
             </div>
             <Divider />
             <List>
-                {window.hiddenPaths.map((text, index) => {
+                {window.hiddenPaths.length > 0 ? window.hiddenPaths.map((_, index) => {
                     const fName = `facet-${index + 1}`;
                     return (
-                        <ListItem button key={fName}>
+                        <ListItem key={fName}>
                             <TextField
                                 id="filled-read-only-input"
-                                label="Read Only"
                                 defaultValue={fName}
                                 variant="filled"
                             />
-                            {/* <ListItem button key={fName}>
-                            <ListItemText primary={fName} />
-                        </ListItem> */}
+                            <IconButton onClick={() => onFocusClick(index)}>
+                                <HighlightIcon className={classes.icon} />
+                            </IconButton>
                         </ListItem>
                     )
-                })}
+                }) : "No facets found."}
             </List>
         </Drawer>
         <main
