@@ -38,10 +38,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FacetTreeSideBar() {
 
-    function onFocusClick(index) {
+    const onFocusClick = (path) => {
+        const element = document.querySelector(path);
+        element.classList.add("rainbow");
         // TODO focus functionality
         // Focus selected continuous movement around DOM element
         // so that it's easy to be declared
+    }
+
+    const onUnFocusClick = (path) => {
+        // TODO
     }
 
     const classes = useStyles();
@@ -84,7 +90,7 @@ export default function FacetTreeSideBar() {
             </div>
             <Divider />
             <List>
-                {window.hiddenPaths.length > 0 ? window.hiddenPaths.map((_, index) => {
+                {window.hiddenPaths.length > 0 ? window.hiddenPaths.map((path, index) => {
                     const fName = `facet-${index + 1}`;
                     return (
                         <ListItem key={fName}>
@@ -93,7 +99,7 @@ export default function FacetTreeSideBar() {
                                 defaultValue={fName}
                                 variant="filled"
                             />
-                            <IconButton onClick={() => onFocusClick(index)}>
+                            <IconButton onClick={() => onFocusClick(path)}>
                                 <HighlightIcon className={classes.icon} />
                             </IconButton>
                         </ListItem>
