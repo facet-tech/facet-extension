@@ -12,6 +12,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
 import HighlightIcon from '@material-ui/icons/Highlight';
+import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 
 const drawerWidth = 240;
 
@@ -46,8 +47,12 @@ export default function FacetTreeSideBar() {
         // so that it's easy to be declared
     }
 
-    const onUnFocusClick = (path) => {
+    const onShowElement = (path) => {
         // TODO
+        console.log('path', path);
+        const element = document.querySelector(path);
+        console.log('element', element);
+        element.style.setProperty("opacity", "unset");
     }
 
     const classes = useStyles();
@@ -101,6 +106,9 @@ export default function FacetTreeSideBar() {
                             />
                             <IconButton onClick={() => onFocusClick(path)}>
                                 <HighlightIcon className={classes.icon} />
+                            </IconButton>
+                            <IconButton onClick={() => onShowElement(path)}>
+                                <RemoveRedEyeIcon className={classes.icon} />
                             </IconButton>
                         </ListItem>
                     )

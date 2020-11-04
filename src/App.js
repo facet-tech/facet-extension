@@ -13,7 +13,6 @@ function App() {
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
       const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
       setShouldDisplayFacetizer(showFacetizerValue);
