@@ -11,12 +11,16 @@ import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import { getOrPostDomain, triggerApiCall } from './services/facetApiService';
+import FacetTreeSideBar from './facetTreeSideBar';
+import CustomProxy from './utils/CustomProxy';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 33% 33% 34%;
+    grid-template-columns: 24% 24% 24% 24%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
+    justify-items: center;
+    align-items: center;
 `;
 const StyledDiv = styled.div`
     width: 100%;
@@ -76,7 +80,7 @@ export default function FacetToolbar() {
                 }
                 domElement.style.setProperty("opacity", "unset");
             });
-            window.hiddenPaths = [];
+            window.hiddenPaths = CustomProxy([]);
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let domainRes = await getOrPostDomain(workspaceId);
 
@@ -99,7 +103,7 @@ export default function FacetToolbar() {
         },
     }));
 
-    const sideBarHanlder = () => {
+    const sideBarHandler = () => {
         window.highlightMode = showSideBar;
         setShowSideBar(!showSideBar);
         if (!showSideBar) {
@@ -116,11 +120,14 @@ export default function FacetToolbar() {
     return <div>
         <GridDiv>
             <StyledDiv>
+                <FacetTreeSideBar />
+            </StyledDiv>
+            <StyledDiv>
                 <StyledButton
                     variant="contained"
                     color="primary"
-                    primary={true} onClick={() => sideBarHanlder()}>
-                    {showSideBar ? '⚔ facet.ninja | DEACTIVATE' : '⚔ facet.ninja | ACTIVATE'}
+                    primary={true} onClick={() => sideBarHandler()}>
+                    {showSideBar ? 'DEACTIVATE' : 'ACTIVATE'}
                 </StyledButton>
             </StyledDiv>
             <StyledButton onClick={() => reset()}>{'Reset'}</StyledButton>

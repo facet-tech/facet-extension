@@ -2,11 +2,12 @@ import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { getFacet, getDomain, createDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
-import { HTTPMethods, api, storage } from './shared/constant';
+import { api } from './shared/constant';
 import get from 'lodash/get';
+import CustomProxy from './utils/CustomProxy';
 
 window.highlightMode = false;
-window.hiddenPaths = [];
+window.hiddenPaths = CustomProxy([]);
 
 var onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
@@ -97,7 +98,7 @@ const updateEvents = async (flag) => {
         });
         const all = [...facetsArr, ...window.hiddenPaths];
         // getting rid of duplicates
-        window.hiddenPaths = [...new Set(all)];
+        window.hiddenPaths = CustomProxy([...new Set(all)]);
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
                 if (flag) {
