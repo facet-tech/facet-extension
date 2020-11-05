@@ -8,7 +8,7 @@ import AppProvider from './AppProvider';
 import { SnackbarProvider } from "notistack";
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
-
+import CoreProvider from './CoreProvider';
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
 
@@ -55,7 +55,9 @@ if (document.getElementById('facetizer')) {
                         horizontal: 'left',
                     }}>
                     <AppProvider>
-                        <App />
+                        <CoreProvider>
+                            <App />
+                        </CoreProvider>
                     </AppProvider>
                 </SnackbarProvider>
             </div >

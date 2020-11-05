@@ -123,14 +123,10 @@ export default function FacetToolbar() {
             <StyledDiv>
                 <FacetTreeSideBar />
             </StyledDiv>
-            <StyledDiv>
-                <StyledButton
-                    variant="contained"
-                    color="primary"
-                    primary={true} onClick={() => sideBarHandler()}>
-                    {showSideBar ? 'DEACTIVATE' : 'ACTIVATE'}
-                </StyledButton>
-            </StyledDiv>
+            <StyledButton
+                onClick={() => sideBarHandler()}>
+                {showSideBar ? 'DEACTIVATE' : 'ACTIVATE'}
+            </StyledButton>
             <StyledButton onClick={() => reset()}>{'Reset'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>

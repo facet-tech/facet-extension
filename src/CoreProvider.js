@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import CoreContext from './CoreContext';
 
 export default ({ children }) => {
-    const [showFacetizer, setShowFacetizer] = useState(false);
-
-    return <CoreContext.Provider value={{ showFacetizer, setShowFacetizer }}>
+    const [highlightedFacets, setHighlightedFacets] = useState([]);
+    console.log('@coreprovider', highlightedFacets);
+    return <CoreContext.Provider value={{ highlightedFacets, setHighlightedFacets }}>
         {children}
     </CoreContext.Provider>
 }

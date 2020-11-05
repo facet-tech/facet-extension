@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -13,6 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
 import HighlightIcon from '@material-ui/icons/Highlight';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
+import CoreProvider from '../CoreProvider';
+import CoreContext from '../CoreContext';
 
 const drawerWidth = 240;
 
@@ -38,26 +40,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FacetTreeSideBar() {
+    const classes = useStyles();
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
 
     const onFocusClick = (path) => {
         const element = document.querySelector(path);
         element.classList.add("rainbow");
-        // TODO focus functionality
-        // Focus selected continuous movement around DOM element
-        // so that it's easy to be declared
+        setHighlightedFacets([...setHighlightedFacets, path]);
+    }
+
+    const onUnfocusClick = (path) => {
+        const element = document.querySelector(path);
+        element.classList.remove("rainbow");
+        setHighlightedFacets(highlightedFacets.filter(element => element !== path));
     }
 
     const onShowElement = (path) => {
-        // TODO
-        console.log('path', path);
         const element = document.querySelector(path);
-        console.log('element', element);
         element.style.setProperty("opacity", "unset");
     }
-
-    const classes = useStyles();
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
