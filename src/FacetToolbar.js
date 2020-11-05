@@ -16,14 +16,15 @@ import CustomProxy from './utils/CustomProxy';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 24% 24% 24% 24%;
+    grid-template-columns: 9% 30% 30% 30%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
     justify-items: center;
     align-items: center;
 `;
+
 const StyledDiv = styled.div`
-    width: 100%;
+    width: ${props => props.drawer ? '100%' : '0'};
     color: white;
 `;
 
