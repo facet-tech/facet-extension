@@ -18,6 +18,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [isPluginEnabled, setIsPluginEnabled] = useState(true);
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [showSideBar, setShowSideBar] = useState(true);
+    const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
 
     useEffect(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
@@ -46,7 +47,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled
+        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
+        hiddenPathsArr, setHiddenPathsArr
     }}>
         {children}
     </AppContext.Provider>

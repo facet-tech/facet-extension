@@ -9,8 +9,8 @@ import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocal
 function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-    isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
-
+    isPluginEnabled, setIsPluginEnabled, hiddenPathsArr, setHiddenPathsArr } = useContext(AppContext);
+  console.log('hiddenPathsArr', hiddenPathsArr);
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
@@ -36,10 +36,10 @@ function App() {
   if (isPluginEnabled) {
     if (showSideBar) {
       console.log('[LOADING REGISTER EVENTS] true', true)
-      updateEvents(true);
+      updateEvents(true, [setHiddenPathsArr]);
     } else {
       console.log('[LOADING REGISTER EVENTS] false', false)
-      updateEvents(false);
+      updateEvents(false, [setHiddenPathsArr]);
     }
   }
 

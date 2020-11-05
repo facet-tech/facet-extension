@@ -13,8 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
 import HighlightIcon from '@material-ui/icons/Highlight';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
-import CoreProvider from '../CoreProvider';
 import CoreContext from '../CoreContext';
+import AppContext from '../AppContext';
 
 const drawerWidth = 240;
 
@@ -43,6 +43,7 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const { hiddenPathsArr } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
 
     const onFocusClick = (path) => {
@@ -98,7 +99,7 @@ export default function FacetTreeSideBar() {
             </div>
             <Divider />
             <List>
-                {window.hiddenPaths.length > 0 ? window.hiddenPaths.map((path, index) => {
+                {hiddenPathsArr.length > 0 ? hiddenPathsArr.map((path, index) => {
                     const fName = `facet-${index + 1}`;
                     return (
                         <ListItem key={fName}>

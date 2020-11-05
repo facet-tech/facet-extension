@@ -71,11 +71,10 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     const currNumber = parseInt(matches[1]);
     const wantedNumber = facetizerIsPresent ? currNumber - 1 : currNumber + 1;
     const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
-
     return result;
 }
 
-const updateEvents = async (flag) => {
+const updateEvents = async (flag, observerFunctions) => {
     try {
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getDomain(window.location.hostname, workspaceId);
@@ -98,20 +97,21 @@ const updateEvents = async (flag) => {
         });
         const all = [...facetsArr, ...window.hiddenPaths];
         // getting rid of duplicates
-        window.hiddenPaths = CustomProxy([...new Set(all)]);
+        window.hiddenPaths = CustomProxy([...new Set(all)], observerFunctions);
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
-            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
-                if (flag) {
-                    e.addEventListener("click", onMouseClickHandle, false);
-                    e.addEventListener("mouseenter", onMouseEnterHandle, false);
-                    e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-                } else {
-                    e.removeEventListener("click", onMouseClickHandle, false);
-                    e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-                    e.style.cursor = "cursor";
-                    e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-                }
-            });
+            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
+                .includes(e)).forEach(e => {
+                    if (flag) {
+                        e.addEventListener("click", onMouseClickHandle, false);
+                        e.addEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.addEventListener("mouseleave", onMouseLeaveHandle, false);
+                    } else {
+                        e.removeEventListener("click", onMouseClickHandle, false);
+                        e.removeEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
+                        e.style.cursor = "cursor";
+                    }
+                });
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }

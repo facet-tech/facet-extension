@@ -1,25 +1,25 @@
-function CustomProxy(array) {
+function CustomProxy(array, observerFunctions) {
     if (!("Proxy" in window)) {
         console.warn("Your browser doesn't support Proxies.");
         return;
     }
 
-    // a proxy for our array
     var proxy = new Proxy(array, {
-        apply: function (target, thisArg, argumentsList) {
-            return thisArg[target].apply(this, argumentsList);
+        get(target, prop) {
+            // add functions to trigger callbacks
+            if (prop === 'filter' || prop === 'push') {
+                triggerCallbacks(observerFunctions, target);
+            }
+            return target[prop];
         },
-        deleteProperty: function (target, property) {
-            console.log("Deleted %s", property);
-            return true;
-        },
-        set: function (target, property, value, receiver) {
-            target[property] = value;
-            console.log("Set %s to %o", property, value);
-            return true;
-        }
     });
     return proxy;
+}
+
+const triggerCallbacks = (observerFunctions, value) => {
+    observerFunctions && observerFunctions.forEach(fn => {
+        fn(value);
+    })
 }
 
 export default CustomProxy;
