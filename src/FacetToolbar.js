@@ -47,6 +47,7 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
+    const { iddenPathsArr } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
@@ -74,14 +75,13 @@ export default function FacetToolbar() {
 
     const reset = async () => {
         try {
-            window.hiddenPaths.forEach(element => {
+            iddenPathsArr.forEach(element => {
                 const domElement = $(element)[0];
                 if (!domElement) {
                     return;
                 }
                 domElement.style.setProperty("opacity", "unset");
             });
-            window.hiddenPaths = CustomProxy([]);
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let domainRes = await getOrPostDomain(workspaceId);
 
