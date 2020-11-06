@@ -5,7 +5,7 @@ function CustomProxy(array, observerFunctions) {
     }
 
     var proxy = new Proxy(array, {
-        get(target, prop) {
+        get(target, prop, value) {
             // add functions to trigger callbacks
             if (prop === 'filter' || prop === 'push') {
                 triggerCallbacks(observerFunctions, target);

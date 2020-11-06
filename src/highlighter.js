@@ -6,8 +6,10 @@ import { api } from './shared/constant';
 import get from 'lodash/get';
 import CustomProxy from './utils/CustomProxy';
 
+// is this needed?
 window.highlightMode = false;
-window.hiddenPaths = CustomProxy([]);
+// singleton
+let hiddenPaths;
 
 var onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
@@ -21,12 +23,12 @@ var onMouseLeaveHandle = function (event) {
 
 var onMouseClickHandle = function (event) {
     var res = getDomPath(event.target);
-    if (window.hiddenPaths.includes(res)) {
-        window.hiddenPaths = window.hiddenPaths.filter(e => e !== res);
+    if (hiddenPaths.includes(res)) {
+        hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("opacity", "unset");
     } else {
         event.target.style.setProperty("opacity", "0.3", "important");
-        window.hiddenPaths.push(res);
+        hiddenPaths.push(res);
     }
     event.preventDefault();
     event.stopPropagation();
@@ -74,8 +76,11 @@ var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     return result;
 }
 
-const updateEvents = async (flag, observerFunctions) => {
+const updateEvents = async (flag, observerFunctions, hiddenPathsArr) => {
     try {
+        if (!hiddenPaths) {
+            hiddenPaths = hiddenPathsArr;
+        }
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getDomain(window.location.hostname, workspaceId);
         // duplicate code to be fixed...
@@ -95,9 +100,9 @@ const updateEvents = async (flag, observerFunctions) => {
             $(ff).css("opacity", "0.3", "important");
             facetsArr.push(ff);
         });
-        const all = [...facetsArr, ...window.hiddenPaths];
+        const all = [...facetsArr, ...hiddenPaths];
         // getting rid of duplicates
-        window.hiddenPaths = CustomProxy([...new Set(all)], observerFunctions);
+        hiddenPaths = CustomProxy([...new Set(all)], observerFunctions);
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
                 .includes(e)).forEach(e => {

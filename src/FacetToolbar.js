@@ -112,12 +112,8 @@ export default function FacetToolbar() {
         }
     }
 
-    const cb = (e) => {
-        setShouldDisplayFacetizer(e);
-    };
-
     const classes = useStyles();
-    const { showSideBar, setShowSideBar, setShouldDisplayFacetizer } = useContext(AppContext);
+    const { showSideBar, setShowSideBar } = useContext(AppContext);
     return <div>
         <GridDiv>
             <StyledDiv>

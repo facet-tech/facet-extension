@@ -45,7 +45,6 @@ export default function FacetTreeSideBar() {
     const [open, setOpen] = useState(false);
     const { hiddenPathsArr } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
-
     const onFocusClick = (path) => {
         const element = document.querySelector(path);
         element.classList.add("rainbow");

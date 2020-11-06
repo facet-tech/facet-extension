@@ -36,10 +36,10 @@ function App() {
   if (isPluginEnabled) {
     if (showSideBar) {
       console.log('[LOADING REGISTER EVENTS] true', true)
-      updateEvents(true, [setHiddenPathsArr]);
+      updateEvents(true, [setHiddenPathsArr], hiddenPathsArr);
     } else {
       console.log('[LOADING REGISTER EVENTS] false', false)
-      updateEvents(false, [setHiddenPathsArr]);
+      updateEvents(false, [setHiddenPathsArr], hiddenPathsArr);
     }
   }
 
