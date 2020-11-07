@@ -26,7 +26,7 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
                 }
             }
-            console.log('[STORAGE] Loaded', obj);
+            // console.log('[STORAGE] Loaded', obj);
         } catch (e) {
             console.log('[STORAGE][ERROR]', e);
         }
@@ -83,7 +83,7 @@ const setKeyInLocalStorage = async (key, value) => {
 
     chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
         const res = await getLocalStorageObject();
-        console.log(`[STORAGE] updated:`, res);
+        // console.log(`[STORAGE] updated:`, res);
     });
 }
 

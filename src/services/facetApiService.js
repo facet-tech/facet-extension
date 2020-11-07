@@ -34,7 +34,7 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
             response: resjson,
             status: res.status
         };
-        console.log('[API] result:', result);
+        // console.log('[API] result:', result);
         return result;
     } catch (e) {
         console.log('[API][Error]', e)

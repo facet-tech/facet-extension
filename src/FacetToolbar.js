@@ -12,7 +12,6 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import { getOrPostDomain, triggerApiCall } from './services/facetApiService';
 import FacetTreeSideBar from './facetTreeSideBar';
-import CustomProxy from './utils/CustomProxy';
 
 const GridDiv = styled.div`
     display: grid;
@@ -47,7 +46,7 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
-    const { iddenPathsArr } = useContext(AppContext);
+    const { hiddenPathsArr } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
@@ -75,7 +74,7 @@ export default function FacetToolbar() {
 
     const reset = async () => {
         try {
-            iddenPathsArr.forEach(element => {
+            hiddenPathsArr.forEach(element => {
                 const domElement = $(element)[0];
                 if (!domElement) {
                     return;
