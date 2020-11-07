@@ -15,6 +15,8 @@ import HighlightIcon from '@material-ui/icons/Highlight';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
+import parsePath from '../shared/parsePath';
+import $ from 'jquery';
 
 const drawerWidth = 240;
 
@@ -45,20 +47,24 @@ export default function FacetTreeSideBar() {
     const [open, setOpen] = useState(false);
     const { hiddenPathsArr } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
+
     const onFocusClick = (path) => {
-        const element = document.querySelector(path);
+        const parsedPath = parsePath([path], false);
+        const element = $(parsedPath[0])[0];
         element.classList.add("rainbow");
-        setHighlightedFacets([...setHighlightedFacets, path]);
+        setHighlightedFacets([...setHighlightedFacets, parsedPath[0]]);
     }
 
     const onUnfocusClick = (path) => {
-        const element = document.querySelector(path);
-        element.classList.remove("rainbow");
+        const parsedPath = parsePath([path], false);
+        const element = $(parsedPath[0])[0];
+        element.classList.add("rainbow");
         setHighlightedFacets(highlightedFacets.filter(element => element !== path));
     }
 
     const onShowElement = (path) => {
-        const element = document.querySelector(path);
+        const parsedPath = parsePath([path], false);
+        const element = $(parsedPath[0])[0];
         element.style.setProperty("opacity", "unset");
     }
 
