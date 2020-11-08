@@ -18,6 +18,9 @@ import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
 import $ from 'jquery';
 import Button from '@material-ui/core/Button';
+import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import { getOrPostDomain } from '../services/facetApiService';
+import { api } from '../shared/constant';
 
 const drawerWidth = 240;
 
@@ -73,8 +76,16 @@ export default function FacetTreeSideBar() {
         }
     }
 
-    const onSaveClick = () => {
+    const onSaveClick = async () => {
         console.log('facetnames!', facetNameMap);
+        const rightParsedPath = parsePath(hiddenPathsArr).map(el => {
+            const obj = {
+                path: el.replace(/ /g, ""),
+                name: facetNameMap.get(el)
+            };
+            return obj;
+        });
+        console.log('rightParsedPath', rightParsedPath);
     }
 
     const handleDrawerOpen = () => {
@@ -115,6 +126,7 @@ export default function FacetTreeSideBar() {
             <List>
                 {hiddenPathsArr.length > 0 ? hiddenPathsArr.map((path, index) => {
                     const fName = `facet-${index + 1}`;
+                    facetNameMap.set(path, fName);
                     const listItems = (
                         <ListItem key={fName}>
                             <TextField

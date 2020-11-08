@@ -46,7 +46,7 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
-    const { hiddenPathsArr } = useContext(AppContext);
+    const { hiddenPathsArr, facetNameMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
@@ -54,12 +54,17 @@ export default function FacetToolbar() {
             // check if domain exists
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
-            const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
+            const facetsArr = parsePath(hiddenPathsArr).map(el => {
+                return {
+                    path: el.replace(/ /g, ""),
+                    name: facetNameMap.get(el)
+                };
+            });
             const body = {
                 domainId: getDomainRes.response.id,
                 domElement: [{
                     enabled: "true",
-                    path: rightParsedPath
+                    facets: facetsArr
                 }],
                 urlPath: window.location.pathname
             }

@@ -38,7 +38,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     }
 
     const isElementHighlighted = (path) => {
-
+        // TODO
     }
 
     console.log('facetNameMap', facetNameMap);
