@@ -1,4 +1,5 @@
 import { computeWithOrWithoutFacetizer } from "../highlighter.js";
+import $ from 'jquery';
 
 export default (arr, withoutFacetizer = true) => {
     if (arr === null || !arr || arr.length === 0) {
@@ -22,6 +23,14 @@ const addOrRemoveRainbowPath = (inputPath, addRainbow = false) => {
         strSplit.splice(strSplit.length - 2, 1);
     }
     return strSplit.join('>');
+}
+
+const removeRainbowElement = (path) => {
+    const splitArr = path.split('>');
+    const element = $(path);
+    $(path).replaceWith(() => {
+        return $('ul', this);
+    });
 }
 
 export { addOrRemoveRainbowPath };

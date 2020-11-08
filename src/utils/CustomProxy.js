@@ -10,6 +10,7 @@ function CustomProxy(array, observerFunctions) {
             if (prop === 'filter' || prop === 'push') {
                 triggerCallbacks(observerFunctions, target);
             }
+            // console.log('STATUS', target)
             return target[prop];
         },
     });

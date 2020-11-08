@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,6 +17,7 @@ import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
 import $ from 'jquery';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
@@ -45,7 +46,8 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted } = useContext(AppContext);
+    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar,
+        facetNameMap, setFacetNameMap } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
 
     const onFocusClick = (path) => {
@@ -62,17 +64,17 @@ export default function FacetTreeSideBar() {
     const onDeleteElement = (path) => {
         try {
             const parsedPath = parsePath([path], false);
-            const isHighlighted = isElementHighlighted(parsedPath);
-            if(isHighlighted) {
-                //remove highlight
-                //remove element from hiddenArray
-            }
             const element = $(parsedPath[0])[0];
             element.style.setProperty("opacity", "unset");
-            setHiddenPathsArr(hiddenPathsArr.filter(e => e !== path));
+            hiddenPathsArr = hiddenPathsArr.filter(e => e !== path);
+            setHiddenPathsArr(hiddenPathsArr);
         } catch (e) {
             console.log(`[ERROR] onDeleteElement`, e);
         }
+    }
+
+    const onSaveClick = () => {
+        console.log('facetnames!', facetNameMap);
     }
 
     const handleDrawerOpen = () => {
@@ -113,19 +115,26 @@ export default function FacetTreeSideBar() {
             <List>
                 {hiddenPathsArr.length > 0 ? hiddenPathsArr.map((path, index) => {
                     const fName = `facet-${index + 1}`;
-                    return (
+                    const listItems = (
                         <ListItem key={fName}>
                             <TextField
                                 id="filled-read-only-input"
                                 defaultValue={fName}
                                 variant="filled"
+                                onChange={(e) => {
+                                    facetNameMap.set(path, e.target.value);
+                                }}
                             />
-                            <IconButton onClick={() => onDeleteElement(path)}>
-                                <DeleteForeverIcon className={classes.icon} />
-                            </IconButton>
                         </ListItem>
-                    )
+                    );
+                    return listItems;
                 }) : "No facets found."}
+                {hiddenPathsArr.length > 0 ? <ListItem>
+                    <Button style={{ width: '100%' }} variant="contained"
+                        color="primary" size="small" onClick={() => onSaveClick()}>
+                        Save
+                    </Button>
+                </ListItem> : null}
             </List>
         </Drawer>
         <main

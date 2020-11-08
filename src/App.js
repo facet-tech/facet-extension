@@ -10,6 +10,7 @@ function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
     isPluginEnabled, setIsPluginEnabled, hiddenPathsArr, setHiddenPathsArr } = useContext(AppContext);
+
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');

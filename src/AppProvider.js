@@ -19,6 +19,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [showSideBar, setShowSideBar] = useState(true);
     const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
+    const [facetNameMap, setFacetNameMap] = useState(new Map());
 
     useEffect(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
@@ -40,6 +41,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
 
     }
 
+    console.log('facetNameMap', facetNameMap);
+
     // sharing stuff among content script
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
@@ -52,7 +55,8 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
-        hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted
+        hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted,
+        facetNameMap, setFacetNameMap
     }}>
         {children}
     </AppContext.Provider>
