@@ -11,18 +11,18 @@ window.highlightMode = false;
 // singleton
 let hiddenPaths;
 
-var onMouseEnterHandle = function (event) {
+const onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
     event.target.style.setProperty("cursor", "pointer");
 };
 
-var onMouseLeaveHandle = function (event) {
+const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("outline", "unset");
     event.target.style.setProperty("cursor", "unset");
 }
 
-var onMouseClickHandle = function (event) {
-    var res = getDomPath(event.target);
+const onMouseClickHandle = function (event) {
+    const res = getDomPath(event.target);
     if (hiddenPaths.includes(res)) {
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("opacity", "unset");
@@ -62,7 +62,7 @@ function getDomPath(el) {
     return withoutSpaces;
 }
 
-var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
+const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     var splitStr = strPath.split('>');
     var secondPathSplit = splitStr[1].split(':eq');
     if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {

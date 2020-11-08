@@ -12,7 +12,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
 import HighlightIcon from '@material-ui/icons/Highlight';
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
@@ -45,27 +45,34 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const { hiddenPathsArr } = useContext(AppContext);
+    const { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
 
     const onFocusClick = (path) => {
         const parsedPath = parsePath([path], false);
         const element = $(parsedPath[0])[0];
-        element.classList.add("rainbow");
+        $(path).wrapAll("<div class='rainbow' />");
         setHighlightedFacets([...setHighlightedFacets, parsedPath[0]]);
     }
 
     const onUnfocusClick = (path) => {
-        const parsedPath = parsePath([path], false);
-        const element = $(parsedPath[0])[0];
-        element.classList.add("rainbow");
-        setHighlightedFacets(highlightedFacets.filter(element => element !== path));
+        // TODO
     }
 
-    const onShowElement = (path) => {
-        const parsedPath = parsePath([path], false);
-        const element = $(parsedPath[0])[0];
-        element.style.setProperty("opacity", "unset");
+    const onDeleteElement = (path) => {
+        try {
+            const parsedPath = parsePath([path], false);
+            const isHighlighted = isElementHighlighted(parsedPath);
+            if(isHighlighted) {
+                //remove highlight
+                //remove element from hiddenArray
+            }
+            const element = $(parsedPath[0])[0];
+            element.style.setProperty("opacity", "unset");
+            setHiddenPathsArr(hiddenPathsArr.filter(e => e !== path));
+        } catch (e) {
+            console.log(`[ERROR] onDeleteElement`, e);
+        }
     }
 
     const handleDrawerOpen = () => {
@@ -113,11 +120,8 @@ export default function FacetTreeSideBar() {
                                 defaultValue={fName}
                                 variant="filled"
                             />
-                            <IconButton onClick={() => onFocusClick(path)}>
-                                <HighlightIcon className={classes.icon} />
-                            </IconButton>
-                            <IconButton onClick={() => onShowElement(path)}>
-                                <RemoveRedEyeIcon className={classes.icon} />
+                            <IconButton onClick={() => onDeleteElement(path)}>
+                                <DeleteForeverIcon className={classes.icon} />
                             </IconButton>
                         </ListItem>
                     )

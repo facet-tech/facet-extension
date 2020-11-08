@@ -13,3 +13,15 @@ export default (arr, withoutFacetizer = true) => {
     }
     return newPayload;
 }
+
+const addOrRemoveRainbowPath = (inputPath, addRainbow = false) => {
+    const strSplit = inputPath.split('>');
+    if (addRainbow) {
+        strSplit.splice(strSplit.length - 2, 0, "div");
+    } else {
+        strSplit.splice(strSplit.length - 2, 1);
+    }
+    return strSplit.join('>');
+}
+
+export { addOrRemoveRainbowPath };

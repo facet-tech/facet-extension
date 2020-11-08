@@ -36,6 +36,10 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setIsAddingFacet(false);
     }
 
+    const isElementHighlighted = (path) => {
+
+    }
+
     // sharing stuff among content script
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
@@ -48,7 +52,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
-        hiddenPathsArr, setHiddenPathsArr
+        hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted
     }}>
         {children}
     </AppContext.Provider>
