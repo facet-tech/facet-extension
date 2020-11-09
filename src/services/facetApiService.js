@@ -1,4 +1,7 @@
 import { HTTPMethods, APIUrl } from "../shared/constant";
+import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import parsePath from '../shared/parsePath';
+import { api } from '../shared/constant';
 
 /**
  * @param {domainId}
@@ -140,8 +143,36 @@ const deleteFacet = async (body) => {
     return jsonResponse;
 }
 
+const saveFacets = async (hiddenPathsArr, facetNameMap, enqueueSnackbar) => {
+    try {
+        // check if domain exists
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        let getDomainRes = await getOrPostDomain(workspaceId);
+        const facetsArr = parsePath(hiddenPathsArr).map(el => {
+            return {
+                path: el.replace(/ /g, ""),
+                name: facetNameMap.get(el)
+            };
+        });
+        const body = {
+            domainId: getDomainRes.response.id,
+            domElement: [{
+                enabled: "true",
+                facets: facetsArr
+            }],
+            urlPath: window.location.pathname
+        }
+        await triggerApiCall(HTTPMethods.POST, '/facet', body);
+        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+    } catch (e) {
+        enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
+        console.log(`[ERROR] [onSaveClick] `, e)
+    }
+}
+
 export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
-    getOrCreateWorkspace, deleteUser, createNewUser
+    getOrCreateWorkspace, deleteUser, createNewUser,
+    saveFacets
 };

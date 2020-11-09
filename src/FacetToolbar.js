@@ -6,11 +6,10 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
-import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
-import { getOrPostDomain, triggerApiCall } from './services/facetApiService';
+import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
 import FacetTreeSideBar from './facetTreeSideBar';
 
 const GridDiv = styled.div`
@@ -51,25 +50,7 @@ export default function FacetToolbar() {
 
     const onSaveClick = async () => {
         try {
-            // check if domain exists
-            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getOrPostDomain(workspaceId);
-            const facetsArr = parsePath(hiddenPathsArr).map(el => {
-                return {
-                    path: el.replace(/ /g, ""),
-                    name: facetNameMap.get(el)
-                };
-            });
-            const body = {
-                domainId: getDomainRes.response.id,
-                domElement: [{
-                    enabled: "true",
-                    facets: facetsArr
-                }],
-                urlPath: window.location.pathname
-            }
-            await triggerApiCall(HTTPMethods.POST, '/facet', body);
-            enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+            saveFacets(hiddenPathsArr, facetNameMap, enqueueSnackbar);
             window.location.reload();
         } catch (e) {
             enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
