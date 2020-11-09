@@ -11,14 +11,14 @@ window.highlightMode = false;
 // singleton
 let hiddenPaths;
 
-const onMouseEnterHandle = function (event) {
-    event.target.style.setProperty("outline", "5px ridge #c25d29");
-    event.target.style.setProperty("cursor", "pointer");
+const onMouseEnterHandle = function (domElement) {
+    domElement.target.style.setProperty("outline", "5px ridge #c25d29");
+    domElement.target.style.setProperty("cursor", "pointer");
 };
 
-const onMouseLeaveHandle = function (event) {
-    event.target.style.setProperty("outline", "unset");
-    event.target.style.setProperty("cursor", "unset");
+const onMouseLeaveHandle = function (domElement) {
+    domElement.target.style.setProperty("outline", "unset");
+    domElement.target.style.setProperty("cursor", "unset");
 }
 
 const onMouseClickHandle = function (event) {
@@ -122,4 +122,4 @@ const updateEvents = async (flag, observerFunctions, hiddenPathsArr) => {
     }
 }
 
-export { updateEvents, computeWithOrWithoutFacetizer };
+export { updateEvents, computeWithOrWithoutFacetizer, onMouseEnterHandle };

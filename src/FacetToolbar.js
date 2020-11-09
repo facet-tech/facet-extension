@@ -10,7 +10,7 @@ import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
-import FacetTreeSideBar from './facetTreeSideBar';
+import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
 
 const GridDiv = styled.div`
     display: grid;

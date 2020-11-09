@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { getOrPostDomain, saveFacets } from '../services/facetApiService';
 import { api } from '../shared/constant';
+import { computeWithOrWithoutFacetizer } from '../highlighter';
 
 const drawerWidth = 240;
 
@@ -88,6 +89,24 @@ export default function FacetTreeSideBar() {
         setOpen(false);
     };
 
+    const onMouseEnterHandle = function (path) {
+        console.log('RECEIVED', path)
+        const computedPath = computeWithOrWithoutFacetizer(path, true);
+        console.log('@ENTER', computedPath);
+
+        $(path).css("outline", "5px ridge #c25d29");
+        $(path).css("cursor", "pointer");
+    };
+
+    const onMouseLeaveHandle = function (path) {
+        console.log('RECEIVED', path)
+        const computedPath = computeWithOrWithoutFacetizer(path, true);
+        console.log('@LEAVE', computedPath);
+
+        $(path).css("outline", "unset");
+        $(path).css("cursor", "unset");
+    }
+
     return (<div className={classes.root}>
         <CssBaseline />
         <IconButton
@@ -120,7 +139,10 @@ export default function FacetTreeSideBar() {
                     const fName = `facet-${index + 1}`;
                     facetNameMap.set(path, fName);
                     const listItems = (
-                        <ListItem key={fName}>
+                        <ListItem
+                            onMouseOver={() => onMouseEnterHandle(path)}
+                            onMouseLeave={() => onMouseLeaveHandle(path)}
+                            key={fName}>
                             <TextField
                                 id="filled-read-only-input"
                                 defaultValue={fName}
