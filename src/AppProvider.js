@@ -6,8 +6,8 @@ import { useSnackbar } from 'notistack';
 import loadLocalStorage from './shared/loadLocalStorage';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
-    const { enqueueSnackbar } = useSnackbar();
 
+    const { enqueueSnackbar } = useSnackbar();
     const [isEnabled, setIsEnabled] = useState(false);
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [isAddingFacet, setIsAddingFacet] = useState(false);
@@ -19,7 +19,11 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
     const [showSideBar, setShowSideBar] = useState(true);
     const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
-    const [facetNameMap, setFacetNameMap] = useState(new Map());
+    const [selectedFacet, setSelectedFacet] = useState('Facet-1');
+    const [facetMap, setFacetMap] = useState(new Map([
+        ['Facet-1', []]
+    ]));
+
 
     useEffect(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
@@ -41,8 +45,6 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         // TODO
     }
 
-    console.log('facetNameMap', facetNameMap);
-
     // sharing stuff among content script
     window.addedElements = addedElements;
     window.setAddedElements = setAddedElements;
@@ -56,7 +58,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
         hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted,
-        facetNameMap, setFacetNameMap
+        facetMap, setFacetMap, selectedFacet, setSelectedFacet
     }}>
         {children}
     </AppContext.Provider>

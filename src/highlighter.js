@@ -11,22 +11,36 @@ window.highlightMode = false;
 // singleton
 let hiddenPaths;
 
-const onMouseEnterHandle = function (domElement) {
-    domElement.target.style.setProperty("outline", "5px ridge #c25d29");
-    domElement.target.style.setProperty("cursor", "pointer");
+const onMouseEnterHandle = function (event) {
+    event.target.style.setProperty("outline", "5px ridge #c25d29");
+    event.target.style.setProperty("cursor", "pointer");
 };
 
-const onMouseLeaveHandle = function (domElement) {
-    domElement.target.style.setProperty("outline", "unset");
-    domElement.target.style.setProperty("cursor", "unset");
+/**
+ * @param {selectedFacet} selected facet
+ * @param {setFacetMap} lifecycle event
+ */
+const onMouseLeaveHandle = function (event) {
+    event.target.style.setProperty("outline", "unset");
+    event.target.style.setProperty("cursor", "unset");
 }
 
 const onMouseClickHandle = function (event) {
+    const selectedFacet = event.currentTarget.selectedFacet;
+    const facetMap = event.currentTarget.facetMap;
     const res = getDomPath(event.target);
+    const domElementsArr = facetMap.get(selectedFacet) !== undefined ? facetMap.get(selectedFacet) : [];
     if (hiddenPaths.includes(res)) {
+        // new state management stuff
+        const newDomElementsArr = domElementsArr.filter(e => e !== res);
+        facetMap.set(selectedFacet, newDomElementsArr);
+
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("opacity", "unset");
     } else {
+        domElementsArr.push(res);
+        facetMap.set(selectedFacet, domElementsArr);
+
         event.target.style.setProperty("opacity", "0.3", "important");
         hiddenPaths.push(res);
     }
@@ -76,7 +90,7 @@ const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     return result;
 }
 
-const updateEvents = async (flag, observerFunctions, hiddenPathsArr) => {
+const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFacet, facetMap) => {
     try {
         if (!hiddenPaths) {
             hiddenPaths = hiddenPathsArr;
@@ -106,6 +120,8 @@ const updateEvents = async (flag, observerFunctions, hiddenPathsArr) => {
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
                 .includes(e)).forEach(e => {
+                    e.selectedFacet = selectedFacet;
+                    e.facetMap = facetMap;
                     if (flag) {
                         e.addEventListener("click", onMouseClickHandle, false);
                         e.addEventListener("mouseenter", onMouseEnterHandle, false);

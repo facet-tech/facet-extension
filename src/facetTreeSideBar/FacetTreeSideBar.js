@@ -16,14 +16,19 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
-import $ from 'jquery';
+import $, { map } from 'jquery';
 import Button from '@material-ui/core/Button';
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { getOrPostDomain, saveFacets } from '../services/facetApiService';
 import { api } from '../shared/constant';
 import { computeWithOrWithoutFacetizer } from '../highlighter';
+import TreeView from '@material-ui/lab/TreeView';
+import TreeItem from '@material-ui/lab/TreeItem';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +48,18 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
+    },
+    treeView: {
+        height: 216,
+        flexGrow: 1,
+        maxWidth: 400,
+    },
+    margin: {
+        marginRight: 20
+    },
+    saveBtn: {
+        position: 'absolute',
+        bottom: 0
     }
 }));
 
@@ -51,8 +68,12 @@ export default function FacetTreeSideBar() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar,
-        facetNameMap, setFacetNameMap } = useContext(AppContext);
+        facetMap, setFacetMap, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
+    const [expanded, setExpanded] = useState([]);
+    const [selected, setSelected] = useState([]);
+
+    console.log('CHECK FF', facetMap);
 
     const onFocusClick = (path) => {
         const parsedPath = parsePath([path], false);
@@ -63,6 +84,15 @@ export default function FacetTreeSideBar() {
 
     const onUnfocusClick = (path) => {
         // TODO
+    }
+
+    const addFacet = () => {
+        console.log('ADDFACET')
+        const autoNumber = facetMap.size + 1;
+        const newName = `Facet-${autoNumber}`;
+        facetMap.set(newName, []);
+        setSelectedFacet(newName);
+        setSelected(newName);
     }
 
     const onDeleteElement = (path) => {
@@ -78,7 +108,8 @@ export default function FacetTreeSideBar() {
     }
 
     const onSaveClick = async () => {
-        saveFacets(hiddenPathsArr, facetNameMap, enqueueSnackbar);
+        saveFacets(hiddenPathsArr, facetMap, enqueueSnackbar);
+        setOpen(false);
     }
 
     const handleDrawerOpen = () => {
@@ -90,22 +121,48 @@ export default function FacetTreeSideBar() {
     };
 
     const onMouseEnterHandle = function (path) {
-        console.log('RECEIVED', path)
         const computedPath = computeWithOrWithoutFacetizer(path, true);
-        console.log('@ENTER', computedPath);
 
         $(path).css("outline", "5px ridge #c25d29");
         $(path).css("cursor", "pointer");
     };
 
     const onMouseLeaveHandle = function (path) {
-        console.log('RECEIVED', path)
         const computedPath = computeWithOrWithoutFacetizer(path, true);
-        console.log('@LEAVE', computedPath);
 
         $(path).css("outline", "unset");
         $(path).css("cursor", "unset");
     }
+
+    const handleNodeIdToggle = (event, nodeIds) => {
+        console.log('handleNodeIdToggle', handleNodeIdToggle)
+        setExpanded(nodeIds);
+    };
+
+    const handleNodeIdsSelect = (event, nodeIds) => {
+        console.log('@handleNodeIdsSelect', nodeIds)
+        setSelected(nodeIds);
+        setSelectedFacet(nodeIds);
+    };
+
+    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    const itemsElement = facetArray.map(element => {
+        const value = element.value;
+        return <TreeItem
+            nodeId={element.name}
+            label={element.name}>
+            {value.map((path, index) => {
+                return <TreeItem
+                    onMouseOver={() => onMouseEnterHandle(path)}
+                    onMouseLeave={() => onMouseLeaveHandle(path)}
+                    nodeId={`${element.name}-element-${index + 1}`}
+                    label={`element-${index + 1}`}
+                />
+            })}
+        </TreeItem>
+    });
+
+    console.log('SELECTED', selected);
 
     return (<div className={classes.root}>
         <CssBaseline />
@@ -128,40 +185,32 @@ export default function FacetTreeSideBar() {
             }}
         >
             <div className={classes.drawerHeader}>
-                {'Available Facets'}
+                <Fab onClick={() => { addFacet() }} size="small" color="secondary" aria-label="add" className={classes.margin}>
+                    <AddIcon />
+                </Fab>
+                <h3>Available Facets</h3>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
             </div>
             <Divider />
-            <List>
-                {hiddenPathsArr.length > 0 ? hiddenPathsArr.map((path, index) => {
-                    const fName = `facet-${index + 1}`;
-                    facetNameMap.set(path, fName);
-                    const listItems = (
-                        <ListItem
-                            onMouseOver={() => onMouseEnterHandle(path)}
-                            onMouseLeave={() => onMouseLeaveHandle(path)}
-                            key={fName}>
-                            <TextField
-                                id="filled-read-only-input"
-                                defaultValue={fName}
-                                variant="filled"
-                                onChange={(e) => {
-                                    facetNameMap.set(path, e.target.value);
-                                }}
-                            />
-                        </ListItem>
-                    );
-                    return listItems;
-                }) : "No facets found."}
-                {hiddenPathsArr.length > 0 ? <ListItem>
+            <TreeView
+                className={classes.treeView}
+                defaultCollapseIcon={<ExpandMoreIcon />}
+                defaultExpandIcon={<ChevronRightIcon />}
+                expanded={selected ? expanded : false}
+                selected={selected}
+                onNodeToggle={handleNodeIdToggle}
+                onNodeSelect={handleNodeIdsSelect}
+            >
+                {itemsElement}
+                <ListItem className={classes.saveBtn}>
                     <Button style={{ width: '100%' }} variant="contained"
                         color="primary" size="small" onClick={() => onSaveClick()}>
                         Save
                     </Button>
-                </ListItem> : null}
-            </List>
+                </ListItem>
+            </TreeView>
         </Drawer>
         <main
             className={clsx(classes.content, {

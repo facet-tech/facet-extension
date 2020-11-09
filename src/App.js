@@ -9,7 +9,8 @@ import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocal
 function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-    isPluginEnabled, setIsPluginEnabled, hiddenPathsArr, setHiddenPathsArr } = useContext(AppContext);
+    isPluginEnabled, setIsPluginEnabled, hiddenPathsArr, setHiddenPathsArr,
+    selectedFacet, facetMap } = useContext(AppContext);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
@@ -35,9 +36,9 @@ function App() {
 
   if (isPluginEnabled) {
     if (showSideBar) {
-      updateEvents(true, [setHiddenPathsArr], hiddenPathsArr);
+      updateEvents(true, [setHiddenPathsArr], hiddenPathsArr, selectedFacet, facetMap);
     } else {
-      updateEvents(false, [setHiddenPathsArr], hiddenPathsArr);
+      updateEvents(false, [setHiddenPathsArr], hiddenPathsArr, selectedFacet, facetMap);
     }
   }
 
