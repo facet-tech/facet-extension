@@ -1,5 +1,10 @@
 # Thank you for contributing to facet-extension!
 
+## Code of Conduct
+
+Facet ninja has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect project participants to adhere to it.
+Please read [the full text](/CODE_OF_CONDUCT.md).
+
 ## Tests
 
 Run tests with `yarn test`.
