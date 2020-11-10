@@ -83,18 +83,7 @@ export default function FacetTreeSideBar() {
     }, []);
 
     console.log('CHECK FF', facetMap);
-
-    const onFocusClick = (path) => {
-        const parsedPath = parsePath([path], false);
-        const element = $(parsedPath[0])[0];
-        $(path).wrapAll("<div class='rainbow' />");
-        setHighlightedFacets([...setHighlightedFacets, parsedPath[0]]);
-    }
-
-    const onUnfocusClick = (path) => {
-        // TODO
-    }
-
+    console.log('Selected', selected);
     const addFacet = () => {
         const autoNumber = facetMap.size + 1;
         const newName = `Facet-${autoNumber}`;
@@ -164,10 +153,12 @@ export default function FacetTreeSideBar() {
     };
 
     const handleNodeIdsSelect = (event, nodeId) => {
+        console.log('@handleNodeIdsSelect', nodeId)
         if (!facetArray.includes(e => e.name !== nodeId)) {
+            console.log('bgika!')
             return;
         }
-        console.log('@handleNodeIdsSelect', nodeId)
+
         setSelected(nodeId);
         setSelectedFacet(nodeId);
         setExpanded([nodeId]);
@@ -196,7 +187,6 @@ export default function FacetTreeSideBar() {
                     labelText={`element-${index + 1}`}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
-                        console.log('TRIGGARA');
                         let arr = facetMap.get(element.name);
                         arr = arr.filter(e => e !== path);
                         facetMap.set(element.name, arr);
