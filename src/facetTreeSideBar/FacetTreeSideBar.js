@@ -94,17 +94,19 @@ export default function FacetTreeSideBar() {
     }
 
     const onMouseEnterHandleAll = (name) => {
-        const paths = facetMap.get(name);
-        paths && paths.forEach(path => {
-            onMouseEnterHandle(path);
-        })
+        // console.log('onMouseEnterHandleAll');
+        // const paths = facetMap.get(name);
+        // paths && paths.forEach(path => {
+        //     onMouseEnterHandle(path);
+        // })
     }
 
     const onMouseLeaveHandleAll = (name) => {
-        const paths = facetMap.get(name);
-        paths && paths.forEach(path => {
-            onMouseLeaveHandle(path);
-        })
+        // console.log('onMouseLeaveHandleAll');
+        // const paths = facetMap.get(name);
+        // paths && paths.forEach(path => {
+        //     onMouseLeaveHandle(path);
+        // })
     }
 
     const onDeleteElement = (path) => {
@@ -147,21 +149,15 @@ export default function FacetTreeSideBar() {
     }
 
     const handleNodeIdToggle = (event, nodeIds) => {
-        console.log('@handleNodeIdToggle', nodeIds)
-
         setExpanded(nodeIds);
     };
 
     const handleNodeIdsSelect = (event, nodeId) => {
-        console.log('@handleNodeIdsSelect', nodeId)
-        if (!facetArray.includes(e => e.name !== nodeId)) {
-            console.log('bgika!')
-            return;
+        if (facetArray.find(e => e.name === nodeId)) {
+            setSelected(nodeId);
+            setSelectedFacet(nodeId);
+            setExpanded([nodeId]);
         }
-
-        setSelected(nodeId);
-        setSelectedFacet(nodeId);
-        setExpanded([nodeId]);
     };
 
 
