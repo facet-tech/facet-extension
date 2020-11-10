@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -27,6 +27,10 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import StyledTreeItem from './StyledTreeItem';
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+import WebAssetIcon from '@material-ui/icons/WebAsset';
+import { lte } from 'lodash';
 
 const drawerWidth = 280;
 
@@ -66,12 +70,17 @@ const useStyles = makeStyles((theme) => ({
 export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar,
         facetMap, setFacetMap, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
+    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+
+    useEffect(() => {
+        setExpanded(['Facet-1']);
+    }, []);
 
     console.log('CHECK FF', facetMap);
 
@@ -87,12 +96,26 @@ export default function FacetTreeSideBar() {
     }
 
     const addFacet = () => {
-        console.log('ADDFACET')
         const autoNumber = facetMap.size + 1;
         const newName = `Facet-${autoNumber}`;
         facetMap.set(newName, []);
         setSelectedFacet(newName);
         setSelected(newName);
+        setExpanded([newName]);
+    }
+
+    const onMouseEnterHandleAll = (name) => {
+        const paths = facetMap.get(name);
+        paths && paths.forEach(path => {
+            onMouseEnterHandle(path);
+        })
+    }
+
+    const onMouseLeaveHandleAll = (name) => {
+        const paths = facetMap.get(name);
+        paths && paths.forEach(path => {
+            onMouseLeaveHandle(path);
+        })
     }
 
     const onDeleteElement = (path) => {
@@ -135,34 +158,55 @@ export default function FacetTreeSideBar() {
     }
 
     const handleNodeIdToggle = (event, nodeIds) => {
-        console.log('handleNodeIdToggle', handleNodeIdToggle)
+        console.log('@handleNodeIdToggle', nodeIds)
+
         setExpanded(nodeIds);
     };
 
-    const handleNodeIdsSelect = (event, nodeIds) => {
-        console.log('@handleNodeIdsSelect', nodeIds)
-        setSelected(nodeIds);
-        setSelectedFacet(nodeIds);
+    const handleNodeIdsSelect = (event, nodeId) => {
+        if (!facetArray.includes(e => e.name !== nodeId)) {
+            return;
+        }
+        console.log('@handleNodeIdsSelect', nodeId)
+        setSelected(nodeId);
+        setSelectedFacet(nodeId);
+        setExpanded([nodeId]);
     };
 
-    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+
     const itemsElement = facetArray.map(element => {
         const value = element.value;
-        return <TreeItem
+        return <StyledTreeItem
+            onMouseOver={() => onMouseEnterHandleAll(element.name)}
+            onMouseLeave={() => onMouseLeaveHandleAll(element.name)}
             nodeId={element.name}
-            label={element.name}>
+            labelText={`${element.name}`}
+            labelIcon={ChangeHistoryIcon}
+            labelInfo="90"
+            onDeleteItem={() => {
+                facetMap.delete(element.name);
+                setFacetMap(new Map(facetMap));
+            }}
+        >
             {value.map((path, index) => {
-                return <TreeItem
+                return <StyledTreeItem
                     onMouseOver={() => onMouseEnterHandle(path)}
                     onMouseLeave={() => onMouseLeaveHandle(path)}
                     nodeId={`${element.name}-element-${index + 1}`}
-                    label={`element-${index + 1}`}
+                    labelText={`element-${index + 1}`}
+                    labelIcon={WebAssetIcon}
+                    onDeleteItem={() => {
+                        console.log('TRIGGARA');
+                        let arr = facetMap.get(element.name);
+                        arr = arr.filter(e => e !== path);
+                        facetMap.set(element.name, arr);
+                        setFacetMap(new Map(facetMap.set(element.name, arr)));
+                    }}
                 />
             })}
-        </TreeItem>
-    });
+        </StyledTreeItem>
 
-    console.log('SELECTED', selected);
+    });
 
     return (<div className={classes.root}>
         <CssBaseline />
