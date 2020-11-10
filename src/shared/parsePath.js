@@ -15,22 +15,12 @@ export default (arr, withoutFacetizer = true) => {
     return newPayload;
 }
 
-const addOrRemoveRainbowPath = (inputPath, addRainbow = false) => {
-    const strSplit = inputPath.split('>');
-    if (addRainbow) {
-        strSplit.splice(strSplit.length - 2, 0, "div");
-    } else {
-        strSplit.splice(strSplit.length - 2, 1);
-    }
-    return strSplit.join('>');
-}
-
-const removeRainbowElement = (path) => {
+const getLastElementFromPath = (path) => {
     const splitArr = path.split('>');
-    const element = $(path);
-    $(path).replaceWith(() => {
-        return $('ul', this);
-    });
+    if (splitArr.length === 0) {
+        return 'element';
+    }
+    return splitArr[splitArr.length - 1]
 }
 
-export { addOrRemoveRainbowPath };
+export { getLastElementFromPath };

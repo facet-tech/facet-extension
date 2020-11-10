@@ -31,6 +31,7 @@ import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import { lte } from 'lodash';
+import { getLastElementFromPath } from '../shared/parsePath';
 
 const drawerWidth = 280;
 
@@ -78,7 +79,7 @@ export default function FacetTreeSideBar() {
     const [selected, setSelected] = useState([]);
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
 
-    console.log('EXPANDED', expanded);
+    console.log('check', facetMap);
     console.log('selected', selected);
     useEffect(() => {
         setExpanded(['Facet-1']);
@@ -168,7 +169,7 @@ export default function FacetTreeSideBar() {
                     onMouseOver={() => onMouseEnterHandle(path)}
                     onMouseLeave={() => onMouseLeaveHandle(path)}
                     nodeId={`${element.name}-element-${index + 1}`}
-                    labelText={`element-${index + 1}`}
+                    labelText={`element-${getLastElementFromPath(path)}`}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
                         let arr = facetMap.get(element.name);
