@@ -78,35 +78,22 @@ export default function FacetTreeSideBar() {
     const [selected, setSelected] = useState([]);
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
 
+    console.log('EXPANDED', expanded);
+    console.log('selected', selected);
     useEffect(() => {
         setExpanded(['Facet-1']);
     }, []);
 
-    console.log('CHECK FF', facetMap);
-    console.log('Selected', selected);
-    const addFacet = () => {
-        const autoNumber = facetMap.size + 1;
+    const addFacet = (autoNumber = facetMap.size + 1) => {
         const newName = `Facet-${autoNumber}`;
-        facetMap.set(newName, []);
+        if (facetMap.get(newName)) {
+            addFacet(autoNumber + 1);
+            return;
+        }
+        setFacetMap(facetMap.set(newName, []));
         setSelectedFacet(newName);
         setSelected(newName);
         setExpanded([newName]);
-    }
-
-    const onMouseEnterHandleAll = (name) => {
-        // console.log('onMouseEnterHandleAll');
-        // const paths = facetMap.get(name);
-        // paths && paths.forEach(path => {
-        //     onMouseEnterHandle(path);
-        // })
-    }
-
-    const onMouseLeaveHandleAll = (name) => {
-        // console.log('onMouseLeaveHandleAll');
-        // const paths = facetMap.get(name);
-        // paths && paths.forEach(path => {
-        //     onMouseLeaveHandle(path);
-        // })
     }
 
     const onDeleteElement = (path) => {
@@ -160,20 +147,21 @@ export default function FacetTreeSideBar() {
         }
     };
 
+    const onDeleteItem = (element) => {
+        // setSelected(undefined);
+        // setSelectedFacet(undefined);
+        // setExpanded([]);
+        facetMap.delete(element.name);
+        setFacetMap(new Map(facetMap));
+    }
 
     const itemsElement = facetArray.map(element => {
         const value = element.value;
         return <StyledTreeItem
-            onMouseOver={() => onMouseEnterHandleAll(element.name)}
-            onMouseLeave={() => onMouseLeaveHandleAll(element.name)}
             nodeId={element.name}
             labelText={`${element.name}`}
             labelIcon={ChangeHistoryIcon}
-            labelInfo="90"
-            onDeleteItem={() => {
-                facetMap.delete(element.name);
-                setFacetMap(new Map(facetMap));
-            }}
+            onDeleteItem={() => { onDeleteItem(element) }}
         >
             {value.map((path, index) => {
                 return <StyledTreeItem
@@ -228,18 +216,12 @@ export default function FacetTreeSideBar() {
                 className={classes.treeView}
                 defaultCollapseIcon={<ExpandMoreIcon />}
                 defaultExpandIcon={<ChevronRightIcon />}
-                expanded={selected ? expanded : false}
+                expanded={expanded}
                 selected={selected}
                 onNodeToggle={handleNodeIdToggle}
                 onNodeSelect={handleNodeIdsSelect}
             >
                 {itemsElement}
-                <ListItem className={classes.saveBtn}>
-                    <Button style={{ width: '100%' }} variant="contained"
-                        color="primary" size="small" onClick={() => onSaveClick()}>
-                        Save
-                    </Button>
-                </ListItem>
             </TreeView>
         </Drawer>
         <main
