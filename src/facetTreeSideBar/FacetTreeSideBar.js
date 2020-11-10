@@ -1,25 +1,20 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import TextField from '@material-ui/core/TextField';
-import HighlightIcon from '@material-ui/icons/Highlight';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
 import $, { map } from 'jquery';
 import Button from '@material-ui/core/Button';
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
-import { getOrPostDomain, saveFacets } from '../services/facetApiService';
+import { saveFacets } from '../services/facetApiService';
 import { api } from '../shared/constant';
 import { computeWithOrWithoutFacetizer } from '../highlighter';
 import TreeView from '@material-ui/lab/TreeView';
@@ -30,7 +25,6 @@ import AddIcon from '@material-ui/icons/Add';
 import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { lte } from 'lodash';
 import { getLastElementFromPath } from '../shared/parsePath';
 
 const drawerWidth = 280;
@@ -72,9 +66,7 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(true);
-    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar,
-        facetMap, setFacetMap, selectedFacet, setSelectedFacet } = useContext(AppContext);
-    const { highlightedFacets, setHighlightedFacets } = useContext(CoreContext);
+    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, facetMap, setFacetMap, setSelectedFacet } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -109,16 +101,12 @@ export default function FacetTreeSideBar() {
         }
     }
 
-    const onSaveClick = async () => {
-        saveFacets(hiddenPathsArr, facetMap, enqueueSnackbar);
-        setOpen(false);
-    }
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
 
     const handleDrawerClose = () => {
+        saveFacets(hiddenPathsArr, facetMap, enqueueSnackbar);
         setOpen(false);
     };
 
@@ -149,9 +137,6 @@ export default function FacetTreeSideBar() {
     };
 
     const onDeleteItem = (element) => {
-        // setSelected(undefined);
-        // setSelectedFacet(undefined);
-        // setExpanded([]);
         facetMap.delete(element.name);
         setFacetMap(new Map(facetMap));
     }
