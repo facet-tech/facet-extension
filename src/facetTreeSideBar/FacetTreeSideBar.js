@@ -89,7 +89,7 @@ export default function FacetTreeSideBar() {
         setExpanded([newName]);
     }
 
-    const onDeleteElement = (path) => {
+    const onDeleteDOMElement = (path) => {
         try {
             const parsedPath = parsePath([path], false);
             const element = $(parsedPath[0])[0];
@@ -136,7 +136,7 @@ export default function FacetTreeSideBar() {
         }
     };
 
-    const onDeleteItem = (element) => {
+    const onDeleteFacet = (element) => {
         facetMap.delete(element.name);
         setFacetMap(new Map(facetMap));
     }
@@ -147,7 +147,7 @@ export default function FacetTreeSideBar() {
             nodeId={element.name}
             labelText={`${element.name}`}
             labelIcon={ChangeHistoryIcon}
-            onDeleteItem={() => { onDeleteItem(element) }}
+            onDeleteItem={() => { onDeleteFacet(element) }}
         >
             {value.map((path, index) => {
                 return <StyledTreeItem
@@ -157,6 +157,8 @@ export default function FacetTreeSideBar() {
                     labelText={`element-${getLastElementFromPath(path)}`}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
+                        //onDeleteDOMElement
+                        onDeleteDOMElement(path);
                         let arr = facetMap.get(element.name);
                         arr = arr.filter(e => e !== path);
                         facetMap.set(element.name, arr);
@@ -165,7 +167,6 @@ export default function FacetTreeSideBar() {
                 />
             })}
         </StyledTreeItem>
-
     });
 
     return (<div className={classes.root}>
