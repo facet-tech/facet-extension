@@ -108,7 +108,7 @@ export default function FacetToolbar() {
                 onClick={() => sideBarHandler()}>
                 {showSideBar ? 'DEACTIVATE' : 'ACTIVATE'}
             </StyledButton>
-            <StyledButton onClick={() => reset()}>{'Reset'}</StyledButton>
+            <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />

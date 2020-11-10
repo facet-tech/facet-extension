@@ -89,6 +89,14 @@ export default function FacetTreeSideBar() {
         setExpanded([newName]);
     }
 
+    const onDeleteFacet = (element) => {
+        element.value.forEach(path => {
+            onDeleteDOMElement(path);
+        })
+        facetMap.delete(element.name);
+        setFacetMap(new Map(facetMap));
+    }
+
     const onDeleteDOMElement = (path) => {
         try {
             const parsedPath = parsePath([path], false);
@@ -135,11 +143,6 @@ export default function FacetTreeSideBar() {
             setExpanded([nodeId]);
         }
     };
-
-    const onDeleteFacet = (element) => {
-        facetMap.delete(element.name);
-        setFacetMap(new Map(facetMap));
-    }
 
     const itemsElement = facetArray.map(element => {
         const value = element.value;

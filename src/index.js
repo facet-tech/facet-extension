@@ -51,7 +51,7 @@ if (document.getElementById('facetizer')) {
                         warning: '⚠️',
                     }}
                     anchorOrigin={{
-                        vertical: 'top',
+                        vertical: 'bottom',
                         horizontal: 'left',
                     }}>
                     <AppProvider>
