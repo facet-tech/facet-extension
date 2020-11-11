@@ -1,5 +1,4 @@
 import { computeWithOrWithoutFacetizer } from "../highlighter.js";
-import $ from 'jquery';
 
 export default (arr, withoutFacetizer = true) => {
     if (arr === null || !arr || arr.length === 0) {

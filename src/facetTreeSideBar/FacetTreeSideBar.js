@@ -71,7 +71,6 @@ export default function FacetTreeSideBar() {
     const [selected, setSelected] = useState([]);
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
 
-    console.log('check', facetMap);
     useEffect(() => {
         setExpanded(['Facet-1']);
     }, []);
@@ -89,7 +88,6 @@ export default function FacetTreeSideBar() {
     }
 
     const onDeleteFacet = (facet) => {
-        console.log('ELA', facet)
         facet.value.forEach(domElement => {
             onDeleteDOMElement(domElement.path);
         })
@@ -118,16 +116,14 @@ export default function FacetTreeSideBar() {
         setOpen(false);
     };
 
+    // TODO duplicate, re-use function from highlighter
     const onMouseEnterHandle = function (path) {
-        const computedPath = computeWithOrWithoutFacetizer(path, true);
-
         $(path).css("outline", "5px ridge #c25d29");
         $(path).css("cursor", "pointer");
     };
 
+    // TODO duplicate, re-use function from highlighter
     const onMouseLeaveHandle = function (path) {
-        const computedPath = computeWithOrWithoutFacetizer(path, true);
-
         $(path).css("outline", "unset");
         $(path).css("cursor", "unset");
     }
@@ -160,7 +156,6 @@ export default function FacetTreeSideBar() {
                     labelText={domElement.name}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
-                        //onDeleteDOMElement
                         onDeleteDOMElement(domElement.path);
                         let arr = facetMap.get(facet.name);
                         arr = arr.filter(e => e.name !== domElement.name);

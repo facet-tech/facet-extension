@@ -5,10 +5,13 @@ const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
+const localBaseURL = 'http://localhost:3000';
+
 
 const APIUrl = {
     apiBaseURL,
-    testBaseURL
+    testBaseURL,
+    localBaseURL
 }
 
 const LoginTypes = {
@@ -26,7 +29,8 @@ const api = {
     userId: 'userId',
     workspace: {
         workspaceId: 'workspaceId'
-    }
+    },
+    facetObjectVersion: '0.0.1'// TODO ideally this matches the manifest version
 };
 
 const HTTPMethods = {

@@ -29,7 +29,7 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `${APIUrl.apiBaseURL}${urlSuffix}`;
+        const url = `${APIUrl.localBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const resjson = await res.json();
@@ -132,7 +132,7 @@ const getFacet = async (domainId, urlPath) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = `${APIUrl.apiBaseURL}/facet`;
+    let url = `${APIUrl.localBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };
@@ -150,32 +150,29 @@ const extractFacetArray = (facetMap) => {
         return {
             enabled: false,
             name: facet.name,
-            domElement: facetMap.get(facet.name) // TODO put work
+            domElement: facetMap.get(facet.name)
         }
     });
 }
 
-const saveFacets = async (hiddenPathsArr, facetNameMap, enqueueSnackbar) => {
+const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
+    const facetObjectVersion = api.facetObjectVersion;
+    const body = {
+        domainId: 'MK-LOCAL-TEST',
+        urlPath: window.location.pathname,
+        facet: extractFacetArray(facetMap),
+        version: facetObjectVersion,
+    }
+    console.log('GENERATED BODY', body);
+    return body;
+}
+
+const saveFacets = async (hiddenPathsArr, facetMap, enqueueSnackbar) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const facetsArr = parsePath(hiddenPathsArr).map(el => {
-            return {
-                path: el.replace(/ /g, ""),
-                name: facetNameMap.get(el)
-            };
-        });
-        console.log('facetsArr', facetsArr)
-        const body = {
-            domainId: getDomainRes.response.id,
-            urlPath: window.location.pathname,
-            facet: extractFacetArray(),
-            domElement: [{
-                enabled: "true",
-                facets: facetsArr
-            }]
-        }
+        const body = generateRequestBodyFromFacetMap(facetMap, getDomainRes.response.id);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
     } catch (e) {

@@ -53,7 +53,6 @@ export default function FacetToolbar() {
             saveFacets(hiddenPathsArr, facetNameMap, enqueueSnackbar);
             window.location.reload();
         } catch (e) {
-            enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
             console.log(`[ERROR] [onSaveClick] `, e)
         }
     }
