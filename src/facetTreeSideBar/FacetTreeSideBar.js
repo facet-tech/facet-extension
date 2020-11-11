@@ -25,7 +25,7 @@ import AddIcon from '@material-ui/icons/Add';
 import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { getLastElementFromPath } from '../shared/parsePath';
+import { getElementNameFromPath } from '../shared/parsePath';
 
 const drawerWidth = 280;
 
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between'
     },
     treeView: {
         height: 216,
@@ -72,7 +72,6 @@ export default function FacetTreeSideBar() {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
 
     console.log('check', facetMap);
-    console.log('selected', selected);
     useEffect(() => {
         setExpanded(['Facet-1']);
     }, []);
@@ -89,11 +88,12 @@ export default function FacetTreeSideBar() {
         setExpanded([newName]);
     }
 
-    const onDeleteFacet = (element) => {
-        element.value.forEach(path => {
-            onDeleteDOMElement(path);
+    const onDeleteFacet = (facet) => {
+        console.log('ELA', facet)
+        facet.value.forEach(domElement => {
+            onDeleteDOMElement(domElement.path);
         })
-        facetMap.delete(element.name);
+        facetMap.delete(facet.name);
         setFacetMap(new Map(facetMap));
     }
 
@@ -144,28 +144,28 @@ export default function FacetTreeSideBar() {
         }
     };
 
-    const itemsElement = facetArray.map(element => {
-        const value = element.value;
+    const itemsElement = facetArray.map(facet => {
+        const value = facet.value;
         return <StyledTreeItem
-            nodeId={element.name}
-            labelText={`${element.name}`}
+            nodeId={facet.name}
+            labelText={`${facet.name}`}
             labelIcon={ChangeHistoryIcon}
-            onDeleteItem={() => { onDeleteFacet(element) }}
+            onDeleteItem={() => { onDeleteFacet(facet) }}
         >
-            {value.map((path, index) => {
+            {value.map((domElement, index) => {
                 return <StyledTreeItem
-                    onMouseOver={() => onMouseEnterHandle(path)}
-                    onMouseLeave={() => onMouseLeaveHandle(path)}
-                    nodeId={`${element.name}-element-${index + 1}`}
-                    labelText={`element-${getLastElementFromPath(path)}`}
+                    onMouseOver={() => onMouseEnterHandle(domElement.path)}
+                    onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
+                    nodeId={`${facet.name}-element-${index + 1}`}
+                    labelText={domElement.name}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
                         //onDeleteDOMElement
-                        onDeleteDOMElement(path);
-                        let arr = facetMap.get(element.name);
-                        arr = arr.filter(e => e !== path);
-                        facetMap.set(element.name, arr);
-                        setFacetMap(new Map(facetMap.set(element.name, arr)));
+                        onDeleteDOMElement(domElement.path);
+                        let arr = facetMap.get(facet.name);
+                        arr = arr.filter(e => e.name !== domElement.name);
+                        facetMap.set(facet.name, arr);
+                        setFacetMap(new Map(facetMap.set(facet.name, arr)));
                     }}
                 />
             })}
@@ -193,13 +193,13 @@ export default function FacetTreeSideBar() {
             }}
         >
             <div className={classes.drawerHeader}>
-                <Fab onClick={() => { addFacet() }} size="small" color="secondary" aria-label="add" className={classes.margin}>
-                    <AddIcon />
-                </Fab>
-                <h3>Available Facets</h3>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
+                <h3>Facets</h3>
+                <Fab onClick={() => { addFacet() }} size="small" color="secondary" aria-label="add" className={classes.margin}>
+                    <AddIcon />
+                </Fab>
             </div>
             <Divider />
             <TreeView

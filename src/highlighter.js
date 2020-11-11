@@ -5,6 +5,7 @@ import parsePath from './shared/parsePath';
 import { api } from './shared/constant';
 import get from 'lodash/get';
 import CustomProxy from './utils/CustomProxy';
+import { getElementNameFromPath } from './shared/parsePath';
 
 // is this needed?
 window.highlightMode = false;
@@ -25,6 +26,13 @@ const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("cursor", "unset");
 }
 
+const convertToDomElementObject = (path) => {
+    return {
+        name: getElementNameFromPath(path),
+        path: path
+    }
+}
+
 const onMouseClickHandle = function (event) {
     const selectedFacet = event.currentTarget.selectedFacet;
     const facetMap = event.currentTarget.facetMap;
@@ -32,15 +40,18 @@ const onMouseClickHandle = function (event) {
     const domElementsArr = facetMap.get(selectedFacet) !== undefined ? facetMap.get(selectedFacet) : [];
     if (hiddenPaths.includes(res)) {
         // new state management stuff
-        const newDomElementsArr = domElementsArr.filter(e => e !== res);
+        const newDomElementsArr = domElementsArr.filter(e => e.path !== res);
         facetMap.set(selectedFacet, newDomElementsArr);
-
         hiddenPaths = hiddenPaths.filter(e => e !== res);
         event.target.style.setProperty("opacity", "unset");
     } else {
-        domElementsArr.push(res);
-        facetMap.set(selectedFacet, domElementsArr);
-
+        const domElementObj = convertToDomElementObject(res);
+        let arr = facetMap.get(selectedFacet);
+        if (!arr) {
+            arr = [];
+            facetMap.set(selectedFacet, arr);
+        }
+        arr.push(domElementObj);
         event.target.style.setProperty("opacity", "0.3", "important");
         hiddenPaths.push(res);
     }

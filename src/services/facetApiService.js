@@ -143,6 +143,18 @@ const deleteFacet = async (body) => {
     return jsonResponse;
 }
 
+const extractFacetArray = (facetMap) => {
+    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+
+    return facetArray.map(facet => {
+        return {
+            enabled: false,
+            name: facet.name,
+            domElement: facetMap.get(facet.name) // TODO put work
+        }
+    });
+}
+
 const saveFacets = async (hiddenPathsArr, facetNameMap, enqueueSnackbar) => {
     try {
         // check if domain exists
@@ -154,13 +166,15 @@ const saveFacets = async (hiddenPathsArr, facetNameMap, enqueueSnackbar) => {
                 name: facetNameMap.get(el)
             };
         });
+        console.log('facetsArr', facetsArr)
         const body = {
             domainId: getDomainRes.response.id,
+            urlPath: window.location.pathname,
+            facet: extractFacetArray(),
             domElement: [{
                 enabled: "true",
                 facets: facetsArr
-            }],
-            urlPath: window.location.pathname
+            }]
         }
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
