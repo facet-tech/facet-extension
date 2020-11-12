@@ -32,6 +32,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [facetMap, setFacetMap] = useState(new Map([
         ['Facet-1', []]
     ]));
+    const [loadingSideBar, setLoadingSideBar] = useState(true);
 
     useEffectAsync(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
@@ -42,6 +43,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         if (getFacetRequest.status === 200) {
             const fMap = convertGetFacetResponseToMap(getFacetRequest.response)
             setFacetMap(new Map(fMap));
+            setLoadingSideBar(false);
         }
 
     }, []);
@@ -73,7 +75,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
         hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted,
-        facetMap, setFacetMap, selectedFacet, setSelectedFacet
+        facetMap, setFacetMap, selectedFacet, setSelectedFacet, loadingSideBar, setLoadingSideBar
     }}>
         {children}
     </AppContext.Provider>

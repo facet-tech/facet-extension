@@ -60,7 +60,7 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(true);
-    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, facetMap, setFacetMap, setSelectedFacet } = useContext(AppContext);
+    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, facetMap, setFacetMap, setSelectedFacet, loadingSideBar } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -133,7 +133,7 @@ export default function FacetTreeSideBar() {
         }
     };
 
-    const itemsElement = facetArray.map(facet => {
+    const itemsElement = loadingSideBar ? <h2>Loading...</h2> : facetArray.map(facet => {
         const value = facet.value;
         return <StyledTreeItem
             nodeId={facet.name}
