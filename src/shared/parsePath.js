@@ -19,7 +19,8 @@ const getElementNameFromPath = (path) => {
     if (splitArr.length === 0) {
         return 'element';
     }
-    return splitArr[splitArr.length - 1].length > 15 ? `${splitArr[splitArr.length - 1]}...` : splitArr[splitArr.length - 1];
+    return splitArr[splitArr.length - 1].length > 15 ?
+        `${splitArr[splitArr.length - 1].subString(0, 15)}...` : splitArr[splitArr.length - 1];
 }
 
 export { getElementNameFromPath };

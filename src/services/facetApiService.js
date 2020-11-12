@@ -37,7 +37,6 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
             response: resjson,
             status: res.status
         };
-        // console.log('[API] result:', result);
         return result;
     } catch (e) {
         console.log('[API][Error]', e)
@@ -144,30 +143,34 @@ const deleteFacet = async (body) => {
 }
 
 const extractFacetArray = (facetMap) => {
-    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    try {
+        const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+        console.log('facetArray', facetArray);
+        return facetArray.map(facet => {
+            return {
+                enabled: false,
+                name: facet.name,
+                domElement: facetMap.get(facet.name)
+            }
+        });
+    } catch (e) {
+        console.log(`[ERROR] [extractFacetArray]`, e)
+    }
 
-    return facetArray.map(facet => {
-        return {
-            enabled: false,
-            name: facet.name,
-            domElement: facetMap.get(facet.name)
-        }
-    });
 }
 
 const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
-        domainId: 'MK-LOCAL-TEST',
+        domainId,
         urlPath: window.location.pathname,
         facet: extractFacetArray(facetMap),
         version: facetObjectVersion,
     }
-    console.log('GENERATED BODY', body);
     return body;
 }
 
-const saveFacets = async (hiddenPathsArr, facetMap, enqueueSnackbar) => {
+const saveFacets = async (facetMap, enqueueSnackbar) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);

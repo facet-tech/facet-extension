@@ -8,15 +8,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import CoreContext from '../CoreContext';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
 import $, { map } from 'jquery';
-import Button from '@material-ui/core/Button';
-import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
-import { saveFacets } from '../services/facetApiService';
-import { api } from '../shared/constant';
-import { computeWithOrWithoutFacetizer } from '../highlighter';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -112,7 +106,6 @@ export default function FacetTreeSideBar() {
     };
 
     const handleDrawerClose = () => {
-        saveFacets(hiddenPathsArr, facetMap, enqueueSnackbar);
         setOpen(false);
     };
 

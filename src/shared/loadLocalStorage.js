@@ -12,25 +12,19 @@ const facetKey = 'facet-settings';
 const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
         try {
-            console.log('OBJ', obj);
             if (!obj) {
-                // setting defaults
-                const cb1 = function () {
-                    setShouldDisplayFacetizer(false);
-                };
-                setKeyInLocalStorage(showFacetizer, cb1);
+                setKeyInLocalStorage(showFacetizer, false);
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
-                console.log('loadLocalStorage setShouldDisplayFacetizer', obj[facetKey][showFacetizer]);
                 setShouldDisplayFacetizer(obj[facetKey][showFacetizer]);
                 setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
                 if (setIsUserAuthenticated) {
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
                 }
-                setWorkspaceId(obj[facetKey][api.workspace.workspaceId])
-                console.log('loadLocalStorage setShouldDisplayFacetizer', obj[facetKey][api.workspace.workspaceId]);
+                if (setWorkspaceId) {
+                    setWorkspaceId(obj[facetKey][api.workspace.workspaceId])
+                }
             }
-            console.log('[STORAGE] Loaded', obj);
         } catch (e) {
             console.log('[STORAGE][ERROR]', e);
         }
@@ -62,7 +56,6 @@ const getKeyFromLocalStorage = async (key) => {
             chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey][key]);
             })
-            resolve(undefined);
         }
         catch (ex) {
             reject(ex);
@@ -87,7 +80,6 @@ const setKeyInLocalStorage = async (key, value) => {
 
     chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
         const res = await getLocalStorageObject();
-        // console.log(`[STORAGE] updated:`, res);
     });
 }
 

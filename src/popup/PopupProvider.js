@@ -18,11 +18,10 @@ export default ({ children }) => {
 
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
-        console.log('CHECKEM', workspaceResponse);
         setIsUserAuthenticated(true);
+        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
-        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
     }
 
     useEffect(() => {

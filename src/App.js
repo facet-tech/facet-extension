@@ -5,6 +5,7 @@ import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
+import { showFacetizer as showFacetizerConstant, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 
 function App() {
 
@@ -14,16 +15,15 @@ function App() {
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-      const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
-      const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
-      console.log('SETTARW', showFacetizerValue, '+', isPluginEnabledValue)
+      const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
+      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
       setShouldDisplayFacetizer(showFacetizerValue);
       setIsPluginEnabled(isPluginEnabledValue);
     });
 
   const handleUserKeyPress = useCallback(event => {
     if (event.ctrlKey && event.keyCode === 69) {
-      setKeyInLocalStorage('showFacetizer', !shouldDisplayFacetizer);
+      setKeyInLocalStorage(showFacetizerConstant, !shouldDisplayFacetizer);
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
     };
   }, [shouldDisplayFacetizer, setShouldDisplayFacetizer]);

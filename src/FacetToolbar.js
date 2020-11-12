@@ -45,13 +45,13 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
-    const { hiddenPathsArr, facetNameMap } = useContext(AppContext);
+    const { hiddenPathsArr, facetMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
         try {
-            saveFacets(hiddenPathsArr, facetNameMap, enqueueSnackbar);
-            window.location.reload();
+            await saveFacets(facetMap, enqueueSnackbar);
+            // window.location.reload();
         } catch (e) {
             console.log(`[ERROR] [onSaveClick] `, e)
         }
