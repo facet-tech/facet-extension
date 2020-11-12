@@ -3,8 +3,12 @@
  */
 export default class MockService {
 
+    static getWorkspaceId = () => {
+        return 'NODE-ENV-LOCAL-TEST-WORKSPACE~ID'
+    }
+
     static getMockDomainId = () => {
-        return 'NODE-ENV-LOCAL-DOMAIN~ID-TEST'
+        return 'NODE-ENV-LOCAL-TEST-DOMAIN~ID'
     }
 
     static mockGetDomain = () => {

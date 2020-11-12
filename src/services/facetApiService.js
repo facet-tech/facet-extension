@@ -132,6 +132,14 @@ const getFacet = async (domainId, urlPath) => {
     return apiResponse;
 }
 
+const convertGetFacetResponseToMap = (responseBody) => {
+    let facetMap = new Map();
+    responseBody.facet.forEach(facet => {
+        facetMap.set(facet.name, facet.domElement)
+    })
+    return facetMap;
+}
+
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
@@ -149,7 +157,6 @@ const deleteFacet = async (body) => {
 const extractFacetArray = (facetMap) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-        console.log('facetArray', facetArray);
         return facetArray.map(facet => {
             return {
                 enabled: false,
@@ -192,5 +199,5 @@ export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
     getOrCreateWorkspace, deleteUser, createNewUser,
-    saveFacets
+    saveFacets, convertGetFacetResponseToMap
 };

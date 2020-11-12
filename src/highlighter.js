@@ -102,6 +102,9 @@ const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     return result;
 }
 
+// TODO refactor
+// must refactor -> a lot of stuff in here...
+// this function should only register/unregister callbacks, ideally it shouldnt handle any req
 const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFacet, facetMap) => {
     try {
         if (!hiddenPaths) {

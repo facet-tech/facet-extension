@@ -5,6 +5,10 @@ import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import loadLocalStorage from './shared/loadLocalStorage';
 import isDevelopment from './utils/isDevelopment';
+import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { api } from './shared/constant';
+import get from 'lodash/get';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
 
@@ -22,16 +26,24 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
 
-
     const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([
         ['Facet-1', []]
     ]));
 
-
     useEffect(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        const domainResponse = await getDomain(window.location.hostname, workspaceId);
+        const domainId = get(domainResponse, 'response.id');
+
+        const getFacetRequest = await getFacet(domainId, window.location.pathname);
+        if (getFacetRequest.status === 200) {
+            const fMap = convertGetFacetResponseToMap(getFacetRequest.response)
+            setFacetMap(new Map(fMap));
+        }
+
     }, []);
 
     const onFacetAdd = (label) => {

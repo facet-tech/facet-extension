@@ -108,6 +108,7 @@ export default () => {
         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
         setTextToCopy(text);
     }, [setTextToCopy]);
+    
     const enableFacetizerElement = <div>
         <GridDiv>
             <div>
