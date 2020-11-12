@@ -7,7 +7,6 @@ const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
 
-
 const APIUrl = {
     apiBaseURL,
     testBaseURL,
@@ -22,11 +21,11 @@ const LoginTypes = {
 const storage = {
     showFacetizer,
     isPluginEnabled,
-    isUserAuthenticated
+    isUserAuthenticated,
 };
 
 const api = {
-    userId: 'userId',
+    domainId: 'domainId',
     workspace: {
         workspaceId: 'workspaceId'
     },

@@ -1,16 +1,17 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getDomain, createDomain } from './services/facetApiService';
+import { getFacet, getDomain, createDomain, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api } from './shared/constant';
 import get from 'lodash/get';
 import CustomProxy from './utils/CustomProxy';
 import { getElementNameFromPath } from './shared/parsePath';
 
-// is this needed?
-// window.highlightMode = true;
-// singleton
+// singletons
 let hiddenPaths;
+let domainId;
+let workspaceId;
+let getFacetResponse;
 
 const onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
@@ -34,7 +35,6 @@ const convertToDomElementObject = (path) => {
 }
 
 const onMouseClickHandle = function (event) {
-    console.log('!onMouseClickHandle', hiddenPaths);
     const selectedFacet = event.currentTarget.selectedFacet;
     const facetMap = event.currentTarget.facetMap;
     const res = getDomPath(event.target);
@@ -104,32 +104,24 @@ const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
 
 // TODO refactor
 // must refactor -> a lot of stuff in here...
-// this function should only register/unregister callbacks, ideally it shouldnt handle any req
+// this function should only register/unregister callbacks, ideally it shouldn't handle any req
 const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFacet, facetMap) => {
     try {
+        // 1 time instantiation of singletons
+        let facetsArr = [];
         if (!hiddenPaths) {
             hiddenPaths = hiddenPathsArr;
+            let getDomainRes = await getOrPostDomain(workspaceId);
+            domainId = getDomainRes.response.id;
+            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            getFacetResponse = await getFacet(domainId, window.location.pathname);
+            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
+            facetsArr = [];
+            properFacetArr && properFacetArr.forEach(ff => {
+                $(ff).css("opacity", "0.3", "important");
+                facetsArr.push(ff);
+            });
         }
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        let getDomainRes = await getDomain(window.location.hostname, workspaceId);
-
-        // duplicate code to be fixed...
-        let domainId;
-        const domainExists = getDomainRes && getDomainRes.response.id !== undefined;
-        // create domain if it doesn't exist
-        if (domainExists) {
-            domainId = get(getDomainRes, 'response.id');
-        } else {
-            const domainRes = await createDomain(window.location.hostname, workspaceId);
-            domainId = get(domainRes, 'response.id', getDomainRes);
-        }
-        const getFacetResponse = await getFacet(domainId, window.location.pathname);
-        const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
-        let facetsArr = [];
-        properFacetArr && properFacetArr.forEach(ff => {
-            $(ff).css("opacity", "0.3", "important");
-            facetsArr.push(ff);
-        });
         const all = [...facetsArr, ...hiddenPaths];
         // getting rid of duplicates
         hiddenPaths = CustomProxy([...new Set(all)], observerFunctions);

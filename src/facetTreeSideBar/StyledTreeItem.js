@@ -80,13 +80,26 @@ function StyledTreeItem(props) {
                     <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
                 </IconButton>
             </div>
-        </div>
+        </div>;
+
+    const keyPress = (e) => {
+        if (e.key === "Escape") {
+            onRenameCancelClick();
+        }
+        if (e.key === "Enter") {
+            onRenameSaveClick(e.target.value);
+        }
+    }
 
     const duringRenameElement = <div>
         <Typography variant="body2" className={classes.labelText}>
             {labelText}
         </Typography>
-        <TextField style={{ width: '50%' }} onChange={(e) => { setRenameValue(e.target.value) }}>
+        <TextField
+            inputRef={input => input && input.focus()}
+            autoFocus
+            style={{ width: '50%' }} onKeyDown={keyPress}
+            onChange={(e) => { setRenameValue(e.target.value) }}>
         </TextField>
         <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
             <CheckIcon color="inherit" className={classes.labelIcon} />
