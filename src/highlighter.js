@@ -8,7 +8,7 @@ import CustomProxy from './utils/CustomProxy';
 import { getElementNameFromPath } from './shared/parsePath';
 
 // is this needed?
-window.highlightMode = false;
+// window.highlightMode = true;
 // singleton
 let hiddenPaths;
 
@@ -34,6 +34,7 @@ const convertToDomElementObject = (path) => {
 }
 
 const onMouseClickHandle = function (event) {
+    console.log('!onMouseClickHandle', hiddenPaths);
     const selectedFacet = event.currentTarget.selectedFacet;
     const facetMap = event.currentTarget.facetMap;
     const res = getDomPath(event.target);
@@ -108,6 +109,7 @@ const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFac
         }
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getDomain(window.location.hostname, workspaceId);
+
         // duplicate code to be fixed...
         let domainId;
         const domainExists = getDomainRes && getDomainRes.response.id !== undefined;
@@ -116,7 +118,7 @@ const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFac
             domainId = get(getDomainRes, 'response.id');
         } else {
             const domainRes = await createDomain(window.location.hostname, workspaceId);
-            domainId = get(domainRes, 'response.id');
+            domainId = get(domainRes, 'response.id', getDomainRes);
         }
         const getFacetResponse = await getFacet(domainId, window.location.pathname);
         const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);

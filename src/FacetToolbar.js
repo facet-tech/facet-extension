@@ -89,7 +89,7 @@ export default function FacetToolbar() {
     }));
 
     const sideBarHandler = () => {
-        window.highlightMode = showSideBar;
+        // window.highlightMode = showSideBar;
         setShowSideBar(!showSideBar);
         if (!showSideBar) {
             // TODO removeEventListeners

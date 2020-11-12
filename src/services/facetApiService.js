@@ -2,6 +2,7 @@ import { HTTPMethods, APIUrl } from "../shared/constant";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import parsePath from '../shared/parsePath';
 import { api } from '../shared/constant';
+import MockService from './MockService'
 
 /**
  * @param {domainId}
@@ -79,6 +80,9 @@ const createDomain = async (domain, workspaceId) => {
 }
 
 const getDomain = async (domainName, workspaceId) => {
+    if (process.env.NODE_ENV === 'development') {
+        return MockService.mockGetDomain();
+    }
     const suffix = `/domain?domain=${domainName}&workspaceId=${workspaceId}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;

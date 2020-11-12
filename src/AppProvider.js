@@ -4,16 +4,17 @@ import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import loadLocalStorage from './shared/loadLocalStorage';
+import isDevelopment from './utils/isDevelopment';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
 
     const { enqueueSnackbar } = useSnackbar();
 
     // TODO these need to change during dev
-    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
-    const [showSideBar, setShowSideBar] = useState(false);
+    const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
+    const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = isDevelopment() ? useState(true) : useState(false);
+    const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
 
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
