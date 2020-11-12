@@ -50,7 +50,7 @@ export default () => {
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
-
+    console.log('@MAINKS shouldDisplayFacetizer', shouldDisplayFacetizer, 'isPluginEnabled', isPluginEnabled)
     const logout = () => {
         clearStorage();
         setIsUserAuthenticated(false);

@@ -16,6 +16,7 @@ function App() {
     async function (request, sendResponse) {
       const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
       const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
+      console.log('SETTARW', showFacetizerValue, '+', isPluginEnabledValue)
       setShouldDisplayFacetizer(showFacetizerValue);
       setIsPluginEnabled(isPluginEnabledValue);
     });

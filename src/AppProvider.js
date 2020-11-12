@@ -8,16 +8,20 @@ import loadLocalStorage from './shared/loadLocalStorage';
 const AppProvider = ({ children, hiddenElementsArray }) => {
 
     const { enqueueSnackbar } = useSnackbar();
+
+    // TODO these need to change during dev
+    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
     const [isEnabled, setIsEnabled] = useState(false);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
+    const [showSideBar, setShowSideBar] = useState(false);
+
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
-    const [isAddingFacet, setIsAddingFacet] = useState(false);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
     const [disabledFacets, setDisabledFacets] = useState([]);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
-    const [isPluginEnabled, setIsPluginEnabled] = useState(true);
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(true);
-    const [showSideBar, setShowSideBar] = useState(true);
+
+
     const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([
@@ -38,7 +42,6 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setNewlyAddedFacet(label);
         enqueueSnackbar(`Facet "${label}" was created!`, { variant: "success" });
         window.selectedDOM = 'main';
-        setIsAddingFacet(false);
     }
 
     const isElementHighlighted = (path) => {
@@ -51,8 +54,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.enqueueSnackbar = enqueueSnackbar;
     return <AppContext.Provider value={{
         hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,
-        isAddingFacet, setIsAddingFacet, newlyAddedFacet,
-        setNewlyAddedFacet, addedElements, setAddedElements,
+        newlyAddedFacet, setNewlyAddedFacet, addedElements, setAddedElements,
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,

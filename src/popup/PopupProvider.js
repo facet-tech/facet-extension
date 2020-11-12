@@ -18,6 +18,7 @@ export default ({ children }) => {
 
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
+        console.log('CHECKEM', workspaceResponse);
         setIsUserAuthenticated(true);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
@@ -42,7 +43,7 @@ export default ({ children }) => {
         loggedInUser, setLoggedInUser, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        email, setEmail
+        workspaceId, email, setEmail
     }}>
         {children}
     </PopupContext.Provider>
