@@ -63,6 +63,7 @@ export default function FacetTreeSideBar() {
     let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, facetMap, setFacetMap, setSelectedFacet, loadingSideBar } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
+    const [renamingFacet, setRenamingFacet] = useState();
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
 
     useEffect(() => {
@@ -141,6 +142,10 @@ export default function FacetTreeSideBar() {
             labelText={`${facet.name}`}
             labelIcon={ChangeHistoryIcon}
             onDeleteItem={() => { onDeleteFacet(facet) }}
+            onRenameItem={() => { setRenamingFacet(facet.name) }}
+            onRenameCancelClick={() => setRenamingFacet(undefined)}
+            onRenameSaveClick={(e) => { facetMap.set(e, facetMap.get(facet.name)); facetMap.delete(facet.name); setFacetMap(new Map(facetMap)) }}
+            renamingFacet={renamingFacet === facet.name}
         >
             {value.map((domElement, index) => {
                 return <StyledTreeItem
@@ -151,6 +156,7 @@ export default function FacetTreeSideBar() {
                     labelText={domElement.name}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
+                        // TODO move on individual function
                         onDeleteDOMElement(domElement.path);
                         let arr = facetMap.get(facet.name);
                         arr = arr.filter(e => e.name !== domElement.name);

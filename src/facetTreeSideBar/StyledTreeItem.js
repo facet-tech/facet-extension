@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
+import CancelIcon from '@material-ui/icons/Cancel';
+import TextField from '@material-ui/core/TextField';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -58,23 +62,44 @@ const useTreeItemStyles = makeStyles((theme) => ({
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, onDeleteItem, ...other } = props;
+    const { labelText, labelIcon: LabelIcon, labelInfo, color,
+        bgColor, onRenameItem, renamingFacet, onDeleteItem,
+        onRenameCancelClick, onRenameSaveClick, ...other } = props;
+    const [renameValue, setRenameValue] = useState('');
+
+    const defaultElement =
+        <div>
+            <div className={classes.labelRoot}>
+                <Typography variant="body2" className={classes.labelText}>
+                    {labelText}
+                </Typography>
+                {onRenameItem ? <IconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
+                    <EditIcon color="inherit" className={classes.labelIcon} />
+                </IconButton> : null}
+                <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
+                    <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
+                </IconButton>
+            </div>
+        </div>
+
+    const duringRenameElement = <div>
+        <Typography variant="body2" className={classes.labelText}>
+            {labelText}
+        </Typography>
+        <TextField style={{ width: '50%' }} onChange={(e) => { setRenameValue(e.target.value) }}>
+        </TextField>
+        <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
+            <CheckIcon color="inherit" className={classes.labelIcon} />
+        </IconButton>
+        <IconButton onClick={() => { onRenameCancelClick() }} aria-label="delete" component="span">
+            <CancelIcon color="inherit" className={classes.labelIcon} />
+        </IconButton>
+    </div>;
 
     return (
         <TreeItem
             label={
-                <div>
-                    <div className={classes.labelRoot}>
-                        <LabelIcon color="inherit" className={classes.labelIcon} />
-                        <Typography variant="body2" className={classes.labelText}>
-                            {labelText}
-                        </Typography>
-                        <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
-                            <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
-                        </IconButton>
-                    </div>
-
-                </div>
+                renamingFacet ? duringRenameElement : defaultElement
             }
             style={{
                 '--tree-view-color': color,
