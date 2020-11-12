@@ -11,7 +11,7 @@ import { api } from './shared/constant';
 import get from 'lodash/get';
 import useEffectAsync from './shared/hooks/useEffectAsync';
 
-const AppProvider = ({ children, hiddenElementsArray }) => {
+const AppProvider = ({ children }) => {
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -68,7 +68,7 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.setAddedElements = setAddedElements;
     window.enqueueSnackbar = enqueueSnackbar;
     return <AppContext.Provider value={{
-        hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,
+        onFacetAdd, addedFacets, setAddedFacets,
         newlyAddedFacet, setNewlyAddedFacet, addedElements, setAddedElements,
         canDeleteElement, setCanDeleteElement, disabledFacets,
         setDisabledFacets, showSideBar, setShowSideBar,

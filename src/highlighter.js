@@ -34,6 +34,9 @@ const convertToDomElementObject = (path) => {
     }
 }
 
+/**
+ * DOM Event Listener of Facet selection
+ */
 const onMouseClickHandle = function (event) {
     const selectedFacet = event.currentTarget.selectedFacet;
     const facetMap = event.currentTarget.facetMap;
@@ -109,7 +112,7 @@ const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFac
     try {
         // 1 time instantiation of singletons
         let facetsArr = [];
-        if (!hiddenPaths) {
+        if (!workspaceId) {
             hiddenPaths = hiddenPathsArr;
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;
