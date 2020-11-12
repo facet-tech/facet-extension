@@ -9,6 +9,7 @@ import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/fa
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import get from 'lodash/get';
+import useEffectAsync from './shared/hooks/useEffectAsync';
 
 const AppProvider = ({ children, hiddenElementsArray }) => {
 
@@ -32,12 +33,11 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         ['Facet-1', []]
     ]));
 
-    useEffect(async () => {
+    useEffectAsync(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         const domainResponse = await getDomain(window.location.hostname, workspaceId);
         const domainId = get(domainResponse, 'response.id');
-
         const getFacetRequest = await getFacet(domainId, window.location.pathname);
         if (getFacetRequest.status === 200) {
             const fMap = convertGetFacetResponseToMap(getFacetRequest.response)

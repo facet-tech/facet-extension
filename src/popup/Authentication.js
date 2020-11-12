@@ -47,7 +47,6 @@ export default () => {
                 <TextField
                     error={!isValidEmail(email)}
                     helperText={!isValidEmail(email) ? 'Please insert a valid email.' : ''}
-                    errorText=''
                     className={classes.button}
                     onChange={(e) => { setEmail(e.target.value) }}
                     id="outlined-basic"

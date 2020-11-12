@@ -137,6 +137,7 @@ export default function FacetTreeSideBar() {
         const value = facet.value;
         return <StyledTreeItem
             nodeId={facet.name}
+            key={facet.name}
             labelText={`${facet.name}`}
             labelIcon={ChangeHistoryIcon}
             onDeleteItem={() => { onDeleteFacet(facet) }}
@@ -146,6 +147,7 @@ export default function FacetTreeSideBar() {
                     onMouseOver={() => onMouseEnterHandle(domElement.path)}
                     onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
                     nodeId={`${facet.name}-element-${index + 1}`}
+                    key={`${facet.name}-element-${index + 1}`}
                     labelText={domElement.name}
                     labelIcon={WebAssetIcon}
                     onDeleteItem={() => {
