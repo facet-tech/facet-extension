@@ -41,9 +41,7 @@ const AppProvider = ({ children }) => {
         const getFacetRequest = await getFacet(domainId, window.location.pathname);
         if (getFacetRequest.status === 200) {
             const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-            console.log('CHJECKARE', fMap);
             if (fMap.size > 0) {
-                console.log('SETTING', fMap.entries().next().value[0]);
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
@@ -73,12 +71,13 @@ const AppProvider = ({ children }) => {
     window.enqueueSnackbar = enqueueSnackbar;
     return <AppContext.Provider value={{
         onFacetAdd, addedFacets, setAddedFacets,
-        newlyAddedFacet, setNewlyAddedFacet, addedElements, setAddedElements,
-        canDeleteElement, setCanDeleteElement, disabledFacets,
-        setDisabledFacets, showSideBar, setShowSideBar,
+        newlyAddedFacet, setNewlyAddedFacet, addedElements,
+        setAddedElements, canDeleteElement, setCanDeleteElement,
+        disabledFacets, setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
-        enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet, setSelectedFacet, loadingSideBar, setLoadingSideBar
+        enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet,
+        setSelectedFacet, loadingSideBar, setLoadingSideBar
     }}>
         {children}
     </AppContext.Provider>

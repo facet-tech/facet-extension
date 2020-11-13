@@ -111,6 +111,10 @@ function StyledTreeItem(props) {
 
     return (
         <TreeItem
+            // check if those are needed
+            onClick={(e) => { e.preventDefault(); }}
+            onLabelClick={(e) => { e.preventDefault(); }}
+            onIconClick={(e) => { e.preventDefault(); }}
             label={
                 renamingFacet ? duringRenameElement : defaultElement
             }

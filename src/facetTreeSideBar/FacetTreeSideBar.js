@@ -63,7 +63,6 @@ export default function FacetTreeSideBar() {
     const [selected, setSelected] = useState([]);
     const [renamingFacet, setRenamingFacet] = useState();
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-
     useEffect(() => {
         setExpanded(['Facet-1']);
     }, []);
@@ -75,7 +74,6 @@ export default function FacetTreeSideBar() {
             return;
         }
         setFacetMap(facetMap.set(newName, []));
-        console.log('@ADDFACET');
         setSelectedFacet(newName);
         setSelected(newName);
         setExpanded([newName]);
@@ -88,9 +86,7 @@ export default function FacetTreeSideBar() {
         facetMap.delete(facet.name);
         setFacetMap(new Map(facetMap));
         let keys = [...facetMap.keys()];
-        console.log('KEYS!', keys)
         if (keys.length > 0) {
-            console.log('SETTING!!!', keys[keys.length - 1])
             setSelectedFacet(keys[keys.length - 1])
         }
     }
@@ -128,16 +124,19 @@ export default function FacetTreeSideBar() {
     }
 
     const handleNodeIdToggle = (event, nodeIds) => {
-        console.log('@handleNodeIdToggle',nodeIds)
         setExpanded(nodeIds);
     };
 
     const handleNodeIdsSelect = (event, nodeId) => {
-        console.log('@handleNodeIdsSelect',nodeId)
-        if (facetArray.find(e => e.name === nodeId)) {
-            setSelected(nodeId);
+        const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+        if (fArray.find(e => e.name === nodeId)) {
+            setSelected([nodeId]);
             setSelectedFacet(nodeId);
-            setExpanded([nodeId]);
+            if (expanded.includes(nodeId)) {
+                setExpanded([])
+            } else {
+                setExpanded([nodeId]);
+            }
         }
     };
 
@@ -148,7 +147,7 @@ export default function FacetTreeSideBar() {
             key={facet.name}
             labelText={`${facet.name}`}
             labelIcon={ChangeHistoryIcon}
-            onDeleteItem={() => { onDeleteFacet(facet) }}
+            onDeleteItem={(e) => { onDeleteFacet(facet) }}
             onRenameItem={() => { setRenamingFacet(facet.name) }}
             onRenameCancelClick={() => setRenamingFacet(undefined)}
             onRenameSaveClick={(e) => { facetMap.set(e, facetMap.get(facet.name)); facetMap.delete(facet.name); setFacetMap(new Map(facetMap)) }}
@@ -212,7 +211,7 @@ export default function FacetTreeSideBar() {
                 expanded={expanded}
                 selected={selected}
                 onNodeToggle={handleNodeIdToggle}
-                // onNodeSelect={handleNodeIdsSelect}
+                onNodeSelect={handleNodeIdsSelect}
             >
                 {itemsElement}
             </TreeView>

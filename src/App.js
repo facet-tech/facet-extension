@@ -35,7 +35,6 @@ function App() {
       window.removeEventListener('keydown', handleUserKeyPress);
     };
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
-  console.log('SELECTEDFACET', selectedFacet, facetMap);
   if (isPluginEnabled) {
     if (showSideBar) {
       updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
