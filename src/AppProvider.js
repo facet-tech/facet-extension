@@ -44,7 +44,7 @@ const AppProvider = ({ children }) => {
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
-            loadInitialState(fMap);
+            loadInitialState(fMap, shouldDisplayFacetizer);
         } else {
             setFacetMap(new Map([['Facet-1', []]]));
         }

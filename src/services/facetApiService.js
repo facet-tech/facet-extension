@@ -1,6 +1,5 @@
 import { HTTPMethods, APIUrl } from "../shared/constant";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
-import parsePath from '../shared/parsePath';
 import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";

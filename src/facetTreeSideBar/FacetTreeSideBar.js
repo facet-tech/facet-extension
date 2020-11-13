@@ -182,7 +182,7 @@ export default function FacetTreeSideBar() {
         });
 
     return (<div className={classes.root}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <IconButton
             color="inherit"
             aria-label="open drawer"

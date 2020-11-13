@@ -55,11 +55,14 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
     });
 }
 
-const loadInitialState = (facetMap) => {
+const loadInitialState = (facetMap, shouldDisplayFacetizer) => {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray.forEach(facet => {
         const value = facet.value;
         value && value.forEach(domElement => {
+            const path = parsePath([domElement.path], shouldDisplayFacetizer);
+            $(path[0]).css("opacity", "0.3", "important");
+            // tmp hack find out why path not computing properly
             $(domElement.path).css("opacity", "0.3", "important");
         })
     })
@@ -118,20 +121,6 @@ function getDomPath(el) {
     return withoutSpaces;
 }
 
-const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
-    var splitStr = strPath.split('>');
-    var secondPathSplit = splitStr[1].split(':eq');
-    if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
-        return splitStr[1];
-    }
-    var regExp = /\(([^)]+)\)/;
-    var matches = regExp.exec(secondPathSplit[1]);
-    const currNumber = parseInt(matches[1]);
-    const wantedNumber = facetizerIsPresent ? currNumber - 1 : currNumber + 1;
-    const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
-    return result;
-}
-
 // TODO refactor
 // must refactor -> a lot of stuff in here...
 // this function should only register/unregister callbacks, ideally it shouldn't handle any req
@@ -182,4 +171,4 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
     }
 }
 
-export { updateEvents, computeWithOrWithoutFacetizer, onMouseEnterHandle, loadInitialState };
+export { updateEvents, onMouseEnterHandle, loadInitialState };
