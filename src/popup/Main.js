@@ -40,11 +40,6 @@ const StyledDiv = styled.div`
     width: 20rem;
 `;
 
-const StyledSpan = styled.span`
-    font-size: .5rem;
-    word-break: break-all;
-`;
-
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
