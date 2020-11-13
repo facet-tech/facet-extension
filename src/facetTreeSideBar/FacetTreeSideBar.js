@@ -93,11 +93,10 @@ export default function FacetTreeSideBar() {
 
     const onDeleteDOMElement = (path) => {
         try {
+            // TODO DOM-related stuff should be handled through highlighter
             const parsedPath = parsePath([path], false);
             const element = $(parsedPath[0])[0];
             element.style.setProperty("opacity", "unset");
-            // hiddenPathsArr = hiddenPathsArr.filter(e => e !== path);
-            // setHiddenPathsArr(hiddenPathsArr);
         } catch (e) {
             console.log(`[ERROR] onDeleteElement`, e);
         }
@@ -140,39 +139,44 @@ export default function FacetTreeSideBar() {
         }
     };
 
-    const itemsElement = loadingSideBar ? <h2>Loading...</h2> : facetArray.map(facet => {
-        const value = facet.value;
-        return <StyledTreeItem
-            nodeId={facet.name}
-            key={facet.name}
-            labelText={`${facet.name}`}
-            labelIcon={ChangeHistoryIcon}
-            onDeleteItem={(e) => { onDeleteFacet(facet) }}
-            onRenameItem={() => { setRenamingFacet(facet.name) }}
-            onRenameCancelClick={() => setRenamingFacet(undefined)}
-            onRenameSaveClick={(e) => { facetMap.set(e, facetMap.get(facet.name)); facetMap.delete(facet.name); setFacetMap(new Map(facetMap)) }}
-            renamingFacet={renamingFacet === facet.name}
-        >
-            {value && value.map((domElement, index) => {
-                return <StyledTreeItem
-                    onMouseOver={() => onMouseEnterHandle(domElement.path)}
-                    onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
-                    nodeId={`${facet.name}-element-${index + 1}`}
-                    key={`${facet.name}-element-${index + 1}`}
-                    labelText={domElement.name}
-                    labelIcon={WebAssetIcon}
-                    onDeleteItem={() => {
-                        // TODO move on individual function
-                        onDeleteDOMElement(domElement.path);
-                        let arr = facetMap.get(facet.name);
-                        arr = arr.filter(e => e.name !== domElement.name);
-                        facetMap.set(facet.name, arr);
-                        setFacetMap(new Map(facetMap.set(facet.name, arr)));
-                    }}
-                />
-            })}
-        </StyledTreeItem>
-    });
+    const itemsElement = loadingSideBar ? <h2>Loading...</h2> :
+        facetArray.map(facet => {
+            const value = facet.value;
+            return <StyledTreeItem
+                nodeId={facet.name}
+                key={facet.name}
+                labelText={`${facet.name}`}
+                labelIcon={ChangeHistoryIcon}
+                onDeleteItem={(e) => { onDeleteFacet(facet) }}
+                onRenameItem={() => { setRenamingFacet(facet.name) }}
+                onRenameCancelClick={() => setRenamingFacet(undefined)}
+                onRenameSaveClick={(e) => {
+                    facetMap.set(e, facetMap.get(facet.name));
+                    facetMap.delete(facet.name);
+                    setFacetMap(new Map(facetMap))
+                }}
+                renamingFacet={renamingFacet === facet.name}
+            >
+                {value && value.map((domElement, index) => {
+                    return <StyledTreeItem
+                        onMouseOver={() => onMouseEnterHandle(domElement.path)}
+                        onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
+                        nodeId={`${facet.name}-element-${index + 1}`}
+                        key={`${facet.name}-element-${index + 1}`}
+                        labelText={domElement.name}
+                        labelIcon={WebAssetIcon}
+                        onDeleteItem={() => {
+                            // TODO move on individual function
+                            onDeleteDOMElement(domElement.path);
+                            let arr = facetMap.get(facet.name);
+                            arr = arr.filter(e => e.name !== domElement.name);
+                            facetMap.set(facet.name, arr);
+                            setFacetMap(new Map(facetMap.set(facet.name, arr)));
+                        }}
+                    />
+                })}
+            </StyledTreeItem>
+        });
 
     return (<div className={classes.root}>
         <CssBaseline />

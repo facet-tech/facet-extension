@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         '&:hover > $content': {
             backgroundColor: theme.palette.action.hover,
         },
@@ -71,7 +71,7 @@ function StyledTreeItem(props) {
         <div>
             <div className={classes.labelRoot}>
                 <Typography variant="body2" className={classes.labelText}>
-                    {labelText}
+                    {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
                 {onRenameItem ? <IconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
                     <EditIcon color="inherit" className={classes.labelIcon} />

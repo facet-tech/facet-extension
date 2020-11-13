@@ -46,8 +46,9 @@ const AppProvider = ({ children }) => {
             }
             setFacetMap(new Map(fMap));
             setLoadingSideBar(false);
+        } else {
+            setFacetMap(new Map([['Facet-1', []]]));
         }
-
     }, []);
 
     const onFacetAdd = (label) => {

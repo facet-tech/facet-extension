@@ -59,7 +59,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
-                enqueueSnackbar(`This element was part of a different facet.`, { variant: "info" });
+                enqueueSnackbar(`This element was removed from ${key} facet.`, { variant: "info" });
             }
             setFacetMap(new Map(facetMap.set(key, newFacetArr)));
             return;

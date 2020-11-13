@@ -29,21 +29,20 @@ export default class MockService {
 
     static mockGetFacet = () => {
         return {
-            "domainId": "MK-LOCAL-TEST",
-            "urlPath": "/",
-            "facet": [
-                {
-                    "enabled": false,
-                    "name": "Facet-1",
-                    "domElement": [
-                        {
-                            "name": "p#landing",
-                            "path": "body>div#main>div#welcome>p#landing"
-                        }
-                    ]
-                }
-            ],
-            "version": "0.0.1"
+            response: {
+                "domainId": "NODE-ENV-LOCAL-TEST-DOMAIN~ID", "urlPath": "/",
+                "facet": [
+                    {
+                        "enabled": false, "name": "Signup", "domElement":
+                            [
+                                { "name": "p#landing", "path": "body\u003ediv#main\u003ediv#welcome\u003ep#landing" },
+                                { "name": "p#pprofessional", "path": "body\u003ediv#main\u003ediv:eq(1)\u003ediv:eq(0)\u003ep#pprofessional" },
+                                { "name": "p#pAesthetic", "path": "body\u003ediv#main\u003ediv:eq(1)\u003ediv:eq(1)\u003ep#pAesthetic" },
+                                { "name": "div", "path": "body\u003ediv#main\u003ediv:eq(3)\u003ediv\u003ediv\u003ediv" }]
+                    }], "version": "0.0.1"
+            },
+            status: 200
         }
+
     }
 }
