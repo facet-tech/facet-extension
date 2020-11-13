@@ -42,7 +42,8 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer,
+        url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
     const logout = () => {
@@ -79,7 +80,6 @@ export default () => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
                 setKeyInLocalStorage(isPluginEnabledConstant, e);
-
                 const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
                 setKeyInLocalStorage(showFacetizerConstant, showFacetizerValue);

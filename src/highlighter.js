@@ -55,6 +55,16 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
     });
 }
 
+const loadInitialState = (facetMap) => {
+    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    facetArray.forEach(facet => {
+        const value = facet.value;
+        value && value.forEach(domElement => {
+            $(domElement.path).css("opacity", "0.3", "important");
+        })
+    })
+}
+
 /**
  * DOM Event Listener of Facet selection
  */
@@ -70,7 +80,7 @@ const onMouseClickHandle = function (event) {
         event.target.style.setProperty("opacity", "unset");
     } else {
         // add element
-        let facet = facetMap.get(selectedFacet);
+        let facet = facetMap.get(selectedFacet) || [];
         const domElementObj = convertToDomElementObject(domPath);
         facet.push(domElementObj)
         setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
@@ -172,4 +182,4 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
     }
 }
 
-export { updateEvents, computeWithOrWithoutFacetizer, onMouseEnterHandle };
+export { updateEvents, computeWithOrWithoutFacetizer, onMouseEnterHandle, loadInitialState };

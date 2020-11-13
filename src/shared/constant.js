@@ -8,6 +8,7 @@ const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
+const defaultFacet = 'Facet-1';
 
 const APIUrl = {
     apiBaseURL,
@@ -45,5 +46,5 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, showFacetizer,
     isPluginEnabled, storage, LoginTypes,
-    api, HTTPMethods, APIUrl
+    api, HTTPMethods, APIUrl, defaultFacet
 };

@@ -10,6 +10,7 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import get from 'lodash/get';
 import useEffectAsync from './shared/hooks/useEffectAsync';
+import { loadInitialState } from './highlighter';
 
 const AppProvider = ({ children }) => {
 
@@ -43,6 +44,7 @@ const AppProvider = ({ children }) => {
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
+            loadInitialState(fMap);
         } else {
             setFacetMap(new Map([['Facet-1', []]]));
         }

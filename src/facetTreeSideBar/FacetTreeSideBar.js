@@ -18,6 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
+import { defaultFacet } from '../shared/constant';
 
 const drawerWidth = 280;
 
@@ -88,6 +89,8 @@ export default function FacetTreeSideBar() {
         let keys = [...facetMap.keys()];
         if (keys.length > 0) {
             setSelectedFacet(keys[keys.length - 1])
+        } else {
+            setSelectedFacet(defaultFacet);
         }
     }
 
