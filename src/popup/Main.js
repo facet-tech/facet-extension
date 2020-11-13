@@ -102,13 +102,18 @@ export default () => {
     }
 
     useEffect(async () => {
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        var loc = new URL(url);
-        let domainRes = await getDomain(loc.hostname, workspaceId);
-        const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-        setTextToCopy(text);
-    }, [setTextToCopy]);
-    
+        try {
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            var loc = new URL(url);
+            let domainRes = await getDomain(loc.hostname, workspaceId);
+            const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+            setTextToCopy(text);
+        } catch (e) {
+            console.log('[ERROR]', e)
+        }
+
+    }, [url, setTextToCopy]);
+
     const enableFacetizerElement = <div>
         <GridDiv>
             <div>

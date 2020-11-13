@@ -1,3 +1,5 @@
+import isDevelopment from "../utils/isDevelopment";
+
 const facetizerId = 'facetizer';
 const facetKey = 'facet-settings'
 const showFacetizer = 'showFacetizer';
@@ -10,7 +12,8 @@ const localBaseURL = 'http://localhost:3000';
 const APIUrl = {
     apiBaseURL,
     testBaseURL,
-    localBaseURL
+    localBaseURL,
+    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
 }
 
 const LoginTypes = {

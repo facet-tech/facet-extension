@@ -149,9 +149,9 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
         if (!workspaceId) {
+            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;
-            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             getFacetResponse = await getFacet(domainId, window.location.pathname);
             const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
             properFacetArr && properFacetArr.forEach(ff => {

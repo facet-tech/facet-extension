@@ -31,7 +31,7 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `${APIUrl.localBaseURL}${urlSuffix}`;
+        const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const resjson = await res.json();
@@ -59,7 +59,7 @@ const deleteUser = async (email, workspaceId) => {
         email,
         workspaceId
     }
-    let url = `${APIUrl.apiBaseURL}/user`;
+    let url = `${APIUrl.activeBaseURL}/user`;
     let options = {
         method: 'DELETE'
     };
@@ -147,7 +147,7 @@ const convertGetFacetResponseToMap = (responseBody) => {
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = `${APIUrl.localBaseURL}/facet`;
+    let url = `${APIUrl.activeBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };

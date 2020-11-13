@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import loadLocalStorage from './shared/loadLocalStorage';
@@ -28,9 +28,7 @@ const AppProvider = ({ children }) => {
     const [addedElements, setAddedElements] = useState(new Map());
 
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
-    const [facetMap, setFacetMap] = useState(new Map([
-        ['Facet-1', []]
-    ]));
+    const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
 
     useEffectAsync(async () => {
@@ -45,10 +43,10 @@ const AppProvider = ({ children }) => {
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
-            setLoadingSideBar(false);
         } else {
             setFacetMap(new Map([['Facet-1', []]]));
         }
+        setLoadingSideBar(false);
     }, []);
 
     const onFacetAdd = (label) => {

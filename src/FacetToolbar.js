@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
-import $ from 'jquery';
 import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
