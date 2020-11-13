@@ -34,18 +34,6 @@ const convertToDomElementObject = (path) => {
     }
 }
 
-//TODO DEL?
-const findFacetNameByDOMElementPath = (facetMap, domElementPath) => {
-    let facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    const foundElement = facetArray.find(e => {
-        const wantedValue = e.value.find(subE => {
-            return subE.path === domElementPath
-        })
-        return wantedValue;
-    })
-    return foundElement.name;
-}
-
 const extractAllDomElementPathsFromFacetMap = (facetMap) => {
     let facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     if (facetArray.length === 0) {
