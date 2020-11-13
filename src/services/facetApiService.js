@@ -135,7 +135,7 @@ const getFacet = async (domainId, urlPath) => {
 const convertGetFacetResponseToMap = (responseBody) => {
     let facetMap = new Map();
     responseBody.facet.forEach(facet => {
-        facetMap.set(facet.name, facet.domElement)
+        facetMap.set(facet.name, facet.domElement || [])
     })
     return facetMap;
 }

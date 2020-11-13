@@ -10,16 +10,14 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
-import $, { map } from 'jquery';
+import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
-import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { getElementNameFromPath } from '../shared/parsePath';
 
 const drawerWidth = 280;
 
@@ -60,7 +58,7 @@ export default function FacetTreeSideBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(true);
-    let { hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, facetMap, setFacetMap, setSelectedFacet, loadingSideBar } = useContext(AppContext);
+    let { facetMap, setFacetMap, setSelectedFacet, loadingSideBar } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
     const [renamingFacet, setRenamingFacet] = useState();
@@ -77,17 +75,24 @@ export default function FacetTreeSideBar() {
             return;
         }
         setFacetMap(facetMap.set(newName, []));
+        console.log('@ADDFACET');
         setSelectedFacet(newName);
         setSelected(newName);
         setExpanded([newName]);
     }
 
     const onDeleteFacet = (facet) => {
-        facet.value.forEach(domElement => {
+        facet && facet.value && facet.value.forEach(domElement => {
             onDeleteDOMElement(domElement.path);
         })
         facetMap.delete(facet.name);
         setFacetMap(new Map(facetMap));
+        let keys = [...facetMap.keys()];
+        console.log('KEYS!', keys)
+        if (keys.length > 0) {
+            console.log('SETTING!!!', keys[keys.length - 1])
+            setSelectedFacet(keys[keys.length - 1])
+        }
     }
 
     const onDeleteDOMElement = (path) => {
@@ -95,8 +100,8 @@ export default function FacetTreeSideBar() {
             const parsedPath = parsePath([path], false);
             const element = $(parsedPath[0])[0];
             element.style.setProperty("opacity", "unset");
-            hiddenPathsArr = hiddenPathsArr.filter(e => e !== path);
-            setHiddenPathsArr(hiddenPathsArr);
+            // hiddenPathsArr = hiddenPathsArr.filter(e => e !== path);
+            // setHiddenPathsArr(hiddenPathsArr);
         } catch (e) {
             console.log(`[ERROR] onDeleteElement`, e);
         }
@@ -123,10 +128,12 @@ export default function FacetTreeSideBar() {
     }
 
     const handleNodeIdToggle = (event, nodeIds) => {
+        console.log('@handleNodeIdToggle',nodeIds)
         setExpanded(nodeIds);
     };
 
     const handleNodeIdsSelect = (event, nodeId) => {
+        console.log('@handleNodeIdsSelect',nodeId)
         if (facetArray.find(e => e.name === nodeId)) {
             setSelected(nodeId);
             setSelectedFacet(nodeId);
@@ -147,7 +154,7 @@ export default function FacetTreeSideBar() {
             onRenameSaveClick={(e) => { facetMap.set(e, facetMap.get(facet.name)); facetMap.delete(facet.name); setFacetMap(new Map(facetMap)) }}
             renamingFacet={renamingFacet === facet.name}
         >
-            {value.map((domElement, index) => {
+            {value && value.map((domElement, index) => {
                 return <StyledTreeItem
                     onMouseOver={() => onMouseEnterHandle(domElement.path)}
                     onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
@@ -205,7 +212,7 @@ export default function FacetTreeSideBar() {
                 expanded={expanded}
                 selected={selected}
                 onNodeToggle={handleNodeIdToggle}
-                onNodeSelect={handleNodeIdsSelect}
+                // onNodeSelect={handleNodeIdsSelect}
             >
                 {itemsElement}
             </TreeView>

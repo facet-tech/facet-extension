@@ -1,14 +1,13 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getDomain, createDomain, getOrPostDomain } from './services/facetApiService';
+import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api } from './shared/constant';
 import get from 'lodash/get';
-import CustomProxy from './utils/CustomProxy';
 import { getElementNameFromPath } from './shared/parsePath';
 
+// facetMap & setFacetMap
 // singletons
-let hiddenPaths;
 let domainId;
 let workspaceId;
 let getFacetResponse;
@@ -34,30 +33,83 @@ const convertToDomElementObject = (path) => {
     }
 }
 
+const findFacetNameByDOMElementPath = (facetMap, domElementPath) => {
+    console.log('ligo prin..', facetMap);
+    let facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    console.log('FACETARRAY', facetArray)
+    const foundElement = facetArray.find(e => {
+        const wantedValue = e.value.find(subE => {
+            console.log('sube', subE);
+            return subE.path === domElementPath
+        })
+        console.log('GG!', wantedValue);
+        return wantedValue;
+    })
+    console.log('foundElement!!', foundElement)
+    return foundElement.name;
+}
+
+const extractAllDomElementPathsFromFacetMap = (facetMap) => {
+    let facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    console.log('FACETARRAY', facetArray)
+    if (facetArray.length === 0) {
+        return []
+    }
+    return facetArray.map(facet => facet.value.map(domElement => domElement.path)).flat();
+}
+
+const removeDomPath = (facetMap, domPath, setFacetMap) => {
+    facetMap.forEach((facet, key) => {
+        var newFacetArr = facet.filter(e => e.path !== domPath);
+        if (facet.length !== newFacetArr.length) {
+            setFacetMap(new Map(facetMap.set(key, newFacetArr)));
+            return;
+        }
+    });
+}
+
 /**
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
     const selectedFacet = event.currentTarget.selectedFacet;
+    const setFacetMap = event.currentTarget.setFacetMap;
     const facetMap = event.currentTarget.facetMap;
-    const res = getDomPath(event.target);
-    const domElementsArr = facetMap.get(selectedFacet) !== undefined ? facetMap.get(selectedFacet) : [];
-    if (hiddenPaths.includes(res)) {
-        // new state management stuff
-        const newDomElementsArr = domElementsArr.filter(e => e.path !== res);
-        facetMap.set(selectedFacet, newDomElementsArr);
-        hiddenPaths = hiddenPaths.filter(e => e !== res);
+    const enqueueSnackbar = event.currentTarget.enqueueSnackbar;
+    const domPath = getDomPath(event.target);
+    const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    console.log('INHIGHLIGHTER Selected', selectedFacet, facetMap);
+    console.log("ALLPATHS:", allPaths);
+    if (allPaths.includes(domPath)) {
+        // remove it
+        console.log('CASE 1');
+        // let facetName = findFacetNameByDOMElementPath(facetMap, domPath);
+        // if (facetName !== selectedFacet) {
+        //     enqueueSnackbar(`This element is already `, { variant: "error" })
+        // }
+        // const facet = facetMap.get(selectedFacet);
+        // console.log('found in facet:', facetName, ':', facet);
+
+        // const newDomElementsArr = facet.filter(e => e.path !== domPath);
+        // console.log('newDomElementsArr', newDomElementsArr);
+        // facet.domElement = newDomElementsArr;
+        // setFacetMap(new Map(facetMap.set(selectedFacet, newDomElementsArr)));
+        removeDomPath(facetMap, domPath, setFacetMap);
         event.target.style.setProperty("opacity", "unset");
+
+        // const newDomElementsArr = domElementsArr.filter(e => e.path !== res);
+        // setFacetMap(new Map(facetMap.set(selectedFacet, newDomElementsArr)));
+        // hiddenPaths = hiddenPaths.filter(e => e !== res);
     } else {
-        const domElementObj = convertToDomElementObject(res);
-        let arr = facetMap.get(selectedFacet);
-        if (!arr) {
-            arr = [];
-            facetMap.set(selectedFacet, arr);
-        }
-        arr.push(domElementObj);
+        // add it
+        console.log('CASE 2', selectedFacet, facetMap);
+        let facet = facetMap.get(selectedFacet);
+        console.log('facet!', facet);
+        const domElementObj = convertToDomElementObject(domPath);
+        console.log('domElementObj', domElementObj)
+        facet.push(domElementObj)
+        setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
         event.target.style.setProperty("opacity", "0.3", "important");
-        hiddenPaths.push(res);
     }
     event.preventDefault();
     event.stopPropagation();
@@ -108,32 +160,37 @@ const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
 // TODO refactor
 // must refactor -> a lot of stuff in here...
 // this function should only register/unregister callbacks, ideally it shouldn't handle any req
-const updateEvents = async (flag, observerFunctions, hiddenPathsArr, selectedFacet, facetMap) => {
+/**
+ * 
+ * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM
+ * @param {*} selectedFacet Currently selected facet
+ * @param {*} facetMap Map of facets
+ * @param {*} enqueueSnackbar notification context
+ */
+const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, enqueueSnackbar) => {
     try {
         // 1 time instantiation of singletons
-        let facetsArr = [];
+        // kinda ugly, define a loader function her
         if (!workspaceId) {
-            hiddenPaths = hiddenPathsArr;
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;
             workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             getFacetResponse = await getFacet(domainId, window.location.pathname);
             const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
-            facetsArr = [];
             properFacetArr && properFacetArr.forEach(ff => {
                 $(ff).css("opacity", "0.3", "important");
-                facetsArr.push(ff);
             });
         }
-        const all = [...facetsArr, ...hiddenPaths];
-        // getting rid of duplicates
-        hiddenPaths = CustomProxy([...new Set(all)], observerFunctions);
+
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
                 .includes(e)).forEach(e => {
+                    // attaching these parameters into the event
                     e.selectedFacet = selectedFacet;
                     e.facetMap = facetMap;
-                    if (flag) {
+                    e.setFacetMap = setFacetMap;
+                    e.enqueueSnackbar = enqueueSnackbar;
+                    if (addEventsFlag) {
                         e.addEventListener("click", onMouseClickHandle, false);
                         e.addEventListener("mouseenter", onMouseEnterHandle, false);
                         e.addEventListener("mouseleave", onMouseLeaveHandle, false);

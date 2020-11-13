@@ -6,12 +6,13 @@ import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { showFacetizer as showFacetizerConstant, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { useSnackbar } from 'notistack';
 
 function App() {
+  const { enqueueSnackbar } = useSnackbar();
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-    isPluginEnabled, setIsPluginEnabled, hiddenPathsArr, setHiddenPathsArr,
-    selectedFacet, facetMap } = useContext(AppContext);
+    isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
@@ -34,12 +35,12 @@ function App() {
       window.removeEventListener('keydown', handleUserKeyPress);
     };
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
-
+  console.log('SELECTEDFACET', selectedFacet, facetMap);
   if (isPluginEnabled) {
     if (showSideBar) {
-      updateEvents(true, [setHiddenPathsArr], hiddenPathsArr, selectedFacet, facetMap);
+      updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     } else {
-      updateEvents(false, [setHiddenPathsArr], hiddenPathsArr, selectedFacet, facetMap);
+      updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
   }
 

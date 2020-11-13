@@ -27,7 +27,6 @@ const AppProvider = ({ children }) => {
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
 
-    const [hiddenPathsArr, setHiddenPathsArr] = useState([]);
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([
         ['Facet-1', []]
@@ -41,7 +40,12 @@ const AppProvider = ({ children }) => {
         const domainId = get(domainResponse, 'response.id');
         const getFacetRequest = await getFacet(domainId, window.location.pathname);
         if (getFacetRequest.status === 200) {
-            const fMap = convertGetFacetResponseToMap(getFacetRequest.response)
+            const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+            console.log('CHJECKARE', fMap);
+            if (fMap.size > 0) {
+                console.log('SETTING', fMap.entries().next().value[0]);
+                setSelectedFacet(fMap.entries().next().value[0]);
+            }
             setFacetMap(new Map(fMap));
             setLoadingSideBar(false);
         }
@@ -74,8 +78,7 @@ const AppProvider = ({ children }) => {
         setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
-        hiddenPathsArr, setHiddenPathsArr, enqueueSnackbar, isElementHighlighted,
-        facetMap, setFacetMap, selectedFacet, setSelectedFacet, loadingSideBar, setLoadingSideBar
+        enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet, setSelectedFacet, loadingSideBar, setLoadingSideBar
     }}>
         {children}
     </AppContext.Provider>

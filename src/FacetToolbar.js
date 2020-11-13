@@ -45,7 +45,7 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
-    const { hiddenPathsArr, facetMap } = useContext(AppContext);
+    const { facetMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
@@ -59,13 +59,6 @@ export default function FacetToolbar() {
 
     const reset = async () => {
         try {
-            hiddenPathsArr.forEach(element => {
-                const domElement = $(element)[0];
-                if (!domElement) {
-                    return;
-                }
-                domElement.style.setProperty("opacity", "unset");
-            });
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let domainRes = await getOrPostDomain(workspaceId);
 
@@ -105,7 +98,7 @@ export default function FacetToolbar() {
             </StyledDiv>
             <StyledButton
                 onClick={() => sideBarHandler()}>
-                {showSideBar ? 'DEACTIVATE' : 'ACTIVATE'}
+                {showSideBar ? 'Deactivate' : 'Activate'}
             </StyledButton>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
