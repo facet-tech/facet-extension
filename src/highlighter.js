@@ -43,7 +43,7 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
 }
 
 const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
-    facetMap.forEach((facet, key) => {
+    facetMap && facetMap.forEach((facet, key) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
@@ -57,7 +57,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 
 const loadInitialState = (facetMap, shouldDisplayFacetizer) => {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    facetArray.forEach(facet => {
+    facetArray && facetArray.forEach(facet => {
         const value = facet.value;
         value && value.forEach(domElement => {
             const path = parsePath([domElement.path], shouldDisplayFacetizer);

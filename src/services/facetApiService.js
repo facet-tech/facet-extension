@@ -3,6 +3,7 @@ import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
+import parsePath from "../shared/parsePath";
 
 /**
  * @param {domainId}
@@ -137,7 +138,7 @@ const getFacet = async (domainId, urlPath) => {
 
 const convertGetFacetResponseToMap = (responseBody) => {
     let facetMap = new Map();
-    responseBody.facet.forEach(facet => {
+    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
         facetMap.set(facet.name, facet.domElement || [])
     })
     return facetMap;
@@ -157,14 +158,25 @@ const deleteFacet = async (body) => {
     return jsonResponse;
 }
 
+const generateDomElements = (domElements) => {
+    const result = (domElements && domElements.map(domElement => {
+        return {
+            name: domElement.name,
+            path: parsePath([domElement.path], true)[0]
+        }
+    })) || [];
+    return result;
+}
+
 const extractFacetArray = (facetMap) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+
         return facetArray.map(facet => {
             return {
                 enabled: false,
                 name: facet.name,
-                domElement: facetMap.get(facet.name)
+                domElement: generateDomElements(facetMap.get(facet.name))
             }
         });
     } catch (e) {
