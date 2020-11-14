@@ -54,6 +54,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         }
     });
 }
+
 /**
  * @param {*} facetMap 
  * @param {*} shouldDisplayFacetizer

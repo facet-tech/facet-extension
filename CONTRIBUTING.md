@@ -20,39 +20,36 @@ This is where the facet-extension reads values from. Here are some examples of h
 #### Read values from local storage:
 
 ```
- chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
-        console.log('[local storage]:', obj);
- });
+chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
+    console.log('[local storage]:', obj);
+});
 ```
 
 #### Set values in local storage:
 
 ```
-    chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
-        console.log('[local storage]:', obj);
-        const aboutToSet = {
-            "facet-settings": {
-                ...obj,
-                enabled: true
-            }
-        };
+chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
+    console.log('[local storage]:', obj);
+    const aboutToSet = {
+        "facet-settings": {
+            ...obj,
+            enabled: true
+        }
+    };
 
-        chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
-            console.log(`[STORAGE] updated`);
-        });
+    chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
+        console.log(`[STORAGE] updated`);
     });
+});
 ```
 
 #### Clean local storage:
 
-````
-
+```
 chrome.storage.sync.clear(function () {
     var error = chrome.runtime.lastError;
     if (error) {
         console.error(error);
     }
 });
-
 ```
-````
