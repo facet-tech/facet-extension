@@ -5,21 +5,24 @@ import styled from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
-import $ from 'jquery';
-import parsePath from './shared/parsePath';
 import { HTTPMethods } from './shared/constant';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
-import { getOrPostDomain, triggerApiCall } from './services/facetApiService';
+import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
+import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
+import isDevelopment from './utils/isDevelopment';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 33% 33% 34%;
+    grid-template-columns: 9% 30% 30% 30%;
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 10%);
     color: white;
+    justify-items: center;
+    align-items: center;
 `;
+
 const StyledDiv = styled.div`
-    width: 100%;
+    width: ${props => props.drawer ? '100%' : '0'};
     color: white;
 `;
 
@@ -42,41 +45,22 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function FacetToolbar() {
+    const { facetMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const onSaveClick = async () => {
         try {
-            // check if domain exists
-            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getOrPostDomain(workspaceId);
-            const rightParsedPath = parsePath(window.hiddenPaths).map(el => el.replace(/ /g, ""));
-            const body = {
-                domainId: getDomainRes.response.id,
-                domElement: [{
-                    enabled: "true",
-                    path: rightParsedPath
-                }],
-                urlPath: window.location.pathname
+            await saveFacets(facetMap, enqueueSnackbar);
+            if (!isDevelopment()) {
+                window.location.reload();
             }
-            await triggerApiCall(HTTPMethods.POST, '/facet', body);
-            enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
-            window.location.reload();
         } catch (e) {
-            enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
             console.log(`[ERROR] [onSaveClick] `, e)
         }
     }
 
     const reset = async () => {
         try {
-            window.hiddenPaths.forEach(element => {
-                const domElement = $(element)[0];
-                if (!domElement) {
-                    return;
-                }
-                domElement.style.setProperty("opacity", "unset");
-            });
-            window.hiddenPaths = [];
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let domainRes = await getOrPostDomain(workspaceId);
 
@@ -99,31 +83,26 @@ export default function FacetToolbar() {
         },
     }));
 
-    const sideBarHanlder = () => {
-        window.highlightMode = showSideBar;
+    const sideBarHandler = () => {
+        // window.highlightMode = showSideBar;
         setShowSideBar(!showSideBar);
         if (!showSideBar) {
             // TODO removeEventListeners
         }
     }
 
-    const cb = (e) => {
-        setShouldDisplayFacetizer(e);
-    };
-
     const classes = useStyles();
-    const { showSideBar, setShowSideBar, setShouldDisplayFacetizer } = useContext(AppContext);
+    const { showSideBar, setShowSideBar } = useContext(AppContext);
     return <div>
         <GridDiv>
             <StyledDiv>
-                <StyledButton
-                    variant="contained"
-                    color="primary"
-                    primary={true} onClick={() => sideBarHanlder()}>
-                    {showSideBar ? '⚔ facet.ninja | DEACTIVATE' : '⚔ facet.ninja | ACTIVATE'}
-                </StyledButton>
+                <FacetTreeSideBar />
             </StyledDiv>
-            <StyledButton onClick={() => reset()}>{'Reset'}</StyledButton>
+            <StyledButton
+                onClick={() => sideBarHandler()}>
+                {showSideBar ? 'Deactivate' : 'Activate'}
+            </StyledButton>
+            <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
         </GridDiv>
         <Divider light classes={{ root: classes.divider }} />

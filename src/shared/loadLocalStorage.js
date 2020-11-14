@@ -1,5 +1,5 @@
 /*global chrome*/
-import { isPluginEnabled, LoginTypes, showFacetizer } from './constant';
+import { isPluginEnabled, LoginTypes, showFacetizer, api } from './constant';
 
 const facetKey = 'facet-settings';
 
@@ -9,15 +9,11 @@ const facetKey = 'facet-settings';
  * @param {*} setIsUserAuthenticated 
  */
 // TODO clean up
-const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated) => {
+const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
         try {
             if (!obj) {
-                // setting defaults
-                const cb1 = function () {
-                    setShouldDisplayFacetizer(false);
-                };
-                setKeyInLocalStorage(showFacetizer, cb1);
+                setKeyInLocalStorage(showFacetizer, false);
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
                 setShouldDisplayFacetizer(obj[facetKey][showFacetizer]);
@@ -25,8 +21,10 @@ const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, s
                 if (setIsUserAuthenticated) {
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
                 }
+                if (setWorkspaceId) {
+                    setWorkspaceId(obj[facetKey][api.workspace.workspaceId])
+                }
             }
-            console.log('[STORAGE] Loaded', obj);
         } catch (e) {
             console.log('[STORAGE][ERROR]', e);
         }
@@ -55,6 +53,9 @@ const getLocalStorageObject = async () => {
 const getKeyFromLocalStorage = async (key) => {
     return new Promise((resolve, reject) => {
         try {
+            if (!chrome || !chrome.storage) {
+                resolve(undefined);
+            }
             chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
                 resolve(value[facetKey][key]);
             })
@@ -82,7 +83,6 @@ const setKeyInLocalStorage = async (key, value) => {
 
     chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
         const res = await getLocalStorageObject();
-        console.log(`[STORAGE] updated:`, res);
     });
 }
 

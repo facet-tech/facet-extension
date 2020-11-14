@@ -32,6 +32,7 @@
         "fs-extra": "3.0.1",
         "html-webpack-plugin": "2.29.0",
         "jest": "20.0.4",
+        "lodash": "^4.17.20",
         "object-assign": "4.1.1",
         "postcss-flexbugs-fixes": "3.0.0",
         "postcss-loader": "2.0.6",
@@ -62,7 +63,7 @@
         "zip-folder": "^1.0.0"
     },
     "scripts": {
-        "start": "node scripts/start.js",
+        "start": "PORT=6112 node scripts/start.js",
         "build": "node scripts/build.js",
         "test": "node scripts/test.js --env=jsdom"
     },

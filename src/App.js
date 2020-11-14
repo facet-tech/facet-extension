@@ -5,24 +5,26 @@ import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
+import { showFacetizer as showFacetizerConstant, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { useSnackbar } from 'notistack';
 
 function App() {
+  const { enqueueSnackbar } = useSnackbar();
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-    isPluginEnabled, setIsPluginEnabled } = useContext(AppContext);
-
+    isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
+  
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-
-      const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
-      const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
+      const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
+      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
       setShouldDisplayFacetizer(showFacetizerValue);
       setIsPluginEnabled(isPluginEnabledValue);
     });
 
   const handleUserKeyPress = useCallback(event => {
     if (event.ctrlKey && event.keyCode === 69) {
-      setKeyInLocalStorage('showFacetizer', !shouldDisplayFacetizer);
+      setKeyInLocalStorage(showFacetizerConstant, !shouldDisplayFacetizer);
       setShouldDisplayFacetizer(!shouldDisplayFacetizer);
     };
   }, [shouldDisplayFacetizer, setShouldDisplayFacetizer]);
@@ -33,21 +35,19 @@ function App() {
       window.removeEventListener('keydown', handleUserKeyPress);
     };
   }, [handleUserKeyPress, shouldDisplayFacetizer]);
-
   if (isPluginEnabled) {
     if (showSideBar) {
-      console.log('[LOADING REGISTER EVENTS] true', true)
-      updateEvents(true);
+      updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     } else {
-      console.log('[LOADING REGISTER EVENTS] false', false)
-      updateEvents(false);
+      updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
   }
 
-
   return (
     <div>
-      {isPluginEnabled && shouldDisplayFacetizer ? <FacetToolbar /> : null}
+      {isPluginEnabled && shouldDisplayFacetizer ? <div>
+        <FacetToolbar />
+      </div> : null}
     </div >
   );
 }

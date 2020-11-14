@@ -1,26 +1,54 @@
 /*global chrome*/
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import loadLocalStorage from './shared/loadLocalStorage';
+import isDevelopment from './utils/isDevelopment';
+import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import { api } from './shared/constant';
+import get from 'lodash/get';
+import useEffectAsync from './shared/hooks/useEffectAsync';
+import { loadInitialState } from './highlighter';
 
-const AppProvider = ({ children, hiddenElementsArray }) => {
+const AppProvider = ({ children }) => {
+
     const { enqueueSnackbar } = useSnackbar();
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
-    const [isEnabled, setIsEnabled] = useState(false);
+
+    // TODO these need to change during dev
+    const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
+    const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
+    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = isDevelopment() ? useState(true) : useState(false);
+    const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
+
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
-    const [isAddingFacet, setIsAddingFacet] = useState(false);
     const [canDeleteElement, setCanDeleteElement] = useState(false);
     const [disabledFacets, setDisabledFacets] = useState([]);
-    const [showSideBar, setShowSideBar] = useState(false);
     const [newlyAddedFacet, setNewlyAddedFacet] = useState("Default-Facet");
     const [addedElements, setAddedElements] = useState(new Map());
-    const [showToolbox, setShowToolbox] = useState(false);
-    const [isPluginEnabled, setIsPluginEnabled] = useState(false);
 
-    useEffect(async () => {
+    const [selectedFacet, setSelectedFacet] = useState('Facet-1');
+    const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
+    const [loadingSideBar, setLoadingSideBar] = useState(true);
+
+    useEffectAsync(async () => {
         await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        const domainResponse = await getDomain(window.location.hostname, workspaceId);
+        const domainId = get(domainResponse, 'response.id');
+        const getFacetRequest = await getFacet(domainId, window.location.pathname);
+        if (getFacetRequest.status === 200) {
+            const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+            if (fMap.size > 0) {
+                setSelectedFacet(fMap.entries().next().value[0]);
+            }
+            setFacetMap(new Map(fMap));
+            loadInitialState(fMap, shouldDisplayFacetizer);
+        } else {
+            setFacetMap(new Map([['Facet-1', []]]));
+        }
+        setLoadingSideBar(false);
     }, []);
 
     const onFacetAdd = (label) => {
@@ -32,7 +60,10 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
         setNewlyAddedFacet(label);
         enqueueSnackbar(`Facet "${label}" was created!`, { variant: "success" });
         window.selectedDOM = 'main';
-        setIsAddingFacet(false);
+    }
+
+    const isElementHighlighted = (path) => {
+        // TODO
     }
 
     // sharing stuff among content script
@@ -40,14 +71,14 @@ const AppProvider = ({ children, hiddenElementsArray }) => {
     window.setAddedElements = setAddedElements;
     window.enqueueSnackbar = enqueueSnackbar;
     return <AppContext.Provider value={{
-        hiddenElementsArray, onFacetAdd, addedFacets, setAddedFacets,
-        isAddingFacet, setIsAddingFacet, newlyAddedFacet,
-        setNewlyAddedFacet, addedElements, setAddedElements,
-        canDeleteElement, setCanDeleteElement, disabledFacets,
-        setDisabledFacets, showSideBar, setShowSideBar,
+        onFacetAdd, addedFacets, setAddedFacets,
+        newlyAddedFacet, setNewlyAddedFacet, addedElements,
+        setAddedElements, canDeleteElement, setCanDeleteElement,
+        disabledFacets, setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, showToolbox, setShowToolbox,
-        isPluginEnabled, setIsPluginEnabled
+        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
+        enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet,
+        setSelectedFacet, loadingSideBar, setLoadingSideBar
     }}>
         {children}
     </AppContext.Provider>

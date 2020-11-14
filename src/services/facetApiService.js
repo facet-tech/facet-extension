@@ -1,4 +1,9 @@
 import { HTTPMethods, APIUrl } from "../shared/constant";
+import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import { api } from '../shared/constant';
+import MockService from './MockService'
+import isDevelopment from "../utils/isDevelopment";
+import parsePath from "../shared/parsePath";
 
 /**
  * @param {domainId}
@@ -26,15 +31,14 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
-        const url = `${APIUrl.apiBaseURL}${urlSuffix}`;
+        const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
-        const resjson = await res.json();
+        const response = await res.json();
         const result = {
-            response: resjson,
+            response,
             status: res.status
         };
-        console.log('[API] result:', result);
         return result;
     } catch (e) {
         console.log('[API][Error]', e)
@@ -55,7 +59,7 @@ const deleteUser = async (email, workspaceId) => {
         email,
         workspaceId
     }
-    let url = `${APIUrl.apiBaseURL}/user`;
+    let url = `${APIUrl.activeBaseURL}/user`;
     let options = {
         method: 'DELETE'
     };
@@ -77,6 +81,9 @@ const createDomain = async (domain, workspaceId) => {
 }
 
 const getDomain = async (domainName, workspaceId) => {
+    if (process.env.NODE_ENV === 'development') {
+        return MockService.mockGetDomain();
+    }
     const suffix = `/domain?domain=${domainName}&workspaceId=${workspaceId}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;
@@ -121,15 +128,36 @@ const getOrCreateWorkspace = async (email) => {
 }
 
 const getFacet = async (domainId, urlPath) => {
+    if (isDevelopment()) {
+        return MockService.mockGetFacet();
+    }
     const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;
 }
 
+const convertDOMElement = (domElementArr) => {
+    return domElementArr.map(domElement => {
+        return {
+            ...domElement,
+            withoutFacetizer: true
+        }
+    })
+}
+
+const convertGetFacetResponseToMap = (responseBody) => {
+    let facetMap = new Map();
+    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
+        const transformedDomElement = convertDOMElement(facet.domElement)
+        facetMap.set(facet.name, transformedDomElement || [])
+    })
+    return facetMap;
+}
+
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
-    let url = `${APIUrl.apiBaseURL}/facet`;
+    let url = `${APIUrl.activeBaseURL}/facet`;
     let options = {
         method: 'DELETE'
     };
@@ -140,8 +168,60 @@ const deleteFacet = async (body) => {
     return jsonResponse;
 }
 
+const generateDomElements = (domElements) => {
+    const result = (domElements && domElements.map(domElement => {
+        return {
+            name: domElement.name,
+            path: domElement.withoutFacetizer ? domElement.path : parsePath([domElement.path], true)[0]
+        }
+    })) || [];
+    return result;
+}
+
+const extractFacetArray = (facetMap) => {
+    try {
+        const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+
+        return facetArray.map(facet => {
+            return {
+                enabled: false,
+                name: facet.name,
+                domElement: generateDomElements(facetMap.get(facet.name))
+            }
+        });
+    } catch (e) {
+        console.log(`[ERROR] [extractFacetArray]`, e)
+    }
+}
+
+const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
+    const facetObjectVersion = api.facetObjectVersion;
+    const body = {
+        domainId,
+        urlPath: window.location.pathname,
+        facet: extractFacetArray(facetMap),
+        version: facetObjectVersion,
+    }
+    return body;
+}
+
+const saveFacets = async (facetMap, enqueueSnackbar) => {
+    try {
+        // check if domain exists
+        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+        let getDomainRes = await getOrPostDomain(workspaceId);
+        const body = generateRequestBodyFromFacetMap(facetMap, getDomainRes.response.id);
+        await triggerApiCall(HTTPMethods.POST, '/facet', body);
+        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+    } catch (e) {
+        enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
+        console.log(`[ERROR] [onSaveClick] `, e)
+    }
+}
+
 export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
-    getOrCreateWorkspace, deleteUser, createNewUser
+    getOrCreateWorkspace, deleteUser, createNewUser,
+    saveFacets, convertGetFacetResponseToMap
 };

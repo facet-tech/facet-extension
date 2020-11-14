@@ -19,9 +19,9 @@ export default ({ children }) => {
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
         setIsUserAuthenticated(true);
+        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
-        await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
     }
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default ({ children }) => {
         loggedInUser, setLoggedInUser, shouldDisplayFacetizer,
         setShouldDisplayFacetizer, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        email, setEmail
+        workspaceId, email, setEmail
     }}>
         {children}
     </PopupContext.Provider>

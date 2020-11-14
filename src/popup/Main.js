@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
-import { api, APIUrl } from '../shared/constant';
+import { api, APIUrl, showFacetizer as showFacetizerConstant, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
@@ -40,17 +40,12 @@ const StyledDiv = styled.div`
     width: 20rem;
 `;
 
-const StyledSpan = styled.span`
-    font-size: .5rem;
-    word-break: break-all;
-`;
-
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer,
+        url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
-
     const logout = () => {
         clearStorage();
         setIsUserAuthenticated(false);
@@ -67,48 +62,53 @@ export default () => {
 
     const cb = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { 'showFacetizer': e }, async function (response) {
-                const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
-                const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
-                setKeyInLocalStorage('showFacetizer', showFacetizerValue);
-                setKeyInLocalStorage('isPluginEnabled', isPluginEnabledValue);
+            chrome.tabs.sendMessage(tabs[0].id, { [showFacetizerConstant]: e }, async function (response) {
+                const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
+                const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+                setKeyInLocalStorage(showFacetizerConstant, showFacetizerValue);
+                setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
                 setShouldDisplayFacetizer(showFacetizerValue);
                 setIsPluginEnabled(isPluginEnabledValue);
             });
         });
         // updating chrome storage
-        setKeyInLocalStorage('showFacetizer', e);
+        setKeyInLocalStorage(showFacetizerConstant, e);
         setShouldDisplayFacetizer(e);
     }
 
     const onEnablePluginCB = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { 'isPluginEnabled': e }, async function (response) {
-                setKeyInLocalStorage('isPluginEnabled', e);
-
-                const showFacetizerValue = await getKeyFromLocalStorage('showFacetizer');
-                const isPluginEnabledValue = await getKeyFromLocalStorage('isPluginEnabled');
-                setKeyInLocalStorage('showFacetizer', showFacetizerValue);
-                setKeyInLocalStorage('isPluginEnabled', isPluginEnabledValue);
+            chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
+                setKeyInLocalStorage(isPluginEnabledConstant, e);
+                const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
+                const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+                setKeyInLocalStorage(showFacetizerConstant, showFacetizerValue);
+                setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
                 setShouldDisplayFacetizer(showFacetizerValue);
                 setIsPluginEnabled(isPluginEnabledValue);
             });
         });
         // update storage
-        setKeyInLocalStorage('isPluginEnabled', e);
+        setKeyInLocalStorage(isPluginEnabledConstant, e);
         if (!e) {
-            setKeyInLocalStorage('showFacetizer', e);
+            setKeyInLocalStorage(showFacetizerConstant, e);
         }
         setIsPluginEnabled(e);
     }
 
     useEffect(async () => {
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        var loc = new URL(url);
-        let domainRes = await getDomain(loc.hostname, workspaceId);
-        const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-        setTextToCopy(text);
-    }, [setTextToCopy]);
+        try {
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            var loc = new URL(url);
+            let domainRes = await getDomain(loc.hostname, workspaceId);
+            const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+            setTextToCopy(text);
+        } catch (e) {
+            console.log('[ERROR]', e)
+        }
+
+    }, [url, setTextToCopy]);
+
     const enableFacetizerElement = <div>
         <GridDiv>
             <div>

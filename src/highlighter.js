@@ -1,30 +1,96 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getDomain, createDomain } from './services/facetApiService';
+import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
-import { HTTPMethods, api, storage } from './shared/constant';
+import { api } from './shared/constant';
+import get from 'lodash/get';
+import { getElementNameFromPath } from './shared/parsePath';
 
-window.highlightMode = false;
-window.hiddenPaths = [];
+// facetMap & setFacetMap
+// singletons
+let domainId;
+let workspaceId;
+let getFacetResponse;
+let enqueueSnackbar;
 
-var onMouseEnterHandle = function (event) {
+const onMouseEnterHandle = function (event) {
     event.target.style.setProperty("outline", "5px ridge #c25d29");
     event.target.style.setProperty("cursor", "pointer");
 };
 
-var onMouseLeaveHandle = function (event) {
+/**
+ * @param {selectedFacet} selected facet
+ * @param {setFacetMap} lifecycle event
+ */
+const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("outline", "unset");
     event.target.style.setProperty("cursor", "unset");
 }
 
-var onMouseClickHandle = function (event) {
-    var res = getDomPath(event.target);
-    if (window.hiddenPaths.includes(res)) {
-        window.hiddenPaths = window.hiddenPaths.filter(e => e !== res);
+const convertToDomElementObject = (path) => {
+    return {
+        name: getElementNameFromPath(path),
+        path: path
+    }
+}
+
+const extractAllDomElementPathsFromFacetMap = (facetMap) => {
+    let facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    if (facetArray.length === 0) {
+        return []
+    }
+    return facetArray.map(facet => facet.value.map(domElement => domElement.path)).flat();
+}
+
+const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
+    facetMap && facetMap.forEach((facet, key) => {
+        var newFacetArr = facet.filter(e => e.path !== domPath);
+        if (facet.length !== newFacetArr.length) {
+            if (key !== selectedFacet) {
+                enqueueSnackbar(`Element was removed from the "${key}" facet.`, { variant: "info" });
+            }
+            setFacetMap(new Map(facetMap.set(key, newFacetArr)));
+            return;
+        }
+    });
+}
+/**
+ * @param {*} facetMap 
+ * @param {*} shouldDisplayFacetizer
+ */
+const loadInitialState = (facetMap, shouldDisplayFacetizer) => {
+    const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    facetArray && facetArray.forEach(facet => {
+        const value = facet.value;
+        value && value.forEach(domElement => {
+            const path = parsePath([domElement.path], shouldDisplayFacetizer);
+            $(path[0]).css("opacity", "0.3", "important");
+            // tmp hack find out why path not computing properly
+            $(domElement.path).css("opacity", "0.3", "important");
+        })
+    })
+}
+
+/**
+ * DOM Event Listener of Facet selection
+ */
+const onMouseClickHandle = function (event) {
+    const selectedFacet = event.currentTarget.selectedFacet;
+    const setFacetMap = event.currentTarget.setFacetMap;
+    const facetMap = event.currentTarget.facetMap;
+    const domPath = getDomPath(event.target);
+    const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    if (allPaths.includes(domPath)) {
+        // remove element
+        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
     } else {
+        // add element
+        let facet = facetMap.get(selectedFacet) || [];
+        const domElementObj = convertToDomElementObject(domPath);
+        facet.push(domElementObj)
+        setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
         event.target.style.setProperty("opacity", "0.3", "important");
-        window.hiddenPaths.push(res);
     }
     event.preventDefault();
     event.stopPropagation();
@@ -58,63 +124,54 @@ function getDomPath(el) {
     return withoutSpaces;
 }
 
-var computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
-    var splitStr = strPath.split('>');
-    var secondPathSplit = splitStr[1].split(':eq');
-    if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
-        return splitStr[1];
-    }
-    var regExp = /\(([^)]+)\)/;
-    var matches = regExp.exec(secondPathSplit[1]);
-    const currNumber = parseInt(matches[1]);
-    const wantedNumber = facetizerIsPresent ? currNumber - 1 : currNumber + 1;
-    const result = `${secondPathSplit[0]}:eq(${wantedNumber})`;
-
-    return result;
-}
-
-const updateEvents = async (flag) => {
+// TODO refactor
+// must refactor -> a lot of stuff in here...
+// this function should only register/unregister callbacks, ideally it shouldn't handle any req
+/**
+ * 
+ * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM
+ * @param {*} selectedFacet Currently selected facet
+ * @param {*} facetMap Map of facets
+ * @param {*} enqueueSnackbar notification context
+ */
+const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
     try {
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        let getDomainRes = await getDomain(window.location.hostname, workspaceId);
-
-        // duplicate code to be fixed...
-        let domainId;
-        const domainExists = getDomainRes && getDomainRes.response.id !== undefined;
-        // create domain if it doesn't exist
-        if (domainExists) {
-            domainId = getDomainRes.response.id
-        } else {
-            const domainRes = await createDomain(window.location.hostname, workspaceId);
-            domainId = domainRes.response.id;
+        // 1 time instantiation of singletons
+        // kinda ugly, define a loader function her
+        if (!workspaceId) {
+            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            let getDomainRes = await getOrPostDomain(workspaceId);
+            domainId = getDomainRes.response.id;
+            getFacetResponse = await getFacet(domainId, window.location.pathname);
+            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
+            properFacetArr && properFacetArr.forEach(ff => {
+                $(ff).css("opacity", "0.3", "important");
+            });
+            enqueueSnackbar = eSBar;
         }
-        const getFacetResponse = await getFacet(domainId, window.location.pathname);
-        const properFacetArr = parsePath(getFacetResponse && getFacetResponse.response.domElement && getFacetResponse.response.domElement[0] && getFacetResponse.response.domElement[0].path, false);
-        let facetsArr = [];
-        properFacetArr && properFacetArr.forEach(ff => {
-            $(ff).css("opacity", "0.3", "important");
-            facetsArr.push(ff);
-        });
-        const all = [...facetsArr, ...window.hiddenPaths];
-        // getting rid of duplicates
-        window.hiddenPaths = [...new Set(all)];
 
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
-            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")].includes(e)).forEach(e => {
-                if (flag) {
-                    e.addEventListener("click", onMouseClickHandle, false);
-                    e.addEventListener("mouseenter", onMouseEnterHandle, false);
-                    e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-                } else {
-                    e.removeEventListener("click", onMouseClickHandle, false);
-                    e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-                    e.style.cursor = "cursor";
-                    e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-                }
-            });
+            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
+                .includes(e)).forEach(e => {
+                    // attaching these parameters into the event
+                    e.selectedFacet = selectedFacet;
+                    e.facetMap = facetMap;
+                    e.setFacetMap = setFacetMap;
+                    e.enqueueSnackbar = enqueueSnackbar;
+                    if (addEventsFlag) {
+                        e.addEventListener("click", onMouseClickHandle, false);
+                        e.addEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.addEventListener("mouseleave", onMouseLeaveHandle, false);
+                    } else {
+                        e.removeEventListener("click", onMouseClickHandle, false);
+                        e.removeEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
+                        e.style.cursor = "cursor";
+                    }
+                });
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
 }
 
-export { updateEvents, computeWithOrWithoutFacetizer };
+export { updateEvents, onMouseEnterHandle, loadInitialState };
