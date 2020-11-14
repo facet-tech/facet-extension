@@ -63,7 +63,7 @@
         "zip-folder": "^1.0.0"
     },
     "scripts": {
-        "start": "node scripts/start.js",
+        "start": "PORT=6112 node scripts/start.js",
         "build": "node scripts/build.js",
         "test": "node scripts/test.js --env=jsdom"
     },
