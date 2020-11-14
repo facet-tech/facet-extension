@@ -13,7 +13,7 @@ function App() {
 
   const { showSideBar, shouldDisplayFacetizer, setShouldDisplayFacetizer,
     isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
-
+  
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
       const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);

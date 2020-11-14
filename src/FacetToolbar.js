@@ -10,6 +10,7 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api } from './shared/constant';
 import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
 import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
+import isDevelopment from './utils/isDevelopment';
 
 const GridDiv = styled.div`
     display: grid;
@@ -50,7 +51,9 @@ export default function FacetToolbar() {
     const onSaveClick = async () => {
         try {
             await saveFacets(facetMap, enqueueSnackbar);
-            // window.location.reload();
+            if (!isDevelopment()) {
+                window.location.reload();
+            }
         } catch (e) {
             console.log(`[ERROR] [onSaveClick] `, e)
         }

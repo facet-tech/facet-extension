@@ -54,7 +54,10 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         }
     });
 }
-
+/**
+ * @param {*} facetMap 
+ * @param {*} shouldDisplayFacetizer
+ */
 const loadInitialState = (facetMap, shouldDisplayFacetizer) => {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {

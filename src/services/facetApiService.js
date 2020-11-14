@@ -34,9 +34,9 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
         const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
-        const resjson = await res.json();
+        const response = await res.json();
         const result = {
-            response: resjson,
+            response,
             status: res.status
         };
         return result;
@@ -136,10 +136,20 @@ const getFacet = async (domainId, urlPath) => {
     return apiResponse;
 }
 
+const convertDOMElement = (domElementArr) => {
+    return domElementArr.map(domElement => {
+        return {
+            ...domElement,
+            withoutFacetizer: true
+        }
+    })
+}
+
 const convertGetFacetResponseToMap = (responseBody) => {
     let facetMap = new Map();
     responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
-        facetMap.set(facet.name, facet.domElement || [])
+        const transformedDomElement = convertDOMElement(facet.domElement)
+        facetMap.set(facet.name, transformedDomElement || [])
     })
     return facetMap;
 }
@@ -162,7 +172,7 @@ const generateDomElements = (domElements) => {
     const result = (domElements && domElements.map(domElement => {
         return {
             name: domElement.name,
-            path: parsePath([domElement.path], true)[0]
+            path: domElement.withoutFacetizer ? domElement.path : parsePath([domElement.path], true)[0]
         }
     })) || [];
     return result;
@@ -182,7 +192,6 @@ const extractFacetArray = (facetMap) => {
     } catch (e) {
         console.log(`[ERROR] [extractFacetArray]`, e)
     }
-
 }
 
 const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
