@@ -5,6 +5,14 @@ import parsePath from './shared/parsePath';
 import { api } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
+console.log('@HIGHLIGHTER');
+
+$('*') && $('*').filter(function () {
+    return $(this).css('position') === 'fixed';
+}).each(function () {
+    console.log('him an', this)
+    $(this).css('top', '96px', 'important');
+})
 
 // facetMap & setFacetMap
 // singletons
