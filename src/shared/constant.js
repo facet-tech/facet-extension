@@ -10,6 +10,10 @@ const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
 const defaultFacet = 'Facet-1';
 
+const styles = {
+    drawerWidth: 280
+}
+
 const APIUrl = {
     apiBaseURL,
     testBaseURL,
@@ -46,5 +50,6 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, showFacetizer,
     isPluginEnabled, storage, LoginTypes,
-    api, HTTPMethods, APIUrl, defaultFacet
+    api, HTTPMethods, APIUrl, defaultFacet,
+    styles
 };

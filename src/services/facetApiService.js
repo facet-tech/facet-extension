@@ -136,13 +136,16 @@ const getFacet = async (domainId, urlPath) => {
     return apiResponse;
 }
 
+/**
+ * @param {*} domElementArr domElement array
+ */
 const convertDOMElement = (domElementArr) => {
-    return domElementArr.map(domElement => {
+    return (domElementArr && domElementArr.map(domElement => {
         return {
             ...domElement,
             withoutFacetizer: true
         }
-    })
+    })) || [];
 }
 
 const convertGetFacetResponseToMap = (responseBody) => {

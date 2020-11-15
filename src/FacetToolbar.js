@@ -48,34 +48,6 @@ export default function FacetToolbar() {
     const { facetMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();
 
-    const onSaveClick = async () => {
-        try {
-            await saveFacets(facetMap, enqueueSnackbar);
-            if (!isDevelopment()) {
-                window.location.reload();
-            }
-        } catch (e) {
-            console.log(`[ERROR] [onSaveClick] `, e)
-        }
-    }
-
-    const reset = async () => {
-        try {
-            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let domainRes = await getOrPostDomain(workspaceId);
-
-            const body = {
-                domainId: domainRes.response.id,
-                urlPath: window.location.pathname
-            }
-            enqueueSnackbar(`Facets reset.`, { variant: "success" });
-            await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
-            window.location.reload();
-        } catch (e) {
-            console.log('[ERROR]', e);
-        }
-    }
-
     const useStyles = makeStyles((theme) => ({
         divider: {
             // Theme Color, or use css color in quote
@@ -94,17 +66,17 @@ export default function FacetToolbar() {
     const classes = useStyles();
     const { showSideBar, setShowSideBar } = useContext(AppContext);
     return <div>
-        <GridDiv>
-            <StyledDiv>
-                <FacetTreeSideBar />
-            </StyledDiv>
+        <StyledDiv>
+            <FacetTreeSideBar />
+        </StyledDiv>
+        {/* <GridDiv>
             <StyledButton
                 onClick={() => sideBarHandler()}>
                 {showSideBar ? 'Deactivate' : 'Activate'}
             </StyledButton>
             <StyledButton onClick={() => reset()}>{'Reset All'}</StyledButton>
             <StyledButton onClick={() => onSaveClick()}>{'Save'}</StyledButton>
-        </GridDiv>
-        <Divider light classes={{ root: classes.divider }} />
+        </GridDiv> */}
+        {/* <Divider light classes={{ root: classes.divider }} /> */}
     </div>
 }

@@ -1,37 +1,36 @@
 import React, { useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import StyledTreeItem from './StyledTreeItem';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { defaultFacet } from '../shared/constant';
-
-const drawerWidth = 280;
+import { defaultFacet, styles } from '../shared/constant';
+import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
+import DesktopAccessDisabledIcon from '@material-ui/icons/DesktopAccessDisabled';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
     drawer: {
-        width: drawerWidth,
+        width: styles.drawerWidth,
         flexShrink: 0,
     },
     drawerPaper: {
-        width: drawerWidth
+        width: styles.drawerWidth,
     },
     drawerHeader: {
         display: 'flex',
@@ -52,21 +51,31 @@ const useStyles = makeStyles((theme) => ({
     saveBtn: {
         position: 'absolute',
         bottom: 0
+    },
+    centered: {
+        textAlign: 'center'
+    },
+    logo: {
+        width: '50%'
+    },
+    gridDiv: {
+        display: 'grid',
+        gridTemplateColumns: '100%',
+        justifyItems: 'center',
+        alignItems: 'center',
+        textAlign: 'center'
     }
 }));
 
 export default function FacetTreeSideBar() {
     const classes = useStyles();
-    const theme = useTheme();
     const [open, setOpen] = useState(true);
-    let { facetMap, setFacetMap, setSelectedFacet, loadingSideBar } = useContext(AppContext);
+    const { facetMap, setFacetMap, setSelectedFacet, loadingSideBar, showSideBar, setShowSideBar, reset, onSaveClick } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
     const [renamingFacet, setRenamingFacet] = useState();
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    useEffect(() => {
-        setExpanded(['Facet-1']);
-    }, []);
+    useEffect(() => { setExpanded(['Facet-1']); }, []);
 
     const addFacet = (autoNumber = facetMap.size + 1) => {
         const newName = `Facet-${autoNumber}`;
@@ -91,6 +100,14 @@ export default function FacetTreeSideBar() {
             setSelectedFacet(keys[keys.length - 1])
         } else {
             setSelectedFacet(defaultFacet);
+        }
+    }
+
+    const sideBarHandler = () => {
+        // window.highlightMode = showSideBar;
+        setShowSideBar(!showSideBar);
+        if (!showSideBar) {
+            // TODO removeEventListeners
         }
     }
 
@@ -181,8 +198,14 @@ export default function FacetTreeSideBar() {
             </StyledTreeItem>
         });
 
+    const activateDeactivateElement = showSideBar ?
+        <IconButton onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable">
+            <DesktopAccessDisabledIcon />
+        </IconButton> : <IconButton onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable">
+            <DesktopWindowsIcon />
+        </IconButton>;
+
     return (<div className={classes.root}>
-        {/* <CssBaseline /> */}
         <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -199,16 +222,23 @@ export default function FacetTreeSideBar() {
             open={open}
             classes={{
                 paper: classes.drawerPaper,
-            }}
-        >
+            }}>
+            <div className={classes.gridDiv}>
+                <div>
+                    <h3>Facets</h3>
+                </div>
+            </div>
             <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerClose}>
-                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                {activateDeactivateElement}
+                <IconButton onClick={() => { reset() }} title="Reset" size="small" color="secondary" aria-label="Reset">
+                    <RotateLeftIcon />
                 </IconButton>
-                <h3>Facets</h3>
-                <Fab onClick={() => { addFacet() }} size="small" color="secondary" aria-label="add" className={classes.margin}>
+                <IconButton onClick={() => { addFacet() }} size="small" color="secondary" aria-label="add">
                     <AddIcon />
-                </Fab>
+                </IconButton>
+                <IconButton onClick={() => { onSaveClick() }} size='medium' color="secondary" aria-label="Save">
+                    <SaveIcon />
+                </IconButton>
             </div>
             <Divider />
             <TreeView

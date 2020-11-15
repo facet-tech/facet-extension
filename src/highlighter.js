@@ -2,16 +2,14 @@ import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
-import { api } from './shared/constant';
+import { api, styles } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
-console.log('@HIGHLIGHTER');
 
 $('*') && $('*').filter(function () {
     return $(this).css('position') === 'fixed';
 }).each(function () {
-    console.log('him an', this)
-    $(this).css('top', '96px', 'important');
+    $(this).css('left', `${styles.drawerWidth}px`, 'important');
 })
 
 // facetMap & setFacetMap
