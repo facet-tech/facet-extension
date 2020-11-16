@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
-import loadLocalStorage from './shared/loadLocalStorage';
 import isDevelopment from './utils/isDevelopment';
 import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
@@ -21,7 +20,6 @@ const AppProvider = ({ children }) => {
     // TODO these need to change during dev
     const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
     const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = isDevelopment() ? useState(true) : useState(false);
     const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
 
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
@@ -65,7 +63,6 @@ const AppProvider = ({ children }) => {
     }
 
     useEffectAsync(async () => {
-        await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         const domainResponse = await getDomain(window.location.hostname, workspaceId);
         const domainId = get(domainResponse, 'response.id');
@@ -76,7 +73,7 @@ const AppProvider = ({ children }) => {
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
-            loadInitialState(fMap, shouldDisplayFacetizer);
+            loadInitialState(fMap);
         } else {
             setFacetMap(new Map([['Facet-1', []]]));
         }
@@ -107,8 +104,7 @@ const AppProvider = ({ children }) => {
         newlyAddedFacet, setNewlyAddedFacet, addedElements,
         setAddedElements, canDeleteElement, setCanDeleteElement,
         disabledFacets, setDisabledFacets, showSideBar, setShowSideBar,
-        isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
+        isEnabled, setIsEnabled, isPluginEnabled, setIsPluginEnabled,
         enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet,
         setSelectedFacet, loadingSideBar, setLoadingSideBar, onSaveClick, reset
     }}>

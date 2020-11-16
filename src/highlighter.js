@@ -6,11 +6,25 @@ import { api, styles } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
 
-$('*') && $('*').filter(function () {
-    return $(this).css('position') === 'fixed';
-}).each(function () {
-    $(this).css('left', `${styles.drawerWidth}px`, 'important');
-})
+/**
+ * Performs transformation on client's DOM
+ */
+const performDOMTransformation = () => {
+    console.log('[facet.ninja][loader]');
+
+    // push the body
+    $('body').attr('style', function (i, s) {
+        return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
+    });
+
+    $('*') && $('*').filter(function () {
+        return $(this).css('position') === 'fixed' && $(this).id !== 'facetizer' &&
+            this.className !== 'MuiPaper-root MuiDrawer-paper jss4 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
+    }).each(function () {
+        $(this).css('position', 'absolute', 'important');
+        $(this).css('left', `${styles.drawerWidth}px`, 'important');
+    })
+}
 
 // facetMap & setFacetMap
 // singletons
@@ -63,16 +77,15 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 
 /**
  * @param {*} facetMap 
- * @param {*} shouldDisplayFacetizer
  */
-const loadInitialState = (facetMap, shouldDisplayFacetizer) => {
+const loadInitialState = (facetMap) => {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
         const value = facet.value;
         value && value.forEach(domElement => {
-            const path = parsePath([domElement.path], shouldDisplayFacetizer);
+            const path = parsePath([domElement.path], true);
             $(path[0]).css("opacity", "0.3", "important");
-            // tmp hack find out why path not computing properly
+            // TODO tmp hack find out why path not computing properly
             $(domElement.path).css("opacity", "0.3", "important");
         })
     })
@@ -181,4 +194,4 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
     }
 }
 
-export { updateEvents, onMouseEnterHandle, loadInitialState };
+export { updateEvents, onMouseEnterHandle, loadInitialState, performDOMTransformation };

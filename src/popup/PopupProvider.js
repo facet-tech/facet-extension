@@ -9,7 +9,6 @@ import { getOrCreateWorkspace } from '../services/facetApiService';
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = useState(false);
     const [url, setUrl] = useState('');
     const [isPluginEnabled, setIsPluginEnabled] = useState(true);
     const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
@@ -25,7 +24,7 @@ export default ({ children }) => {
     }
 
     useEffect(() => {
-        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated);
+        loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated);
 
         const loadURL = () => {
             chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
@@ -35,12 +34,11 @@ export default ({ children }) => {
         }
 
         loadURL();
-        loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
-    }, [setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId]);
+        loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
+    }, [setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId]);
 
     return <PopupContext.Provider value={{
-        loggedInUser, setLoggedInUser, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, url, setUrl, isPluginEnabled,
+        loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
         workspaceId, email, setEmail
     }}>

@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AppContext from '../AppContext';
 import parsePath from '../shared/parsePath';
@@ -206,15 +205,6 @@ export default function FacetTreeSideBar() {
         </IconButton>;
 
     return (<div className={classes.root}>
-        <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-        >
-            <MenuIcon />
-        </IconButton>
         <Drawer
             className={classes.drawer}
             variant="persistent"

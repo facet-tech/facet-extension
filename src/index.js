@@ -11,8 +11,6 @@ import PopupProvider from './popup/PopupProvider';
 import CoreProvider from './CoreProvider';
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
-import $ from 'jquery';
-import { styles } from './shared/constant';
 
 if (process.env.NODE_ENV !== 'development') {
     Sentry.init({
@@ -27,17 +25,6 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 if (!document.getElementById('popup')) {
-
-    $('body').attr('style', function (i, s) {
-        return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
-    });
-
-    // top: 96px !important;
-    // position: absolute !important;
-    // left: 0px !important;
-    // right: 0px !important;
-    // min-height: calc(100% - 96px) !important;
-    // overflow-x: initial !important;
 
     // Get the element to prepend our app to. This could be any element on a specific website or even just `document.body`.
     const body = document.body;
