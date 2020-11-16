@@ -2,13 +2,16 @@ import isDevelopment from "../utils/isDevelopment";
 
 const facetizerId = 'facetizer';
 const facetKey = 'facet-settings'
-const showFacetizer = 'showFacetizer';
 const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
 const defaultFacet = 'Facet-1';
+
+const styles = {
+    drawerWidth: 280
+}
 
 const APIUrl = {
     apiBaseURL,
@@ -23,7 +26,6 @@ const LoginTypes = {
 }
 
 const storage = {
-    showFacetizer,
     isPluginEnabled,
     isUserAuthenticated,
 };
@@ -44,7 +46,7 @@ const HTTPMethods = {
 };
 
 export {
-    facetizerId, facetKey, showFacetizer,
-    isPluginEnabled, storage, LoginTypes,
-    api, HTTPMethods, APIUrl, defaultFacet
+    facetizerId, facetKey, isPluginEnabled,
+    storage, LoginTypes, api, HTTPMethods,
+    APIUrl, defaultFacet, styles
 };

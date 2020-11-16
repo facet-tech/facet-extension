@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
-import { api, APIUrl, showFacetizer as showFacetizerConstant, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
+import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
 
 const GridDiv = styled.div`
     display: grid;
@@ -42,8 +42,7 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, shouldDisplayFacetizer, setShouldDisplayFacetizer,
-        url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
     const logout = () => {
@@ -60,39 +59,16 @@ export default () => {
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
-    const cb = (e) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { [showFacetizerConstant]: e }, async function (response) {
-                const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
-                const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-                setKeyInLocalStorage(showFacetizerConstant, showFacetizerValue);
-                setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
-                setShouldDisplayFacetizer(showFacetizerValue);
-                setIsPluginEnabled(isPluginEnabledValue);
-            });
-        });
-        // updating chrome storage
-        setKeyInLocalStorage(showFacetizerConstant, e);
-        setShouldDisplayFacetizer(e);
-    }
-
     const onEnablePluginCB = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
                 setKeyInLocalStorage(isPluginEnabledConstant, e);
-                const showFacetizerValue = await getKeyFromLocalStorage(showFacetizerConstant);
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-                setKeyInLocalStorage(showFacetizerConstant, showFacetizerValue);
                 setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
-                setShouldDisplayFacetizer(showFacetizerValue);
                 setIsPluginEnabled(isPluginEnabledValue);
             });
         });
-        // update storage
         setKeyInLocalStorage(isPluginEnabledConstant, e);
-        if (!e) {
-            setKeyInLocalStorage(showFacetizerConstant, e);
-        }
         setIsPluginEnabled(e);
     }
 
@@ -134,16 +110,6 @@ export default () => {
         {enableFacetizerElement}
         <Divider />
         <MarginTop value=".5rem" />
-        <TwoGridDiv>
-            <div>
-                <Typography variant="primary" gutterBottom>
-                    {'Show Toolbar: (Ctrl+E)'}
-                </Typography>
-            </div>
-            <div>
-                <FacetSwitch labelOn='On' labelOff='Off' callBack={cb} value={shouldDisplayFacetizer} />
-            </div>
-        </TwoGridDiv>
         <Divider />
         <TwoGridDiv>
             <div>

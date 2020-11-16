@@ -1,22 +1,20 @@
 /*global chrome*/
-import { isPluginEnabled, LoginTypes, showFacetizer, api } from './constant';
+import isDevelopment from '../utils/isDevelopment';
+import { isPluginEnabled, LoginTypes, api } from './constant';
 
 const facetKey = 'facet-settings';
 
 /**
- * @param {setShouldDisplayFacetizer} setShouldDisplayFacetizer
  * @param {*} setIsPluginEnabled 
  * @param {*} setIsUserAuthenticated 
  */
 // TODO clean up
-const loadLocalStorage = async (setShouldDisplayFacetizer, setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
+const loadLocalStorage = async (setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
     chrome.storage && chrome.storage.sync.get(facetKey, function (obj) {
         try {
             if (!obj) {
-                setKeyInLocalStorage(showFacetizer, false);
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
-                setShouldDisplayFacetizer(obj[facetKey][showFacetizer]);
                 setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
                 if (setIsUserAuthenticated) {
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
@@ -51,6 +49,9 @@ const getLocalStorageObject = async () => {
  * @param {key} key stored in local storage for 'facet-settings'
  */
 const getKeyFromLocalStorage = async (key) => {
+    if (isDevelopment()) {
+        return true;
+    }
     return new Promise((resolve, reject) => {
         try {
             if (!chrome || !chrome.storage) {

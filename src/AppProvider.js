@@ -3,14 +3,15 @@
 import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
-import loadLocalStorage from './shared/loadLocalStorage';
 import isDevelopment from './utils/isDevelopment';
 import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { api } from './shared/constant';
+import { api, storage } from './shared/constant';
 import get from 'lodash/get';
 import useEffectAsync from './shared/hooks/useEffectAsync';
 import { loadInitialState } from './highlighter';
+import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
+import { HTTPMethods } from './shared/constant';
 
 const AppProvider = ({ children }) => {
 
@@ -19,7 +20,6 @@ const AppProvider = ({ children }) => {
     // TODO these need to change during dev
     const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
     const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
-    const [shouldDisplayFacetizer, setShouldDisplayFacetizer] = isDevelopment() ? useState(true) : useState(false);
     const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
 
     const [addedFacets, setAddedFacets] = useState(["Default-Facet"]);
@@ -32,8 +32,41 @@ const AppProvider = ({ children }) => {
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
 
+    const onSaveClick = async () => {
+        try {
+            await saveFacets(facetMap, enqueueSnackbar);
+            if (!isDevelopment()) {
+                window.location.reload();
+            }
+        } catch (e) {
+            console.log(`[ERROR] [onSaveClick] `, e)
+        }
+    }
+
+    const reset = async () => {
+        try {
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            let domainRes = await getOrPostDomain(workspaceId);
+
+            const body = {
+                domainId: domainRes.response.id,
+                urlPath: window.location.pathname
+            }
+            enqueueSnackbar(`Facets reset.`, { variant: "success" });
+            await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
+            if (!isDevelopment()) {
+                window.location.reload();
+            }
+        } catch (e) {
+            console.log('[ERROR]', e);
+        }
+    }
+
     useEffectAsync(async () => {
-        await loadLocalStorage(setShouldDisplayFacetizer, setIsPluginEnabled);
+        const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
+        if (!isPluginEnabled) {
+            return
+        }
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         const domainResponse = await getDomain(window.location.hostname, workspaceId);
         const domainId = get(domainResponse, 'response.id');
@@ -44,7 +77,7 @@ const AppProvider = ({ children }) => {
                 setSelectedFacet(fMap.entries().next().value[0]);
             }
             setFacetMap(new Map(fMap));
-            loadInitialState(fMap, shouldDisplayFacetizer);
+            loadInitialState(fMap);
         } else {
             setFacetMap(new Map([['Facet-1', []]]));
         }
@@ -75,10 +108,9 @@ const AppProvider = ({ children }) => {
         newlyAddedFacet, setNewlyAddedFacet, addedElements,
         setAddedElements, canDeleteElement, setCanDeleteElement,
         disabledFacets, setDisabledFacets, showSideBar, setShowSideBar,
-        isEnabled, setIsEnabled, shouldDisplayFacetizer,
-        setShouldDisplayFacetizer, isPluginEnabled, setIsPluginEnabled,
+        isEnabled, setIsEnabled, isPluginEnabled, setIsPluginEnabled,
         enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet,
-        setSelectedFacet, loadingSideBar, setLoadingSideBar
+        setSelectedFacet, loadingSideBar, setLoadingSideBar, onSaveClick, reset
     }}>
         {children}
     </AppContext.Provider>
