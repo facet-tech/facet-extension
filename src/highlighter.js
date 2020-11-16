@@ -18,7 +18,7 @@ const performDOMTransformation = () => {
     });
 
     $('*') && $('*').filter(function () {
-        return $(this).css('position') === 'fixed' && $(this).id !== 'facetizer' &&
+        return $(this).css('position') === 'fixed' && this.id !== 'facetizer' &&
             this.className !== 'MuiPaper-root MuiDrawer-paper jss4 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
     }).each(function () {
         $(this).css('position', 'absolute', 'important');

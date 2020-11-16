@@ -31,12 +31,14 @@ if (!document.getElementById('popup')) {
 
     // Create a div to render the <App /> component to.
     const facetDiv = document.createElement('div');
-
+    facetDiv.setAttribute("style", "width: 280px !important")
     // Set the app element's id to `root`. This is the same as the element that create-react-app renders to by default so it will work on the local server too.
     facetDiv.id = 'facetizer';
 
     // Prepend the <App /> component to the viewport element if it exists. You could also use `appendChild` depending on your needs.
-    if (body) body.prepend(facetDiv);
+    if (body) {
+        body.prepend(facetDiv);
+    }
 }
 
 if (document.getElementById('facetizer')) {
