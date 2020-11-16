@@ -15,8 +15,8 @@ function App() {
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (request, sendResponse) {
-      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-      setIsPluginEnabled(isPluginEnabledValue);
+      await getKeyFromLocalStorage(isPluginEnabledConstant);
+      window.location.reload();
     });
 
   useEffect(async () => {
