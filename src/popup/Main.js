@@ -66,10 +66,8 @@ export default () => {
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
                 setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
                 setIsPluginEnabled(isPluginEnabledValue);
-                // TODO need to refresh DOM
             });
         });
-        // update storage
         setKeyInLocalStorage(isPluginEnabledConstant, e);
         setIsPluginEnabled(e);
     }

@@ -5,6 +5,7 @@ import PopupContext from './PopupContext';
 import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api } from '../shared/constant';
 import { getOrCreateWorkspace } from '../services/facetApiService';
+import triggerDOMReload from '../shared/popup/triggerDOMReload';
 
 export default ({ children }) => {
     // email,id:  
@@ -21,6 +22,7 @@ export default ({ children }) => {
         await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
+        triggerDOMReload();
     }
 
     useEffect(() => {
