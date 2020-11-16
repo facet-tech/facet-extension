@@ -121,14 +121,6 @@ export default function FacetTreeSideBar() {
         }
     }
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
-
     // TODO duplicate, re-use function from highlighter
     const onMouseEnterHandle = function (path) {
         $(path).css("outline", "5px ridge #c25d29");

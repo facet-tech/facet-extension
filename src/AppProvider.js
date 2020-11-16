@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 import isDevelopment from './utils/isDevelopment';
 import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { api } from './shared/constant';
+import { api, storage } from './shared/constant';
 import get from 'lodash/get';
 import useEffectAsync from './shared/hooks/useEffectAsync';
 import { loadInitialState } from './highlighter';
@@ -63,6 +63,10 @@ const AppProvider = ({ children }) => {
     }
 
     useEffectAsync(async () => {
+        const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
+        if (!isPluginEnabled) {
+            return
+        }
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         const domainResponse = await getDomain(window.location.hostname, workspaceId);
         const domainId = get(domainResponse, 'response.id');

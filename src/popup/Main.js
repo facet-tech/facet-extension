@@ -59,15 +59,16 @@ export default () => {
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
-    const cb = (e) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {}, async function (response) {
-                const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-                setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
-                setIsPluginEnabled(isPluginEnabledValue);
-            });
-        });
-    }
+    // is this needed? remove..
+    // const cb = (e) => {
+    //     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    //         chrome.tabs.sendMessage(tabs[0].id, {}, async function (response) {
+    //             const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+    //             setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
+    //             setIsPluginEnabled(isPluginEnabledValue);
+    //         });
+    //     });
+    // }
 
     const onEnablePluginCB = (e) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -76,6 +77,7 @@ export default () => {
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
                 setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
                 setIsPluginEnabled(isPluginEnabledValue);
+                // TODO need to refresh DOM
             });
         });
         // update storage
