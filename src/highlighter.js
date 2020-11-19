@@ -5,11 +5,15 @@ import parsePath from './shared/parsePath';
 import { api, styles } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
+import isDevelopment from './utils/isDevelopment';
 
 /**
  * Performs transformation on client's DOM
  */
 const performDOMTransformation = () => {
+    if (isDevelopment()) {
+        return
+    }
     console.log('[facet.ninja][loader]');
 
     // push the body
