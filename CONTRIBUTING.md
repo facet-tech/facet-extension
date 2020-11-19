@@ -77,3 +77,9 @@ chrome.storage.sync.clear(function () {
     }
 });
 ```
+
+
+## Authentication
+
+Hosted UI Endpoint: https://facetextensionfd235e0e-fd235e0e-dev.auth.us-west-2.amazoncognito.com/
+Test Your Hosted UI Endpoint: https://facetextensionfd235e0e-fd235e0e-dev.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=6fa4fhctnojuf3hmlvo0mvsp02&redirect_uri=http://localhost:3000/

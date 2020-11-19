@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
 import Authentication from './Authentication';
 import Main from './Main';
+import AmplifyAuthentication from './AmplifyAuthentication';
 
 const GridDiv = styled.div`
     display: grid;
@@ -31,7 +32,7 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { isUserAuthenticated, setIsUserAuthenticated } = useContext(PopupContext);
 
-    const element = !isUserAuthenticated ? <Authentication /> : <Main />;
+    const element = !isUserAuthenticated ? <AmplifyAuthentication /> : <Main />;
 
     return <StyledDiv>
         {element}

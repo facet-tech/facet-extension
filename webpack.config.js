@@ -39,6 +39,11 @@ module.exports = (_, argv) => {
                         fullySpecified: false
                     }
                 },
+                {
+                    test: /\.json$/i,
+                    loader: 'json5-loader',
+                    type: 'javascript/auto',
+                },
             ],
         },
         resolve: {
