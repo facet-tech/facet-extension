@@ -9,16 +9,26 @@ module.exports = {
                 exclude: /node_modules/,
                 use: ['babel-loader'],
             },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false
+                }
+            }
         ],
     },
     resolve: {
         extensions: ['*', '.js', '.jsx'],
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, './build'),
         filename: 'bundle.js',
     },
     devServer: {
-        contentBase: path.resolve(__dirname, './dist'),
+        contentBase: path.resolve(__dirname, './build'),
     },
 };
