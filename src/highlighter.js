@@ -5,6 +5,7 @@ import parsePath from './shared/parsePath';
 import { api, styles } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
+import isDevelopment from './utils/isDevelopment';
 
 /**
  * Performs transformation on client's DOM
@@ -16,6 +17,10 @@ const performDOMTransformation = () => {
     $('body').attr('style', function (i, s) {
         return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
     });
+
+    if (isDevelopment()) {
+        return
+    }
 
     $('*') && $('*').filter(function () {
         return $(this).css('position') === 'fixed' && this.id !== 'facetizer' &&

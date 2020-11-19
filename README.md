@@ -21,13 +21,6 @@ Control your release 🚀 lifecycle and embrace trunk based development with ⚔
 
 Read installation steps in [INSTALL_PLUGIN.md](./readme_assets/INSTALL_PLUGIN.md)
 
-## See changes in chrome:
-
-2. `yarn build`
-3. Click the reload button next to the facet.ninja plugin and you are settled.
-
-![Facetizer](./readme_assets/chrome_installation.png)
-
 ## Test facet-extension Live
 
 You can test facet-extension end-to-end, through this already-integrated website: https://mywebsite.facet.ninja.
@@ -37,3 +30,11 @@ You will need to authenticate with `team@facet.ninja` in the facet-extension to 
 ## Contribute
 
 Thanks for contributing! Read the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md). You can ask any question through our [spectrum.chat](https://spectrum.chat/facet) space.
+
+## Code of Conduct
+
+Facet ninja has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect project participants to adhere to it.
+Please read [the full text](/CODE_OF_CONDUCT.md).
+
+## License
+facet.ninja [MIT](./LICENSE)
