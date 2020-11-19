@@ -11,15 +11,16 @@ import isDevelopment from './utils/isDevelopment';
  * Performs transformation on client's DOM
  */
 const performDOMTransformation = () => {
-    if (isDevelopment()) {
-        return
-    }
     console.log('[facet.ninja][loader]');
 
     // push the body
     $('body').attr('style', function (i, s) {
         return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
     });
+
+    if (isDevelopment()) {
+        return
+    }
 
     $('*') && $('*').filter(function () {
         return $(this).css('position') === 'fixed' && this.id !== 'facetizer' &&
