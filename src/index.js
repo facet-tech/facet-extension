@@ -11,9 +11,9 @@ import CoreProvider from './CoreProvider';
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
 import { styles } from './shared/constant';
-// import Amplify from "aws-amplify";
-// import awsExports from "./aws-exports";
-// Amplify.configure(awsExports);
+import Amplify from "aws-amplify";
+import awsExports from "./aws-exports";
+Amplify.configure(awsExports);
 
 if (process.env.NODE_ENV !== 'development') {
     Sentry.init({

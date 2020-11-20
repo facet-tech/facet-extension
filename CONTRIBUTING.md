@@ -78,7 +78,6 @@ chrome.storage.sync.clear(function () {
 });
 ```
 
-
 ## Authentication
 
 Hosted UI Endpoint: https://facetextensionfd235e0e-fd235e0e-dev.auth.us-west-2.amazoncognito.com/
