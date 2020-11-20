@@ -8,6 +8,8 @@ import Authentication from './Authentication';
 import Main from './Main';
 import AmplifyAuthentication from './AmplifyAuthentication';
 import { Auth } from 'aws-amplify';
+import LoginForm from './LoginForm';
+import '../static/bootstrap.min.css';
 
 const GridDiv = styled.div`
     display: grid;
@@ -56,6 +58,7 @@ export default () => {
     const element = !isUserAuthenticated ? <Authentication /> : <Main />;
 
     return <StyledDiv>
-        {element}
+    <LoginForm></LoginForm>
+        {/* {element} */}
     </StyledDiv>
 }
