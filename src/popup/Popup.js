@@ -9,7 +9,6 @@ import Main from './Main';
 import AmplifyAuthentication from './AmplifyAuthentication';
 import { Auth } from 'aws-amplify';
 import LoginForm from './LoginForm';
-import '../static/bootstrap.min.css';
 
 const GridDiv = styled.div`
     display: grid;
