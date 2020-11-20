@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import Authentication from './Authentication';
 import Main from './Main';
 import AmplifyAuthentication from './AmplifyAuthentication';
+import { Auth } from 'aws-amplify';
 
 const GridDiv = styled.div`
     display: grid;
@@ -32,7 +33,27 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { isUserAuthenticated, setIsUserAuthenticated } = useContext(PopupContext);
 
-    const element = !isUserAuthenticated ? <AmplifyAuthentication /> : <Main />;
+    async function signUp(username, password, email, phone_number) {
+        try {
+            const { user } = await Auth.signUp({
+                username,
+                password,
+                attributes: {
+                    email,          // optional
+                    // other custom attributes 
+                }
+            });
+            console.log("CHECKME", user);
+        } catch (error) {
+            console.log('error signing up:', error);
+        }
+    }
+
+    //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
+
+
+
+    const element = !isUserAuthenticated ? <Authentication /> : <Main />;
 
     return <StyledDiv>
         {element}
