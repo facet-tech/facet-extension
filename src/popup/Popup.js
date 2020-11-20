@@ -8,7 +8,8 @@ import Authentication from './Authentication';
 import Main from './Main';
 import AmplifyAuthentication from './AmplifyAuthentication';
 import { Auth } from 'aws-amplify';
-import LoginForm from './LoginForm';
+import Login from '../authentication/Login';
+import Signup from '../authentication/Signup';
 
 const GridDiv = styled.div`
     display: grid;
@@ -57,7 +58,8 @@ export default () => {
     const element = !isUserAuthenticated ? <Authentication /> : <Main />;
 
     return <StyledDiv>
-    <LoginForm></LoginForm>
+        dwadwadw
+    <Signup></Signup>
         {/* {element} */}
     </StyledDiv>
 }
