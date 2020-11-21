@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PopupContext from './PopupContext';
 import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
@@ -33,16 +33,15 @@ const StyledSpan = styled.span`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { isUserAuthenticated, setIsUserAuthenticated } = useContext(PopupContext);
+    const { isUserAuthenticated, setIsUserAuthenticated, loadLogin } = useContext(PopupContext);
 
-    async function signUp(username, password, email, phone_number) {
+    async function signupClick(username, password, email, phone_number) {
         try {
             const { user } = await Auth.signUp({
                 username,
                 password,
                 attributes: {
-                    email,          // optional
-                    // other custom attributes 
+                    email,
                 }
             });
             console.log("CHECKME", user);
@@ -52,14 +51,19 @@ export default () => {
     }
 
     //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
+    console.log('PGG!', loadLogin);
+    let displayElement;
+    if (loadLogin) {
+        displayElement = <Login />;
+    } else if (!isUserAuthenticated) {
+        displayElement = <Signup />
+    } else {
+        displayElement = <Main />
+    }
 
-
-
-    const element = !isUserAuthenticated ? <Authentication /> : <Main />;
+    // displayElement = !isUserAuthenticated ? <Signup /> : <Main />;
 
     return <StyledDiv>
-        dwadwadw
-    <Signup></Signup>
-        {/* {element} */}
+        {displayElement}
     </StyledDiv>
 }

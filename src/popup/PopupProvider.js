@@ -15,6 +15,7 @@ export default ({ children }) => {
     const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
+    const [loadLogin, setLoadLogin] = useState(false);
 
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
@@ -23,6 +24,10 @@ export default ({ children }) => {
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
         triggerDOMReload();
+    }
+
+    const onLoginClick = (val) => {
+        setLoadLogin(val);
     }
 
     useEffect(() => {
@@ -42,7 +47,7 @@ export default ({ children }) => {
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        workspaceId, email, setEmail
+        workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick
     }}>
         {children}
     </PopupContext.Provider>

@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-
 import { useForm } from "react-hook-form";
+import PopupContext from "../popup/PopupContext";
 import "./styles.css";
 
 export default () => {
+  const { onLoginClick } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const password = useRef({});
   password.current = watch("password", "");
@@ -47,6 +48,9 @@ export default () => {
 
         <input type="submit" onClick={handleSubmit(onSubmit)} />
       </form>
-    </React.Fragment>
+      <div>
+      <span><a onClick={() => onLoginClick(false)}>Don't have an account? Signup</a></span>
+      </div>
+    </React.Fragment >
   );
 }

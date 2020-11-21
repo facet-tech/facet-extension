@@ -82,7 +82,7 @@ if (document.getElementById('popup')) {
                     horizontal: 'left',
                 }}>
                 <PopupProvider>
-                    <div id='popup-container'>dwdwwd
+                    <div id='popup-container'>
                         <Popup />
                     </div>
                 </PopupProvider>
