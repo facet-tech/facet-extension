@@ -49,9 +49,8 @@ export default () => {
             console.log('error signing up:', error);
         }
     }
-
     //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
-    console.log('PGG!', loadLogin);
+
     let displayElement;
     if (loadLogin) {
         displayElement = <Login />;
