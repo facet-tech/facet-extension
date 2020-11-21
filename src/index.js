@@ -30,7 +30,6 @@ if (process.env.NODE_ENV !== 'development') {
 if (!document.getElementById('popup')) {
 
     const body = document.body;
-
     const facetDiv = document.createElement('div');
     facetDiv.setAttribute("style", `width: ${styles.drawerWidth}px !important`)
     facetDiv.id = 'facetizer';
@@ -42,7 +41,7 @@ if (!document.getElementById('popup')) {
 if (document.getElementById('facetizer')) {
     ReactDOM.render(
         <React.StrictMode>
-            <div id='facet-sidebar'>
+            <div style={{ width: `${styles.drawerWidth}px` }} id='facet-sidebar'>
                 <SnackbarProvider maxSnack={4}
                     disableWindowBlurListener
                     autoHideDuration={5000}

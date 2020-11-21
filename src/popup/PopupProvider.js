@@ -15,6 +15,7 @@ export default ({ children }) => {
     const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
+    const preventDefault = (event) => event.preventDefault();
 
     // deprecate this..
     const [loadLogin, setLoadLogin] = useState(false);
@@ -51,7 +52,7 @@ export default ({ children }) => {
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
         workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-        currAuthState, setCurrAuthState
+        currAuthState, setCurrAuthState, preventDefault
     }}>
         {children}
     </PopupContext.Provider>

@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import { Input, InputLabel, Button, Link } from '@material-ui/core';
 
 export default () => {
 
   const { register, errors, handleSubmit, watch } = useForm({});
-  const { onLoginClick, setCurrAuthState } = React.useContext(PopupContext);
+  const { setCurrAuthState } = React.useContext(PopupContext);
 
   const password = useRef({});
   password.current = watch("password", "");
@@ -26,7 +27,6 @@ export default () => {
           // 'timestamp': `${Date.now()}`,
         }
       });
-      console.log("CHECKME", user);
       setCurrAuthState(authStateConstant.confirmingSignup);
 
     } catch (error) {
@@ -38,32 +38,35 @@ export default () => {
     <React.Fragment>
       <img src={fnLogoHorizontal} />
       <form onSubmit={e => e.preventDefault()}>
-        <label htmlFor="name">First name</label>
-        <input
+        <InputLabel htmlFor="fname">First name</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           id="name"
           name="name"
           aria-invalid={errors.name ? "true" : "false"}
-          ref={register({
+          inputRef={register({
             required: "required",
           })}
         />
         {errors.name && <span role="alert">{errors.name.message}</span>}
-        <label htmlFor="email">Last name</label>
-        <input
+        <InputLabel htmlFor="sname">Last name</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           id="lastName"
           name="lastName"
           aria-invalid={errors.lastName ? "true" : "false"}
-          ref={register({
+          inputRef={register({
             required: "required",
           })}
         />
         {errors.lastName && <span role="alert">{errors.lastName.message}</span>}
-        <label htmlFor="email">email</label>
-        <input
+        <InputLabel htmlFor="email">email</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           id="email"
           name="email"
           aria-invalid={errors.email ? "true" : "false"}
-          ref={register({
+          inputRef={register({
             required: "required",
             pattern: {
               value: /\S+@\S+\.\S+/,
@@ -74,11 +77,12 @@ export default () => {
           placeholder="example@mail.com"
         />
         {errors.email && <span role="alert">{errors.email.message}</span>}
-        <label>Password</label>
-        <input
+        <InputLabel>Password</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           name="password"
           type="password"
-          ref={register({
+          inputRef={register({
             required: "You must specify a password",
             minLength: {
               value: 8,
@@ -87,21 +91,23 @@ export default () => {
           })}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <label>Repeat password</label>
-        <input
+        <InputLabel>Repeat password</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           name="password_repeat"
           type="password"
-          ref={register({
+          inputRef={register({
             validate: value =>
               value === password.current || "The passwords do not match"
           })}
         />
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
-
-        <input value="signup" type="submit" onClick={handleSubmit(onSubmit)} />
+        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>
       <div>
-        <span><a onClick={() => setCurrAuthState(authStateConstant.signingIn)}>Already have an account? SignIn</a></span>
+        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingIn)}>
+          Already have an account? SignIn
+        </Link>
       </div>
     </React.Fragment >
   );

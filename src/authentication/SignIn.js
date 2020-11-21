@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
-import { Input, InputLabel, Button } from '@material-ui/core';
+import { Input, InputLabel, Button, Link } from '@material-ui/core';
 
 export default () => {
   const { setCurrAuthState } = React.useContext(PopupContext);
@@ -14,13 +14,14 @@ export default () => {
   const onSubmit = async data => {
     console.log(JSON.stringify(data));
     const { email, password } = data;
+    console.log('EHEW', data)
     try {
 
       const user = await Auth.signIn(email, password);
       console.log('USER!', user);
       setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
-      console.log('error signing in', error.code);
+      console.log('error signing in', error);
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
       }
@@ -37,7 +38,7 @@ export default () => {
           id="email"
           name="email"
           aria-invalid={errors.email ? "true" : "false"}
-          ref={register({
+          inputRef={register({
             required: "required",
             pattern: {
               value: /\S+@\S+\.\S+/,
@@ -53,7 +54,7 @@ export default () => {
           style={{ width: "100%" }}
           name="password"
           type="password"
-          ref={register({
+          inputRef={register({
             required: "You must specify a password",
           })}
           placeholder="example@mail.com"
@@ -64,9 +65,10 @@ export default () => {
         </div>
       </form>
       <div>
-        <span><a onClick={() => setCurrAuthState(authStateConstant.signingUp)}>Don't have an account? Signup</a></span>
+        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
+          Don't have an account? Signup
+        </Link>
       </div>
-
     </React.Fragment >
   );
 }

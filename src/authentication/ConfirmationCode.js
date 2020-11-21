@@ -3,21 +3,22 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
-import { Input, InputLabel, Button } from '@material-ui/core';
+import { Input, InputLabel, Button, Link } from '@material-ui/core';
 
 export default () => {
     const { setCurrAuthState } = React.useContext(PopupContext);
     const { register, errors, handleSubmit, watch } = useForm({});
     const password = useRef({});
     password.current = watch("password", "");
+
     const onSubmit = async data => {
         console.log(JSON.stringify(data));
         const { confirmationCode } = data;
         try {
             // handle this properly..
             const user = await Auth.confirmSignUp('mtreamer333@gmail.com', confirmationCode);
-
-            console.log('RESPONSE:', user);
+            console.log('Response:', user);
+            setCurrAuthState(authStateConstant.signedIn);
         } catch (error) {
             console.log('error signing in', error);
         }
@@ -26,21 +27,29 @@ export default () => {
     return (
         <React.Fragment>
             <form onSubmit={e => e.preventDefault()}>
-                <InputLabel htmlFor="email">email</InputLabel>
+                <InputLabel htmlFor="email">Confirmation Code:</InputLabel>
                 <Input
                     id="confirmationCode"
                     name="confirmationCode"
                     aria-invalid={errors.email ? "true" : "false"}
-                    ref={register({
+                    inputRef={register({
                         required: "required"
                     })}
                 />
                 {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}
-                <Button type="submit" onClick={handleSubmit(onSubmit)} />
+                <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Confirm</Button>
             </form>
             <div>
-                <span><a onClick={() => setCurrAuthState(authStateConstant.signingUp)}>Don't have an account? Signup</a></span>
-                <span><a onClick={() => setCurrAuthState(authStateConstant.signingIn)}>Already have an account? SignIn</a></span>
+                <div>
+                    <Link inputRef="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
+                        Don't have an account? Signup
+                    </Link>
+                </div>
+                <div>
+                    <Link inputRef="#" onClick={() => setCurrAuthState(authStateConstant.signingIn)}>
+                        Already have an account? SignIn
+                    </Link>
+                </div>
             </div>
         </React.Fragment >
     );
