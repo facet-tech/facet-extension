@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
-import "./styles.css";
+import { Input, InputLabel, Button } from '@material-ui/core';
 
 export default () => {
     const { setCurrAuthState } = React.useContext(PopupContext);
@@ -26,8 +26,8 @@ export default () => {
     return (
         <React.Fragment>
             <form onSubmit={e => e.preventDefault()}>
-                <label htmlFor="email">email</label>
-                <input
+                <InputLabel htmlFor="email">email</InputLabel>
+                <Input
                     id="confirmationCode"
                     name="confirmationCode"
                     aria-invalid={errors.email ? "true" : "false"}
@@ -36,7 +36,7 @@ export default () => {
                     })}
                 />
                 {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}
-                <input type="submit" onClick={handleSubmit(onSubmit)} />
+                <Button type="submit" onClick={handleSubmit(onSubmit)} />
             </form>
             <div>
                 <span><a onClick={() => setCurrAuthState(authStateConstant.signingUp)}>Don't have an account? Signup</a></span>

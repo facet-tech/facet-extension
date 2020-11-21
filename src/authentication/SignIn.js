@@ -3,7 +3,8 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
-import "./styles.css";
+import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import { Input, InputLabel, Button } from '@material-ui/core';
 
 export default () => {
   const { setCurrAuthState } = React.useContext(PopupContext);
@@ -14,7 +15,7 @@ export default () => {
     console.log(JSON.stringify(data));
     const { email, password } = data;
     try {
-      
+
       const user = await Auth.signIn(email, password);
       console.log('USER!', user);
       setCurrAuthState(authStateConstant.signedIn);
@@ -28,9 +29,11 @@ export default () => {
 
   return (
     <React.Fragment>
+      <img src={fnLogoHorizontal} />
       <form onSubmit={e => e.preventDefault()}>
-        <label htmlFor="email">email</label>
-        <input
+        <InputLabel htmlFor="email">email</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           id="email"
           name="email"
           aria-invalid={errors.email ? "true" : "false"}
@@ -42,21 +45,23 @@ export default () => {
             }
           })}
           type="email"
-          placeholder="example@mail.com"
         />
         {errors.email && <span role="alert">{errors.email.message}</span>}
 
-        <label>Password</label>
-        <input
+        <InputLabel>Password</InputLabel>
+        <Input
+          style={{ width: "100%" }}
           name="password"
           type="password"
           ref={register({
             required: "You must specify a password",
           })}
+          placeholder="example@mail.com"
         />
         {errors.password && <p>{errors.password.message}</p>}
-
-        <input type="submit" onClick={handleSubmit(onSubmit)} />
+        <div >
+          <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Login</Button>
+        </div>
       </form>
       <div>
         <span><a onClick={() => setCurrAuthState(authStateConstant.signingUp)}>Don't have an account? Signup</a></span>

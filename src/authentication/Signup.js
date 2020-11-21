@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
-import "./styles.css";
+import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 
 export default () => {
 
@@ -36,6 +36,7 @@ export default () => {
 
   return (
     <React.Fragment>
+      <img src={fnLogoHorizontal} />
       <form onSubmit={e => e.preventDefault()}>
         <label htmlFor="name">First name</label>
         <input
