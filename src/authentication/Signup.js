@@ -2,35 +2,36 @@ import React, { useRef } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-// import "./styles.css";
+import { authState as authStateConstant } from '../shared/constant';
+import "./styles.css";
 
 export default () => {
 
   const { register, errors, handleSubmit, watch } = useForm({});
-  const { onLoginClick } = React.useContext(PopupContext);
-
-
-  //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
+  const { onLoginClick, setCurrAuthState } = React.useContext(PopupContext);
 
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-    alert(JSON.stringify(data));
-    // async function signupClick(username, password, email, phone_number) {
-    //   try {
-    //     const { user } = await Auth.signUp({
-    //       username,
-    //       password,
-    //       attributes: {
-    //         email,
-    //       }
-    //     });
-    //     console.log("CHECKME", user);
-    //   } catch (error) {
-    //     console.log('error signing up:', error);
-    //   }
-    // }
+    console.log(JSON.stringify(data));
+    const { email, password } = data;
+    try {
+      Auth.confirmSignUp()
+      const { user } = await Auth.signUp({
+        username: email,
+        password,
+        attributes: {
+          email,
+          // 'timestamp': `${Date.now()}`,
+        }
+      });
+      console.log("CHECKME", user);
+      setCurrAuthState(authStateConstant.confirmingSignup);
+
+    } catch (error) {
+      console.log('error signing up:', error);
+    }
   };
 
   return (
@@ -99,7 +100,7 @@ export default () => {
         <input value="signup" type="submit" onClick={handleSubmit(onSubmit)} />
       </form>
       <div>
-        <span><a onClick={() => onLoginClick(true)}>Already have an account? Login</a></span>
+        <span><a onClick={() => setCurrAuthState(authStateConstant.signingIn)}>Already have an account? SignIn</a></span>
       </div>
     </React.Fragment >
   );

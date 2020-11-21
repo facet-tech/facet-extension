@@ -9,6 +9,15 @@ const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
 const defaultFacet = 'Facet-1';
 
+const authState = {
+    notSignedIn: 'NOT_LOGGED_IN',
+    signedIn: 'LOGGED_IN',
+    signingIn: 'SIGNING_IN',
+    signUp: 'SIGN_UP',
+    signingUp: 'SIGNING_UP',
+    confirmingSignup: 'CONFIRMING_SIGNUP',
+};
+
 const styles = {
     drawerWidth: 280
 }
@@ -48,5 +57,5 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, isPluginEnabled,
     storage, LoginTypes, api, HTTPMethods,
-    APIUrl, defaultFacet, styles
+    APIUrl, defaultFacet, styles, authState
 };

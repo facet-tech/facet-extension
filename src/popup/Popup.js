@@ -10,16 +10,14 @@ import AmplifyAuthentication from './AmplifyAuthentication';
 import { Auth } from 'aws-amplify';
 import SignIn from '../authentication/SignIn';
 import Signup from '../authentication/Signup';
+import { authState as authStateConstant } from '../shared/constant';
+import ConfirmationCode from '../authentication/ConfirmationCode';
 
 const GridDiv = styled.div`
     display: grid;
     grid-template-columns: 45% 45%;
     grid-gap: 5%;
     align-items: center;
-`;
-
-const MarginTop = styled.div`
-    margin-top: ${props => props.value};
 `;
 
 const StyledDiv = styled.div`
@@ -32,19 +30,17 @@ const StyledSpan = styled.span`
 `;
 
 export default () => {
-    const { enqueueSnackbar } = useSnackbar();
-    const { isUserAuthenticated, setIsUserAuthenticated, loadLogin } = useContext(PopupContext);
-
+    const { currAuthState } = useContext(PopupContext);
     let displayElement;
-    if (loadLogin) {
+    if (currAuthState === authStateConstant.signingIn) {
         displayElement = <SignIn />;
-    } else if (!isUserAuthenticated) {
+    } else if (currAuthState === authStateConstant.signingUp) {
         displayElement = <Signup />
-    } else {
+    } else if (currAuthState === authStateConstant.confirmingSignup) {
+        displayElement = <ConfirmationCode />
+    } else if (currAuthState === authStateConstant.signedIn) {
         displayElement = <Main />
     }
-
-    // displayElement = !isUserAuthenticated ? <Signup /> : <Main />;
 
     return <StyledDiv>
         {displayElement}

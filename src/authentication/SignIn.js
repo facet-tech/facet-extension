@@ -2,21 +2,27 @@ import { Auth } from "aws-amplify";
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
+import { authState as authStateConstant } from '../shared/constant';
 import "./styles.css";
 
 export default () => {
-  const { onLoginClick } = React.useContext(PopupContext);
+  const { setCurrAuthState } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const password = useRef({});
   password.current = watch("password", "");
   const onSubmit = async data => {
-    alert(JSON.stringify(data));
+    console.log(JSON.stringify(data));
     const { email, password } = data;
     try {
+      
       const user = await Auth.signIn(email, password);
-      console.log('RESPONSE:', user);
+      console.log('USER!', user);
+      setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
-      console.log('error signing in', error);
+      console.log('error signing in', error.code);
+      if (error.code === 'UserNotConfirmedException') {
+        setCurrAuthState(authStateConstant.confirmingSignup);
+      }
     }
   };
 
@@ -46,10 +52,6 @@ export default () => {
           type="password"
           ref={register({
             required: "You must specify a password",
-            minLength: {
-              value: 8,
-              message: "Password must have at least 8 characters"
-            }
           })}
         />
         {errors.password && <p>{errors.password.message}</p>}
@@ -57,7 +59,7 @@ export default () => {
         <input type="submit" onClick={handleSubmit(onSubmit)} />
       </form>
       <div>
-        <span><a onClick={() => onLoginClick(false)}>Don't have an account? Signup</a></span>
+        <span><a onClick={() => setCurrAuthState(authStateConstant.signingUp)}>Don't have an account? Signup</a></span>
       </div>
 
     </React.Fragment >
