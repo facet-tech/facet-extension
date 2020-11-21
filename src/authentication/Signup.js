@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-
+import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 // import "./styles.css";
@@ -8,13 +8,29 @@ export default () => {
 
   const { register, errors, handleSubmit, watch } = useForm({});
   const { onLoginClick } = React.useContext(PopupContext);
-  console.log('HEYA', onLoginClick)
+
+
+  //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
 
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = async data => {
     alert(JSON.stringify(data));
+    // async function signupClick(username, password, email, phone_number) {
+    //   try {
+    //     const { user } = await Auth.signUp({
+    //       username,
+    //       password,
+    //       attributes: {
+    //         email,
+    //       }
+    //     });
+    //     console.log("CHECKME", user);
+    //   } catch (error) {
+    //     console.log('error signing up:', error);
+    //   }
+    // }
   };
 
   return (

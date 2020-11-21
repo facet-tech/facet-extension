@@ -8,7 +8,7 @@ import Authentication from './Authentication';
 import Main from './Main';
 import AmplifyAuthentication from './AmplifyAuthentication';
 import { Auth } from 'aws-amplify';
-import Login from '../authentication/Login';
+import SignIn from '../authentication/SignIn';
 import Signup from '../authentication/Signup';
 
 const GridDiv = styled.div`
@@ -35,25 +35,9 @@ export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { isUserAuthenticated, setIsUserAuthenticated, loadLogin } = useContext(PopupContext);
 
-    async function signupClick(username, password, email, phone_number) {
-        try {
-            const { user } = await Auth.signUp({
-                username,
-                password,
-                attributes: {
-                    email,
-                }
-            });
-            console.log("CHECKME", user);
-        } catch (error) {
-            console.log('error signing up:', error);
-        }
-    }
-    //signUp('waaaawdatawest123123', 'Taaawdaawdadwesawt123123', 'mtreamer333@gmail.com', '1232313231')
-
     let displayElement;
     if (loadLogin) {
-        displayElement = <Login />;
+        displayElement = <SignIn />;
     } else if (!isUserAuthenticated) {
         displayElement = <Signup />
     } else {

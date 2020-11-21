@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
@@ -10,6 +11,13 @@ export default () => {
   password.current = watch("password", "");
   const onSubmit = async data => {
     alert(JSON.stringify(data));
+    const { email, password } = data;
+    try {
+      const user = await Auth.signIn(email, password);
+      console.log('RESPONSE:', user);
+    } catch (error) {
+      console.log('error signing in', error);
+    }
   };
 
   return (
@@ -49,8 +57,9 @@ export default () => {
         <input type="submit" onClick={handleSubmit(onSubmit)} />
       </form>
       <div>
-      <span><a onClick={() => onLoginClick(false)}>Don't have an account? Signup</a></span>
+        <span><a onClick={() => onLoginClick(false)}>Don't have an account? Signup</a></span>
       </div>
+
     </React.Fragment >
   );
 }
