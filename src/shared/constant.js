@@ -18,6 +18,12 @@ const authState = {
     confirmingSignup: 'CONFIRMING_SIGNUP',
 };
 
+// information persisted in sync.storage
+const authStorage = {
+    username: 'USERNAME',
+    sessionToken: 'SESSION_TOKEN'
+}
+
 const styles = {
     drawerWidth: 280
 }
@@ -57,5 +63,6 @@ const HTTPMethods = {
 export {
     facetizerId, facetKey, isPluginEnabled,
     storage, LoginTypes, api, HTTPMethods,
-    APIUrl, defaultFacet, styles, authState
+    APIUrl, defaultFacet, styles, authState,
+    authStorage
 };

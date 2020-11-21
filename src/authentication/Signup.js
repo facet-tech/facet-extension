@@ -2,12 +2,15 @@ import React, { useRef } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant } from '../shared/constant';
+import { authState as authStateConstant, authStorage as authStorageConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
+import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
+import AppContext from "../AppContext";
 
 export default () => {
 
+  const { authObject, setAuthObject } = React.useContext(AppContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const { setCurrAuthState } = React.useContext(PopupContext);
 
@@ -19,7 +22,7 @@ export default () => {
     const { email, password } = data;
     try {
       Auth.confirmSignUp()
-      const { user } = await Auth.signUp({
+      const signUpResponse = await Auth.signUp({
         username: email,
         password,
         attributes: {
@@ -27,8 +30,14 @@ export default () => {
           // 'timestamp': `${Date.now()}`,
         }
       });
-      setCurrAuthState(authStateConstant.confirmingSignup);
+      console.log('signUpResponse', signUpResponse);
+      // tmp remove username altogether
 
+      setAuthObject({
+        ...authObject,
+        username: email
+      })
+      setCurrAuthState(authStateConstant.confirmingSignup);
     } catch (error) {
       console.log('error signing up:', error);
     }

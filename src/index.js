@@ -80,11 +80,13 @@ if (document.getElementById('popup')) {
                     vertical: 'top',
                     horizontal: 'left',
                 }}>
-                <PopupProvider>
-                    <div id='popup-container'>
-                        <Popup />
-                    </div>
-                </PopupProvider>
+                <AppProvider>
+                    <PopupProvider>
+                        <div id='popup-container'>
+                            <Popup />
+                        </div>
+                    </PopupProvider>
+                </AppProvider>
             </SnackbarProvider>
         </React.StrictMode>,
         document.getElementById('popup')

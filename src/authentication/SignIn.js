@@ -17,8 +17,8 @@ export default () => {
     console.log('EHEW', data)
     try {
 
-      const user = await Auth.signIn(email, password);
-      console.log('USER!', user);
+      const userResponse = await Auth.signIn(email, password);
+      console.log('USER!', userResponse);
       setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
       console.log('error signing in', error);
@@ -39,7 +39,7 @@ export default () => {
           name="email"
           aria-invalid={errors.email ? "true" : "false"}
           inputRef={register({
-            required: "required",
+            required: "Please specify an email",
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "Entered value does not match email format"
@@ -55,7 +55,7 @@ export default () => {
           name="password"
           type="password"
           inputRef={register({
-            required: "You must specify a password",
+            required: "Please specify a password",
           })}
           placeholder="example@mail.com"
         />
