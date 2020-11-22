@@ -46,6 +46,7 @@ export default () => {
                     })}
                 />
                 {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}
+                <br />
                 <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Confirm</Button>
             </form>
             <br />
@@ -54,8 +55,8 @@ export default () => {
             <div>
                 <div>
                     Don't have an account?
-                    <Link inputRef="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
-                        Sign up
+                    <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
+                        {' '}Sign up
                     </Link>
                 </div>
             </div>

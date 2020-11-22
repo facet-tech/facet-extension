@@ -114,6 +114,7 @@ export default () => {
           })}
         />
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
+        <br />
         <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>
       <br />
