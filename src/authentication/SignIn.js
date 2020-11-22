@@ -1,5 +1,5 @@
 import { Auth } from "aws-amplify";
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
@@ -9,21 +9,25 @@ import { Input, InputLabel, Button, Link } from '@material-ui/core';
 export default () => {
   const { setCurrAuthState } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
+  const [serverError, setServerError] = useState(undefined);
+
+  console.log('errors!@!!!', errors);
   const password = useRef({});
   password.current = watch("password", "");
+
   const onSubmit = async data => {
     console.log(JSON.stringify(data));
     const { email, password } = data;
-    console.log('EHEW', data)
-    try {
 
+    try {
       const userResponse = await Auth.signIn(email, password);
-      console.log('USER!', userResponse);
       setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
       console.log('error signing in', error);
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
+      } else {
+        setServerError(error.message)
       }
     }
   };
@@ -60,6 +64,7 @@ export default () => {
           placeholder="example@mail.com"
         />
         {errors.password && <p>{errors.password.message}</p>}
+        {serverError && <p>{serverError}</p>}
         <div >
           <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Login</Button>
         </div>
