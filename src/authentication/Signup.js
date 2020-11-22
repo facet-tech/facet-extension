@@ -1,18 +1,19 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant, authStorage as authStorageConstant } from '../shared/constant';
+import { authState as authStateConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
-import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import AppContext from "../AppContext";
+import Alert from '@material-ui/lab/Alert';
 
 export default () => {
 
   const { authObject, setAuthObject } = React.useContext(AppContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const { setCurrAuthState } = React.useContext(PopupContext);
+  const [serverError, setServerError] = useState(undefined);
 
   const password = useRef({});
   password.current = watch("password", "");
@@ -39,13 +40,15 @@ export default () => {
       })
       setCurrAuthState(authStateConstant.confirmingSignup);
     } catch (error) {
-      console.log('error signing up:', error);
+      setServerError(error.message);
     }
   };
 
   return (
     <React.Fragment>
-      <img src={fnLogoHorizontal} />
+      <div style={{ textAlign: 'center' }}>
+        <img src={fnLogoHorizontal} />
+      </div>
       <form onSubmit={e => e.preventDefault()}>
         <InputLabel htmlFor="fname">First name</InputLabel>
         <Input
@@ -113,9 +116,13 @@ export default () => {
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
         <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>
+      <br />
+      {serverError && <Alert severity="error">{serverError}</Alert>}
+      <br />
       <div>
+        Have an account?
         <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingIn)}>
-          Already have an account? SignIn
+          Sign in.
         </Link>
       </div>
     </React.Fragment >
