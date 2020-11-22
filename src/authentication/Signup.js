@@ -122,7 +122,7 @@ export default () => {
       <div>
         Have an account?
         <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingIn)}>
-          Sign in.
+          {' '}Sign in
         </Link>
       </div>
     </React.Fragment >

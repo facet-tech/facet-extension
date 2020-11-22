@@ -74,8 +74,8 @@ export default () => {
       <br />
       <div>
         Don't have an account?
-        <Link inputRef="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
-          Sign up
+        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
+          {' '}Sign up
         </Link>
       </div>
     </React.Fragment >
