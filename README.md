@@ -11,11 +11,9 @@
 
 Project demo: https://video.facet.ninja/mvp
 
-Project vision: https://video.facet.ninja/vision
-
 # Facetizer Chrome extension
 
-Control your release 🚀 lifecycle and embrace trunk based development with ⚔️ facet.ninja ⚔️
+Control your release 🚀 lifecycle and embrace trunk based development with facet.ninja.
 
 ## Installation
 
@@ -27,6 +25,10 @@ You can test facet-extension end-to-end, through this already-integrated website
 
 You will need to authenticate with `team@facet.ninja` in the facet-extension to see your changes apply.
 
+## Roadmap
+
+Our roadmap is based by the feedback of the community and our customers. It can be found [here](https://github.com/facets-io/facet-extension/projects/1).
+
 ## Contribute
 
 Thanks for contributing! Read the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md). You can ask any question through our [spectrum.chat](https://spectrum.chat/facet) space.
@@ -37,4 +39,5 @@ Facet ninja has adopted the [Contributor Covenant](https://www.contributor-coven
 Please read [the full text](/CODE_OF_CONDUCT.md).
 
 ## License
+
 facet.ninja [MIT](./LICENSE)
