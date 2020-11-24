@@ -23,7 +23,7 @@ jobs:
         run: mv build extension-chrome-facet-ninja && sudo apt install zip && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/ && mkdir tmp-build && mv extension-chrome-facet-ninja.zip tmp-build/ && ls -d $PWD/*
 
       - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@v0.5.0
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --follow-symlinks
         env:
