@@ -19,29 +19,35 @@ export default () => {
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-    console.log(JSON.stringify(data));
+    
+    console.log('currentAuthenticatedUser', await Auth.currentAuthenticatedUser())
+    console.log('currentSession', await Auth.currentSession())
+    console.log('currentUserInfo', await Auth.currentUserInfo())
+    console.log('currentUserCredentials', await Auth.currentUserCredentials())
+
+
     const { email, password } = data;
     setAuthObject({
       ...authObject,
       email
     });
-    try {
-      Auth.confirmSignUp()
-      const signUpResponse = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          // 'timestamp': `${Date.now()}`,
-        }
-      });
-      console.log('signUpResponse', signUpResponse);
-      // tmp remove username altogether
+    // try {
+    //   // Auth.confirmSignUp()
+    //   // const signUpResponse = await Auth.signUp({
+    //   //   username: email,
+    //   //   password,
+    //   //   attributes: {
+    //   //     email,
+    //   //     // 'timestamp': `${Date.now()}`,
+    //   //   }
+    //   });
+    //   console.log('signUpResponse', signUpResponse);
+    //   // tmp remove username altogether
 
-      setCurrAuthState(authStateConstant.confirmingSignup);
-    } catch (error) {
-      setServerError(error.message);
-    }
+    //   setCurrAuthState(authStateConstant.confirmingSignup);
+    // } catch (error) {
+    //   setServerError(error.message);
+    // }
   };
 
   return (

@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import isDevelopment from './utils/isDevelopment';
-import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
+import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/FacetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { api, storage } from './shared/constant';
 import get from 'lodash/get';
 import useEffectAsync from './shared/hooks/useEffectAsync';
 import { loadInitialState } from './highlighter';
-import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
+import { getOrPostDomain, triggerApiCall, saveFacets } from './services/FacetApiService';
 import { HTTPMethods } from './shared/constant';
 
 const AppProvider = ({ children }) => {

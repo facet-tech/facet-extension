@@ -13,7 +13,7 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
-import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
+import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
 import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
 
 const GridDiv = styled.div`

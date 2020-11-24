@@ -15,7 +15,6 @@ export default () => {
     const [serverError, setServerError] = useState(undefined);
 
     const onSubmit = async data => {
-        console.log(JSON.stringify(data));
         const { email } = data;
 
         try {
