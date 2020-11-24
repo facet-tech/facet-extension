@@ -21,6 +21,13 @@ export default () => {
 
     try {
       await Auth.signIn(email, password);
+      Auth.currentSession().then(res => {
+        let accessToken = res.getAccessToken()
+        let jwt = accessToken.getJwtToken()
+        //You can print them to see the full objects
+        console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
+        console.log(`myJwt: ${jwt}`)
+      })
       setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
       console.log('error signing in', error);
