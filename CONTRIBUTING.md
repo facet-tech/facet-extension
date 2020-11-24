@@ -77,3 +77,12 @@ chrome.storage.sync.clear(function () {
     }
 });
 ```
+
+## Authentication
+
+For trying out the plugin, you can try logging in with this account:
+
+```
+username: layani.kamora@primaryale.com
+password: layani.kamora@primaryale.com
+```

@@ -11,6 +11,9 @@ import CoreProvider from './CoreProvider';
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
 import { styles } from './shared/constant';
+import Amplify from "aws-amplify";
+import awsExports from "./aws-exports";
+Amplify.configure(awsExports);
 
 if (process.env.NODE_ENV !== 'development') {
     Sentry.init({
@@ -27,7 +30,6 @@ if (process.env.NODE_ENV !== 'development') {
 if (!document.getElementById('popup')) {
 
     const body = document.body;
-
     const facetDiv = document.createElement('div');
     facetDiv.setAttribute("style", `width: ${styles.drawerWidth}px !important`)
     facetDiv.id = 'facetizer';
@@ -39,7 +41,7 @@ if (!document.getElementById('popup')) {
 if (document.getElementById('facetizer')) {
     ReactDOM.render(
         <React.StrictMode>
-            <div id='facet-sidebar'>
+            <div style={{ width: `${styles.drawerWidth}px` }} id='facet-sidebar'>
                 <SnackbarProvider maxSnack={4}
                     disableWindowBlurListener
                     autoHideDuration={5000}
@@ -78,11 +80,13 @@ if (document.getElementById('popup')) {
                     vertical: 'top',
                     horizontal: 'left',
                 }}>
-                <PopupProvider>
-                    <div id='popup-container'>
-                        <Popup />
-                    </div>
-                </PopupProvider>
+                <AppProvider>
+                    <PopupProvider>
+                        <div id='popup-container'>
+                            <Popup />
+                        </div>
+                    </PopupProvider>
+                </AppProvider>
             </SnackbarProvider>
         </React.StrictMode>,
         document.getElementById('popup')

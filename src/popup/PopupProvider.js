@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStorage'
-import { LoginTypes, storage, api } from '../shared/constant';
+import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
 import { getOrCreateWorkspace } from '../services/facetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 
@@ -16,6 +16,10 @@ export default ({ children }) => {
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
 
+    // deprecate this..
+    const [loadLogin, setLoadLogin] = useState(false);
+    const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
+
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
         setIsUserAuthenticated(true);
@@ -23,6 +27,10 @@ export default ({ children }) => {
         await setKeyInLocalStorage(storage.isPluginEnabled, true);
         await setKeyInLocalStorage(LoginTypes.email, email);
         triggerDOMReload();
+    }
+
+    const onLoginClick = (val) => {
+        setLoadLogin(val);
     }
 
     useEffect(() => {
@@ -42,7 +50,8 @@ export default ({ children }) => {
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        workspaceId, email, setEmail
+        workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+        currAuthState, setCurrAuthState
     }}>
         {children}
     </PopupContext.Provider>

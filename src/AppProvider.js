@@ -31,6 +31,7 @@ const AppProvider = ({ children }) => {
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
+    const [authObject, setAuthObject] = useState({});
 
     const onSaveClick = async () => {
         try {
@@ -110,7 +111,8 @@ const AppProvider = ({ children }) => {
         disabledFacets, setDisabledFacets, showSideBar, setShowSideBar,
         isEnabled, setIsEnabled, isPluginEnabled, setIsPluginEnabled,
         enqueueSnackbar, isElementHighlighted, facetMap, setFacetMap, selectedFacet,
-        setSelectedFacet, loadingSideBar, setLoadingSideBar, onSaveClick, reset
+        setSelectedFacet, loadingSideBar, setLoadingSideBar, onSaveClick, reset,
+        authObject, setAuthObject
     }}>
         {children}
     </AppContext.Provider>

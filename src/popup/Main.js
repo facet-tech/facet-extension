@@ -82,7 +82,6 @@ export default () => {
         } catch (e) {
             console.log('[ERROR]', e)
         }
-
     }, [url, setTextToCopy]);
 
     const enableFacetizerElement = <div>
