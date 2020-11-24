@@ -6,8 +6,11 @@ import { authState as authStateConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import AppContext from "../AppContext";
 
 export default () => {
+  
+  const { authObject, setAuthObject } = React.useContext(AppContext);
   const { setCurrAuthState } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const [serverError, setServerError] = useState(undefined);
@@ -20,6 +23,10 @@ export default () => {
     const { email, password } = data;
 
     try {
+      setAuthObject({
+        ...authObject,
+        email
+      });
       await Auth.signIn(email, password);
       Auth.currentSession().then(res => {
         let accessToken = res.getAccessToken()

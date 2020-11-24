@@ -21,6 +21,10 @@ export default () => {
   const onSubmit = async data => {
     console.log(JSON.stringify(data));
     const { email, password } = data;
+    setAuthObject({
+      ...authObject,
+      email
+    });
     try {
       Auth.confirmSignUp()
       const signUpResponse = await Auth.signUp({
@@ -57,6 +61,8 @@ export default () => {
           })}
         />
         {errors.name && <span role="alert">{errors.name.message}</span>}
+        <br />
+        <br />
         <InputLabel htmlFor="sname">Last name</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -68,6 +74,8 @@ export default () => {
           })}
         />
         {errors.lastName && <span role="alert">{errors.lastName.message}</span>}
+        <br />
+        <br />
         <InputLabel htmlFor="email">Email</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -85,6 +93,8 @@ export default () => {
           placeholder="example@mail.com"
         />
         {errors.email && <span role="alert">{errors.email.message}</span>}
+        <br />
+        <br />
         <InputLabel>Password</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -99,7 +109,8 @@ export default () => {
           })}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <br/>
+        <br />
+        <br />
         <InputLabel>Repeat password</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -111,6 +122,7 @@ export default () => {
           })}
         />
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
+        <br />
         <br />
         <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>

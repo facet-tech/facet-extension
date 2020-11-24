@@ -9,21 +9,20 @@ import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import Alert from '@material-ui/lab/Alert';
 
 export default () => {
-    const { authObject, setAuthObject } = React.useContext(AppContext);
+    const { authObject } = React.useContext(AppContext);
     const { setCurrAuthState } = React.useContext(PopupContext);
     const { register, errors, handleSubmit, watch } = useForm({});
     const [serverError, setServerError] = useState(undefined);
-
     const password = useRef({});
     password.current = watch("password", "");
 
     const onSubmit = async data => {
-        console.log(JSON.stringify(data));
         const { confirmationCode } = data;
+
         try {
             // handle this properly..
-            const user = await Auth.confirmSignUp(authObject.username, confirmationCode);
-            console.log('Response:', user);
+            const confirmSignUpResponse = await Auth.confirmSignUp(authObject.email, confirmationCode);
+            console.log('confirmSignUpResponse', confirmSignUpResponse);
             setCurrAuthState(authStateConstant.signedIn);
         } catch (error) {
             setServerError(error.message);
@@ -35,18 +34,23 @@ export default () => {
             <div style={{ textAlign: 'center' }}>
                 <img src={fnLogoHorizontal} />
             </div>
+            <br />
+            <div>
+                Check your email, a confirmation code has been sent. Don't see the code?
+            <Link href="#">
+                {' '}Click here to resend
+            </Link>
+            </div>
+            <br />
+            <br />
             <form onSubmit={e => e.preventDefault()}>
-                <InputLabel>Confirmation Code:</InputLabel>
+                <InputLabel>Enter Confirmation Code:</InputLabel>
                 <Input
                     id="confirmationCode"
                     name="confirmationCode"
                     aria-invalid={errors.email ? "true" : "false"}
                     inputRef={register({
                         required: "required"
-                    })}
-                    onChange={(e) => setAuthObject({
-                        ...authObject,
-                        email: e.target.value
                     })}
                 />
                 {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}

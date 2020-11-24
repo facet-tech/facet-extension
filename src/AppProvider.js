@@ -16,7 +16,6 @@ import { HTTPMethods } from './shared/constant';
 const AppProvider = ({ children }) => {
 
     const { enqueueSnackbar } = useSnackbar();
-
     // TODO these need to change during dev
     const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
     const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
@@ -31,9 +30,7 @@ const AppProvider = ({ children }) => {
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
-    const [authObject, setAuthObject] = useState({
-        email: ''
-    });
+    const [authObject, setAuthObject] = useState({ email: '' });
 
     const onSaveClick = async () => {
         try {

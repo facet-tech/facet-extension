@@ -11,25 +11,20 @@ import AppContext from "../AppContext";
 export default () => {
     const { setCurrAuthState } = React.useContext(PopupContext);
     const { authObject, setAuthObject } = React.useContext(AppContext);
-    const { register, errors, watch, handleSubmit } = useForm({});
+    const { register, errors, handleSubmit } = useForm({});
     const [serverError, setServerError] = useState(undefined);
-
-    const password = useRef({});
-    password.current = watch("password", "");
 
     const onSubmit = async data => {
         console.log(JSON.stringify(data));
-        const { email, password } = data;
+        const { email } = data;
 
         try {
-
+            const confirmSignUpResponse = await Auth.forgotPassword(email);
+            console.log('confirmSignUpResponse', confirmSignUpResponse);
+            setCurrAuthState(authStateConstant.onPasswordReset);
         } catch (error) {
             console.log('error signing in', error);
-            if (error.code === 'UserNotConfirmedException') {
-                setCurrAuthState(authStateConstant.confirmingSignup);
-            } else {
-                setServerError(error.message);
-            }
+            setServerError(error.message);
         }
     };
 
