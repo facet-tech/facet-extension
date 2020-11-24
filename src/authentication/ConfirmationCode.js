@@ -44,6 +44,10 @@ export default () => {
                     inputRef={register({
                         required: "required"
                     })}
+                    onChange={(e) => setAuthObject({
+                        ...authObject,
+                        email: e.target.value
+                    })}
                 />
                 {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}
                 <br />

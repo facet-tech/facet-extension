@@ -34,10 +34,6 @@ export default () => {
       console.log('signUpResponse', signUpResponse);
       // tmp remove username altogether
 
-      setAuthObject({
-        ...authObject,
-        username: email
-      })
       setCurrAuthState(authStateConstant.confirmingSignup);
     } catch (error) {
       setServerError(error.message);
@@ -72,7 +68,7 @@ export default () => {
           })}
         />
         {errors.lastName && <span role="alert">{errors.lastName.message}</span>}
-        <InputLabel htmlFor="email">email</InputLabel>
+        <InputLabel htmlFor="email">Email</InputLabel>
         <Input
           style={{ width: "100%" }}
           id="email"
@@ -103,6 +99,7 @@ export default () => {
           })}
         />
         {errors.password && <p>{errors.password.message}</p>}
+        <br/>
         <InputLabel>Repeat password</InputLabel>
         <Input
           style={{ width: "100%" }}

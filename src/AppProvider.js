@@ -31,7 +31,9 @@ const AppProvider = ({ children }) => {
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
-    const [authObject, setAuthObject] = useState({});
+    const [authObject, setAuthObject] = useState({
+        email: ''
+    });
 
     const onSaveClick = async () => {
         try {
