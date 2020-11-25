@@ -10,9 +10,7 @@ import { authState as authStateConstant } from '../shared/constant';
 import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
-// import useEffectAsync from '../shared/hooks/useEffectAsync';
-import AmplifyService from '../services/AmplifyService';
-import { Auth } from 'aws-amplify';
+
 const StyledDiv = styled.div`
     width: 20rem;
 `;
@@ -20,19 +18,6 @@ const StyledDiv = styled.div`
 export default () => {
     const { currAuthState } = useContext(PopupContext);
     const [isUserLoggedIn, setIsUserLoggedIn] = useState('');
-
-    useEffect(() => {
-        (async () => {
-            const result = await Auth.currentSession();
-            const jwtToken = result?.accessToken?.jwtToken;
-            setIsUserLoggedIn(jwtToken);
-        })();
-    }, []);
-
-    // useEffectAsync(async () => {
-    //     const jwt = await AmplifyService.getCurrentUserJTW();
-    //     setIsUserLoggedIn(jwt);
-    // }, []);
 
     let displayElement;
     if (isUserLoggedIn || currAuthState === authStateConstant.signedIn) {

@@ -49,6 +49,7 @@ export default () => {
     const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+
     const logout = () => {
         clearStorage();
         Auth.signOut();
@@ -77,8 +78,7 @@ export default () => {
         setIsPluginEnabled(e);
     }
 
-    // uncomment
-    useEffect(async () => {
+    const loadCopySnippet = async () => {
         try {
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             var loc = new URL(url);
@@ -88,7 +88,24 @@ export default () => {
         } catch (e) {
             console.log('[ERROR]', e)
         }
+    }
+
+    useEffect(() => {
+        loadCopySnippet();
     }, [url, setTextToCopy]);
+
+    // uncomment
+    // useEffect(() => {
+    //     try {
+    //         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    //         var loc = new URL(url);
+    //         let domainRes = await getDomain(loc.hostname, workspaceId);
+    //         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+    //         setTextToCopy(text);
+    //     } catch (e) {
+    //         console.log('[ERROR]', e)
+    //     }
+    // }, [url, setTextToCopy]);
 
     const enableFacetizerElement = <div>
         <GridDiv>
