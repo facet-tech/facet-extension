@@ -50,11 +50,9 @@ export default () => {
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
     const logout = () => {
-        console.log('@logout!')
         clearStorage();
         Auth.signOut();
         setCurrAuthState(authStateConstant.signingIn);
-        console.log('@telos!')
     }
 
     const invite = async () => {

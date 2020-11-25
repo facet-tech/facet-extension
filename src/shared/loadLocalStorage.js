@@ -10,15 +10,8 @@ const facetKey = 'facet-settings';
  */
 // TODO clean up
 const loadLocalStorage = async (setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
-    console.log('@LOCALHSTORA');
-    console.log('@setIsPluginEnabled', setIsPluginEnabled);
-    console.log('@setIsUserAuthenticated', setIsUserAuthenticated);
-    console.log('@setWorkspaceId', setWorkspaceId);
-    console.log('isPluginEnabled', isPluginEnabled);
-    console.log('facetKey', facetKey);
     chrome?.storage?.sync?.get(facetKey, function (obj) {
         try {
-            console.log('obj!!!', obj);
             if (!obj) {
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
@@ -88,7 +81,7 @@ const setKeyInLocalStorage = async (key, value) => {
             [key]: value
         }
     };
-    
+
 
     chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
         const res = await getLocalStorageObject();
@@ -100,7 +93,6 @@ const setKeyInLocalStorage = async (key, value) => {
  */
 const clearStorage = () => {
     chrome?.storage?.sync?.clear(function () {
-        console.log()
         var error = chrome?.runtime?.lastError;
         if (error) {
             console.error(error);

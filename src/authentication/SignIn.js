@@ -32,16 +32,7 @@ export default () => {
       Auth.currentSession().then(res => {
         let accessToken = res.getAccessToken()
         let jwt = accessToken.getJwtToken()
-        //You can print them to see the full objects
-        console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
-        console.log(`myJwt: ${jwt}`)
-      })
-      console.log('currentAuthenticatedUser', await Auth.currentAuthenticatedUser())
-      console.log('currentSession', await Auth.currentSession())
-      console.log('currentUserInfo', await Auth.currentUserInfo())
-      console.log('currentUserCredentials', await Auth.currentUserCredentials())
-
-
+      });
       setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
       console.log('error signing in', error);

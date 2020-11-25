@@ -22,7 +22,6 @@ export default () => {
         try {
             // handle this properly..
             const confirmSignUpResponse = await Auth.confirmSignUp(authObject.email, confirmationCode);
-            console.log('confirmSignUpResponse', confirmSignUpResponse);
             setCurrAuthState(authStateConstant.signedIn);
         } catch (error) {
             setServerError(error.message);

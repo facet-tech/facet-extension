@@ -25,7 +25,6 @@ export default () => {
         (async () => {
             const result = await Auth.currentSession();
             const jwtToken = result?.accessToken?.jwtToken;
-            console.log('@JWTTOKEN', jwtToken)
             setIsUserLoggedIn(jwtToken);
         })();
     }, []);
@@ -34,7 +33,6 @@ export default () => {
     //     const jwt = await AmplifyService.getCurrentUserJTW();
     //     setIsUserLoggedIn(jwt);
     // }, []);
-
 
     let displayElement;
     if (isUserLoggedIn || currAuthState === authStateConstant.signedIn) {

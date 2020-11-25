@@ -19,10 +19,8 @@ export default () => {
 
         try {
             const confirmSignUpResponse = await Auth.forgotPassword(email);
-            console.log('confirmSignUpResponse', confirmSignUpResponse);
             setCurrAuthState(authStateConstant.onPasswordReset);
         } catch (error) {
-            console.log('error signing in', error);
             setServerError(error.message);
         }
     };
