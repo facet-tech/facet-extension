@@ -95,7 +95,7 @@ export default () => {
                 </div>
                 <br />
                 <div >
-                    <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Reset password</Button>
+                    <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Reset password</Button>
                 </div>
             </form>
             <br />

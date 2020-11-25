@@ -124,7 +124,7 @@ export default () => {
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
         <br />
         <br />
-        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
+        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>
       <br />
       {serverError && <Alert severity="error">{serverError}</Alert>}

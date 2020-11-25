@@ -18,6 +18,7 @@ import { api, APIUrl, authState, isPluginEnabled as isPluginEnabledConstant } fr
 import { Auth } from 'aws-amplify';
 import AppContext from '../AppContext';
 import { authState as authStateConstant } from '../shared/constant';
+import AmplifyService from '../services/AmplifyService';
 
 
 const GridDiv = styled.div`
@@ -46,7 +47,7 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState } = useContext(PopupContext);
+    const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
@@ -54,6 +55,7 @@ export default () => {
         clearStorage();
         Auth.signOut();
         setCurrAuthState(authStateConstant.signingIn);
+        setJwt(undefined);
     }
 
     const invite = async () => {
@@ -85,6 +87,8 @@ export default () => {
             let domainRes = await getDomain(loc.hostname, workspaceId);
             const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
             setTextToCopy(text);
+            const rr = await AmplifyService.getCurrentUserJTW();
+            console.log('RRR', rr);
         } catch (e) {
             console.log('[ERROR]', e)
         }

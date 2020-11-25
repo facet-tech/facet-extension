@@ -8,9 +8,8 @@ export default class {
             const jwtToken = result?.accessToken?.jwtToken;
             return jwtToken;
         } catch (e) {
-            // TODO no current user logged in ~ redirect to login page
+            console.log('[ERROR][getCurrentUserJTW]', e)
             return undefined;
         }
-
     }
 }

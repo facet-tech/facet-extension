@@ -20,7 +20,7 @@ export default () => {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState('');
 
     let displayElement;
-    if (isUserLoggedIn || currAuthState === authStateConstant.signedIn) {
+    if (jwt || currAuthState === authStateConstant.signedIn) {
         displayElement = <Main />;
     }
     else if (currAuthState === authStateConstant.signingIn) {

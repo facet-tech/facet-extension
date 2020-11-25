@@ -78,7 +78,7 @@ export default () => {
         {errors.password && <p>{errors.password.message}</p>}
         <br />
         <div >
-          <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Login</Button>
+          <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Login</Button>
         </div>
       </form>
       <br />

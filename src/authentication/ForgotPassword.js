@@ -57,7 +57,7 @@ export default () => {
             {serverError && <Alert severity="error">{serverError}</Alert>}
             <br />
             <div>
-                <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>
+                <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
                     Confirm email
                 </Button>
             </div>

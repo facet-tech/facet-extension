@@ -6,6 +6,7 @@ import loadLocalStorage, { setKeyInLocalStorage } from '../shared/loadLocalStora
 import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
 import { getOrCreateWorkspace } from '../services/facetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
+import AmplifyService from '../services/AmplifyService';
 
 export default ({ children }) => {
     // email,id:  
@@ -15,7 +16,7 @@ export default ({ children }) => {
     const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
-
+    const [jwt, setJwt] = useState('');
     // deprecate this..
     const [loadLogin, setLoadLogin] = useState(false);
     const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
@@ -43,11 +44,19 @@ export default ({ children }) => {
                     setUrl(websiteUrl);
                 });
             }
-
             loadURL();
             loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
         })();
     }, [setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId]);
+
+    const loadJWT = async () => {
+        const jwt = await AmplifyService.getCurrentUserJTW();
+        setJwt(jwt);
+    }
+
+    useEffect(() => {
+        loadJWT();
+    }, [setJwt]);
 
     // useEffect(() => {
     //     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated);
@@ -67,7 +76,7 @@ export default ({ children }) => {
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
         workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-        currAuthState, setCurrAuthState
+        currAuthState, setCurrAuthState, jwt, setJwt
     }}>
         {children}
     </PopupContext.Provider>

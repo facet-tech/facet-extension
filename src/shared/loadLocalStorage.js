@@ -16,10 +16,10 @@ const loadLocalStorage = async (setIsPluginEnabled, setIsUserAuthenticated, setW
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
                 setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
-                if (setIsUserAuthenticated) {
+                if (setIsUserAuthenticated && obj[facetKey]) {
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
                 }
-                if (setWorkspaceId) {
+                if (setWorkspaceId && obj[facetKey]) {
                     setWorkspaceId(obj[facetKey][api.workspace.workspaceId])
                 }
             }
@@ -89,7 +89,7 @@ const setKeyInLocalStorage = async (key, value) => {
 }
 
 /**
- * Clears the local storage ggdwd
+ * Clears the local storage
  */
 const clearStorage = () => {
     chrome?.storage?.sync?.clear(function () {
