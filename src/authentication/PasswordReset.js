@@ -18,16 +18,13 @@ export default () => {
     password.current = watch("password", "");
 
     const onSubmit = async data => {
-        console.log(JSON.stringify(data));
         const { email } = authObject;
         const { code, password } = data;
 
         try {
             const pwResetResponse = await Auth.forgotPasswordSubmit(email, code, password);
-            console.log('pwResetResponse', pwResetResponse);
             setCurrAuthState(authStateConstant.signedIn);
         } catch (error) {
-            console.log('error at PasswordReset', error);
             if (error.code === 'UserNotConfirmedException') {
                 setCurrAuthState(authStateConstant.confirmingSignup);
             } else {

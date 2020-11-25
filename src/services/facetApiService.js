@@ -34,10 +34,8 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
         let jwt = await AmplifyService.getCurrentUserJTW();
         let headers = {
-            'AccessToken': jwt,
-            'PGG': 'KATKA'
+            AccessToken: jwt,
         };
-        console.log('SINEXISA');
         const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method, headers } : { headers, method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
