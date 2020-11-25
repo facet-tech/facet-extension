@@ -74,7 +74,7 @@
     },
     "scripts": {
         "start": "webpack serve --open 'Google Chrome' --mode='development'",
-        "build": "webpack --mode='development'"
+        "build": "webpack --mode='production'"
     },
     "eslintConfig": {
         "extends": "react-app"

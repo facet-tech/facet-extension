@@ -14,12 +14,9 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
-import { api, APIUrl, authState, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
+import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant } from '../shared/constant';
 import { Auth } from 'aws-amplify';
-import AppContext from '../AppContext';
-import { authState as authStateConstant } from '../shared/constant';
-import AmplifyService from '../services/AmplifyService';
-
+import triggerDOMReload from '../shared/popup/triggerDOMReload';
 
 const GridDiv = styled.div`
     display: grid;
@@ -56,6 +53,7 @@ export default () => {
         Auth.signOut();
         setCurrAuthState(authStateConstant.signingIn);
         setJwt(undefined);
+        triggerDOMReload();
     }
 
     const invite = async () => {
@@ -87,8 +85,6 @@ export default () => {
             let domainRes = await getDomain(loc.hostname, workspaceId);
             const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
             setTextToCopy(text);
-            const rr = await AmplifyService.getCurrentUserJTW();
-            console.log('RRR', rr);
         } catch (e) {
             console.log('[ERROR]', e)
         }
@@ -97,19 +93,6 @@ export default () => {
     useEffect(() => {
         loadCopySnippet();
     }, [url, setTextToCopy]);
-
-    // uncomment
-    // useEffect(() => {
-    //     try {
-    //         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-    //         var loc = new URL(url);
-    //         let domainRes = await getDomain(loc.hostname, workspaceId);
-    //         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-    //         setTextToCopy(text);
-    //     } catch (e) {
-    //         console.log('[ERROR]', e)
-    //     }
-    // }, [url, setTextToCopy]);
 
     const enableFacetizerElement = <div>
         <GridDiv>

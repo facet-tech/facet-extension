@@ -7,9 +7,9 @@ import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
+import triggerDOMReload from "../shared/popup/triggerDOMReload";
 
 export default () => {
-
 
   const { authObject, setAuthObject } = React.useContext(AppContext);
   const { setCurrAuthState } = React.useContext(PopupContext);
@@ -33,6 +33,7 @@ export default () => {
         let jwt = accessToken.getJwtToken()
       });
       setCurrAuthState(authStateConstant.signedIn);
+      triggerDOMReload();
     } catch (error) {
       console.log('error signing in', error);
       if (error.code === 'UserNotConfirmedException') {

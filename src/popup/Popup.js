@@ -16,8 +16,7 @@ const StyledDiv = styled.div`
 `;
 
 export default () => {
-    const { currAuthState } = useContext(PopupContext);
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState('');
+    const { currAuthState, jwt } = useContext(PopupContext);
 
     let displayElement;
     if (jwt || currAuthState === authStateConstant.signedIn) {

@@ -4,13 +4,12 @@ import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
 import { performDOMTransformation, updateEvents } from './highlighter';
-import { getKeyFromLocalStorage, } from './shared/loadLocalStorage';
+import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
-
   const { showSideBar, isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
 
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
@@ -19,17 +18,17 @@ function App() {
       window.location.reload();
     });
 
+  const loadLocalStorageValues = async () => {
+    const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+    if (isPluginEnabledValue) {
+      setIsPluginEnabled(true);
+      performDOMTransformation();
+    }
+  }
+
   useEffect(() => {
-    (async () => {
-      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-      if (isPluginEnabledValue) {
-        setIsPluginEnabled(true);
-        performDOMTransformation();
-      }
-    })();
-  },[]);
-
-
+    loadLocalStorageValues();
+  }, [setIsPluginEnabled]);
 
   if (isPluginEnabled) {
     if (showSideBar) {
@@ -38,12 +37,12 @@ function App() {
       updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
   }
-
+  console.log('!isPluginEnabled', isPluginEnabled)
   return (
     <div>
       {isPluginEnabled ? <div>
         <FacetToolbar />
-      </div> : null}
+      </div> : 'test'}
     </div >
   );
 }

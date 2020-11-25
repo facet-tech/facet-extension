@@ -15,11 +15,14 @@ const loadLocalStorage = async (setIsPluginEnabled, setIsUserAuthenticated, setW
             if (!obj) {
                 setKeyInLocalStorage(isPluginEnabled, false);
             } else {
+                if (!obj[facetKey]) {
+                    return
+                }
                 setIsPluginEnabled(obj[facetKey][isPluginEnabled]);
-                if (setIsUserAuthenticated && obj[facetKey]) {
+                if (setIsUserAuthenticated) {
                     setIsUserAuthenticated(Boolean(obj[facetKey][LoginTypes.email]));
                 }
-                if (setWorkspaceId && obj[facetKey]) {
+                if (setWorkspaceId) {
                     setWorkspaceId(obj[facetKey][api.workspace.workspaceId])
                 }
             }
@@ -57,7 +60,11 @@ const getKeyFromLocalStorage = async (key) => {
             if (!chrome || !chrome.storage) {
                 resolve(undefined);
             }
-            chrome && chrome.storage && chrome.storage.sync.get(facetKey, function (value) {
+            chrome?.storage?.sync?.get(facetKey, function (value) {
+                if (!value[facetKey]) {
+                    resolve(undefined);
+                    return;
+                }
                 resolve(value[facetKey][key]);
             })
         }

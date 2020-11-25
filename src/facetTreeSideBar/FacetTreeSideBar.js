@@ -69,7 +69,8 @@ const useStyles = makeStyles((theme) => ({
 export default function FacetTreeSideBar() {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
-    const { facetMap, setFacetMap, setSelectedFacet, loadingSideBar, showSideBar, setShowSideBar, reset, onSaveClick } = useContext(AppContext);
+    const { facetMap, setFacetMap, setSelectedFacet, loadingSideBar,
+        showSideBar, setShowSideBar, reset, onSaveClick } = useContext(AppContext);
     const [expanded, setExpanded] = useState([]);
     const [selected, setSelected] = useState([]);
     const [renamingFacet, setRenamingFacet] = useState();
