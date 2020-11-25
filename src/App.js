@@ -19,13 +19,17 @@ function App() {
       window.location.reload();
     });
 
-  useEffect(async () => {
-    const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-    if (isPluginEnabledValue) {
-      setIsPluginEnabled(true);
-      performDOMTransformation();
-    }
-  }, []);
+  useEffect(() => {
+    (async () => {
+      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+      if (isPluginEnabledValue) {
+        setIsPluginEnabled(true);
+        performDOMTransformation();
+      }
+    })();
+  },[]);
+
+
 
   if (isPluginEnabled) {
     if (showSideBar) {

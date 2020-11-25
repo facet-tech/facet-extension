@@ -1,6 +1,6 @@
 /*global chrome*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import isDevelopment from './utils/isDevelopment';
@@ -62,27 +62,29 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    useEffectAsync(async () => {
-        const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
-        if (!isPluginEnabled) {
-            return
-        }
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        const domainResponse = await getDomain(window.location.hostname, workspaceId);
-        const domainId = get(domainResponse, 'response.id');
-        const getFacetRequest = await getFacet(domainId, window.location.pathname);
-        if (getFacetRequest.status === 200) {
-            const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-            if (fMap.size > 0) {
-                setSelectedFacet(fMap.entries().next().value[0]);
+    useEffect(() => {
+        (async () => {
+            const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
+            if (!isPluginEnabled) {
+                return
             }
-            setFacetMap(new Map(fMap));
-            loadInitialState(fMap);
-        } else {
-            setFacetMap(new Map([['Facet-1', []]]));
-        }
-        setLoadingSideBar(false);
-    }, []);
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            const domainResponse = await getDomain(window.location.hostname, workspaceId);
+            const domainId = get(domainResponse, 'response.id');
+            const getFacetRequest = await getFacet(domainId, window.location.pathname);
+            if (getFacetRequest.status === 200) {
+                const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+                if (fMap.size > 0) {
+                    setSelectedFacet(fMap.entries().next().value[0]);
+                }
+                setFacetMap(new Map(fMap));
+                loadInitialState(fMap);
+            } else {
+                setFacetMap(new Map([['Facet-1', []]]));
+            }
+            setLoadingSideBar(false);
+        })();
+    },[]);
 
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {

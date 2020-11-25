@@ -14,6 +14,11 @@ module.exports = (_, argv) => {
     return {
         mode: argv.mode,
         entry: path.resolve(__dirname, './src/index.js'),
+        optimization: {
+            // We no not want to minimize our code.
+            minimize: false
+        },
+        devtool: 'source-map',
         module: {
             rules: [
                 {

@@ -14,7 +14,11 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
-import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
+import { api, APIUrl, authState, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
+import { Auth } from 'aws-amplify';
+import AppContext from '../AppContext';
+import { authState as authStateConstant } from '../shared/constant';
+
 
 const GridDiv = styled.div`
     display: grid;
@@ -42,12 +46,15 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
     const logout = () => {
+        console.log('@logout!')
         clearStorage();
-        setIsUserAuthenticated(false);
+        Auth.signOut();
+        setCurrAuthState(authStateConstant.signingIn);
+        console.log('@telos!')
     }
 
     const invite = async () => {
@@ -60,7 +67,7 @@ export default () => {
     }
 
     const onEnablePluginCB = (e) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
                 setKeyInLocalStorage(isPluginEnabledConstant, e);
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
@@ -72,17 +79,18 @@ export default () => {
         setIsPluginEnabled(e);
     }
 
-    useEffect(async () => {
-        try {
-            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            var loc = new URL(url);
-            let domainRes = await getDomain(loc.hostname, workspaceId);
-            const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-            setTextToCopy(text);
-        } catch (e) {
-            console.log('[ERROR]', e)
-        }
-    }, [url, setTextToCopy]);
+    // uncomment
+    // useEffect(async () => {
+    //     try {
+    //         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    //         var loc = new URL(url);
+    //         let domainRes = await getDomain(loc.hostname, workspaceId);
+    //         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+    //         setTextToCopy(text);
+    //     } catch (e) {
+    //         console.log('[ERROR]', e)
+    //     }
+    // }, [url, setTextToCopy]);
 
     const enableFacetizerElement = <div>
         <GridDiv>

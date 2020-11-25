@@ -7,16 +7,14 @@ import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
-import AmplifyService from "../services/AmplifyService";
 
 export default () => {
 
-  AmplifyService.getCurrentUserJTW();
+
   const { authObject, setAuthObject } = React.useContext(AppContext);
   const { setCurrAuthState } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const [serverError, setServerError] = useState(undefined);
-
 
   const password = useRef({});
   password.current = watch("password", "");
@@ -44,7 +42,7 @@ export default () => {
       console.log('currentUserCredentials', await Auth.currentUserCredentials())
 
 
-      // setCurrAuthState(authStateConstant.signedIn);
+      setCurrAuthState(authStateConstant.signedIn);
     } catch (error) {
       console.log('error signing in', error);
       if (error.code === 'UserNotConfirmedException') {
