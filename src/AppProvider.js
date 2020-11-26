@@ -34,8 +34,8 @@ const AppProvider = ({ children }) => {
     const [authObject, setAuthObject] = useState({ email: '', password: '' });
 
     /**
- * TODO this listener should probably live into the Provider
- */
+    * TODO this listener should probably live into the Provider
+    */
     chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
         async function (request, sender, sendResponse) {
             if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
