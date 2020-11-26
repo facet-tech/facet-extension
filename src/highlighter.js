@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getOrPostDomain } from './services/FacetApiService';
+import { getFacet, getOrPostDomain } from './Services/FacetApiService';
 import parsePath from './shared/parsePath';
 import { api, styles } from './shared/constant';
 import get from 'lodash/get';

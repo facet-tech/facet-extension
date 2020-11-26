@@ -13,7 +13,7 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
-import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
+import { deleteUser, getDomain, createNewUser } from '../Services/FacetApiService';
 import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, ChromeRequestType } from '../shared/constant';
 import { Auth } from 'aws-amplify';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';

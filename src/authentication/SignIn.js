@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
 import triggerDOMReload from "../shared/popup/triggerDOMReload";
 import { setKeyInLocalStorage } from "../shared/loadLocalStorage";
-import { getOrCreateWorkspace } from "../services/FacetApiService";
+import { getOrCreateWorkspace } from "../Services/FacetApiService";
 
 export default () => {
 
