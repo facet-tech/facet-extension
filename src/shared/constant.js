@@ -16,13 +16,14 @@ const authState = {
     signUp: 'SIGN_UP',
     signingUp: 'SIGNING_UP',
     confirmingSignup: 'CONFIRMING_SIGNUP',
+    onForgotPassword: 'FORGOT_PASSWORD'
 };
 
 // information persisted in sync.storage
 const authStorage = {
     username: 'USERNAME',
     sessionToken: 'SESSION_TOKEN'
-}
+};
 
 const styles = {
     drawerWidth: 280
@@ -33,16 +34,22 @@ const APIUrl = {
     testBaseURL,
     localBaseURL,
     activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
-}
+};
 
 const LoginTypes = {
     email: 'email',
     workspaceId: 'workspaceId'
-}
+};
 
 const storage = {
     isPluginEnabled,
     isUserAuthenticated,
+    username: 'username',
+    password: 'password'
+};
+
+const ChromeRequestType = {
+    GET_LOGGED_IN_USER: 'GET_LOGGED_IN_USER'
 };
 
 const api = {
@@ -64,5 +71,5 @@ export {
     facetizerId, facetKey, isPluginEnabled,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
-    authStorage
+    authStorage, ChromeRequestType
 };

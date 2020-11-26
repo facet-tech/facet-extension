@@ -4,6 +4,7 @@ import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
 import parsePath from "../shared/parsePath";
+import AmplifyService from "./AmplifyService";
 
 /**
  * @param {domainId}
@@ -31,8 +32,12 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
  */
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
+        let jwt = await AmplifyService.getCurrentUserJTW();
+        let headers = {
+            AccessToken: jwt,
+        };
         const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
-        let obj = HTTPMethods.GET === method ? { method } : { method, body: JSON.stringify(body) };
+        let obj = HTTPMethods.GET === method ? { method, headers } : { headers, method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
         const response = await res.json();
         const result = {

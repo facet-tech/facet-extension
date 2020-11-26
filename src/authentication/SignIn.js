@@ -2,12 +2,18 @@ import { Auth } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant } from '../shared/constant';
+import { authState as authStateConstant, isPluginEnabled, storage, api as apiConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import AppContext from "../AppContext";
+import triggerDOMReload from "../shared/popup/triggerDOMReload";
+import { setKeyInLocalStorage } from "../shared/loadLocalStorage";
+import { getOrCreateWorkspace } from "../services/FacetApiService";
 
 export default () => {
+
+  const { authObject, setAuthObject } = React.useContext(AppContext);
   const { setCurrAuthState } = React.useContext(PopupContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const [serverError, setServerError] = useState(undefined);
@@ -16,21 +22,25 @@ export default () => {
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-    console.log(JSON.stringify(data));
     const { email, password } = data;
 
+    // abstract this method... to be used during signup too
     try {
+      setAuthObject({
+        ...authObject,
+        email
+      });
       await Auth.signIn(email, password);
-      Auth.currentSession().then(res => {
-        let accessToken = res.getAccessToken()
-        let jwt = accessToken.getJwtToken()
-        //You can print them to see the full objects
-        console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
-        console.log(`myJwt: ${jwt}`)
-      })
+      const workspaceResponse = await getOrCreateWorkspace(email);
+      await setKeyInLocalStorage(apiConstant.workspace.workspaceId, workspaceResponse?.response?.workspaceId);
+      await setKeyInLocalStorage(isPluginEnabled, true);
+      await setKeyInLocalStorage(storage.username, email);
+      await setKeyInLocalStorage(storage.password, password);
+
       setCurrAuthState(authStateConstant.signedIn);
+      triggerDOMReload();
     } catch (error) {
-      console.log('error signing in', error);
+      console.log('[ERROR]][SignIn]', error);
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
       } else {
@@ -73,8 +83,16 @@ export default () => {
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
+        <br />
+        <div>
+          Forgot your password?
+        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)}>
+            {' '}Click here to reset it.
+        </Link>
+        </div>
+        <br />
         <div >
-          <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Login</Button>
+          <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Login</Button>
         </div>
       </form>
       <br />

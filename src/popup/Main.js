@@ -13,8 +13,11 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
-import { deleteUser, getDomain, createNewUser } from '../services/facetApiService';
-import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant } from '../shared/constant';
+import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
+import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, ChromeRequestType } from '../shared/constant';
+import { Auth } from 'aws-amplify';
+import triggerDOMReload from '../shared/popup/triggerDOMReload';
+import AmplifyService from '../services/AmplifyService';
 
 const GridDiv = styled.div`
     display: grid;
@@ -42,12 +45,16 @@ const StyledDiv = styled.div`
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { setIsUserAuthenticated, url, isPluginEnabled, setIsPluginEnabled } = useContext(PopupContext);
+    const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState } = useContext(PopupContext);
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+
     const logout = () => {
         clearStorage();
-        setIsUserAuthenticated(false);
+        Auth.signOut();
+        setCurrAuthState(authStateConstant.signingIn);
+        setJwt(undefined);
+        triggerDOMReload();
     }
 
     const invite = async () => {
@@ -59,8 +66,8 @@ export default () => {
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
-    const onEnablePluginCB = (e) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const onEnablePluginCB = async (e) => {
+        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
                 setKeyInLocalStorage(isPluginEnabledConstant, e);
                 const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
@@ -72,7 +79,7 @@ export default () => {
         setIsPluginEnabled(e);
     }
 
-    useEffect(async () => {
+    const loadCopySnippet = async () => {
         try {
             const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             var loc = new URL(url);
@@ -80,8 +87,12 @@ export default () => {
             const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
             setTextToCopy(text);
         } catch (e) {
-            console.log('[ERROR]', e)
+            console.log('[ERROR][loadCopySnippet]', e);
         }
+    }
+
+    useEffect(() => {
+        loadCopySnippet();
     }, [url, setTextToCopy]);
 
     const enableFacetizerElement = <div>

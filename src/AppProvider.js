@@ -1,22 +1,22 @@
 /*global chrome*/
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppContext from './AppContext';
 import { useSnackbar } from 'notistack';
 import isDevelopment from './utils/isDevelopment';
-import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/facetApiService';
+import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/FacetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { api, storage } from './shared/constant';
+import { api, ChromeRequestType, storage } from './shared/constant';
 import get from 'lodash/get';
-import useEffectAsync from './shared/hooks/useEffectAsync';
 import { loadInitialState } from './highlighter';
-import { getOrPostDomain, triggerApiCall, saveFacets } from './services/facetApiService';
+import { getOrPostDomain, triggerApiCall, saveFacets } from './services/FacetApiService';
 import { HTTPMethods } from './shared/constant';
+import AmplifyService from './services/AmplifyService';
+import { Auth } from 'aws-amplify';
 
 const AppProvider = ({ children }) => {
 
     const { enqueueSnackbar } = useSnackbar();
-
     // TODO these need to change during dev
     const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
     const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
@@ -31,7 +31,21 @@ const AppProvider = ({ children }) => {
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
-    const [authObject, setAuthObject] = useState({});
+    const [authObject, setAuthObject] = useState({ email: '', password: '' });
+
+    /**
+    * TODO this listener should probably live into the Provider
+    */
+    chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+        async function (request, sender, sendResponse) {
+            if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+                let data = await AmplifyService.getCurrentSession();
+                sendResponse({
+                    data
+                });
+            }
+        }
+    );
 
     const onSaveClick = async () => {
         try {
@@ -63,26 +77,28 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    useEffectAsync(async () => {
-        const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
-        if (!isPluginEnabled) {
-            return
-        }
-        const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-        const domainResponse = await getDomain(window.location.hostname, workspaceId);
-        const domainId = get(domainResponse, 'response.id');
-        const getFacetRequest = await getFacet(domainId, window.location.pathname);
-        if (getFacetRequest.status === 200) {
-            const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-            if (fMap.size > 0) {
-                setSelectedFacet(fMap.entries().next().value[0]);
+    useEffect(() => {
+        (async () => {
+            const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
+            if (!isPluginEnabled) {
+                return
             }
-            setFacetMap(new Map(fMap));
-            loadInitialState(fMap);
-        } else {
-            setFacetMap(new Map([['Facet-1', []]]));
-        }
-        setLoadingSideBar(false);
+            const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+            const domainResponse = await getDomain(window.location.hostname, workspaceId);
+            const domainId = get(domainResponse, 'response.id');
+            const getFacetRequest = await getFacet(domainId, window.location.pathname);
+            if (getFacetRequest.status === 200) {
+                const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+                if (fMap.size > 0) {
+                    setSelectedFacet(fMap.entries().next().value[0]);
+                }
+                setFacetMap(new Map(fMap));
+                loadInitialState(fMap);
+            } else {
+                setFacetMap(new Map([['Facet-1', []]]));
+            }
+            setLoadingSideBar(false);
+        })();
     }, []);
 
     const onFacetAdd = (label) => {

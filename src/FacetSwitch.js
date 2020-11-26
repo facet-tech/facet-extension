@@ -14,7 +14,7 @@ const StyledDiv = styled.div`
 function FacetSwitch({ labelOn = 'Navigate', labelOff = 'Edit', callBack, value }) {
     const handleChange = () => {
         callBack(!value);
-    };
+    };    
 
     return (
         <StyledDiv>

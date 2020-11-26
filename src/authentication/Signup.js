@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
@@ -10,20 +10,23 @@ import Alert from '@material-ui/lab/Alert';
 
 export default () => {
 
-  const { authObject, setAuthObject } = React.useContext(AppContext);
+  const { authObject, setAuthObject } = useContext(AppContext);
   const { register, errors, handleSubmit, watch } = useForm({});
-  const { setCurrAuthState } = React.useContext(PopupContext);
+  const { setCurrAuthState } = useContext(PopupContext);
   const [serverError, setServerError] = useState(undefined);
 
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-    console.log(JSON.stringify(data));
     const { email, password } = data;
+    setAuthObject({
+      ...authObject,
+      email
+    });
     try {
       Auth.confirmSignUp()
-      const signUpResponse = await Auth.signUp({
+      await Auth.signUp({
         username: email,
         password,
         attributes: {
@@ -31,13 +34,7 @@ export default () => {
           // 'timestamp': `${Date.now()}`,
         }
       });
-      console.log('signUpResponse', signUpResponse);
-      // tmp remove username altogether
 
-      setAuthObject({
-        ...authObject,
-        username: email
-      })
       setCurrAuthState(authStateConstant.confirmingSignup);
     } catch (error) {
       setServerError(error.message);
@@ -61,6 +58,8 @@ export default () => {
           })}
         />
         {errors.name && <span role="alert">{errors.name.message}</span>}
+        <br />
+        <br />
         <InputLabel htmlFor="sname">Last name</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -72,7 +71,9 @@ export default () => {
           })}
         />
         {errors.lastName && <span role="alert">{errors.lastName.message}</span>}
-        <InputLabel htmlFor="email">email</InputLabel>
+        <br />
+        <br />
+        <InputLabel htmlFor="email">Email</InputLabel>
         <Input
           style={{ width: "100%" }}
           id="email"
@@ -85,15 +86,23 @@ export default () => {
               message: "Entered value does not match email format"
             }
           })}
+          value={authObject.email}
+          onChange={(e) => setAuthObject({
+            ...authObject,
+            email: e.target.value
+          })}
           type="email"
           placeholder="example@mail.com"
         />
         {errors.email && <span role="alert">{errors.email.message}</span>}
+        <br />
+        <br />
         <InputLabel>Password</InputLabel>
         <Input
           style={{ width: "100%" }}
           name="password"
           type="password"
+          aria-invalid={errors.password ? "true" : "false"}
           inputRef={register({
             required: "You must specify a password",
             minLength: {
@@ -101,8 +110,16 @@ export default () => {
               message: "Password must have at least 8 characters"
             }
           })}
+          onChange={(e) => {
+            setAuthObject({
+              ...authObject,
+              password: e.target.value
+            });
+          }}
         />
         {errors.password && <p>{errors.password.message}</p>}
+        <br />
+        <br />
         <InputLabel>Repeat password</InputLabel>
         <Input
           style={{ width: "100%" }}
@@ -115,7 +132,8 @@ export default () => {
         />
         {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
         <br />
-        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" primary={true} onClick={handleSubmit(onSubmit)}>Signup</Button>
+        <br />
+        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Signup</Button>
       </form>
       <br />
       {serverError && <Alert severity="error">{serverError}</Alert>}
