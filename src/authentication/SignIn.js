@@ -2,13 +2,14 @@ import { Auth } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant, isPluginEnabled, storage } from '../shared/constant';
+import { authState as authStateConstant, isPluginEnabled, storage, api as apiConstant } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
 import triggerDOMReload from "../shared/popup/triggerDOMReload";
 import { setKeyInLocalStorage } from "../shared/loadLocalStorage";
+import { getOrCreateWorkspace } from "../services/FacetApiService";
 
 export default () => {
 
@@ -23,16 +24,20 @@ export default () => {
   const onSubmit = async data => {
     const { email, password } = data;
 
+    // abstractify this method... to be used during signup too
     try {
       setAuthObject({
         ...authObject,
         email
       });
       await Auth.signIn(email, password);
-      setCurrAuthState(authStateConstant.signedIn);
+      const workspaceResponse = await getOrCreateWorkspace(email);
+      await setKeyInLocalStorage(apiConstant.workspace.workspaceId, workspaceResponse?.response?.workspaceId);
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
       await setKeyInLocalStorage(storage.password, password);
+
+      setCurrAuthState(authStateConstant.signedIn);
       triggerDOMReload();
     } catch (error) {
       console.log('[ERROR]][SignIn]', error);

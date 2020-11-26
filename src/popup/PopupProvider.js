@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
-import { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage'
+import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
 import { getOrCreateWorkspace } from '../services/facetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
@@ -69,6 +69,7 @@ export default ({ children }) => {
     useEffect(() => {
         loadJWT();
         signInExistingUser();
+        loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
     }, [setJwt]);
 
     // useEffect(() => {

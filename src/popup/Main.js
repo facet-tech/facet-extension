@@ -56,7 +56,6 @@ export default () => {
         async function (request, sender, sendResponse) {
             if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
                 const pgg = await AmplifyService.getCurrentSession();
-                console.log('hi from pgg', pgg);
                 sendResponse({
                     data: pgg
                 });
@@ -103,7 +102,7 @@ export default () => {
             const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
             setTextToCopy(text);
         } catch (e) {
-            console.log('[ERROR]', e)
+            console.log('[ERROR][loadCopySnippet]', e);
         }
     }
 
