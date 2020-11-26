@@ -30,7 +30,7 @@ const AppProvider = ({ children }) => {
     const [selectedFacet, setSelectedFacet] = useState('Facet-1');
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
-    const [authObject, setAuthObject] = useState({ email: '' });
+    const [authObject, setAuthObject] = useState({ email: '', password: '' });
 
     const onSaveClick = async () => {
         try {
@@ -84,7 +84,7 @@ const AppProvider = ({ children }) => {
             }
             setLoadingSideBar(false);
         })();
-    },[]);
+    }, []);
 
     const onFacetAdd = (label) => {
         if (addedFacets.includes(label)) {

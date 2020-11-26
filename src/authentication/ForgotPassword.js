@@ -44,7 +44,6 @@ export default () => {
                             message: "Entered value does not match email format"
                         }
                     })}
-                    value={authObject.email}
                     onChange={(e) => setAuthObject({
                         ...authObject,
                         email: e.target.value

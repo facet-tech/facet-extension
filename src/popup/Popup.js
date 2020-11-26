@@ -21,8 +21,7 @@ export default () => {
     let displayElement;
     if (jwt || currAuthState === authStateConstant.signedIn) {
         displayElement = <Main />;
-    }
-    else if (currAuthState === authStateConstant.signingIn) {
+    } else if (currAuthState === authStateConstant.signingIn) {
         displayElement = <SignIn />;
     } else if (currAuthState === authStateConstant.signingUp) {
         displayElement = <Signup />

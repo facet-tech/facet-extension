@@ -37,12 +37,12 @@ function App() {
       updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
   }
-  console.log('!isPluginEnabled', isPluginEnabled)
+
   return (
     <div>
       {isPluginEnabled ? <div>
         <FacetToolbar />
-      </div> : 'test'}
+      </div> : null}
     </div >
   );
 }

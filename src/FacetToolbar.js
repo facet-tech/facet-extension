@@ -11,7 +11,6 @@ const StyledDiv = styled.div`
     color: white;
 `;
 
-
 export default function FacetToolbar() {
     const { facetMap } = useContext(AppContext);
     const { enqueueSnackbar } = useSnackbar();

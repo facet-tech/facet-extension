@@ -14,9 +14,10 @@ import { useSnackbar } from 'notistack';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import { deleteUser, getDomain, createNewUser } from '../services/FacetApiService';
-import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant } from '../shared/constant';
+import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, ChromeRequestType } from '../shared/constant';
 import { Auth } from 'aws-amplify';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
+import AmplifyService from '../services/AmplifyService';
 
 const GridDiv = styled.div`
     display: grid;
@@ -48,6 +49,21 @@ export default () => {
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
+    /**
+     * TODO this listener should probably live into the Provider
+     */
+    chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+        async function (request, sender, sendResponse) {
+            if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+                const pgg = await AmplifyService.getCurrentSession();
+                console.log('hi from pgg', pgg);
+                sendResponse({
+                    data: pgg
+                });
+            }
+        }
+    );
+
     const logout = () => {
         clearStorage();
         Auth.signOut();
@@ -65,7 +81,7 @@ export default () => {
         enqueueSnackbar(`Invite sent!`, { variant: "success" });
     }
 
-    const onEnablePluginCB = (e) => {
+    const onEnablePluginCB = async (e) => {
         chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async function (response) {
                 setKeyInLocalStorage(isPluginEnabledConstant, e);
@@ -74,6 +90,7 @@ export default () => {
                 setIsPluginEnabled(isPluginEnabledValue);
             });
         });
+        const gg = await AmplifyService.getCurrentUserJTW();
         setKeyInLocalStorage(isPluginEnabledConstant, e);
         setIsPluginEnabled(e);
     }
