@@ -35,21 +35,6 @@ export default ({ children }) => {
         setLoadLogin(val);
     }
 
-    // useEffect(() => {
-    //     (async () => {
-    //         loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated);
-
-    //         const loadURL = () => {
-    //             chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
-    //                 let websiteUrl = tabs[0] && tabs[0].url;
-    //                 setUrl(websiteUrl);
-    //             });
-    //         }
-    //         loadURL();
-    //         loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
-    //     })();
-    // }, [setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId]);
-
     const loadJWT = async () => {
         const jwt = await AmplifyService.getCurrentUserJTW();
         setJwt(jwt);
@@ -71,20 +56,6 @@ export default ({ children }) => {
         signInExistingUser();
         loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
     }, [setJwt]);
-
-    // useEffect(() => {
-    //     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated);
-
-    //     const loadURL = () => {
-    //         chrome.tabs && chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
-    //             let websiteUrl = tabs[0] && tabs[0].url;
-    //             setUrl(websiteUrl);
-    //         });
-    //     }
-
-    //     loadURL();
-    //     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
-    // }, [setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId]);
 
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
