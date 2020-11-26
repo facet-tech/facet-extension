@@ -12,7 +12,7 @@ jobs:
 
       - name: Building the Application
         env:
-          CI: true
+          CI: false
         run: yarn build
 
   # todo run tests eventually
