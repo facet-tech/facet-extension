@@ -17,7 +17,6 @@ import { deleteUser, getDomain, createNewUser } from '../Services/FacetApiServic
 import { api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, ChromeRequestType } from '../shared/constant';
 import { Auth } from 'aws-amplify';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import AmplifyService from '../services/AmplifyService';
 
 const GridDiv = styled.div`
     display: grid;

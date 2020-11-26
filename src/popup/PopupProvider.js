@@ -6,7 +6,7 @@ import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from '
 import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
 import { getOrCreateWorkspace } from '../Services/FacetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import AmplifyService from '../services/AmplifyService';
+import AmplifyService from '../Services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
 export default ({ children }) => {

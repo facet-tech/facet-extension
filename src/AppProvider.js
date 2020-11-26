@@ -10,7 +10,7 @@ import { api, ChromeRequestType, storage } from './shared/constant';
 import get from 'lodash/get';
 import { loadInitialState } from './highlighter';
 import { HTTPMethods } from './shared/constant';
-import AmplifyService from './services/AmplifyService';
+import AmplifyService from './Services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
 const AppProvider = ({ children }) => {
