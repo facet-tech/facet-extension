@@ -33,6 +33,16 @@ export default () => {
         }
     };
 
+    const resendConfirmationCode = async () => {
+        try {
+            const response = await Auth.resendSignUp(authObject.email);
+            console.log('respose!', response);
+            enqueueSnackbar(`Confirmation code has been sent in your email.`, { variant: "success" });
+        } catch (e) {
+            console.log('[ERROR]', e);
+        }
+    }
+
     return (
         <React.Fragment>
             <div style={{ textAlign: 'center' }}>
@@ -41,7 +51,7 @@ export default () => {
             <br />
             <div>
                 Check your email, a verification code has been sent. Don't see the code?
-            <Link href="#">
+            <Link href="#" onClick={() => { resendConfirmationCode() }}>
                     {' '}Click here to resend
             </Link>
             </div>

@@ -83,6 +83,14 @@ export default () => {
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
+        <br />
+        <div>
+          Forgot your password?
+        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)}>
+            {' '}Click here to reset it.
+        </Link>
+        </div>
+        <br />
         <div >
           <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Login</Button>
         </div>

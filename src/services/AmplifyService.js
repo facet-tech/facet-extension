@@ -6,12 +6,12 @@ import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 class AmplifyService {
 
     /**
-     * * Promise wrapper for chrome.tabs.sendMessage
+     * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
      */
     static sendMessagePromise = () => {
         return new Promise((resolve, reject) => {
-            chrome.runtime.sendMessage({
+            chrome?.runtime?.sendMessage({
                 data: ChromeRequestType.GET_LOGGED_IN_USER
             }, async function (response) {
                 if (!response) {

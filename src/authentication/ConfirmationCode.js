@@ -7,8 +7,10 @@ import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import Alert from '@material-ui/lab/Alert';
+import { useSnackbar } from 'notistack';
 
 export default () => {
+    const { enqueueSnackbar } = useSnackbar();
     const { authObject } = React.useContext(AppContext);
     const { setCurrAuthState } = React.useContext(PopupContext);
     const { register, errors, handleSubmit, watch } = useForm({});
@@ -20,13 +22,21 @@ export default () => {
         const { confirmationCode } = data;
 
         try {
-            // handle this properly..
             const confirmSignUpResponse = await Auth.confirmSignUp(authObject.email, confirmationCode);
             setCurrAuthState(authStateConstant.signedIn);
         } catch (error) {
             setServerError(error.message);
         }
     };
+
+    const resendConfirmationCode = async () => {
+        try {
+            const response = await Auth.resendSignUp(authObject.email);
+            enqueueSnackbar(`Confirmation code has been sent in your email.`, { variant: "success" });
+        } catch (e) {
+            console.log('[ERROR]', e);
+        }
+    }
 
     return (
         <React.Fragment>
@@ -36,8 +46,8 @@ export default () => {
             <br />
             <div>
                 Check your email, a confirmation code has been sent. Don't see the code?
-            <Link href="#">
-                {' '}Click here to resend
+            <Link href="#" onClick={() => { resendConfirmationCode() }}>
+                {' '}Click here to resend.
             </Link>
             </div>
             <br />
