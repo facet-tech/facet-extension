@@ -1,8 +1,9 @@
 /*global chrome*/
-import { ChromeRequestType } from '../shared/constant';
+import { ChromeRequestType, storage } from '../shared/constant';
 import { Auth } from "aws-amplify";
+import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 
-export default class {
+class AmplifyService {
 
     /**
      * * Promise wrapper for chrome.tabs.sendMessage
@@ -12,7 +13,14 @@ export default class {
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage({
                 data: ChromeRequestType.GET_LOGGED_IN_USER
-            }, function (response) {
+            }, async function (response) {
+                if (!response) {
+                    const email = await getKeyFromLocalStorage(storage.username);
+                    const password = await getKeyFromLocalStorage(storage.password);
+                    await Auth.signIn(email, password);
+                    let ans = await AmplifyService.getCurrentSession();
+                    resolve(ans);
+                }
                 resolve(response && response.data);
             });
         })
@@ -40,3 +48,5 @@ export default class {
         }
     }
 }
+
+export default AmplifyService;

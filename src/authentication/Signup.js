@@ -19,7 +19,6 @@ export default () => {
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-
     const { email, password } = data;
     setAuthObject({
       ...authObject,
@@ -27,7 +26,7 @@ export default () => {
     });
     try {
       Auth.confirmSignUp()
-      const signUpResponse = await Auth.signUp({
+      await Auth.signUp({
         username: email,
         password,
         attributes: {
@@ -41,8 +40,6 @@ export default () => {
       setServerError(error.message);
     }
   };
-
-  console.log('qq: ', authObject);
 
   return (
     <React.Fragment>

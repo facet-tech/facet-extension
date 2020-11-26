@@ -49,20 +49,6 @@ export default () => {
     const [invitee, setInvitee] = useState('');
     const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
-    /**
-     * TODO this listener should probably live into the Provider
-     */
-    chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
-        async function (request, sender, sendResponse) {
-            if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
-                const pgg = await AmplifyService.getCurrentSession();
-                sendResponse({
-                    data: pgg
-                });
-            }
-        }
-    );
-
     const logout = () => {
         clearStorage();
         Auth.signOut();
@@ -89,7 +75,6 @@ export default () => {
                 setIsPluginEnabled(isPluginEnabledValue);
             });
         });
-        const gg = await AmplifyService.getCurrentUserJTW();
         setKeyInLocalStorage(isPluginEnabledConstant, e);
         setIsPluginEnabled(e);
     }

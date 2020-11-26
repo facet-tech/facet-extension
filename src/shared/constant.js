@@ -32,7 +32,7 @@ const APIUrl = {
     apiBaseURL,
     testBaseURL,
     localBaseURL,
-    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
+    activeBaseURL: !isDevelopment() ? localBaseURL : apiBaseURL
 };
 
 const LoginTypes = {

@@ -6,12 +6,13 @@ import { useSnackbar } from 'notistack';
 import isDevelopment from './utils/isDevelopment';
 import { getFacet, getDomain, convertGetFacetResponseToMap } from './services/FacetApiService';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { api, storage } from './shared/constant';
+import { api, ChromeRequestType, storage } from './shared/constant';
 import get from 'lodash/get';
-import useEffectAsync from './shared/hooks/useEffectAsync';
 import { loadInitialState } from './highlighter';
 import { getOrPostDomain, triggerApiCall, saveFacets } from './services/FacetApiService';
 import { HTTPMethods } from './shared/constant';
+import AmplifyService from './services/AmplifyService';
+import { Auth } from 'aws-amplify';
 
 const AppProvider = ({ children }) => {
 
@@ -31,6 +32,20 @@ const AppProvider = ({ children }) => {
     const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
     const [loadingSideBar, setLoadingSideBar] = useState(true);
     const [authObject, setAuthObject] = useState({ email: '', password: '' });
+
+    /**
+ * TODO this listener should probably live into the Provider
+ */
+    chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+        async function (request, sender, sendResponse) {
+            if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+                let data = await AmplifyService.getCurrentSession();
+                sendResponse({
+                    data
+                });
+            }
+        }
+    );
 
     const onSaveClick = async () => {
         try {

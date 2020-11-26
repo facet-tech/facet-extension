@@ -24,7 +24,7 @@ export default () => {
   const onSubmit = async data => {
     const { email, password } = data;
 
-    // abstractify this method... to be used during signup too
+    // abstract this method... to be used during signup too
     try {
       setAuthObject({
         ...authObject,
