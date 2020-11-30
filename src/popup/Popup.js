@@ -3,13 +3,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PopupContext from './PopupContext';
-import Main from './Main';
 import SignIn from '../authentication/SignIn';
 import Signup from '../authentication/Signup';
 import { authState as authStateConstant } from '../shared/constant';
 import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
+import Main from './Main';
 
 const StyledDiv = styled.div`
     width: 20rem;
