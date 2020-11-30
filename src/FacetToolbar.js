@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import AppContext from './AppContext';
-import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar.jsx';
+import FacetTreeSideBar from './FacetTreeSideBar/FacetTreeSideBar';
 
 const StyledDiv = styled.div`
     width: ${(props) => (props.drawer ? '100%' : '0')};
