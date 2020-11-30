@@ -33,7 +33,7 @@
         "react-dev-utils": "^3.0.2",
         "react-dom": "^16.13.1",
         "react-error-overlay": "^1.0.9",
-        "react-google-login": "^5.1.21",
+        "react-google-login": "^5.1.22",
         "react-hook-form": "^6.11.3",
         "react-router-dom": "^5.2.0",
         "style-loader": "0.18.2",
