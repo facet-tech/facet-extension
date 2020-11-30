@@ -25,7 +25,7 @@
         "jest": "26.6.3",
         "lodash": "^4.17.20",
         "object-assign": "4.1.1",
-        "postcss-flexbugs-fixes": "3.0.0",
+        "postcss-flexbugs-fixes": "3.3.1",
         "postcss-loader": "2.0.6",
         "process": "^0.11.10",
         "promise": "7.3.1",
