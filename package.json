@@ -11,7 +11,7 @@
         "@sentry/tracing": "^5.25.0",
         "autoprefixer": "7.2.6",
         "aws-amplify": "^3.3.8",
-        "case-sensitive-paths-webpack-plugin": "2.1.1",
+        "case-sensitive-paths-webpack-plugin": "2.3.0",
         "chalk": "^4.1.0",
         "css-loader": "0.28.4",
         "dotenv": "4.0.0",
