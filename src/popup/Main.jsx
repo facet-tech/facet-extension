@@ -18,7 +18,6 @@ import {
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { createNewUser, deleteUser, getDomain } from '../services/FacetApiService';
-import PopupContext from './PopupContext';
 import AppContext from '../AppContext';
 
 const GridDiv = styled.div`

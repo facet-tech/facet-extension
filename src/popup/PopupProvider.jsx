@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
-import { getOrCreateWorkspace } from '../Services/FacetApiService';
+import { getOrCreateWorkspace } from '../services/FacetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import AmplifyService from '../Services/AmplifyService';
+import AmplifyService from '../services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
 // THIS IS NOT BEING USED.

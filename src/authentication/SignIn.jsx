@@ -13,7 +13,7 @@ import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
-import { getOrCreateWorkspace } from '../Services/FacetApiService';
+import { getOrCreateWorkspace } from '../services/FacetApiService';
 
 export default () => {
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
