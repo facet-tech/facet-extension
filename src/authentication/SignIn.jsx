@@ -33,6 +33,7 @@ export default () => {
     try {
       await Auth.signIn(email, password);
       const workspaceResponse = await getOrCreateWorkspace(email);
+      console.log('@WORKSPACERESPONSE',workspaceResponse);
       await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
         workspaceResponse?.response?.workspaceId);
       await setKeyInLocalStorage(isPluginEnabled, true);

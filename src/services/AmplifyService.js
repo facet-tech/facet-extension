@@ -33,6 +33,7 @@ class AmplifyService {
         })
     }
 
+    // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
             const jwtToken = await this.sendMessagePromise();
