@@ -32,7 +32,7 @@ class AmplifyService {
             });
         })
     }
-
+    
     // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
@@ -42,7 +42,7 @@ class AmplifyService {
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)
             return undefined;
-        }
+        } 
     }
 
     static getCurrentSession = async () => {

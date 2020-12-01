@@ -8,7 +8,7 @@ import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets,
-} from './services/FacetApiService';
+} from './services/facetApiService';
 import loadLocalStorage, { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import {
   api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,

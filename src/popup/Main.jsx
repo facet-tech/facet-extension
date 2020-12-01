@@ -17,7 +17,7 @@ import {
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import { createNewUser, deleteUser, getDomain } from '../services/FacetApiService';
+import { createNewUser, deleteUser, getDomain } from '../services/facetApiService';
 import AppContext from '../AppContext';
 
 const GridDiv = styled.div`
