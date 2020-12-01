@@ -33,7 +33,6 @@ const constructPayload = (domainId = '', urlPath = '', path = []) => {
 const triggerApiCall = async (method, urlSuffix = '', body) => {
     try {
         let jwt = await AmplifyService.getCurrentUserJTW();
-        console.log('JWT',jwt);
         let headers = {
             AccessToken: jwt,
         };
@@ -87,7 +86,6 @@ const createDomain = async (domain, workspaceId) => {
 }
 
 const getDomain = async (domainName, workspaceId) => {
-    console.log('@getDomain',domainName);
     if (process.env.NODE_ENV === 'development') {
         return MockService.mockGetDomain();
     }
@@ -97,7 +95,6 @@ const getDomain = async (domainName, workspaceId) => {
 }
 
 const getOrPostDomain = async (workspaceId) => {
-    console.log('@GETORPOSTDOMAIN',window.location);
     try {
         let domainRes = await getDomain(window.location.hostname, workspaceId);
         const domainExists = domainRes && domainRes.response.id !== undefined;

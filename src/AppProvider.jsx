@@ -45,7 +45,6 @@ const AppProvider = ({ children }) => {
       // deprecate this..
       const [loadLogin, setLoadLogin] = useState(false);
       const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-      console.log('@currST8',currAuthState);
       const login = async () => {
           const workspaceResponse = await getOrCreateWorkspace(email);
           setIsUserAuthenticated(true);
@@ -134,6 +133,7 @@ const AppProvider = ({ children }) => {
         return;
       }
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      console.log('@APPRPOVIDER',window.location);
       const domainResponse = await getDomain(window.location.hostname, workspaceId);
       const domainId = get(domainResponse, 'response.id');
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
