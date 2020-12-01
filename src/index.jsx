@@ -11,9 +11,8 @@ import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
 import { styles } from './shared/constant';
 import awsExports from './aws-exports';
-import Popup from './Popup/Popup';
+import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
-import SomeNewProvider from './popup/SomeNewProvider';
 
 Amplify.configure(awsExports);
 
