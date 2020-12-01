@@ -16,7 +16,8 @@ const authState = {
     signUp: 'SIGN_UP',
     signingUp: 'SIGNING_UP',
     confirmingSignup: 'CONFIRMING_SIGNUP',
-    onForgotPassword: 'FORGOT_PASSWORD'
+    onForgotPassword: 'FORGOT_PASSWORD',
+    onPasswordReset: 'PASSWORD_RESET'
 };
 
 // information persisted in sync.storage

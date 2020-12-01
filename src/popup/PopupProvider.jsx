@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import PopupContext from './PopupContext';
 import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage'
 import { LoginTypes, storage, api, authState as authStateConstant } from '../shared/constant';
-import { getOrCreateWorkspace } from '../Services/FacetApiService';
+import { getOrCreateWorkspace } from '../services/facetApiService';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import AmplifyService from '../Services/AmplifyService';
+import AmplifyService from '../services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
+// THIS IS NOT BEING USED.
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
@@ -21,7 +22,6 @@ export default ({ children }) => {
     // deprecate this..
     const [loadLogin, setLoadLogin] = useState(false);
     const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
         setIsUserAuthenticated(true);

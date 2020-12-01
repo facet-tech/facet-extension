@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import AppContext from './AppContext';
-import FacetTreeSideBar from './FacetTreeSideBar/FacetTreeSideBar';
+import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
 
 const StyledDiv = styled.div`
     width: ${(props) => (props.drawer ? '100%' : '0')};

@@ -20,6 +20,7 @@ import { defaultFacet, styles } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
+import FacetSwitch from '../FacetSwitch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -220,14 +221,6 @@ export default function FacetTreeSideBar() {
         <div className={classes.gridDiv}>
           <div>
             <h3>Facets</h3>
-          </div>
-          <div>
-            <Typography gutterBottom>
-              Enable Plugin:
-            </Typography>
-          </div>
-          <div>
-            <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
           </div>
         </div>
         <div className={classes.drawerHeader}>

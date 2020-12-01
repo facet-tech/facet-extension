@@ -32,7 +32,8 @@ class AmplifyService {
             });
         })
     }
-
+    
+    // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
             const jwtToken = await this.sendMessagePromise();
@@ -41,7 +42,7 @@ class AmplifyService {
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)
             return undefined;
-        }
+        } 
     }
 
     static getCurrentSession = async () => {

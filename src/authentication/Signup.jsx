@@ -12,7 +12,7 @@ export default () => {
 
   const { authObject, setAuthObject } = useContext(AppContext);
   const { register, errors, handleSubmit, watch } = useForm({});
-  const { setCurrAuthState } = useContext(PopupContext);
+  const { setCurrAuthState } = useContext(AppContext);
   const [serverError, setServerError] = useState(undefined);
 
   const password = useRef({});

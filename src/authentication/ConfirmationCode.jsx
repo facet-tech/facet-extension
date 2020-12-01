@@ -12,7 +12,7 @@ import { useSnackbar } from 'notistack';
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { authObject } = React.useContext(AppContext);
-    const { setCurrAuthState } = React.useContext(PopupContext);
+    const { setCurrAuthState } = React.useContext(AppContext);
     const { register, errors, handleSubmit, watch } = useForm({});
     const [serverError, setServerError] = useState(undefined);
     const password = useRef({});

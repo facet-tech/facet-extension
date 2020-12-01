@@ -3,7 +3,7 @@ import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
-import parsePath from "../shared/parsePath";
+import parsePath from "../shared/parsePath";  
 import AmplifyService from "./AmplifyService";
 
 /**

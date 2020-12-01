@@ -8,11 +8,11 @@ import { Integrations } from '@sentry/tracing';
 import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
-import PopupProvider from './popup/PopupProvider';
 import CoreProvider from './CoreProvider';
 import { styles } from './shared/constant';
 import awsExports from './aws-exports';
-import Popup from './Popup/Popup';
+import Popup from './popup/Popup';
+import PopupProvider from './popup/PopupProvider';
 
 Amplify.configure(awsExports);
 
@@ -61,6 +61,7 @@ if (document.getElementById('facetizer')) {
             </CoreProvider>
           </AppProvider>
         </SnackbarProvider>
+
       </div>
     </React.StrictMode>,
     document.getElementById('facetizer'),
@@ -84,13 +85,13 @@ if (document.getElementById('popup')) {
           horizontal: 'left',
         }}
       >
-        <AppProvider>
-          <PopupProvider>
-            <div id="popup-container">
-              <Popup />
-            </div>
-          </PopupProvider>
-        </AppProvider>
+        <div style={{display: 'grid'}}>
+          <AppProvider id='gg'>
+            <PopupProvider id='popup-provider'>
+              <Popup id='facet-popup' />
+            </PopupProvider>
+          </AppProvider>
+        </div>
       </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('popup'),

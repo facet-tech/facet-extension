@@ -2,7 +2,6 @@
 
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import PopupContext from './PopupContext';
 import SignIn from '../authentication/SignIn';
 import Signup from '../authentication/Signup';
 import { authState as authStateConstant } from '../shared/constant';
@@ -10,14 +9,18 @@ import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
 import Main from './Main';
+import AppContext from '../AppContext';
 
 const StyledDiv = styled.div`
     width: 20rem;
+    align-self: center;
+    justify-self: center;
 `;
 
 export default () => {
-  const { currAuthState, jwt } = useContext(PopupContext);
-
+  const context = useContext(AppContext);
+  const popupContext = React.useContext(AppContext);
+  const { currAuthState, jwt } = useContext(AppContext);
   let displayElement;
   if (jwt || currAuthState === authStateConstant.signedIn) {
     displayElement = <Main />;
