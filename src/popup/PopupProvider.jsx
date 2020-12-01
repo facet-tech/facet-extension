@@ -9,6 +9,8 @@ import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import AmplifyService from '../Services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
+
+// THIS IS NOT BEING USED.
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
@@ -21,7 +23,7 @@ export default ({ children }) => {
     // deprecate this..
     const [loadLogin, setLoadLogin] = useState(false);
     const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-
+    // console.log('@currST8',currAuthState);
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
         setIsUserAuthenticated(true);

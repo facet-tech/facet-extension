@@ -11,7 +11,7 @@ import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import AppContext from '../AppContext';
 
 export default () => {
-  const { setCurrAuthState } = useContext(PopupContext);
+  const { setCurrAuthState } = useContext(AppContext);
   const {
     register, errors, handleSubmit, watch,
   } = useForm({});

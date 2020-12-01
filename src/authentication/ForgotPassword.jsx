@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
 
 export default () => {
-    const { setCurrAuthState } = React.useContext(PopupContext);
+    const { setCurrAuthState } = React.useContext(AppContext);
     const { authObject, setAuthObject } = React.useContext(AppContext);
     const { register, errors, handleSubmit } = useForm({});
     const [serverError, setServerError] = useState(undefined);

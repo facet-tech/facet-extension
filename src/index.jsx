@@ -8,11 +8,12 @@ import { Integrations } from '@sentry/tracing';
 import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
-import PopupProvider from './popup/PopupProvider';
 import CoreProvider from './CoreProvider';
 import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './Popup/Popup';
+import PopupProvider from './popup/PopupProvider';
+import SomeNewProvider from './popup/SomeNewProvider';
 
 Amplify.configure(awsExports);
 
@@ -39,6 +40,7 @@ if (!document.getElementById('popup')) {
 }
 
 if (document.getElementById('facetizer')) {
+  console.log('LOADARA 1')
   ReactDOM.render(
     <React.StrictMode>
       <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
@@ -56,11 +58,12 @@ if (document.getElementById('facetizer')) {
           }}
         >
           <AppProvider>
-            <CoreProvider>
-              <App />
-            </CoreProvider>
+              <CoreProvider>
+                <App />
+              </CoreProvider>
           </AppProvider>
         </SnackbarProvider>
+
       </div>
     </React.StrictMode>,
     document.getElementById('facetizer'),
@@ -69,6 +72,7 @@ if (document.getElementById('facetizer')) {
 
 // TODO fix duplication
 if (document.getElementById('popup')) {
+  console.log('LOADARA 2')
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
@@ -84,13 +88,13 @@ if (document.getElementById('popup')) {
           horizontal: 'left',
         }}
       >
-        <AppProvider>
-          <PopupProvider>
-            <div id="popup-container">
-              <Popup />
-            </div>
-          </PopupProvider>
-        </AppProvider>
+        <SomeNewProvider>
+          <AppProvider id='gg'>
+            <PopupProvider id='popup-provider'>
+              <Popup id='facet-popup' />
+            </PopupProvider>
+          </AppProvider>
+        </SomeNewProvider>
       </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('popup'),

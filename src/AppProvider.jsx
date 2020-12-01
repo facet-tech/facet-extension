@@ -9,12 +9,11 @@ import isDevelopment from './utils/isDevelopment';
 import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets,
 } from './Services/FacetApiService';
-import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import loadLocalStorage, { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import {
-  api, ChromeRequestType, storage, HTTPMethods,
+  api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
 } from './shared/constant';
 import { loadInitialState } from './highlighter';
-
 import AmplifyService from './Services/AmplifyService';
 
 const AppProvider = ({ children }) => {
@@ -34,6 +33,55 @@ const AppProvider = ({ children }) => {
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [loadingSideBar, setLoadingSideBar] = useState(true);
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
+
+  //popup stuff
+      // email,id:  
+      const [loggedInUser, setLoggedInUser] = useState({});
+      const [url, setUrl] = useState('');
+      const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+      const [email, setEmail] = useState('');
+      const [workspaceId, setWorkspaceId] = useState(undefined);
+      const [jwt, setJwt] = useState('');
+      // deprecate this..
+      const [loadLogin, setLoadLogin] = useState(false);
+      const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
+      console.log('@currST8',currAuthState);
+      const login = async () => {
+          const workspaceResponse = await getOrCreateWorkspace(email);
+          setIsUserAuthenticated(true);
+          await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
+          await setKeyInLocalStorage(storage.isPluginEnabled, true);
+          await setKeyInLocalStorage(LoginTypes.email, email);
+          triggerDOMReload();
+      }
+  
+      const onLoginClick = (val) => {
+          setLoadLogin(val);
+      }
+  
+      const loadJWT = async () => {
+          const jwt = await AmplifyService.getCurrentUserJTW();
+          setJwt(jwt);
+      }
+  
+      const signInExistingUser = async () => {
+          try {
+              const username = await getKeyFromLocalStorage(storage.username);
+              const password = await getKeyFromLocalStorage(storage.password);
+              await Auth.signIn(username, password);
+              setCurrAuthState(authStateConstant.signedIn);
+          } catch (e) {
+              console.log('[ERROR][signInExistingUser]', e);
+          }
+      }
+  
+      useEffect(() => {
+          loadJWT();
+          signInExistingUser();
+          loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
+      }, [setJwt]);
+  
+
 
   /**
     * TODO this listener should probably live into the Provider
@@ -81,8 +129,8 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const isPluginEnabled = await getKeyFromLocalStorage(storage.isPluginEnabled);
-      if (!isPluginEnabled) {
+      const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
+      if (!isPluginEnabledVal) {
         return;
       }
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
@@ -148,6 +196,10 @@ const AppProvider = ({ children }) => {
       reset,
       authObject,
       setAuthObject,
+
+      loggedInUser, setLoggedInUser, url, setUrl,  login, isUserAuthenticated, setIsUserAuthenticated,
+        workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+        currAuthState, setCurrAuthState, jwt, setJwt
     }}
     >
       {children}

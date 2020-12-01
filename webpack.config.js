@@ -13,7 +13,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 module.exports = (_, argv) => {
     return {
         mode: argv.mode,
-        entry: path.resolve(__dirname, './src/index.js'),
+        entry: path.resolve(__dirname, './src/index.jsx'),
         optimization: {
             // We no not want to minimize our code.
             minimize: false
@@ -67,6 +67,7 @@ module.exports = (_, argv) => {
                     { from: "./public/manifest.json", to: "./" },
                     { from: "./public/facet_ninja_logo.png", to: "./" },
                     { from: "./public/popup.html", to: "./" },
+                    { from: "./public/background.js", to: "./" },
                 ],
             }),
             // fix "process is not defined" error: https://stackoverflow.com/a/64553486/1373465

@@ -16,8 +16,8 @@ import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import { getOrCreateWorkspace } from '../Services/FacetApiService';
 
 export default () => {
-  const { authObject, setAuthObject } = React.useContext(AppContext);
-  const { setCurrAuthState } = React.useContext(PopupContext);
+  const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
+  // const {  } = React.useContext(PopupContext);
   const {
     register, errors, handleSubmit, watch,
   } = useForm({});
@@ -106,7 +106,9 @@ export default () => {
       <br />
       <div>
         Don't have an account?
-        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
+        <Link href="#" onClick={() => {
+         setCurrAuthState(authStateConstant.signingUp)
+        }}>
           {' '}
           Sign up
         </Link>
