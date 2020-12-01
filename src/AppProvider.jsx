@@ -14,7 +14,7 @@ import {
   api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
 } from './shared/constant';
 import { loadInitialState } from './highlighter';
-import AmplifyService from './Services/AmplifyService';
+import AmplifyService from './services/AmplifyService';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
