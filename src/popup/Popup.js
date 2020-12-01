@@ -15,6 +15,8 @@ import SomeNewContext from './SomeNewContext';
 
 const StyledDiv = styled.div`
     width: 20rem;
+    align-self: center;
+    justify-self: center;
 `;
 
 export default () => {

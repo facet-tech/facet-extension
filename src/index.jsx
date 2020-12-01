@@ -40,7 +40,6 @@ if (!document.getElementById('popup')) {
 }
 
 if (document.getElementById('facetizer')) {
-  console.log('LOADARA 1')
   ReactDOM.render(
     <React.StrictMode>
       <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
@@ -58,9 +57,9 @@ if (document.getElementById('facetizer')) {
           }}
         >
           <AppProvider>
-              <CoreProvider>
-                <App />
-              </CoreProvider>
+            <CoreProvider>
+              <App />
+            </CoreProvider>
           </AppProvider>
         </SnackbarProvider>
 
@@ -72,7 +71,6 @@ if (document.getElementById('facetizer')) {
 
 // TODO fix duplication
 if (document.getElementById('popup')) {
-  console.log('LOADARA 2')
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
@@ -88,13 +86,13 @@ if (document.getElementById('popup')) {
           horizontal: 'left',
         }}
       >
-        <SomeNewProvider>
+        <div style={{display: 'grid'}}>
           <AppProvider id='gg'>
             <PopupProvider id='popup-provider'>
               <Popup id='facet-popup' />
             </PopupProvider>
           </AppProvider>
-        </SomeNewProvider>
+        </div>
       </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('popup'),
