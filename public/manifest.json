@@ -7,13 +7,8 @@
         "512": "facet_ninja_logo.png"
     },
     "browser_action": {
-        "default_icon": "facet_ninja_logo.png"
-    },
-    "background": {
-        "persistent": false,
-        "scripts": [
-            "background.js"
-        ]
+        "default_icon": "facet_ninja_logo.png",
+        "default_popup": "popup.html"
     },
     "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",
     "content_scripts": [

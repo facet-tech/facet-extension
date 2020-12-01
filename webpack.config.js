@@ -67,7 +67,7 @@ module.exports = (_, argv) => {
                     { from: "./public/manifest.json", to: "./" },
                     { from: "./public/facet_ninja_logo.png", to: "./" },
                     { from: "./public/popup.html", to: "./" },
-                    { from: "./public/background.js", to: "./" },
+                    { from: "./public/authentication.html", to: "./" },
                 ],
             }),
             // fix "process is not defined" error: https://stackoverflow.com/a/64553486/1373465

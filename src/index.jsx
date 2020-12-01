@@ -13,8 +13,13 @@ import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
+import SignIn from './authentication/SignIn';
+import Main from './popup/Main';
+import isUserLoggedIn from './shared/isUserLoggedIn';
 
 Amplify.configure(awsExports);
+
+// TODO fix duplication
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
@@ -28,6 +33,8 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
+
+// TODO this needs cleanup
 if (!document.getElementById('popup')) {
   const { body } = document;
   const facetDiv = document.createElement('div');
@@ -38,7 +45,34 @@ if (!document.getElementById('popup')) {
   }
 }
 
-if (document.getElementById('facetizer')) {
+console.log('CHECKARE ME', document.getElementById('authentication'));
+if (document.getElementById('authentication')) {
+  console.log('AT AUTH');
+  ReactDOM.render(
+    <React.StrictMode>
+      <SnackbarProvider
+        maxSnack={4}
+        disableWindowBlurListener
+        autoHideDuration={5000}
+        iconVariant={{
+          error: '✖️',
+          warning: '⚠️',
+        }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <div>
+          <AppProvider>
+            <Popup />
+          </AppProvider>
+        </div>
+      </SnackbarProvider>
+    </React.StrictMode>,
+    document.getElementById('authentication'),
+  );
+} else if (document.getElementById('facetizer')) {
   ReactDOM.render(
     <React.StrictMode>
       <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
@@ -66,34 +100,46 @@ if (document.getElementById('facetizer')) {
     </React.StrictMode>,
     document.getElementById('facetizer'),
   );
-}
+} else if (document.getElementById('popup')) {
 
-// TODO fix duplication
-if (document.getElementById('popup')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SnackbarProvider
-        maxSnack={4}
-        disableWindowBlurListener
-        autoHideDuration={5000}
-        iconVariant={{
-          error: '✖️',
-          warning: '⚠️',
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div style={{display: 'grid'}}>
-          <AppProvider id='gg'>
-            <PopupProvider id='popup-provider'>
-              <Popup id='facet-popup' />
-            </PopupProvider>
-          </AppProvider>
-        </div>
-      </SnackbarProvider>
-    </React.StrictMode>,
-    document.getElementById('popup'),
-  );
+  (async () => {
+    try {
+      console.log('MPIKA')
+      const userHasLoggedIn = await isUserLoggedIn();
+      console.log('ELA', userHasLoggedIn);
+      if (userHasLoggedIn) {
+        ReactDOM.render(
+          <React.StrictMode>
+            <SnackbarProvider
+              maxSnack={4}
+              disableWindowBlurListener
+              autoHideDuration={5000}
+              iconVariant={{
+                error: '✖️',
+                warning: '⚠️',
+              }}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <div style={{ display: 'grid' }}>
+                <AppProvider id='gg'>
+                  <PopupProvider id='popup-provider'>
+                    <Popup id='facet-popup' />
+                  </PopupProvider>
+                </AppProvider>
+              </div>
+            </SnackbarProvider>
+          </React.StrictMode>,
+          document.getElementById('popup'),
+        );
+      } else {
+        chrome.tabs.create({ url: chrome.extension.getURL('authentication.html') });
+      }
+    } catch (e) {
+      console.log('eela man error ',e);
+      // Deal with the fact the chain failed
+    }
+  })();
 }
