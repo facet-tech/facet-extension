@@ -57,6 +57,7 @@ export default () => {
     Auth.signOut();
     setCurrAuthState(authStateConstant.signingIn);
     setJwt(undefined);
+    window.close();
     triggerDOMReload();
   };
 

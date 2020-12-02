@@ -46,7 +46,8 @@ const storage = {
     isPluginEnabled,
     isUserAuthenticated,
     username: 'username',
-    password: 'password'
+    password: 'password',
+    initiatingTabId: 'INITIATING_TAB_ID'
 };
 
 const ChromeRequestType = {

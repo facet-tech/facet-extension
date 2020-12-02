@@ -31,13 +31,13 @@ export default () => {
 
     // abstract this method... to be used during signup too
     try {
+      await setKeyInLocalStorage(isPluginEnabled, true);
+      await setKeyInLocalStorage(storage.username, email);
+      await setKeyInLocalStorage(storage.password, password);
       await Auth.signIn(email, password);
       const workspaceResponse = await getOrCreateWorkspace(email);
       await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
         workspaceResponse?.response?.workspaceId);
-      await setKeyInLocalStorage(isPluginEnabled, true);
-      await setKeyInLocalStorage(storage.username, email);
-      await setKeyInLocalStorage(storage.password, password);
       setCurrAuthState(authStateConstant.signedIn);
       setAuthObject({
         ...authObject,
@@ -84,7 +84,6 @@ export default () => {
           inputRef={register({
             required: 'Please specify a password',
           })}
-          placeholder="example@mail.com"
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />

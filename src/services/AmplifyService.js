@@ -5,11 +5,17 @@ import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 
 class AmplifyService {
 
+    static sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     /**
      * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
+     * 
+     * Request is retried 3 times maximum
      */
-    static sendMessagePromise = () => {
+    static sendMessagePromise = (counter = 0) => {
         return new Promise((resolve, reject) => {
             chrome?.runtime?.sendMessage({
                 data: ChromeRequestType.GET_LOGGED_IN_USER
@@ -18,31 +24,34 @@ class AmplifyService {
                     console.log('[local storage]:', obj);
                 });
                 if (!response) {
+                    await AmplifyService.sleep(2000);
                     const email = await getKeyFromLocalStorage(storage.username);
                     const password = await getKeyFromLocalStorage(storage.password);
-                    // u need retry logic...
-                    if (!email || !password) {
-                        resolve(undefined);
-                    }
                     await Auth.signIn(email, password);
                     let ans = await AmplifyService.getCurrentSession();
+                    if(!ans) {
+                        if(counter>3) {
+                            resolve(undefined);
+                        }
+                        sendMessagePromise(counter+1);
+                    }
                     resolve(ans);
                 }
                 resolve(response && response.data);
             });
         })
     }
-    
+
     // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
             const jwtToken = await this.sendMessagePromise();
-            return jwtToken;ß
+            return jwtToken;
 
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)
             return undefined;
-        } 
+        }
     }
 
     static getCurrentSession = async () => {

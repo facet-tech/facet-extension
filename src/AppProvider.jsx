@@ -9,7 +9,7 @@ import isDevelopment from './utils/isDevelopment';
 import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets,
 } from './services/facetApiService';
-import loadLocalStorage, { getKeyFromLocalStorage } from './shared/loadLocalStorage';
+import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import {
   api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
 } from './shared/constant';
@@ -80,8 +80,6 @@ const AppProvider = ({ children }) => {
           loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
       }, [setJwt]);
   
-
-
   /**
     * TODO this listener should probably live into the Provider
     */
@@ -133,7 +131,6 @@ const AppProvider = ({ children }) => {
         return;
       }
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      console.log('@APPRPOVIDER',window.location);
       const domainResponse = await getDomain(window.location.hostname, workspaceId);
       const domainId = get(domainResponse, 'response.id');
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
