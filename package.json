@@ -35,7 +35,6 @@
         "promise": "7.3.1",
         "react": "^16.14.0",
         "react-copy-to-clipboard": "^5.0.2",
-        "react-dev-utils": "^3.0.2",
         "react-dom": "^16.14.0",
         "react-error-overlay": "^6.0.8",
         "react-google-login": "^5.1.22",
