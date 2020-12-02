@@ -70,7 +70,6 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "fontsource-roboto": "^3.0.3",
         "json5-loader": "^4.0.1",
-        "material-ui-popup-state": "^1.6.1",
         "webpack-cli": "^4.2.0",
         "zip-folder": "^1.0.0"
     },
