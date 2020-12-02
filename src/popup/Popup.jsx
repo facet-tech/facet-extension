@@ -30,14 +30,10 @@ export default () => {
       console.log(queryString);
       const urlParams = new URLSearchParams(queryString);
       const redirectTabId = urlParams.get('redirectTabId');
-      console.log('redirectTabId',redirectTabId)
       if (redirectTabId) {
         chrome.tabs.reload(parseInt(redirectTabId));
       }
-      chrome.tabs.remove(tab.id, function () {
-        // TODO trigger 
-      });
-
+      chrome.tabs.remove(tab.id);
     });
 
     displayElement = null;

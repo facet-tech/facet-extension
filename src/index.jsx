@@ -47,7 +47,6 @@ if (!document.getElementById('popup')) {
 }
 
 if (document.getElementById('authentication')) {
-  console.log('AT AUTH');
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
@@ -105,7 +104,6 @@ if (document.getElementById('authentication')) {
   (async () => {
     try {
       const userHasLoggedIn = await isUserLoggedIn();
-      console.log('@userHasLoggedIn', userHasLoggedIn)
       if (userHasLoggedIn) {
         ReactDOM.render(
           <React.StrictMode>
@@ -138,9 +136,6 @@ if (document.getElementById('authentication')) {
           var currTab = tabs[0];
           chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });//maybe with redirect
         });
-        
-        // chrome.tabs.sendMessage(tabs[0].id, { 'CLOSE_TAB': 'GG!' }, async () => {
-        // });
       }
     } catch (e) {
       console.log('[ERROR]', e);
