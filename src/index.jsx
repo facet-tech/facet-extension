@@ -9,13 +9,14 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { styles } from './shared/constant';
+import { storage, styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
 import SignIn from './authentication/SignIn';
 import Main from './popup/Main';
 import isUserLoggedIn from './shared/isUserLoggedIn';
+import { setKeyInLocalStorage } from './shared/loadLocalStorage';
 
 Amplify.configure(awsExports);
 
@@ -45,7 +46,6 @@ if (!document.getElementById('popup')) {
   }
 }
 
-console.log('CHECKARE ME', document.getElementById('authentication'));
 if (document.getElementById('authentication')) {
   console.log('AT AUTH');
   ReactDOM.render(
@@ -104,9 +104,8 @@ if (document.getElementById('authentication')) {
 
   (async () => {
     try {
-      console.log('MPIKA')
       const userHasLoggedIn = await isUserLoggedIn();
-      console.log('ELA', userHasLoggedIn);
+      console.log('@userHasLoggedIn', userHasLoggedIn)
       if (userHasLoggedIn) {
         ReactDOM.render(
           <React.StrictMode>
@@ -126,7 +125,7 @@ if (document.getElementById('authentication')) {
               <div style={{ display: 'grid' }}>
                 <AppProvider id='gg'>
                   <PopupProvider id='popup-provider'>
-                    <Popup id='facet-popup' />
+                    <Main />
                   </PopupProvider>
                 </AppProvider>
               </div>
@@ -135,10 +134,16 @@ if (document.getElementById('authentication')) {
           document.getElementById('popup'),
         );
       } else {
-        chrome.tabs.create({ url: chrome.extension.getURL('authentication.html') });
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          var currTab = tabs[0];
+          chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });//maybe with redirect
+        });
+        
+        // chrome.tabs.sendMessage(tabs[0].id, { 'CLOSE_TAB': 'GG!' }, async () => {
+        // });
       }
     } catch (e) {
-      console.log('eela man error ',e);
+      console.log('[ERROR]', e);
       // Deal with the fact the chain failed
     }
   })();

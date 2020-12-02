@@ -10,6 +10,7 @@ import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
 import Main from './Main';
 import AppContext from '../AppContext';
+import getURLParams from '../shared/chrome/getURLParams';
 
 const StyledDiv = styled.div`
     width: 20rem;
@@ -23,15 +24,29 @@ export default () => {
   const { currAuthState, jwt } = useContext(AppContext);
   let displayElement;
   if (jwt || currAuthState === authStateConstant.signedIn) {
-    displayElement = <Main />;
+    // close current tab
+    chrome.tabs.getCurrent(function (tab) {
+      const queryString = window.location.search;
+      console.log(queryString);
+      const urlParams = new URLSearchParams(queryString);
+      const redirectTabId = urlParams.get('redirectTabId');
+      console.log('redirectTabId',redirectTabId)
+      if (redirectTabId) {
+        chrome.tabs.reload(parseInt(redirectTabId));
+      }
+      chrome.tabs.remove(tab.id, function () {
+        // TODO trigger 
+      });
+
+    });
+
+    displayElement = null;
   } else if (currAuthState === authStateConstant.signingIn) {
     displayElement = <SignIn />;
   } else if (currAuthState === authStateConstant.signingUp) {
     displayElement = <Signup />;
   } else if (currAuthState === authStateConstant.confirmingSignup) {
     displayElement = <ConfirmationCode />;
-  } else if (currAuthState === authStateConstant.signedIn) {
-    displayElement = <Main />;
   } else if (currAuthState === authStateConstant.onForgotPassword) {
     displayElement = <ForgotPassword />;
   } else if (currAuthState === authStateConstant.onPasswordReset) {
