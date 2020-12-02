@@ -39,6 +39,12 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
         const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method, headers } : { headers, method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
+        if(!res) {
+            return {
+                response: undefined,
+                status: 404
+            };
+        }
         const response = await res.json();
         const result = {
             response,

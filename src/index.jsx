@@ -13,10 +13,8 @@ import { storage, styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
-import SignIn from './authentication/SignIn';
 import Main from './popup/Main';
 import isUserLoggedIn from './shared/isUserLoggedIn';
-import { setKeyInLocalStorage } from './shared/loadLocalStorage';
 
 Amplify.configure(awsExports);
 

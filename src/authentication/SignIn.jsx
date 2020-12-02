@@ -31,14 +31,13 @@ export default () => {
 
     // abstract this method... to be used during signup too
     try {
-      await Auth.signIn(email, password);
-      const workspaceResponse = await getOrCreateWorkspace(email);
-      console.log('WORKSAPCERESPONSE',workspaceResponse);
-      await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
-        workspaceResponse?.response?.workspaceId);
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
       await setKeyInLocalStorage(storage.password, password);
+      await Auth.signIn(email, password);
+      const workspaceResponse = await getOrCreateWorkspace(email);
+      await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
+        workspaceResponse?.response?.workspaceId);
       setCurrAuthState(authStateConstant.signedIn);
       setAuthObject({
         ...authObject,

@@ -34,7 +34,7 @@ export default () => {
         chrome.tabs.reload(parseInt(redirectTabId));
       }
       // todo uncomment
-      // chrome.tabs.remove(tab.id);
+      chrome.tabs.remove(tab.id);
     });
 
     displayElement = null;

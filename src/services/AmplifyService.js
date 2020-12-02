@@ -12,8 +12,10 @@ class AmplifyService {
     /**
      * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
+     * 
+     * Request is retried @param ${counter} times
      */
-    static sendMessagePromise = () => {
+    static sendMessagePromise = (counter = 0) => {
         return new Promise((resolve, reject) => {
             chrome?.runtime?.sendMessage({
                 data: ChromeRequestType.GET_LOGGED_IN_USER
@@ -25,12 +27,14 @@ class AmplifyService {
                     await AmplifyService.sleep(2000);
                     const email = await getKeyFromLocalStorage(storage.username);
                     const password = await getKeyFromLocalStorage(storage.password);
-                    // u need retry logic...
-                    if (!email || !password) {
-                        resolve(undefined);
-                    }
                     await Auth.signIn(email, password);
                     let ans = await AmplifyService.getCurrentSession();
+                    if(!ans) {
+                        if(counter>3) {
+                            resolve(undefined);
+                        }
+                        sendMessagePromise(counter+1);
+                    }
                     resolve(ans);
                 }
                 resolve(response && response.data);
