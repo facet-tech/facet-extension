@@ -13,7 +13,7 @@ class AmplifyService {
      * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
      * 
-     * Request is retried @param ${counter} times
+     * Request is retried 3 times maximum
      */
     static sendMessagePromise = (counter = 0) => {
         return new Promise((resolve, reject) => {
