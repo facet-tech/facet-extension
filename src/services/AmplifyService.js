@@ -5,6 +5,10 @@ import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 
 class AmplifyService {
 
+    static sleep = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     /**
      * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
@@ -18,6 +22,7 @@ class AmplifyService {
                     console.log('[local storage]:', obj);
                 });
                 if (!response) {
+                    await AmplifyService.sleep(2000);
                     const email = await getKeyFromLocalStorage(storage.username);
                     const password = await getKeyFromLocalStorage(storage.password);
                     // u need retry logic...
@@ -32,17 +37,17 @@ class AmplifyService {
             });
         })
     }
-    
+
     // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
             const jwtToken = await this.sendMessagePromise();
-            return jwtToken;ß
+            return jwtToken;
 
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)
             return undefined;
-        } 
+        }
     }
 
     static getCurrentSession = async () => {

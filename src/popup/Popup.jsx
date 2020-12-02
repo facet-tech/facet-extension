@@ -33,7 +33,8 @@ export default () => {
       if (redirectTabId) {
         chrome.tabs.reload(parseInt(redirectTabId));
       }
-      chrome.tabs.remove(tab.id);
+      // todo uncomment
+      // chrome.tabs.remove(tab.id);
     });
 
     displayElement = null;

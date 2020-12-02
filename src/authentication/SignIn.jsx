@@ -33,6 +33,7 @@ export default () => {
     try {
       await Auth.signIn(email, password);
       const workspaceResponse = await getOrCreateWorkspace(email);
+      console.log('WORKSAPCERESPONSE',workspaceResponse);
       await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
         workspaceResponse?.response?.workspaceId);
       await setKeyInLocalStorage(isPluginEnabled, true);
@@ -84,7 +85,6 @@ export default () => {
           inputRef={register({
             required: 'Please specify a password',
           })}
-          placeholder="example@mail.com"
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
