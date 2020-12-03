@@ -9,7 +9,7 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { storage, styles } from './shared/constant';
+import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
