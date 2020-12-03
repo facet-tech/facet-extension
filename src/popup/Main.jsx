@@ -86,10 +86,13 @@ export default () => {
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      const loc = new URL(url);
-      const domainRes = await getDomain(loc.hostname, workspaceId);
-      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-      setTextToCopy(text);
+      chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        var currentTab = tabs[0]; // there will be only one in this array
+        const loc = new URL(currentTab.url);
+        const domainRes = await getDomain(loc.hostname, workspaceId);
+        const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+        setTextToCopy(text);
+      });
     } catch (e) {
       console.log('[ERROR][loadCopySnippet]', e);
     }

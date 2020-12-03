@@ -9,7 +9,7 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { storage, styles } from './shared/constant';
+import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
@@ -69,34 +69,6 @@ if (document.getElementById('authentication')) {
     </React.StrictMode>,
     document.getElementById('authentication'),
   );
-} else if (document.getElementById('facetizer')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
-        <SnackbarProvider
-          maxSnack={4}
-          disableWindowBlurListener
-          autoHideDuration={5000}
-          iconVariant={{
-            error: '✖️',
-            warning: '⚠️',
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <AppProvider>
-            <CoreProvider>
-              <App />
-            </CoreProvider>
-          </AppProvider>
-        </SnackbarProvider>
-
-      </div>
-    </React.StrictMode>,
-    document.getElementById('facetizer'),
-  );
 } else if (document.getElementById('popup')) {
 
   (async () => {
@@ -140,4 +112,32 @@ if (document.getElementById('authentication')) {
       // Deal with the fact the chain failed
     }
   })();
+} else if (document.getElementById('facetizer')) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
+        <SnackbarProvider
+          maxSnack={4}
+          disableWindowBlurListener
+          autoHideDuration={5000}
+          iconVariant={{
+            error: '✖️',
+            warning: '⚠️',
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <AppProvider>
+            <CoreProvider>
+              <App />
+            </CoreProvider>
+          </AppProvider>
+        </SnackbarProvider>
+
+      </div>
+    </React.StrictMode>,
+    document.getElementById('facetizer'),
+  );
 }

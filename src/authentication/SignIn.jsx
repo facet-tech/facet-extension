@@ -17,7 +17,6 @@ import { getOrCreateWorkspace } from '../services/facetApiService';
 
 export default () => {
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
-  // const {  } = React.useContext(PopupContext);
   const {
     register, errors, handleSubmit, watch,
   } = useForm({});
