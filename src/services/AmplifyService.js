@@ -37,7 +37,7 @@ class AmplifyService {
     static getCurrentUserJTW = async () => {
         try {
             let ans = await AmplifyService.getCurrentSession();
-            console.log('ANS!',ans);
+            // console.log('ANS!',ans);
             if(ans) {
                 return ans;
             }

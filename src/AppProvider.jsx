@@ -7,7 +7,7 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import {
@@ -131,9 +131,12 @@ const AppProvider = ({ children }) => {
       if (!isPluginEnabledVal) {
         return;
       }
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      const domainResponse = await getDomain(window.location.hostname, workspaceId);
-      const domainId = get(domainResponse, 'response.id');
+      const storageEmail = await getKeyFromLocalStorage(storage.username);
+      const workspaceResponse = await getOrCreateWorkspace(storageEmail,false);
+      const workspaceId = workspaceResponse?.response?.workspaceId;
+      const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
+      const domainId = domainResponse?.response?.id;
+      console.log('storageEmail',storageEmail,'workspaceId',workspaceId,'domainId',domainId);
       await initSessionData({workspaceId, domainId});
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
