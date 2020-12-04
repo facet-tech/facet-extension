@@ -95,7 +95,6 @@ const getDomain = async (domainName, workspaceId, readFromStorage = true) => {
     if (process.env.NODE_ENV === 'development') {
         return MockService.mockGetDomain();
     }
-    console.log('READFROMRESPONSE', readFromStorage);
     if (readFromStorage) {
         const { domainId } = await getKeyFromLocalStorage(storage.sessionData) || {};
         if (domainId) {
@@ -130,7 +129,6 @@ const getOrPostDomain = async (workspaceId) => {
 
 const getOrCreateWorkspace = async (email, readFromStorage = true) => {
     try {
-        console.log('READFROMRESPONSE', readFromStorage);
         let suffix = `/user?email=${email}`;
         if (readFromStorage) {
             const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData) || {};

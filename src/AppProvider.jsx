@@ -125,7 +125,6 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log('MPIKA STO USEFFECT');
     (async () => {
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
       if (!isPluginEnabledVal) {

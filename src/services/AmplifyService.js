@@ -20,11 +20,11 @@ class AmplifyService {
                     const password = await getKeyFromLocalStorage(storage.password);
                     await Auth.signIn(email, password);
                     let ans = await AmplifyService.getCurrentSession();
-                    if(!ans) {
-                        if(counter>3) {
+                    if (!ans) {
+                        if (counter > 3) {
                             resolve(undefined);
                         }
-                        sendMessagePromise(counter+1);
+                        sendMessagePromise(counter + 1);
                     }
                     resolve(ans);
                 }
@@ -37,8 +37,7 @@ class AmplifyService {
     static getCurrentUserJTW = async () => {
         try {
             let ans = await AmplifyService.getCurrentSession();
-            // console.log('ANS!',ans);
-            if(ans) {
+            if (ans) {
                 return ans;
             }
             const jwtToken = await this.sendMessagePromise();
