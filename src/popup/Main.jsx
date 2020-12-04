@@ -40,10 +40,6 @@ const MarginTop = styled.div`
     margin-top: ${(props) => props.value};
 `;
 
-const StyledDiv = styled.div`
-    width: 20rem;
-`;
-
 export default () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -174,8 +170,8 @@ export default () => {
     </div>
   ) : enableFacetizerElement;
   return (
-    <StyledDiv>
+    <div>
       {element}
-    </StyledDiv>
+    </div>
   );
 };
