@@ -47,7 +47,8 @@ const storage = {
     isUserAuthenticated,
     username: 'username',
     password: 'password',
-    initiatingTabId: 'INITIATING_TAB_ID'
+    initiatingTabId: 'INITIATING_TAB_ID',
+    sessionData: 'SESSION_DATA'
 };
 
 const ChromeRequestType = {

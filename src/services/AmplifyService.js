@@ -4,11 +4,6 @@ import { Auth } from "aws-amplify";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 
 class AmplifyService {
-
-    static sleep = (ms) => {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     /**
      * Promise wrapper for chrome.tabs.sendMessage
      * @returns {Promise}
@@ -20,11 +15,7 @@ class AmplifyService {
             chrome?.runtime?.sendMessage({
                 data: ChromeRequestType.GET_LOGGED_IN_USER
             }, async function (response) {
-                chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
-                    console.log('[local storage]:', obj);
-                });
                 if (!response) {
-                    await AmplifyService.sleep(2000);
                     const email = await getKeyFromLocalStorage(storage.username);
                     const password = await getKeyFromLocalStorage(storage.password);
                     await Auth.signIn(email, password);
@@ -45,6 +36,11 @@ class AmplifyService {
     // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
+            let ans = await AmplifyService.getCurrentSession();
+            console.log('ANS!',ans);
+            if(ans) {
+                return ans;
+            }
             const jwtToken = await this.sendMessagePromise();
             return jwtToken;
 
