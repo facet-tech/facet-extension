@@ -1,8 +1,29 @@
 /*global chrome*/
 import isDevelopment from '../utils/isDevelopment';
-import { isPluginEnabled, LoginTypes, api } from './constant';
+import { isPluginEnabled, LoginTypes, api, storage } from './constant';
 
 const facetKey = 'facet-settings';
+
+/**
+ * 
+ * @param {object} object containing workspaceId and domainId
+ */
+const initSessionData = async ({ workspaceId, domainId }) => {
+    const localStorageObj = await getLocalStorageObject();
+    const aboutToSet = {
+        [facetKey]: {
+            ...localStorageObj,
+            [storage.sessionData]: {
+                workspaceId,
+                domainId
+            }
+        }
+    };
+
+    chrome.storage && chrome.storage.sync.set(aboutToSet, async function () {
+        const res = await getLocalStorageObject();
+    });
+}
 
 /**
  * @param {*} setIsPluginEnabled 
@@ -107,6 +128,6 @@ const clearStorage = () => {
     });
 }
 
-export { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage };
+export { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage, initSessionData };
 
 export default loadLocalStorage;

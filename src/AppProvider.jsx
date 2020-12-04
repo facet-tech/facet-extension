@@ -7,9 +7,9 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
-import loadLocalStorage, { getKeyFromLocalStorage, setKeyInLocalStorage } from './shared/loadLocalStorage';
+import loadLocalStorage, { getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import {
   api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
 } from './shared/constant';
@@ -34,52 +34,52 @@ const AppProvider = ({ children }) => {
   const [loadingSideBar, setLoadingSideBar] = useState(true);
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
 
-  //popup stuff
-      // email,id:  
-      const [loggedInUser, setLoggedInUser] = useState({});
-      const [url, setUrl] = useState('');
-      const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-      const [email, setEmail] = useState('');
-      const [workspaceId, setWorkspaceId] = useState(undefined);
-      const [jwt, setJwt] = useState('');
-      // deprecate this..
-      const [loadLogin, setLoadLogin] = useState(false);
-      const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-      const login = async () => {
-          const workspaceResponse = await getOrCreateWorkspace(email);
-          setIsUserAuthenticated(true);
-          await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
-          await setKeyInLocalStorage(storage.isPluginEnabled, true);
-          await setKeyInLocalStorage(LoginTypes.email, email);
-          triggerDOMReload();
-      }
-  
-      const onLoginClick = (val) => {
-          setLoadLogin(val);
-      }
-  
-      const loadJWT = async () => {
-          const jwt = await AmplifyService.getCurrentUserJTW();
-          setJwt(jwt);
-      }
-  
-      const signInExistingUser = async () => {
-          try {
-              const username = await getKeyFromLocalStorage(storage.username);
-              const password = await getKeyFromLocalStorage(storage.password);
-              await Auth.signIn(username, password);
-              setCurrAuthState(authStateConstant.signedIn);
-          } catch (e) {
-              console.log('[ERROR][signInExistingUser]', e);
-          }
-      }
-  
-      useEffect(() => {
-          loadJWT();
-          signInExistingUser();
-          loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
-      }, [setJwt]);
-  
+  // popup stuff
+  // email,id:  
+  const [loggedInUser, setLoggedInUser] = useState({});
+  const [url, setUrl] = useState('');
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [workspaceId, setWorkspaceId] = useState(undefined);
+  const [jwt, setJwt] = useState('');
+  // deprecate this..
+  const [loadLogin, setLoadLogin] = useState(false);
+  const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
+  const login = async () => {
+    const workspaceResponse = await getOrCreateWorkspace(email);
+    setIsUserAuthenticated(true);
+    await setKeyInLocalStorage(api.workspace.workspaceId, workspaceResponse.response.workspaceId);
+    await setKeyInLocalStorage(storage.isPluginEnabled, true);
+    await setKeyInLocalStorage(LoginTypes.email, email);
+    triggerDOMReload();
+  }
+
+  const onLoginClick = (val) => {
+    setLoadLogin(val);
+  }
+
+  const loadJWT = async () => {
+    const jwt = await AmplifyService.getCurrentUserJTW();
+    setJwt(jwt);
+  }
+
+  const signInExistingUser = async () => {
+    try {
+      const username = await getKeyFromLocalStorage(storage.username);
+      const password = await getKeyFromLocalStorage(storage.password);
+      await Auth.signIn(username, password);
+      setCurrAuthState(authStateConstant.signedIn);
+    } catch (e) {
+      console.log('[ERROR][signInExistingUser]', e);
+    }
+  }
+
+  useEffect(() => {
+    loadJWT();
+    signInExistingUser();
+    loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
+  }, [setJwt]);
+
   /**
     * TODO this listener should probably live into the Provider
     */
@@ -130,9 +130,13 @@ const AppProvider = ({ children }) => {
       if (!isPluginEnabledVal) {
         return;
       }
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      const domainResponse = await getDomain(window.location.hostname, workspaceId);
-      const domainId = get(domainResponse, 'response.id');
+      const storageEmail = await getKeyFromLocalStorage(storage.username);
+      const workspaceResponse = await getOrCreateWorkspace(storageEmail,false);
+      const workspaceId = workspaceResponse?.response?.workspaceId;
+      const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
+      const domainId = domainResponse?.response?.id;
+      console.log('storageEmail',storageEmail,'workspaceId',workspaceId,'domainId',domainId);
+      await initSessionData({workspaceId, domainId});
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
@@ -194,9 +198,9 @@ const AppProvider = ({ children }) => {
       authObject,
       setAuthObject,
 
-      loggedInUser, setLoggedInUser, url, setUrl,  login, isUserAuthenticated, setIsUserAuthenticated,
-        workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-        currAuthState, setCurrAuthState, jwt, setJwt
+      loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
+      workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+      currAuthState, setCurrAuthState, jwt, setJwt
     }}
     >
       {children}

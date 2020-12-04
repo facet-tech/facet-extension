@@ -1,9 +1,9 @@
-import { HTTPMethods, APIUrl } from "../shared/constant";
+import { HTTPMethods, APIUrl, storage } from "../shared/constant";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
-import parsePath from "../shared/parsePath";  
+import parsePath from "../shared/parsePath";
 import AmplifyService from "./AmplifyService";
 
 /**
@@ -39,7 +39,7 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
         const url = `${APIUrl.activeBaseURL}${urlSuffix}`;
         let obj = HTTPMethods.GET === method ? { method, headers } : { headers, method, body: JSON.stringify(body) };
         const res = await fetch(url, obj);
-        if(!res) {
+        if (!res) {
             return {
                 response: undefined,
                 status: 404
@@ -91,9 +91,21 @@ const createDomain = async (domain, workspaceId) => {
     return apiResponse;
 }
 
-const getDomain = async (domainName, workspaceId) => {
+const getDomain = async (domainName, workspaceId, readFromStorage = true) => {
     if (process.env.NODE_ENV === 'development') {
         return MockService.mockGetDomain();
+    }
+    if (readFromStorage) {
+        const { domainId } = await getKeyFromLocalStorage(storage.sessionData) || {};
+        if (domainId) {
+            const responseObject = {
+                response: {
+                    id: domainId
+                }
+            };
+            console.log('[CACHE]', responseObject);
+            return responseObject;
+        }
     }
     const suffix = `/domain?domain=${domainName}&workspaceId=${workspaceId}`;
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
@@ -115,9 +127,21 @@ const getOrPostDomain = async (workspaceId) => {
     }
 }
 
-const getOrCreateWorkspace = async (email) => {
+const getOrCreateWorkspace = async (email, readFromStorage = true) => {
     try {
         let suffix = `/user?email=${email}`;
+        if (readFromStorage) {
+            const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData) || {};
+            if (workspaceId) {
+                const responseObject = {
+                    response: {
+                        id: workspaceId
+                    }
+                };
+                console.log('[CACHE]', responseObject);
+                return responseObject;
+            }
+        }
         const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
         // create new user
         if (getUserResponse && getUserResponse.status >= 400 && getUserResponse.status <= 500) {

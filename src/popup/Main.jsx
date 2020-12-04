@@ -82,7 +82,7 @@ export default () => {
     setKeyInLocalStorage(isPluginEnabledConstant, e);
     setIsPluginEnabled(e);
   };
-
+  
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
