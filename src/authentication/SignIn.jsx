@@ -104,7 +104,7 @@ export default () => {
       {serverError && <Alert severity="error">{serverError}</Alert>}
       <br />
       <Typography>
-        <FacetLabel text='No profile?' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+        <FacetLabel text='No profile? ' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
         <br/>
         <br/>
         <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
