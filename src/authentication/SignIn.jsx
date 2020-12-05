@@ -2,7 +2,7 @@ import { Auth } from 'aws-amplify';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  Input, InputLabel, Button, Link,
+  Input, InputLabel, Button, Link, Typography,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
@@ -17,6 +17,8 @@ import { getOrCreateWorkspace } from '../services/facetApiService';
 import FacetInput from '../shared/FacetInput';
 import FacetLabel from '../shared/FacetLabel';
 import FacetButton from '../shared/FacetButton';
+import FacetLink from '../shared/FacetLink';
+import SecondaryFacetLink from '../shared/FacetSecondaryLink';
 
 export default () => {
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
@@ -91,11 +93,7 @@ export default () => {
         <br />
         <br />
         <div>
-          Forgot your password?
-          <Link href="#" onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)}>
-            {' '}
-            Click here to reset it.
-          </Link>
+          <FacetLink text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
         </div>
         <br />
         <div>
@@ -105,15 +103,12 @@ export default () => {
       <br />
       {serverError && <Alert severity="error">{serverError}</Alert>}
       <br />
-      <div>
-        Don't have an account?
-        <Link href="#" onClick={() => {
-          setCurrAuthState(authStateConstant.signingUp)
-        }}>
-          {' '}
-          Sign up
-        </Link>
-      </div>
+      <Typography>
+        <FacetLabel text='No profile?' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+        <br/>
+        <br/>
+        <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
+      </Typography>
     </>
   );
 };
