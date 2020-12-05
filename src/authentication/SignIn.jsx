@@ -14,6 +14,9 @@ import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import { getOrCreateWorkspace } from '../services/facetApiService';
+import FacetInput from '../shared/FacetInput';
+import FacetLabel from '../shared/FacetLabel';
+import FacetButton from '../shared/FacetButton';
 
 export default () => {
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
@@ -59,9 +62,8 @@ export default () => {
         <img src={fnLogoHorizontal} />
       </div>
       <form onSubmit={(e) => e.preventDefault()}>
-        <InputLabel htmlFor="email">email</InputLabel>
-        <Input
-          style={{ width: '100%' }}
+        <FacetLabel htmlFor="email" text="EMAIL"></FacetLabel>
+        <FacetInput
           id="email"
           name="email"
           aria-invalid={errors.email ? 'true' : 'false'}
@@ -74,10 +76,11 @@ export default () => {
           })}
           type="email"
         />
+        <br />
+        <br />
         {errors.email && <span role="alert">{errors.email.message}</span>}
-        <InputLabel>Password</InputLabel>
-        <Input
-          style={{ width: '100%' }}
+        <FacetLabel text="Password" />
+        <FacetInput
           name="password"
           type="password"
           inputRef={register({
@@ -96,7 +99,7 @@ export default () => {
         </div>
         <br />
         <div>
-          <Button style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Login</Button>
+          <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
         </div>
       </form>
       <br />
@@ -105,7 +108,7 @@ export default () => {
       <div>
         Don't have an account?
         <Link href="#" onClick={() => {
-         setCurrAuthState(authStateConstant.signingUp)
+          setCurrAuthState(authStateConstant.signingUp)
         }}>
           {' '}
           Sign up

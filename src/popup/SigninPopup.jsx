@@ -37,7 +37,7 @@ export default () => {
         });
     }
 
-    const element = !hasUserLoggedIn ? <Main /> : <div>
+    const element = hasUserLoggedIn ? <Main /> : <div>
         <img src={logo} />
         <FacetButton style={{ width: "100%" }} variant="contained" color="primary" type="submit" text="Sign in" onClick={() => onLoginClick()}></FacetButton>
     </div>
