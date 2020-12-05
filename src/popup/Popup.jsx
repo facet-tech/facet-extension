@@ -27,7 +27,6 @@ export default () => {
     // close current tab
     chrome.tabs.getCurrent(function (tab) {
       const queryString = window.location.search;
-      console.log(queryString);
       const urlParams = new URLSearchParams(queryString);
       const redirectTabId = urlParams.get('redirectTabId');
       if (redirectTabId) {
