@@ -13,11 +13,15 @@ import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
-import Main from './popup/Main';
-import isUserLoggedIn from './shared/isUserLoggedIn';
 import SigninPopup from './popup/SigninPopup';
+import styled from 'styled-components';
 
 Amplify.configure(awsExports);
+
+
+const PopupContainer = styled.div`
+ background-color: #181D26;
+ `;
 
 // TODO fix duplication
 
@@ -32,7 +36,6 @@ if (process.env.NODE_ENV !== 'development') {
     tracesSampleRate: 1.0,
   });
 }
-
 
 // TODO this needs cleanup
 if (!document.getElementById('popup')) {
@@ -63,7 +66,9 @@ if (document.getElementById('authentication')) {
       >
         <div>
           <AppProvider>
-            <Popup />
+            <PopupContainer>
+              <Popup />
+            </PopupContainer>
           </AppProvider>
         </div>
       </SnackbarProvider>
@@ -89,7 +94,9 @@ if (document.getElementById('authentication')) {
         <div style={{ display: 'grid' }}>
           <AppProvider id='gg'>
             <PopupProvider id='popup-provider'>
-              <SigninPopup />
+              <PopupContainer>
+                <SigninPopup />
+              </PopupContainer>
             </PopupProvider>
           </AppProvider>
         </div>

@@ -82,7 +82,7 @@ export default () => {
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+      chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const domainRes = await getDomain(loc.hostname, workspaceId);

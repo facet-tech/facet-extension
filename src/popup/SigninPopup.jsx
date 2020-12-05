@@ -7,9 +7,9 @@ import isUserLoggedIn from '../shared/isUserLoggedIn';
 import isDevelopment from '../utils/isDevelopment';
 import Main from './Main';
 import logo from '../static/images/fn_horizontal_logo.png';
+import FacetButton from '../shared/FacetButton';
 
 export default () => {
-
     const StyledDiv = styled.div`
         width: 20rem;
         text-align: center;
@@ -31,15 +31,15 @@ export default () => {
         if (isDevelopment) {
             setHasUserLoggedIn(true);
         }
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             var currTab = tabs[0];
             chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });
         });
     }
 
-    const element = hasUserLoggedIn ? <Main /> : <div>
+    const element = !hasUserLoggedIn ? <Main /> : <div>
         <img src={logo} />
-        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={() => onLoginClick()}> Sign in </Button>
+        <FacetButton style={{ width: "100%" }} variant="contained" color="primary" type="submit" text="Sign in" onClick={() => onLoginClick()}></FacetButton>
     </div>
 
     return <StyledDiv>
