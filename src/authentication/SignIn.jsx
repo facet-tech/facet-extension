@@ -10,6 +10,7 @@ import {
   authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
 } from '../shared/constant';
 import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import facetLogo from '../static/images/facet_main_logo.png';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
@@ -19,6 +20,14 @@ import FacetLabel from '../shared/FacetLabel';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import SecondaryFacetLink from '../shared/FacetSecondaryLink';
+import styled from 'styled-components';
+
+const BorderDiv = styled.div`
+  border: 2px solid lightblue;
+  textAlign: center;
+  padding: 1rem;
+`;
+
 
 export default () => {
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
@@ -61,54 +70,55 @@ export default () => {
   return (
     <>
       <div style={{ textAlign: 'center' }}>
-        <img src={fnLogoHorizontal} />
+        <img src={facetLogo} />
       </div>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <FacetLabel htmlFor="email" text="EMAIL"></FacetLabel>
-        <FacetInput
-          id="email"
-          name="email"
-          aria-invalid={errors.email ? 'true' : 'false'}
-          inputRef={register({
-            required: 'Please specify an email',
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Entered value does not match email format',
-            },
-          })}
-          type="email"
-        />
+      <BorderDiv>
+        <h3 style={{ color: 'lightblue' }}>Login</h3>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <FacetLabel htmlFor="email" text="EMAIL"></FacetLabel>
+          <FacetInput
+            id="email"
+            name="email"
+            aria-invalid={errors.email ? 'true' : 'false'}
+            inputRef={register({
+              required: 'Please specify an email',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: 'Entered value does not match email format',
+              },
+            })}
+            type="email"
+          />
+          <br />
+          {errors.email && <span role="alert">{errors.email.message}</span>}
+          <FacetLabel text="Password" />
+          <FacetInput
+            name="password"
+            type="password"
+            inputRef={register({
+              required: 'Please specify a password',
+            })}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+          <br />
+          <div>
+            <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
+          </div>
+          <br />
+          <div>
+            <FacetLink text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
+          </div>
+        </form>
         <br />
+        {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
-        {errors.email && <span role="alert">{errors.email.message}</span>}
-        <FacetLabel text="Password" />
-        <FacetInput
-          name="password"
-          type="password"
-          inputRef={register({
-            required: 'Please specify a password',
-          })}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-        <br />
-        <br />
-        <div>
-          <FacetLink text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
-        </div>
-        <br />
-        <div>
-          <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
-        </div>
-      </form>
-      <br />
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <br />
-      <Typography>
-        <FacetLabel text='No profile? ' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
-        <br/>
-        <br/>
-        <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
-      </Typography>
+        <Typography>
+          <FacetLabel text='No profile? ' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+          <br />
+          <br />
+          <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
+        </Typography>
+      </BorderDiv>
     </>
   );
 };
