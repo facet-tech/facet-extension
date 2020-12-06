@@ -10,7 +10,6 @@ import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
 import Main from './Main';
 import AppContext from '../AppContext';
-import getURLParams from '../shared/chrome/getURLParams';
 
 const StyledDiv = styled.div`
     align-self: center;
