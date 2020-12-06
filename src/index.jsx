@@ -61,7 +61,7 @@ if (document.getElementById('authentication')) {
       >
         <div>
           <AppProvider>
-              <Popup />
+            <Popup />
           </AppProvider>
         </div>
       </SnackbarProvider>
@@ -87,9 +87,7 @@ if (document.getElementById('authentication')) {
         <div style={{ display: 'grid' }}>
           <AppProvider id='gg'>
             <PopupProvider id='popup-provider'>
-              <PopupContainer>
-                <SigninPopup />
-              </PopupContainer>
+              <SigninPopup />
             </PopupProvider>
           </AppProvider>
         </div>
