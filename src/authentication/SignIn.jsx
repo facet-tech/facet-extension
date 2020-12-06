@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Typography, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import PopupContext from '../popup/PopupContext';
 import {
   authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
 } from '../shared/constant';
@@ -16,7 +15,6 @@ import FacetInput from '../shared/FacetInput';
 import FacetLabel from '../shared/FacetLabel';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
-import SecondaryFacetLink from '../shared/FacetSecondaryLink';
 import styled from 'styled-components';
 import facetTypographyIcon from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
@@ -120,7 +118,7 @@ export default () => {
             <Typography>
               <b>
                 <FacetLabel text='No profile? ' />
-                <FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+                <FacetLink color='#758EBF' text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
               </b>
               <br />
               <br />
