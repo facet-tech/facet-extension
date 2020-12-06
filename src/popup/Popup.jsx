@@ -16,7 +16,11 @@ const StyledDiv = styled.div`
     align-self: center;
     justify-self: center;
     background-color: #181D26;
-    padding: 5rem;
+    height: 100%;
+`;
+
+const InnerDiv = styled.div`
+  padding: 10rem;
 `;
 
 export default () => {
@@ -54,7 +58,9 @@ export default () => {
 
   return (
     <StyledDiv>
-      {displayElement}
+      <InnerDiv>
+        {displayElement}
+      </InnerDiv>
     </StyledDiv>
   );
 };
