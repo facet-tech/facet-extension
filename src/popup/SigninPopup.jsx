@@ -8,14 +8,24 @@ import isDevelopment from '../utils/isDevelopment';
 import Main from './Main';
 import logo from '../static/images/facet_main_logo.svg';
 import FacetButton from '../shared/FacetButton';
+import FacetLabel from '../shared/FacetLabel';
+import FacetLink from '../shared/FacetLink';
+import StyledPopupDiv from './StyledPopupDiv';
+
+const StyledDiv = styled.div`
+    width: 20rem;
+    text-align: center;
+`;
+
+const InnerStyledDiv = styled.div`
+    padding: 2rem;
+`;
 
 export default () => {
-    const StyledDiv = styled.div`
-        ${'' /* width: 20rem; */}
-        text-align: center;
-    `;
+
 
     const [hasUserLoggedIn, setHasUserLoggedIn] = useState(false);
+    console.log('hasUserLoggedIn', hasUserLoggedIn)
 
     useEffect(() => {
         // Create an scoped async function in the hook
@@ -37,10 +47,31 @@ export default () => {
         });
     }
 
-    const element = hasUserLoggedIn ? <Main /> : <div>
-        <img src={logo} />
-        <FacetButton style={{ width: "100%" }} variant="contained" color="primary" type="submit" text="Sign in" onClick={() => onLoginClick()}></FacetButton>
-    </div>
+    const onRegisterClick = () => {
+        // todo open new tab with auth stuff
+        if (isDevelopment) {
+            setHasUserLoggedIn(true);
+        }
+        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
+            var currTab = tabs[0];
+            chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });
+        });
+    }
+
+    const element = hasUserLoggedIn ? <Main /> : <StyledPopupDiv>
+        <InnerStyledDiv>
+            <br />
+            <img src={logo} />
+            <br />
+            <br />
+            <FacetLabel text="Please Login to your account or register on our free platform" />
+            <br />
+            <br />
+            <FacetButton variant="contained" color="primary" type="submit" text="LOGIN" onClick={() => onLoginClick()}></FacetButton>
+            <br />
+            <FacetLink onClick={() => { onRegisterClick() }} color="#758EBF" underline="always" text="REGISTER" />
+        </InnerStyledDiv>
+    </StyledPopupDiv>
 
     return <StyledDiv>
         {element}

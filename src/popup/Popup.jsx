@@ -12,14 +12,16 @@ import Main from './Main';
 import AppContext from '../AppContext';
 
 const StyledDiv = styled.div`
-    align-self: center;
-    justify-self: center;
+    display: grid;
+    align-items: center;
+    justify-items: center;
     background-color: #181D26;
     height: 100%;
 `;
 
 const InnerDiv = styled.div`
   padding: 10rem;
+  max-width: 30rem;
 `;
 
 export default () => {
