@@ -1,7 +1,7 @@
 import { Input } from '@material-ui/core';
 import React from 'react';
 
-export default ({ type, name, id }) => {
+export default ({ type, name, id, ...other }) => {
     return <div>
         <Input
             id={id}
@@ -18,6 +18,7 @@ export default ({ type, name, id }) => {
             inputProps={{
                 'aria-label': 'weight',
             }}
+            {...other}
         />
     </div>
 }

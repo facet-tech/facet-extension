@@ -18,6 +18,7 @@ import FacetLink from '../shared/FacetLink';
 import styled from 'styled-components';
 import facetTypographyIcon from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
+import FacetFormError from '../shared/FacetFormError';
 
 const BorderDiv = styled.div`
   border: 2px solid #758EBF;
@@ -95,7 +96,8 @@ export default () => {
             type="email"
           />
           <br />
-          {errors.email && <span role="alert">{errors.email.message}</span>}
+          {errors.email && <FacetFormError role="alert" text={errors.email.message}></FacetFormError>}
+          <br />
           <FacetLabel text="Password" />
           <FacetInput
             name="password"
@@ -104,7 +106,8 @@ export default () => {
               required: 'Please specify a password',
             })}
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          <br />
+          {errors.password && <FacetFormError role="alert" text={errors.password.message}></FacetFormError>}
           <br />
           <div>
             <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
