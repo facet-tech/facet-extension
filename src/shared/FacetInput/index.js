@@ -11,6 +11,7 @@ export default ({ type, name, id }) => {
                 width: '100%',
                 backgroundColor: '#4A4E59',
                 color: 'white',
+                padding: '.3rem',
             }}
             id="standard-adornment-weight"
             aria-describedby="standard-weight-helper-text"

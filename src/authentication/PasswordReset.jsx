@@ -7,7 +7,7 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
 import { authState as authStateConstant } from '../shared/constant';
-import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
 
 export default () => {
@@ -49,7 +49,7 @@ export default () => {
   return (
     <>
       <div style={{ textAlign: 'center' }}>
-        <img src={fnLogoHorizontal} />
+        <img src={facetLogo} />
       </div>
       <br />
       <div>

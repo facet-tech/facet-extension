@@ -5,7 +5,7 @@ export default ({ text }) => {
     return <span
         style={{
             width: '100%',
-            color: '#4A4E59'
+            color: '#A4A7AC'
         }}
     >{text}</span>
 }

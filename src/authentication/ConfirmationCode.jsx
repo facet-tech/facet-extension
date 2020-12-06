@@ -5,7 +5,7 @@ import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
-import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import facetLogo from '../static/images/facet_main_logo.svg';
 import Alert from '@material-ui/lab/Alert';
 import { useSnackbar } from 'notistack';
 
@@ -41,7 +41,7 @@ export default () => {
     return (
         <React.Fragment>
             <div style={{ textAlign: 'center' }}>
-                <img src={fnLogoHorizontal} />
+                <img src={facetLogo} />
             </div>
             <br />
             <div>

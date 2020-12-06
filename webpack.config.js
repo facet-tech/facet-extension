@@ -37,6 +37,17 @@ module.exports = (_, argv) => {
                         name: '[path][name].[ext]',
                     },
                 },
+                {
+                    test: /\.svg$/,
+                    use: [
+                        {
+                            loader: 'svg-url-loader',
+                            options: {
+                                limit: 10000,
+                            },
+                        },
+                    ],
+                },
                 // patching https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
                 {
                     test: /\.m?js/,

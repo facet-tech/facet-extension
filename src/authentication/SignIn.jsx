@@ -1,15 +1,13 @@
 import { Auth } from 'aws-amplify';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Input, InputLabel, Button, Link, Typography, makeStyles,
-} from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
 import {
   authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
 } from '../shared/constant';
-import facetLogo from '../static/images/facet_main_logo.png';
+import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
@@ -20,7 +18,8 @@ import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import SecondaryFacetLink from '../shared/FacetSecondaryLink';
 import styled from 'styled-components';
-import facetTypographyIcon from '../static/images/facet_typography.png';
+import facetTypographyIcon from '../static/images/facet_typography.svg';
+import FacetImage from '../shared/FacetImage';
 
 const BorderDiv = styled.div`
   border: 2px solid #758EBF;
@@ -76,14 +75,14 @@ export default () => {
   return (
     <>
       <div style={{ textAlign: 'center' }}>
-        <img src={facetLogo} />
+        <FacetImage src={facetLogo} />
       </div>
       <br />
       <br />
       <BorderDiv>
         <h3 style={{ color: '#C4DDF2' }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
-          <FacetLabel htmlFor="email" text="EMAIL"></FacetLabel>
+          <FacetLabel htmlFor="email" text="Email"></FacetLabel>
           <FacetInput
             id="email"
             name="email"
@@ -115,11 +114,14 @@ export default () => {
           <br />
           <div className={classes.center}>
             <div>
-              <FacetLink text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
+              <FacetLink underline='hover' text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
             </div>
             <br />
             <Typography>
-              <FacetLabel text='No profile? ' /><FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+              <b>
+                <FacetLabel text='No profile? ' />
+                <FacetLink text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+              </b>
               <br />
               <br />
               <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
@@ -131,7 +133,7 @@ export default () => {
       </BorderDiv>
       <br />
       <div className={classes.center}>
-        <img src={facetTypographyIcon} />
+        <FacetImage src={facetTypographyIcon} />
       </div>
     </>
   );

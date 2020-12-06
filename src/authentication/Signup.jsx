@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant } from '../shared/constant';
-import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
+import facetLogo from '../static/images/facet_main_logo.svg';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
@@ -44,7 +44,7 @@ export default () => {
   return (
     <React.Fragment>
       <div style={{ textAlign: 'center' }}>
-        <img src={fnLogoHorizontal} />
+        <img src={facetLogo} />
       </div>
       <form onSubmit={e => e.preventDefault()}>
         <InputLabel htmlFor="fname">First name</InputLabel>

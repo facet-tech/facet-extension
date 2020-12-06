@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import isUserLoggedIn from '../shared/isUserLoggedIn';
 import isDevelopment from '../utils/isDevelopment';
 import Main from './Main';
-import logo from '../static/images/fn_horizontal_logo.png';
+import logo from '../static/images/facet_main_logo.svg';
 import FacetButton from '../shared/FacetButton';
 
 export default () => {
