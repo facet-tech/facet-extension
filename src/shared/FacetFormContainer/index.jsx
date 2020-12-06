@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core';
 
 const BorderDiv = styled.div`
   border: 2px solid #758EBF;
-  textAlign: center;
   padding: 1rem;
 `;
 
@@ -24,6 +23,7 @@ export default ({ children }) => {
         <div style={{ textAlign: 'center' }}>
             <FacetImage src={facetLogo} />
         </div>
+        <br />
         <BorderDiv>
             {children}
         </BorderDiv>

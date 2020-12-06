@@ -6,7 +6,6 @@ import Alert from '@material-ui/lab/Alert';
 import {
   authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
 } from '../shared/constant';
-import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
@@ -22,7 +21,6 @@ import FacetFormContainer from '../shared/FacetFormContainer';
 
 const BorderDiv = styled.div`
   border: 2px solid #758EBF;
-  textAlign: center;
   padding: 1rem;
 `;
 

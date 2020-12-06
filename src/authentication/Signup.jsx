@@ -8,6 +8,11 @@ import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
 import FacetLink from "../shared/FacetLink";
+import FacetLabel from "../shared/FacetLabel";
+import FacetInput from "../shared/FacetInput";
+import FacetButton from "../shared/FacetButton";
+import FacetFormContainer from "../shared/FacetFormContainer";
+import FacetFormError from "../shared/FacetFormError";
 
 export default () => {
 
@@ -43,104 +48,99 @@ export default () => {
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <img src={facetLogo} />
-      </div>
-      <form onSubmit={e => e.preventDefault()}>
-        <InputLabel htmlFor="fname">First name</InputLabel>
-        <Input
-          style={{ width: "100%" }}
-          id="name"
-          name="name"
-          aria-invalid={errors.name ? "true" : "false"}
-          inputRef={register({
-            required: "required",
-          })}
-        />
-        {errors.name && <span role="alert">{errors.name.message}</span>}
-        <br />
-        <br />
-        <InputLabel htmlFor="sname">Last name</InputLabel>
-        <Input
-          style={{ width: "100%" }}
-          id="lastName"
-          name="lastName"
-          aria-invalid={errors.lastName ? "true" : "false"}
-          inputRef={register({
-            required: "required",
-          })}
-        />
-        {errors.lastName && <span role="alert">{errors.lastName.message}</span>}
-        <br />
-        <br />
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <Input
-          style={{ width: "100%" }}
-          id="email"
-          name="email"
-          aria-invalid={errors.email ? "true" : "false"}
-          inputRef={register({
-            required: "required",
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: "Entered value does not match email format"
-            }
-          })}
-          value={authObject.email}
-          onChange={(e) => setAuthObject({
-            ...authObject,
-            email: e.target.value
-          })}
-          type="email"
-          placeholder="example@mail.com"
-        />
-        {errors.email && <span role="alert">{errors.email.message}</span>}
-        <br />
-        <br />
-        <InputLabel>Password</InputLabel>
-        <Input
-          style={{ width: "100%" }}
-          name="password"
-          type="password"
-          aria-invalid={errors.password ? "true" : "false"}
-          inputRef={register({
-            required: "You must specify a password",
-            minLength: {
-              value: 8,
-              message: "Password must have at least 8 characters"
-            }
-          })}
-          onChange={(e) => {
-            setAuthObject({
+      <FacetFormContainer>
+        <h3 style={{ color: color.ice }}>Register</h3>
+        <form onSubmit={e => e.preventDefault()}>
+          <FacetLabel text="First name" htmlFor="fname" />
+          <FacetInput
+            id="name"
+            name="name"
+            aria-invalid={errors.name ? "true" : "false"}
+            inputRef={register({
+              required: "required",
+            })}
+          />
+          {errors.name && <FacetFormError role="alert" text={errors.name.message} />}
+          <br />
+          <br />
+          <FacetLabel text="Last name" htmlFor="sname" />
+          <FacetInput
+            id="lastName"
+            name="lastName"
+            aria-invalid={errors.lastName ? "true" : "false"}
+            inputRef={register({
+              required: "required",
+            })}
+          />
+          {errors.lastName && <FacetFormError text={errors.lastName.message} role="alert" />}
+          <br />
+          <br />
+          <FacetLabel text="Email" htmlFor="email"></FacetLabel>
+          <FacetInput
+            id="email"
+            name="email"
+            aria-invalid={errors.email ? "true" : "false"}
+            inputRef={register({
+              required: "required",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Entered value does not match email format"
+              }
+            })}
+            type="email"
+            value={authObject.email}
+            onChange={(e) => setAuthObject({
               ...authObject,
-              password: e.target.value
-            });
-          }}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
+              email: e.target.value
+            })}
+            type="email"
+          />
+          {errors.email && <FacetFormError role="alert" text={errors.email.message} />}
+          <br />
+          <br />
+          <FacetLabel text="Password"/>
+          <FacetInput
+            name="password"
+            type="password"
+            aria-invalid={errors.password ? "true" : "false"}
+            inputRef={register({
+              required: "You must specify a password",
+              minLength: {
+                value: 8,
+                message: "Password must have at least 8 characters"
+              }
+            })}
+            onChange={(e) => {
+              setAuthObject({
+                ...authObject,
+                password: e.target.value
+              });
+            }}
+          />
+          {errors.password && <FacetFormError text={errors.password.message} />}
+          <br />
+          <br />
+          <FacetLabel text="Repeat password"/>
+          <FacetInput
+            name="password_repeat"
+            type="password"
+            inputRef={register({
+              validate: value =>
+                value === password.current || "The passwords do not match"
+            })}
+          />
+          {errors.password_repeat && <FacetFormError text={errors.password_repeat.message} />}
+          <br />
+          <br />
+          <FacetButton text="REGISTER" variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
+        </form>
         <br />
+        {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
-        <InputLabel>Repeat password</InputLabel>
-        <Input
-          style={{ width: "100%" }}
-          name="password_repeat"
-          type="password"
-          inputRef={register({
-            validate: value =>
-              value === password.current || "The passwords do not match"
-          })}
-        />
-        {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
-        <br />
-        <br />
-        <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Signup</Button>
-      </form>
-      <br />
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <br />
-      <div>
-        <FacetLink text="Login" color={color.ice} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
-      </div>
+        <div style={{ textAlign: 'center' }}>
+          <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
+        </div>
+      </FacetFormContainer>
     </ >
   );
 }

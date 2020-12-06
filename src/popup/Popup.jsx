@@ -20,8 +20,8 @@ const StyledDiv = styled.div`
 `;
 
 const InnerDiv = styled.div`
-  padding: 10rem;
-  max-width: 30rem;
+    width: 100%;
+    max-width: 30rem;
 `;
 
 export default () => {
