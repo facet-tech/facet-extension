@@ -16,9 +16,9 @@ import FacetLabel from '../shared/FacetLabel';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import styled from 'styled-components';
-import facetTypographyIcon from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import FacetFormError from '../shared/FacetFormError';
+import FacetFormContainer from '../shared/FacetFormContainer';
 
 const BorderDiv = styled.div`
   border: 2px solid #758EBF;
@@ -73,12 +73,7 @@ export default () => {
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <FacetImage src={facetLogo} />
-      </div>
-      <br />
-      <br />
-      <BorderDiv>
+      <FacetFormContainer>
         <h3 style={{ color: '#C4DDF2' }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
           <FacetLabel htmlFor="email" text="Email"></FacetLabel>
@@ -131,11 +126,7 @@ export default () => {
         </form>
         {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
-      </BorderDiv>
-      <br />
-      <div className={classes.center}>
-        <FacetImage src={facetTypographyIcon} />
-      </div>
+      </FacetFormContainer>
     </>
   );
 };

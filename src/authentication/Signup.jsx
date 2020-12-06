@@ -2,11 +2,12 @@ import React, { useRef, useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant } from '../shared/constant';
+import { authState as authStateConstant, color } from '../shared/constant';
 import facetLogo from '../static/images/facet_main_logo.svg';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
+import FacetLink from "../shared/FacetLink";
 
 export default () => {
 
@@ -31,7 +32,6 @@ export default () => {
         password,
         attributes: {
           email,
-          // 'timestamp': `${Date.now()}`,
         }
       });
 
@@ -42,7 +42,7 @@ export default () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <div style={{ textAlign: 'center' }}>
         <img src={facetLogo} />
       </div>
@@ -139,11 +139,8 @@ export default () => {
       {serverError && <Alert severity="error">{serverError}</Alert>}
       <br />
       <div>
-        Have an account?
-        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingIn)}>
-          {' '}Sign in
-        </Link>
+        <FacetLink text="Login" color={color.ice} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
       </div>
-    </React.Fragment >
+    </ >
   );
 }
