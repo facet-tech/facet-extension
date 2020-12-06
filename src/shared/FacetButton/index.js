@@ -14,11 +14,7 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    },
+    root: {},
 }));
 
 export default ({ onClick, text, disabled }) => {

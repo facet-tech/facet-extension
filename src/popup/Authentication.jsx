@@ -27,7 +27,6 @@ const GridDiv = styled.div`
     display: grid;
     row-gap: .3rem;
     align-items: center;
-    padding: 1rem;
 `;
 
 export default () => {
@@ -35,7 +34,6 @@ export default () => {
     const { setSelectedWayOfLogin, login, email, setEmail } = useContext(AppContext);
 
     return <div>
-        {/* <form> */}
         <GridDiv>
             <div className={classes.span}>
                 <span >Please enter your email:</span>
@@ -62,6 +60,5 @@ export default () => {
                 </Button>
             </div>
         </GridDiv>
-        {/* </form> */}
     </div>
 }

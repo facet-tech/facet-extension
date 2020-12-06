@@ -11,7 +11,7 @@ import FacetButton from '../shared/FacetButton';
 
 export default () => {
     const StyledDiv = styled.div`
-        width: 20rem;
+        ${'' /* width: 20rem; */}
         text-align: center;
     `;
 

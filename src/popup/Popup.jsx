@@ -13,9 +13,10 @@ import AppContext from '../AppContext';
 import getURLParams from '../shared/chrome/getURLParams';
 
 const StyledDiv = styled.div`
-    width: 20rem;
     align-self: center;
     justify-self: center;
+    background-color: #181D26;
+    padding: 5rem;
 `;
 
 export default () => {

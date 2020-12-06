@@ -18,11 +18,6 @@ import styled from 'styled-components';
 
 Amplify.configure(awsExports);
 
-
-const PopupContainer = styled.div`
- background-color: #181D26;
- `;
-
 // TODO fix duplication
 
 if (process.env.NODE_ENV !== 'development') {
@@ -66,9 +61,7 @@ if (document.getElementById('authentication')) {
       >
         <div>
           <AppProvider>
-            <PopupContainer>
               <Popup />
-            </PopupContainer>
           </AppProvider>
         </div>
       </SnackbarProvider>
