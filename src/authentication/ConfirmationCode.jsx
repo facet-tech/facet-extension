@@ -2,12 +2,18 @@ import { Auth } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant } from '../shared/constant';
+import { authState as authStateConstant, color } from '../shared/constant';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import facetLogo from '../static/images/facet_main_logo.svg';
 import Alert from '@material-ui/lab/Alert';
 import { useSnackbar } from 'notistack';
+import FacetFormContainer from "../shared/FacetFormContainer";
+import FacetLink from "../shared/FacetLink";
+import FacetLabel from "../shared/FacetLabel";
+import FacetInput from "../shared/FacetInput";
+import FacetFormError from "../shared/FacetFormError";
+import FacetButton from "../shared/FacetButton";
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -39,44 +45,41 @@ export default () => {
     }
 
     return (
-        <React.Fragment>
-            <div style={{ textAlign: 'center' }}>
-                <img src={facetLogo} />
-            </div>
+        <>
             <br />
-            <div>
-                Check your email, a confirmation code has been sent. Don't see the code?
-            <Link href="#" onClick={() => { resendConfirmationCode() }}>
-                {' '}Click here to resend.
-            </Link>
-            </div>
-            <br />
-            <br />
-            <form onSubmit={e => e.preventDefault()}>
-                <InputLabel>Enter Confirmation Code:</InputLabel>
-                <Input
-                    id="confirmationCode"
-                    name="confirmationCode"
-                    aria-invalid={errors.email ? "true" : "false"}
-                    inputRef={register({
-                        required: "required"
-                    })}
-                />
-                {errors.email && <span role="alert">{errors.confirmationCode.message}</span>}
+            <FacetFormContainer>
+                <FacetLabel text="An email has been sent to your address with an authorization key." />
                 <br />
-                <Button style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Confirm</Button>
-            </form>
-            <br />
-            {serverError && <Alert severity="error">{serverError}</Alert>}
-            <br />
-            <div>
-                <div>
-                    Don't have an account?
-                    <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
-                        {' '}Sign up
-                    </Link>
-                </div>
+                <FacetLabel text="I did not get any email." />
+                <FacetLink color={color.electricB} text="Resend key to my email" onClick={() => { resendConfirmationCode() }} />
+                <FacetLabel text="or" />
+                <FacetLink color={color.electricB} text="Register again" onClick={() => { setCurrAuthState(auth) }} />
+                <br />
+                <br />
+                <form onSubmit={e => e.preventDefault()}>
+                    <FacetLabel text="KEY" />
+                    <br />
+                    <FacetInput
+                        id="confirmationCode"
+                        name="confirmationCode"
+                        aria-invalid={errors.email ? "true" : "false"}
+                        inputRef={register({
+                            required: "required"
+                        })}
+                    />
+                    {errors.email && <FacetFormError text="errors.confirmationCode.message" role="alert" />}
+                    <br />
+                    <FacetButton text="CONFIRM" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
+                </form>
+                <br />
+                {serverError && <Alert severity="error">{serverError}</Alert>}
+                <br />
+                <div style={{ textAlign: 'center' }}>
+                <b>
+                    <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
+                </b>
             </div>
-        </React.Fragment >
+            </FacetFormContainer>
+        </ >
     );
 }
