@@ -20,6 +20,27 @@ const authState = {
     onPasswordReset: 'PASSWORD_RESET'
 };
 
+const fontSize = {
+    small: 'small',
+    medium: 'medium',
+    large: 'large',
+    xLarge: 'x-large',
+    xxLarge: 'xx-large',
+    xxxLarge: 'xxx-large'
+}
+
+const color = {
+    electricA: '#5979D9',
+    electricB: '#758EBF',
+    ice: '#C4DDF2',
+    lightGray: '#8B8E93',
+    grayA: '#4A4E59',
+    darkGray: '#181D26',
+    darkestGray: '#13171E',
+    black: '#000000',
+    redError: '#CD0F11'
+}
+
 // information persisted in sync.storage
 const authStorage = {
     username: 'USERNAME',
@@ -74,5 +95,5 @@ export {
     facetizerId, facetKey, isPluginEnabled,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
-    authStorage, ChromeRequestType
+    authStorage, ChromeRequestType, color, fontSize
 };

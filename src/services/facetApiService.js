@@ -103,7 +103,6 @@ const getDomain = async (domainName, workspaceId, readFromStorage = true) => {
                     id: domainId
                 }
             };
-            console.log('[CACHE]', responseObject);
             return responseObject;
         }
     }
@@ -138,7 +137,6 @@ const getOrCreateWorkspace = async (email, readFromStorage = true) => {
                         id: workspaceId
                     }
                 };
-                console.log('[CACHE]', responseObject);
                 return responseObject;
             }
         }

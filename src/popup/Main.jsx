@@ -40,10 +40,6 @@ const MarginTop = styled.div`
     margin-top: ${(props) => props.value};
 `;
 
-const StyledDiv = styled.div`
-    width: 20rem;
-`;
-
 export default () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -86,7 +82,7 @@ export default () => {
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+      chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const domainRes = await getDomain(loc.hostname, workspaceId);
@@ -174,8 +170,8 @@ export default () => {
     </div>
   ) : enableFacetizerElement;
   return (
-    <StyledDiv>
+    <div>
       {element}
-    </StyledDiv>
+    </div>
   );
 };

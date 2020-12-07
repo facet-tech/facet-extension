@@ -13,8 +13,9 @@ import { styles } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
-import Main from './popup/Main';
-import isUserLoggedIn from './shared/isUserLoggedIn';
+import SigninPopup from './popup/SigninPopup';
+import styled from 'styled-components';
+import 'typeface-roboto';
 
 Amplify.configure(awsExports);
 
@@ -31,7 +32,6 @@ if (process.env.NODE_ENV !== 'development') {
     tracesSampleRate: 1.0,
   });
 }
-
 
 // TODO this needs cleanup
 if (!document.getElementById('popup')) {
@@ -70,48 +70,32 @@ if (document.getElementById('authentication')) {
     document.getElementById('authentication'),
   );
 } else if (document.getElementById('popup')) {
-
-  (async () => {
-    try {
-      const userHasLoggedIn = await isUserLoggedIn();
-      if (userHasLoggedIn) {
-        ReactDOM.render(
-          <React.StrictMode>
-            <SnackbarProvider
-              maxSnack={4}
-              disableWindowBlurListener
-              autoHideDuration={5000}
-              iconVariant={{
-                error: '✖️',
-                warning: '⚠️',
-              }}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            >
-              <div style={{ display: 'grid' }}>
-                <AppProvider id='gg'>
-                  <PopupProvider id='popup-provider'>
-                    <Main />
-                  </PopupProvider>
-                </AppProvider>
-              </div>
-            </SnackbarProvider>
-          </React.StrictMode>,
-          document.getElementById('popup'),
-        );
-      } else {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          var currTab = tabs[0];
-          chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });//maybe with redirect
-        });
-      }
-    } catch (e) {
-      console.log('[ERROR]', e);
-      // Deal with the fact the chain failed
-    }
-  })();
+  ReactDOM.render(
+    <React.StrictMode>
+      <SnackbarProvider
+        maxSnack={4}
+        disableWindowBlurListener
+        autoHideDuration={5000}
+        iconVariant={{
+          error: '✖️',
+          warning: '⚠️',
+        }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <div style={{ display: 'grid' }}>
+          <AppProvider>
+            <PopupProvider id='popup-provider'>
+              <SigninPopup />
+            </PopupProvider>
+          </AppProvider>
+        </div>
+      </SnackbarProvider>
+    </React.StrictMode>,
+    document.getElementById('popup'),
+  );
 } else if (document.getElementById('facetizer')) {
   ReactDOM.render(
     <React.StrictMode>

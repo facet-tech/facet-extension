@@ -1,21 +1,37 @@
 import { Auth } from 'aws-amplify';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Input, InputLabel, Button, Link,
-} from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import PopupContext from '../popup/PopupContext';
 import {
   authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
 } from '../shared/constant';
-import fnLogoHorizontal from '../static/images/fn_horizontal_logo.png';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import { getOrCreateWorkspace } from '../services/facetApiService';
+import FacetInput from '../shared/FacetInput';
+import FacetLabel from '../shared/FacetLabel';
+import FacetButton from '../shared/FacetButton';
+import FacetLink from '../shared/FacetLink';
+import styled from 'styled-components';
+import FacetImage from '../shared/FacetImage';
+import FacetFormError from '../shared/FacetFormError';
+import FacetFormContainer from '../shared/FacetFormContainer';
+
+const BorderDiv = styled.div`
+  border: 2px solid #758EBF;
+  padding: 1rem;
+`;
+
+const useStyles = makeStyles(() => ({
+  center: {
+    textAlign: 'center',
+  },
+}));
 
 export default () => {
+  const classes = useStyles();
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
   const {
     register, errors, handleSubmit, watch,
@@ -26,10 +42,9 @@ export default () => {
   password.current = watch('password', '');
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-
     // abstract this method... to be used during signup too
     try {
+      const { email, password } = data;
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
       await setKeyInLocalStorage(storage.password, password);
@@ -55,62 +70,60 @@ export default () => {
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <img src={fnLogoHorizontal} />
-      </div>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <InputLabel htmlFor="email">email</InputLabel>
-        <Input
-          style={{ width: '100%' }}
-          id="email"
-          name="email"
-          aria-invalid={errors.email ? 'true' : 'false'}
-          inputRef={register({
-            required: 'Please specify an email',
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Entered value does not match email format',
-            },
-          })}
-          type="email"
-        />
-        {errors.email && <span role="alert">{errors.email.message}</span>}
-        <InputLabel>Password</InputLabel>
-        <Input
-          style={{ width: '100%' }}
-          name="password"
-          type="password"
-          inputRef={register({
-            required: 'Please specify a password',
-          })}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
+      <FacetFormContainer>
+        <h3 style={{ color: '#C4DDF2' }}>Login</h3>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <FacetLabel htmlFor="email" text="Email"></FacetLabel>
+          <FacetInput
+            id="email"
+            name="email"
+            aria-invalid={errors.email ? 'true' : 'false'}
+            inputRef={register({
+              required: 'Please specify an email',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: 'Entered value does not match email format',
+              },
+            })}
+            type="email"
+          />
+          <br />
+          {errors.email && <FacetFormError role="alert" text={errors.email.message}></FacetFormError>}
+          <br />
+          <FacetLabel text="Password" />
+          <FacetInput
+            name="password"
+            type="password"
+            inputRef={register({
+              required: 'Please specify a password',
+            })}
+          />
+          <br />
+          {errors.password && <FacetFormError role="alert" text={errors.password.message}></FacetFormError>}
+          <br />
+          <div>
+            <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
+          </div>
+          <br />
+          <div className={classes.center}>
+            <div>
+              <FacetLink underline='hover' text='RESET PASSWORD' onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)} />
+            </div>
+            <br />
+            <Typography>
+              <b>
+                <FacetLabel text='No profile? ' />
+                <FacetLink color='#758EBF' text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+              </b>
+              <br />
+              <br />
+              <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
+            </Typography>
+          </div>
+        </form>
+        {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
-        <br />
-        <div>
-          Forgot your password?
-          <Link href="#" onClick={() => setCurrAuthState(authStateConstant.onForgotPassword)}>
-            {' '}
-            Click here to reset it.
-          </Link>
-        </div>
-        <br />
-        <div>
-          <Button style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Login</Button>
-        </div>
-      </form>
-      <br />
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <br />
-      <div>
-        Don't have an account?
-        <Link href="#" onClick={() => {
-         setCurrAuthState(authStateConstant.signingUp)
-        }}>
-          {' '}
-          Sign up
-        </Link>
-      </div>
+      </FacetFormContainer>
     </>
   );
 };
