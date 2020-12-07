@@ -102,6 +102,9 @@ const getKeyFromLocalStorage = async (key) => {
  * @param {*} value 
  */
 const setKeyInLocalStorage = async (key, value) => {
+    if (isDevelopment()) {
+        return;
+    }
     const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
         [facetKey]: {

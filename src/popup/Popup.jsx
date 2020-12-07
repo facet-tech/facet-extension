@@ -10,6 +10,7 @@ import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
 import Main from './Main';
 import AppContext from '../AppContext';
+import WelcomeAbroad from '../shared/WelcomeAbroad/WelcomeAbroad';
 
 const StyledDiv = styled.div`
     display: grid;
@@ -29,20 +30,21 @@ export default () => {
   const popupContext = React.useContext(AppContext);
   const { currAuthState, jwt } = useContext(AppContext);
   let displayElement;
+  console.log("JWT", jwt, 'currst8', currAuthState);
   if (jwt || currAuthState === authStateConstant.signedIn) {
     // close current tab
-    chrome.tabs.getCurrent(function (tab) {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const redirectTabId = urlParams.get('redirectTabId');
-      if (redirectTabId) {
-        chrome.tabs.reload(parseInt(redirectTabId));
-      }
-      // todo uncomment
-      chrome.tabs.remove(tab.id);
-    });
+    // chrome.tabs.getCurrent(function (tab) {
+    //   const queryString = window.location.search;
+    //   const urlParams = new URLSearchParams(queryString);
+    //   const redirectTabId = urlParams.get('redirectTabId');
+    //   if (redirectTabId) {
+    //     chrome.tabs.reload(parseInt(redirectTabId));
+    //   }
+    //   // todo uncomment
+    //   chrome.tabs.remove(tab.id);
+    // });
 
-    displayElement = null;
+    displayElement = <WelcomeAbroad />;
   } else if (currAuthState === authStateConstant.signingIn) {
     displayElement = <SignIn />;
   } else if (currAuthState === authStateConstant.signingUp) {

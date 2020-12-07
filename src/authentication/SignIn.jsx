@@ -42,10 +42,10 @@ export default () => {
   password.current = watch('password', '');
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-
     // abstract this method... to be used during signup too
     try {
+      const { email, password } = data;
+      console.log('signin Email', email, password);
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
       await setKeyInLocalStorage(storage.password, password);

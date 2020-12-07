@@ -1,11 +1,12 @@
 import { Input, InputAdornment, InputLabel } from '@material-ui/core';
 import React from 'react';
 
-export default ({ text }) => {
+export default ({ text, color = '#A4A7AC', fontSize='small' }) => {
     return <span
         style={{
             width: '100%',
-            color: '#A4A7AC'
+            color,
+            fontSize
         }}
     >{text}</span>
 }

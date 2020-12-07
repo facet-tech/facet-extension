@@ -20,6 +20,15 @@ const authState = {
     onPasswordReset: 'PASSWORD_RESET'
 };
 
+const fontSize = {
+    small: 'small',
+    medium: 'medium',
+    large: 'large',
+    xLarge: 'x-large',
+    xxLarge: 'xx-large',
+    xxxLarge: 'xxx-large'
+}
+
 const color = {
     electricA: '#5979D9',
     electricB: '#758EBF',
@@ -86,5 +95,5 @@ export {
     facetizerId, facetKey, isPluginEnabled,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
-    authStorage, ChromeRequestType, color
+    authStorage, ChromeRequestType, color, fontSize
 };
