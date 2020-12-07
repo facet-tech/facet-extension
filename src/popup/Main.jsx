@@ -137,7 +137,7 @@ export default () => {
           </IconButton>
         </div>
         <div>
-          <IconButton color="primary" aria-label="logout" component="span">
+          <IconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
             <FacetImage src={logoutLogo} />
           </IconButton>
         </div>

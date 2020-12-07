@@ -32,7 +32,8 @@ export default ({ type, name, id, ...other }) => {
                 backgroundColor: '#4A4E59',
                 color: 'white',
                 padding: '.3rem',
-                borderRadius: '.5rem'
+                borderRadius: '.5rem',
+                height: '2rem'
             }}
             id="standard-adornment-weight"
             aria-describedby="standard-weight-helper-text"

@@ -24,7 +24,6 @@ export default ({
             disabled={disabled}
             onClick={() => { onClick() }}
             variant="contained"
-            size="small"
             {...other}>
             {text}
         </ColorButton>
