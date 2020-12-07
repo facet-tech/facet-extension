@@ -12,6 +12,7 @@ import FacetInput from "../shared/FacetInput";
 import FacetLabel from "../shared/FacetLabel";
 import FacetButton from "../shared/FacetButton";
 import FacetLink from "../shared/FacetLink";
+import FacetFormError from "../shared/FacetFormError";
 
 export default () => {
     const { setCurrAuthState } = React.useContext(AppContext);
@@ -36,7 +37,6 @@ export default () => {
                 <form onSubmit={e => e.preventDefault()}>
                     <FacetLabel text="EMAIL" htmlFor="email" />
                     <FacetInput
-                        style={{ width: "100%" }}
                         id="email"
                         name="email"
                         aria-invalid={errors.email ? "true" : "false"}

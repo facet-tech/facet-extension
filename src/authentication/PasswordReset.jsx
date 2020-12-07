@@ -6,9 +6,15 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
-import { authState as authStateConstant } from '../shared/constant';
+import { authState as authStateConstant, color } from '../shared/constant';
 import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
+import FacetLink from '../shared/FacetLink';
+import FacetInput from '../shared/FacetInput';
+import FacetLabel from '../shared/FacetLabel';
+import FacetButton from '../shared/FacetButton';
+import FacetFormContainer from '../shared/FacetFormContainer';
+import FacetFormError from '../shared/FacetFormError';
 
 export default () => {
   const { setCurrAuthState } = useContext(AppContext);
@@ -48,79 +54,69 @@ export default () => {
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <img src={facetLogo} />
-      </div>
       <br />
-      <div>
-        Check your email, a verification code has been sent. Don't see the code?
-        <Link href="#" onClick={() => { resendConfirmationCode(); }}>
-          {' '}
-          Click here to resend
-        </Link>
-      </div>
-      <br />
-      <br />
-      <form onSubmit={(e) => e.preventDefault()}>
+      <FacetFormContainer>
         <div>
-          <InputLabel htmlFor="code">Enter your verification code</InputLabel>
-          <Input
-            style={{ width: '100%' }}
-            id="code"
-            name="code"
-            aria-invalid={errors.code ? 'true' : 'false'}
-            inputRef={register({
-              required: 'Please enter your code',
-            })}
-            type="code"
-          />
-          {errors.code && <span role="alert">{errors.code.message}</span>}
+          <FacetLabel text="Check your email, a verification code has been sent. Don't see the code? " />
+          <FacetLink color={color.electricB} text="Click here to resend" href="#" onClick={() => { resendConfirmationCode(); }} />
         </div>
         <br />
-        <div>
-          <InputLabel>Password</InputLabel>
-          <Input
-            style={{ width: '100%' }}
-            name="password"
-            type="password"
-            inputRef={register({
-              required: 'You must specify a password',
-              minLength: {
-                value: 8,
-                message: 'Password must have at least 8 characters',
-              },
-            })}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
+        <br />
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div>
+            <FacetLabel text="Enter your verification code" htmlFor="code" />
+            <FacetInput
+              id="code"
+              name="code"
+              aria-invalid={errors.code ? 'true' : 'false'}
+              inputRef={register({
+                required: 'Please enter your code',
+              })}
+              type="code"
+            />
+            {errors.code && <FacetFormError text={errors.code.message} role="alert" />}
+          </div>
+          <br />
+          <div>
+            <FacetLabel text="Password" />
+            <FacetInput
+              name="password"
+              type="password"
+              inputRef={register({
+                required: 'You must specify a password',
+                minLength: {
+                  value: 8,
+                  message: 'Password must have at least 8 characters',
+                },
+              })}
+            />
+            {errors.password && <FacetFormError text={errors.password.message} />}
+          </div>
+          <br />
+          <div>
+            <FacetLabel text="Repeat password" />
+            <FacetInput
+              name="password_repeat"
+              type="password"
+              inputRef={register({
+                validate: (value) => value === password.current || 'The passwords do not match',
+              })}
+            />
+            {errors.password_repeat && <FacetFormError text={errors.password_repeat.message} />}
+          </div>
+          <br />
+          <div>
+            <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" text="Reset password" onClick={handleSubmit(onSubmit)} />
+          </div>
+        </form>
+        <br />
+        {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
         <div>
-          <InputLabel>Repeat password</InputLabel>
-          <Input
-            style={{ width: '100%' }}
-            name="password_repeat"
-            type="password"
-            inputRef={register({
-              validate: (value) => value === password.current || 'The passwords do not match',
-            })}
-          />
-          {errors.password_repeat && <p>{errors.password_repeat.message}</p>}
+          <FacetLabel text="Don't have an account? " />
+          <FacetLink text="Register" href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)} />
         </div>
-        <br />
-        <div>
-          <Button style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>Reset password</Button>
-        </div>
-      </form>
-      <br />
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <br />
-      <div>
-        Don't have an account?
-        <Link href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)}>
-          {' '}
-          Sign up
-        </Link>
-      </div>
+      </FacetFormContainer>
     </>
   );
 };
