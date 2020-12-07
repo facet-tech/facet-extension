@@ -50,9 +50,9 @@ export default () => {
             <FacetFormContainer>
                 <FacetLabel text="An email has been sent to your address with an authorization key." />
                 <br />
-                <FacetLabel text="I did not get any email." />
+                <FacetLabel text="I did not get any email. " />
                 <FacetLink color={color.electricB} text="Resend key to my email" onClick={() => { resendConfirmationCode() }} />
-                <FacetLabel text="or" />
+                <FacetLabel text=" or " />
                 <FacetLink color={color.electricB} text="Register again" onClick={() => { setCurrAuthState(auth) }} />
                 <br />
                 <br />

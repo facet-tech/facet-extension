@@ -52,7 +52,7 @@ export default () => {
         }
         chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             var currTab = tabs[0];
-            chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}`) });
+            chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
         });
     }
 

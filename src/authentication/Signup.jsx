@@ -1,10 +1,8 @@
 import React, { useRef, useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
-import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant, color } from '../shared/constant';
 import facetLogo from '../static/images/facet_main_logo.svg';
-import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
 import FacetLink from "../shared/FacetLink";
@@ -138,7 +136,7 @@ export default () => {
         {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
         <div style={{ textAlign: 'center' }}>
-          <b><FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
+          <b><FacetLink fontSize="medium" text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
         </div>
       </FacetFormContainer>
     </ >

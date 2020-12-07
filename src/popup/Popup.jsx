@@ -4,7 +4,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SignIn from '../authentication/SignIn';
 import Signup from '../authentication/Signup';
-import { authState as authStateConstant } from '../shared/constant';
+import { authState, authState as authStateConstant } from '../shared/constant';
 import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
@@ -28,9 +28,22 @@ const InnerDiv = styled.div`
 export default () => {
   const context = useContext(AppContext);
   const popupContext = React.useContext(AppContext);
-  const { currAuthState, jwt } = useContext(AppContext);
+  const { currAuthState, jwt, setCurrAuthState } = useContext(AppContext);
   let displayElement;
-  if (jwt || currAuthState === authStateConstant.signedIn) {
+
+  useEffect(() => {
+    async function loadState() {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const type = urlParams.get('type');
+      if (type === "register") {
+        setCurrAuthState(authState.signingUp);
+      }
+    }
+    loadState();
+  }, [])
+  //jwt || currAuthState === authStateConstant.signedIn
+  if (false) {
     // Commented this in favor of WelcomeAbroad component
     // chrome.tabs.getCurrent(function (tab) {
     //   const queryString = window.location.search;
