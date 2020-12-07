@@ -25,7 +25,6 @@ import FacetImage from '../shared/FacetImage';
 import settingsLogo from '../static/images/facet_settings.svg';
 import IconButton from '@material-ui/core/IconButton';
 import FacetLabel from '../shared/FacetLabel';
-import FacetButton from '../shared/FacetButton';
 import FacetCard from '../shared/FacetCard/FacetCard';
 import FacetInput from '../shared/FacetInput';
 import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
@@ -52,14 +51,20 @@ const TwoGridDiv = styled.div`
     align-items: center;
 `;
 
-
-
 const TopDiv = styled.div`
   padding: 1rem;
 `;
 
 const MarginTop = styled.div`
     margin-top: ${(props) => props.value};
+`;
+
+const CenteredDiv = styled.div`
+text-align: center;
+`;
+
+const PaddingDiv = styled.div`
+padding: 1rem;
 `;
 
 export default () => {
@@ -148,14 +153,6 @@ export default () => {
     </TopDiv>
   );
 
-  const CenteredDiv = styled.div`
-    text-align: center;
-  `;
-
-  const PaddingDiv = styled.div`
-    padding: 1rem;
-  `;
-
   const element = isPluginEnabled ? (
     <div>
       {enableFacetizerElement}
@@ -170,7 +167,8 @@ export default () => {
           <br />
           <TwoGridDiv>
             <div>
-              <FacetInput value={invitee} onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
+              {/* setInvitee(e.target.value) */}
+              <FacetInput onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
             </div>
             <div>
               <FacetImageButton onClick={() => invite()} color={color.ice} startIconSrc={InviteIcon} text="Invite" />
