@@ -135,7 +135,6 @@ const AppProvider = ({ children }) => {
       const workspaceId = workspaceResponse?.response?.workspaceId;
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
-      console.log('storageEmail',storageEmail,'workspaceId',workspaceId,'domainId',domainId);
       await initSessionData({workspaceId, domainId});
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {

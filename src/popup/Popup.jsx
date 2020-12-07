@@ -30,9 +30,8 @@ export default () => {
   const popupContext = React.useContext(AppContext);
   const { currAuthState, jwt } = useContext(AppContext);
   let displayElement;
-  console.log("JWT", jwt, 'currst8', currAuthState);
   if (jwt || currAuthState === authStateConstant.signedIn) {
-    // close current tab
+    // Commented this in favor of WelcomeAbroad component
     // chrome.tabs.getCurrent(function (tab) {
     //   const queryString = window.location.search;
     //   const urlParams = new URLSearchParams(queryString);

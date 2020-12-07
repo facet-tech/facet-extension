@@ -45,7 +45,6 @@ export default () => {
     // abstract this method... to be used during signup too
     try {
       const { email, password } = data;
-      console.log('signin Email', email, password);
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
       await setKeyInLocalStorage(storage.password, password);
