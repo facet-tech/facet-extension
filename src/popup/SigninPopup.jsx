@@ -23,7 +23,6 @@ const InnerStyledDiv = styled.div`
 
 export default () => {
 
-
     const [hasUserLoggedIn, setHasUserLoggedIn] = useState(false);
     console.log('hasUserLoggedIn', hasUserLoggedIn)
 

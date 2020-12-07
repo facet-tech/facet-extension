@@ -60,6 +60,10 @@ module.exports = (_, argv) => {
                     loader: 'json5-loader',
                     type: 'javascript/auto',
                 },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                    type: 'asset/resource',
+                },
             ],
         },
         resolve: {

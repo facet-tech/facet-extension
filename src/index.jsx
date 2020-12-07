@@ -15,6 +15,7 @@ import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
 import SigninPopup from './popup/SigninPopup';
 import styled from 'styled-components';
+import 'typeface-roboto';
 
 Amplify.configure(awsExports);
 

@@ -98,7 +98,7 @@ export default () => {
           {errors.email && <FacetFormError role="alert" text={errors.email.message} />}
           <br />
           <br />
-          <FacetLabel text="Password"/>
+          <FacetLabel text="Password" />
           <FacetInput
             name="password"
             type="password"
@@ -120,7 +120,7 @@ export default () => {
           {errors.password && <FacetFormError text={errors.password.message} />}
           <br />
           <br />
-          <FacetLabel text="Repeat password"/>
+          <FacetLabel text="Repeat password" />
           <FacetInput
             name="password_repeat"
             type="password"
@@ -138,7 +138,7 @@ export default () => {
         {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
         <div style={{ textAlign: 'center' }}>
-          <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
+          <b><FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
         </div>
       </FacetFormContainer>
     </ >
