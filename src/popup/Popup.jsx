@@ -42,8 +42,8 @@ export default () => {
     }
     loadState();
   }, [])
-  //jwt || currAuthState === authStateConstant.signedIn
-  if (false) {
+
+  if (jwt || currAuthState === authStateConstant.signedIn) {
     // Commented this in favor of WelcomeAbroad component
     // chrome.tabs.getCurrent(function (tab) {
     //   const queryString = window.location.search;
@@ -55,7 +55,6 @@ export default () => {
     //   // todo uncomment
     //   chrome.tabs.remove(tab.id);
     // });
-
     displayElement = <WelcomeAbroad />;
   } else if (currAuthState === authStateConstant.signingIn) {
     displayElement = <SignIn />;

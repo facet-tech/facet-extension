@@ -86,7 +86,7 @@ if (document.getElementById('authentication')) {
         }}
       >
         <div style={{ display: 'grid' }}>
-          <AppProvider id='gg'>
+          <AppProvider>
             <PopupProvider id='popup-provider'>
               <SigninPopup />
             </PopupProvider>
