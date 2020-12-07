@@ -1,9 +1,26 @@
-import { Input } from '@material-ui/core';
+import { Input, withStyles } from '@material-ui/core';
 import React from 'react';
+import { color } from '../constant';
+
+const CustomInput = withStyles(
+    {
+        focused: {},
+        disabled: {},
+        error: {},
+        underline: {
+            '&:after': {
+                borderBottom: `2px solid ${color.ice}`
+            },
+            '&:hover:not($disabled):not($focused):not($error):before': {
+                borderBottom: `2px solid ${color.ice}`
+            }
+        }
+    }
+)(Input);
 
 export default ({ type, name, id, ...other }) => {
     return <div>
-        <Input
+        <CustomInput
             id={id}
             type={type}
             name={name}

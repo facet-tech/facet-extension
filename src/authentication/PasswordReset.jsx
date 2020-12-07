@@ -56,6 +56,7 @@ export default () => {
     <>
       <br />
       <FacetFormContainer>
+      <h3 style={{ color: color.ice }}>Reset Password</h3>
         <div>
           <FacetLabel text="Check your email, a verification code has been sent. Don't see the code? " />
           <FacetLink color={color.electricB} text="Click here to resend" href="#" onClick={() => { resendConfirmationCode(); }} />
