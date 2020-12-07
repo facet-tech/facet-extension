@@ -13,17 +13,34 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Auth } from 'aws-amplify';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import {
-  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant,
+  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize,
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import { createNewUser, deleteUser, getDomain } from '../services/facetApiService';
 import AppContext from '../AppContext';
+import facetLogo from '../static/images/facet_typography.svg';
+import logoutLogo from '../static/images/facet_logout.svg';
+import FacetImage from '../shared/FacetImage';
+import settingsLogo from '../static/images/facet_settings.svg';
+import IconButton from '@material-ui/core/IconButton';
+import FacetLabel from '../shared/FacetLabel';
+import FacetButton from '../shared/FacetButton';
+import FacetCard from '../shared/FacetCard/FacetCard';
+import FacetInput from '../shared/FacetInput';
+import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
+import InviteIcon from '../static/images/facet_invite_person.svg';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 30% 30% 30%;
-    grid-gap: 5%;
+    grid-template-columns: 75% 12.5% 12.5%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const GridDivTwoColumn = styled.div`
+    display: grid;
+    grid-template-columns: 75% 25%;
     align-items: center;
     justify-content: center;
 `;
@@ -33,7 +50,12 @@ const TwoGridDiv = styled.div`
     grid-template-columns: 60% 30%;
     grid-gap: 5%;
     align-items: center;
-    justify-content: center;
+`;
+
+
+
+const TopDiv = styled.div`
+  padding: 1rem;
 `;
 
 const MarginTop = styled.div`
@@ -78,7 +100,7 @@ export default () => {
     setKeyInLocalStorage(isPluginEnabledConstant, e);
     setIsPluginEnabled(e);
   };
-  
+
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
@@ -99,28 +121,40 @@ export default () => {
   }, [url, setTextToCopy]);
 
   const enableFacetizerElement = (
-    <div>
+    <TopDiv>
       <GridDiv>
         <div>
-          <Typography gutterBottom>
-            Enable Plugin:
-          </Typography>
+          <FacetImage src={facetLogo} />
+        </div>
+        <div>
+          <IconButton color="primary" aria-label="settings" component="span">
+            <FacetImage src={settingsLogo} />
+          </IconButton>
+        </div>
+        <div>
+          <IconButton color="primary" aria-label="logout" component="span">
+            <FacetImage src={logoutLogo} />
+          </IconButton>
+        </div>
+      </GridDiv>
+      <GridDivTwoColumn>
+        <div>
+          <FacetLabel color={color.ice} text="Enable Plugin" />
         </div>
         <div>
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
         </div>
-        <div>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => logout()}
-          >
-            logout
-          </Button>
-        </div>
-      </GridDiv>
-    </div>
+      </GridDivTwoColumn>
+    </TopDiv>
   );
+
+  const CenteredDiv = styled.div`
+    text-align: center;
+  `;
+
+  const PaddingDiv = styled.div`
+    padding: 1rem;
+  `;
 
   const element = isPluginEnabled ? (
     <div>
@@ -128,45 +162,24 @@ export default () => {
       <Divider />
       <MarginTop value=".5rem" />
       <Divider />
-      <TwoGridDiv>
-        <div>
-          <TextField
-            onChange={(e) => { setInvitee(e.target.value); }}
-            id="outlined-basic"
-            variant="outlined"
-            type="email"
-            placeholder="example@email.com"
-          />
-        </div>
-        <div>
-          <Button
-            style={{ width: '100%' }}
-            onClick={() => invite()}
-            startIcon={<ContactMailIcon />}
-            variant="contained"
-            color="primary"
-            size="small"
-          >
-            Invite
-          </Button>
-        </div>
-      </TwoGridDiv>
+      <PaddingDiv>
+        <FacetCard>
+          <CenteredDiv>
+            <FacetLabel fontSize={fontSize.medium} color={color.grayA} text="Send Invitation" />
+          </CenteredDiv>
+          <br />
+          <TwoGridDiv>
+            <div>
+              <FacetInput onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
+            </div>
+            <div>
+              <FacetImageButton onClick={() => invite()} color={color.ice} startIconSrc={InviteIcon} text="Invite" />
+            </div>
+          </TwoGridDiv>
+        </FacetCard>
+      </PaddingDiv>
       <Divider />
       <MarginTop value=".5rem" />
-      <CopyToClipboard
-        text={textToCopy}
-        onCopy={() => enqueueSnackbar('Copied snippet', { variant: 'info' })}
-      >
-        <Button
-          startIcon={<FileCopyIcon />}
-          style={{ width: '100%' }}
-          variant="contained"
-          color="primary"
-          size="small"
-        >
-          Copy Snippet
-        </Button>
-      </CopyToClipboard>
     </div>
   ) : enableFacetizerElement;
   return (

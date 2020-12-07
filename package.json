@@ -10,7 +10,6 @@
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@sentry/browser": "^5.28.0",
         "@sentry/tracing": "^5.28.0",
-        "autoprefixer": "7.2.6",
         "aws-amplify": "^3.3.11",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
         "chalk": "^4.1.0",

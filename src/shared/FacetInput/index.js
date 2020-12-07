@@ -7,7 +7,11 @@ const CustomInput = withStyles(
         focused: {},
         disabled: {},
         error: {},
+        borderRadius: "1rem",
         underline: {
+            '&:before': {
+                borderBottom: 'none'
+            },
             '&:after': {
                 borderBottom: `2px solid ${color.ice}`
             },
@@ -29,6 +33,7 @@ export default ({ type, name, id, ...other }) => {
                 backgroundColor: '#4A4E59',
                 color: 'white',
                 padding: '.3rem',
+                borderRadius: '.5rem'
             }}
             id="standard-adornment-weight"
             aria-describedby="standard-weight-helper-text"

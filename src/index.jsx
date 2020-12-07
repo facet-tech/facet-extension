@@ -44,32 +44,33 @@ if (!document.getElementById('popup')) {
   }
 }
 
-if (document.getElementById('authentication')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SnackbarProvider
-        maxSnack={4}
-        disableWindowBlurListener
-        autoHideDuration={5000}
-        iconVariant={{
-          error: '✖️',
-          warning: '⚠️',
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div>
-          <AppProvider>
-            <Popup />
-          </AppProvider>
-        </div>
-      </SnackbarProvider>
-    </React.StrictMode>,
-    document.getElementById('authentication'),
-  );
-} else if (document.getElementById('popup')) {
+// if (document.getElementById('authentication')) {
+//   ReactDOM.render(
+//     <React.StrictMode>
+//       <SnackbarProvider
+//         maxSnack={4}
+//         disableWindowBlurListener
+//         autoHideDuration={5000}
+//         iconVariant={{
+//           error: '✖️',
+//           warning: '⚠️',
+//         }}
+//         anchorOrigin={{
+//           vertical: 'top',
+//           horizontal: 'left',
+//         }}
+//       >
+//         <div>
+//           <AppProvider>
+//             <Popup />
+//           </AppProvider>
+//         </div>
+//       </SnackbarProvider>
+//     </React.StrictMode>,
+//     document.getElementById('authentication'),
+//   );
+// } else 
+if (document.getElementById('popup')) {
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
