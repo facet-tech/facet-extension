@@ -139,7 +139,7 @@ export default () => {
       </GridDiv>
       <GridDivTwoColumn>
         <div>
-          <FacetLabel color={color.ice} text="Enable Plugin" />
+          <FacetLabel fontSize={fontSize.medium} color={color.ice} text="Enable Plugin" />
         </div>
         <div>
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
@@ -170,7 +170,7 @@ export default () => {
           <br />
           <TwoGridDiv>
             <div>
-              <FacetInput onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
+              <FacetInput value={invitee} onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
             </div>
             <div>
               <FacetImageButton onClick={() => invite()} color={color.ice} startIconSrc={InviteIcon} text="Invite" />

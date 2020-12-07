@@ -7,7 +7,6 @@ const CustomInput = withStyles(
         focused: {},
         disabled: {},
         error: {},
-        borderRadius: "1rem",
         underline: {
             '&:before': {
                 borderBottom: 'none'
