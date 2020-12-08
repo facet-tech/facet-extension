@@ -14,15 +14,9 @@ import FacetInput from '../shared/FacetInput';
 import FacetLabel from '../shared/FacetLabel';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
-import styled from 'styled-components';
-import FacetImage from '../shared/FacetImage';
 import FacetFormError from '../shared/FacetFormError';
 import FacetFormContainer from '../shared/FacetFormContainer';
-
-const BorderDiv = styled.div`
-  border: 2px solid #758EBF;
-  padding: 1rem;
-`;
+import MarginTop from '../shared/MarginTop';
 
 const useStyles = makeStyles(() => ({
   center: {
@@ -74,6 +68,7 @@ export default () => {
         <h3 style={{ color: '#C4DDF2' }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
           <FacetLabel htmlFor="email" text="Email"></FacetLabel>
+          <MarginTop value='.5rem'/>
           <FacetInput
             id="email"
             name="email"
@@ -91,6 +86,7 @@ export default () => {
           {errors.email && <FacetFormError role="alert" text={errors.email.message}></FacetFormError>}
           <br />
           <FacetLabel text="Password" />
+          <MarginTop value='.5rem'/>
           <FacetInput
             name="password"
             type="password"

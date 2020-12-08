@@ -69,7 +69,8 @@ if (document.getElementById('authentication')) {
     </React.StrictMode>,
     document.getElementById('authentication'),
   );
-} else if (document.getElementById('popup')) {
+} else 
+if (document.getElementById('popup')) {
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider

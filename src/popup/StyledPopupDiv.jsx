@@ -8,6 +8,7 @@ const StyledDiv = styled.div`
     background-color: #181D26;
     height: 100%;
     max-width: 35rem;
+    text-align: center;
 `;
 
 export default ({ children }) => {

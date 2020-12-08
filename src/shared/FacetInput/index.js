@@ -8,13 +8,22 @@ const CustomInput = withStyles(
         disabled: {},
         error: {},
         underline: {
+            '&:before': {
+                borderBottom: 'none'
+            },
             '&:after': {
                 borderBottom: `2px solid ${color.ice}`
             },
             '&:hover:not($disabled):not($focused):not($error):before': {
                 borderBottom: `2px solid ${color.ice}`
             }
-        }
+        },
+        input: {
+            '&:-webkit-autofill': {
+                transitionDelay: '9999s',
+                transitionProperty: 'background-color, color',
+            },
+        },
     }
 )(Input);
 
@@ -26,9 +35,11 @@ export default ({ type, name, id, ...other }) => {
             name={name}
             style={{
                 width: '100%',
-                backgroundColor: '#4A4E59',
+                backgroundColor: color.grayA,
                 color: 'white',
                 padding: '.3rem',
+                borderRadius: '.5rem',
+                height: '2rem'
             }}
             id="standard-adornment-weight"
             aria-describedby="standard-weight-helper-text"

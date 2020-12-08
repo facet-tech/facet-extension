@@ -11,10 +11,11 @@ import FacetButton from '../shared/FacetButton';
 import FacetLabel from '../shared/FacetLabel';
 import FacetLink from '../shared/FacetLink';
 import StyledPopupDiv from './StyledPopupDiv';
+import { color } from '../shared/constant';
 
 const StyledDiv = styled.div`
-    width: 20rem;
-    text-align: center;
+    width: 25rem;
+    background-color: ${color.darkGray};
 `;
 
 const InnerStyledDiv = styled.div`
