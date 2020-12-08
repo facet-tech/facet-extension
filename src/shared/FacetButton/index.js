@@ -1,30 +1,36 @@
 import { Button } from '@material-ui/core';
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { color as colorConstant } from '../constant';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { green, purple } from '@material-ui/core/colors';
 
-export default ({
-    color = colorConstant.ice, backgroundColor = colorConstant.grayA,
-    hoverColor = colorConstant.ice, onClick, text, disabled, ...other }) => {
-
-    const ColorButton = withStyles(() => ({
-        root: {
-            color: color,
-            backgroundColor: backgroundColor,
-            '&:hover': {
-                backgroundColor: hoverColor,
-            },
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: '#4A4E59',
+        backgroundColor: '#C4DDF2',
+        '&:hover': {
+            backgroundColor: '#758EBF',
         },
-    }))(Button);
+    },
+}))(Button);
 
-    return <div>
+const useStyles = makeStyles((theme) => ({
+    root: {},
+}));
+
+export default ({ onClick, text, disabled }) => {
+    const classes = useStyles();
+
+    return <div className={classes.root}>
         <ColorButton
             style={{ width: '100%' }}
             variant="contained"
+            color="primary"
             disabled={disabled}
+            className={classes.margin}
             onClick={() => { onClick() }}
             variant="contained"
-            {...other}>
+            color="primary"
+            size="small">
             {text}
         </ColorButton>
     </div >
