@@ -29,7 +29,7 @@ export default ({ type, name, id, ...other }) => {
             name={name}
             style={{
                 width: '100%',
-                backgroundColor: '#4A4E59',
+                backgroundColor: color.grayA,
                 color: 'white',
                 padding: '.3rem',
                 borderRadius: '.5rem',

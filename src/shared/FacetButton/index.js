@@ -5,7 +5,7 @@ import { color as colorConstant } from '../constant';
 
 export default ({
     color = colorConstant.ice, backgroundColor = colorConstant.grayA,
-    hoverColor = colorConstant.electricB, onClick, text, disabled, ...other }) => {
+    hoverColor = colorConstant.ice, onClick, text, disabled, ...other }) => {
 
     const ColorButton = withStyles(() => ({
         root: {

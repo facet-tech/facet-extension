@@ -14,7 +14,7 @@ import StyledPopupDiv from './StyledPopupDiv';
 import { color } from '../shared/constant';
 
 const StyledDiv = styled.div`
-    width: 20rem;
+    width: 25rem;
     background-color: ${color.darkGray};
 `;
 
