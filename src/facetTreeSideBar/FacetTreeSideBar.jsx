@@ -30,6 +30,7 @@ import resetLogo from '../static/images/facet_restart_button.svg';
 import saveFacetLogo from '../static/images/facet_save.svg';
 import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
 import styled from 'styled-components';
+import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -213,13 +214,9 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <IconButton onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable">
-        <FacetImage src={facetEnableLogo} />
-      </IconButton>
+      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable" />
     ) : (
-      <IconButton onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable">
-        <DesktopWindowsIcon />
-      </IconButton>
+      <FacetIconButton src={<DesktopWindowsIcon />} onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable" />
     );
 
   return (
@@ -236,35 +233,32 @@ export default function FacetTreeSideBar() {
         <div className={classes.gridDiv}>
           <TopDiv>
             <div>
-              <FacetImage src={facetTypography} />
+              <FacetIconButton src={facetTypography} />
             </div>
             <div>
-              <IconButton color="primary" aria-label="settings" component="span">
-                <FacetImage src={facetProfileLogo} />
-              </IconButton>
+              <FacetIconButton src={facetProfileLogo} />
             </div>
             <div>
-              <IconButton color="primary" aria-label="settings" component="span">
-                <FacetImage src={settingsLogo} />
-              </IconButton>
+              <FacetIconButton src={settingsLogo} />
             </div>
             <div>
-              <IconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
-                <FacetImage src={logoutLogo} />
-              </IconButton>
+              <FacetIconButton onClick={() => { logout() }} src={logoutLogo} />
             </div>
           </TopDiv>
           <div className={classes.drawerHeader}>
             {activateDeactivateElement}
-            <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
+            <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset" src={resetLogo} />
+            {/* <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
               <FacetImage src={resetLogo} />
-            </IconButton>
-            <IconButton onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add">
+            </IconButton> */}
+            <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add" />
+            {/* <IconButton onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add">
               <FacetImage src={saveFacetLogo} />
-            </IconButton>
-            <IconButton onClick={() => { }} size="medium" color="secondary" aria-label="Save">
+            </IconButton> */}
+            <FacetIconButton src={resetLogo} onClick={() => { }} size="small" color="secondary" aria-label="Save" />
+            {/* <IconButton onClick={() => { }} size="medium" color="secondary" aria-label="Save">
               <FacetImage src={resetLogo} />
-            </IconButton>
+            </IconButton> */}
           </div>
           <div>
             <h3 style={{ color: color.lightGray }}>My Facets</h3>
