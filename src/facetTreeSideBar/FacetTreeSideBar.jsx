@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
@@ -20,7 +19,17 @@ import { defaultFacet, styles } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
-import FacetSwitch from '../FacetSwitch';
+import { color } from '../shared/constant.js';
+import facetTypography from '../static/images/facet_typography.svg';
+import FacetImage from '../shared/FacetImage';
+import settingsLogo from '../static/images/facet_settings.svg';
+import logoutLogo from '../static/images/logout_new.svg';
+import facetProfileLogo from '../static/images/facet_profile.svg';
+import facetEnableLogo from '../static/images/facet_button.svg';
+import resetLogo from '../static/images/facet_restart_button.svg';
+import saveFacetLogo from '../static/images/facet_save.svg';
+import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
+import styled from 'styled-components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: styles.drawerWidth,
+    backgroundColor: color.darkGray,
   },
   drawerHeader: {
     display: 'flex',
@@ -61,12 +71,17 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDiv: {
     display: 'grid',
-    gridTemplateColumns: '100%',
-    justifyItems: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+    marginLeft: '.5rem',
+    marginRight: '.5rem',
+    marginTop: '.5rem'
   },
 }));
+
+const TopDiv = styled.div`
+    display: grid;
+    grid-template-columns: 60% 10% 10% 10%;
+    grid-gap: 2%;
+`;
 
 export default function FacetTreeSideBar() {
   const classes = useStyles();
@@ -199,7 +214,7 @@ export default function FacetTreeSideBar() {
   const activateDeactivateElement = showSideBar
     ? (
       <IconButton onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable">
-        <DesktopAccessDisabledIcon />
+        <FacetImage src={facetEnableLogo} />
       </IconButton>
     ) : (
       <IconButton onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable">
@@ -219,21 +234,41 @@ export default function FacetTreeSideBar() {
         }}
       >
         <div className={classes.gridDiv}>
-          <div>
-            <h3>Facets</h3>
+          <TopDiv>
+            <div>
+              <FacetImage src={facetTypography} />
+            </div>
+            <div>
+              <IconButton color="primary" aria-label="settings" component="span">
+                <FacetImage src={facetProfileLogo} />
+              </IconButton>
+            </div>
+            <div>
+              <IconButton color="primary" aria-label="settings" component="span">
+                <FacetImage src={settingsLogo} />
+              </IconButton>
+            </div>
+            <div>
+              <IconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
+                <FacetImage src={logoutLogo} />
+              </IconButton>
+            </div>
+          </TopDiv>
+          <div className={classes.drawerHeader}>
+            {activateDeactivateElement}
+            <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
+              <FacetImage src={resetLogo} />
+            </IconButton>
+            <IconButton onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add">
+              <FacetImage src={saveFacetLogo} />
+            </IconButton>
+            <IconButton onClick={() => { }} size="medium" color="secondary" aria-label="Save">
+              <FacetImage src={resetLogo} />
+            </IconButton>
           </div>
-        </div>
-        <div className={classes.drawerHeader}>
-          {activateDeactivateElement}
-          <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
-            <RotateLeftIcon />
-          </IconButton>
-          <IconButton onClick={() => { addFacet(); }} size="small" color="secondary" aria-label="add">
-            <AddIcon />
-          </IconButton>
-          <IconButton onClick={() => { onSaveClick(); }} size="medium" color="secondary" aria-label="Save">
-            <SaveIcon />
-          </IconButton>
+          <div>
+            <h3 style={{ color: color.lightGray }}>My Facets</h3>
+          </div>
         </div>
         <Divider />
         <TreeView

@@ -69,38 +69,10 @@ if (document.getElementById('authentication')) {
     </React.StrictMode>,
     document.getElementById('authentication'),
   );
-} else 
-if (document.getElementById('popup')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SnackbarProvider
-        maxSnack={4}
-        disableWindowBlurListener
-        autoHideDuration={5000}
-        iconVariant={{
-          error: '✖️',
-          warning: '⚠️',
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div style={{ display: 'grid' }}>
-          <AppProvider>
-            <PopupProvider id='popup-provider'>
-              <SigninPopup />
-            </PopupProvider>
-          </AppProvider>
-        </div>
-      </SnackbarProvider>
-    </React.StrictMode>,
-    document.getElementById('popup'),
-  );
-} else if (document.getElementById('facetizer')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
+} else
+  if (document.getElementById('popup')) {
+    ReactDOM.render(
+      <React.StrictMode>
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
@@ -110,19 +82,47 @@ if (document.getElementById('popup')) {
             warning: '⚠️',
           }}
           anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'top',
             horizontal: 'left',
-          }}
-        >
-          <AppProvider>
-            <CoreProvider>
-              <App />
-            </CoreProvider>
-          </AppProvider>
+          }}>
+          <div style={{ display: 'grid' }}>
+            <AppProvider>
+              <PopupProvider id='popup-provider'>
+                <SigninPopup />
+              </PopupProvider>
+            </AppProvider>
+          </div>
         </SnackbarProvider>
+      </React.StrictMode>,
+      document.getElementById('popup'),
+    );
+  } else 
+  if (document.getElementById('facetizer')) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
+          <SnackbarProvider
+            maxSnack={4}
+            disableWindowBlurListener
+            autoHideDuration={5000}
+            iconVariant={{
+              error: '✖️',
+              warning: '⚠️',
+            }}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+          >
+            <AppProvider>
+              <CoreProvider>
+                <App />
+              </CoreProvider>
+            </AppProvider>
+          </SnackbarProvider>
 
-      </div>
-    </React.StrictMode>,
-    document.getElementById('facetizer'),
-  );
-}
+        </div>
+      </React.StrictMode>,
+      document.getElementById('facetizer'),
+    );
+  }
