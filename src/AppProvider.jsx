@@ -22,6 +22,7 @@ const AppProvider = ({ children }) => {
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
+  const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
 
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
@@ -31,7 +32,6 @@ const AppProvider = ({ children }) => {
 
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
-  const [loadingSideBar, setLoadingSideBar] = useState(true);
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
 
   // popup stuff

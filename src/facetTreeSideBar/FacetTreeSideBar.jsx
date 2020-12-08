@@ -80,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 60% 10% 10% 10%;
-    grid-gap: 2%;
+    grid-template-columns: 50% 10% 10% 10%;
+    grid-gap: 5%;
 `;
 
 export default function FacetTreeSideBar() {
@@ -233,7 +233,7 @@ export default function FacetTreeSideBar() {
         <div className={classes.gridDiv}>
           <TopDiv>
             <div>
-              <FacetIconButton src={facetTypography} />
+              <FacetImage src={facetTypography} />
             </div>
             <div>
               <FacetIconButton src={facetProfileLogo} />
@@ -247,18 +247,9 @@ export default function FacetTreeSideBar() {
           </TopDiv>
           <div className={classes.drawerHeader}>
             {activateDeactivateElement}
-            <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset" src={resetLogo} />
-            {/* <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
-              <FacetImage src={resetLogo} />
-            </IconButton> */}
-            <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add" />
-            {/* <IconButton onClick={() => { onSaveClick(); }} size="small" color="secondary" aria-label="add">
-              <FacetImage src={saveFacetLogo} />
-            </IconButton> */}
+            <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} />
+            <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
             <FacetIconButton src={resetLogo} onClick={() => { }} size="small" color="secondary" aria-label="Save" />
-            {/* <IconButton onClick={() => { }} size="medium" color="secondary" aria-label="Save">
-              <FacetImage src={resetLogo} />
-            </IconButton> */}
           </div>
           <div>
             <h3 style={{ color: color.lightGray }}>My Facets</h3>
