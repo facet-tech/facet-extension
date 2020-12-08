@@ -144,7 +144,7 @@ export default () => {
       </GridDiv>
       <GridDivTwoColumn>
         <div>
-          <FacetLabel fontSize={fontSize.medium} color={color.ice} text="Enable Plugin" />
+          <FacetLabel fontSize={fontSize.large} color={color.ice} text="Enable Plugin" />
         </div>
         <div>
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
@@ -157,7 +157,6 @@ export default () => {
     <div>
       {enableFacetizerElement}
       <Divider />
-      <MarginTop value=".5rem" />
       <Divider />
       <PaddingDiv>
         <FacetCard>
