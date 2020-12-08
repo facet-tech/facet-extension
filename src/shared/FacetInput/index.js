@@ -17,7 +17,13 @@ const CustomInput = withStyles(
             '&:hover:not($disabled):not($focused):not($error):before': {
                 borderBottom: `2px solid ${color.ice}`
             }
-        }
+        },
+        input: {
+            '&:-webkit-autofill': {
+                transitionDelay: '9999s',
+                transitionProperty: 'background-color, color',
+            },
+        },
     }
 )(Input);
 
