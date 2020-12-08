@@ -131,11 +131,11 @@ const AppProvider = ({ children }) => {
         return;
       }
       const storageEmail = await getKeyFromLocalStorage(storage.username);
-      const workspaceResponse = await getOrCreateWorkspace(storageEmail,false);
+      const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
       const workspaceId = workspaceResponse?.response?.workspaceId;
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
-      await initSessionData({workspaceId, domainId});
+      await initSessionData({ workspaceId, domainId });
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);

@@ -9,6 +9,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
+import { color as colorConstant } from '../shared/constant.js';
+import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
+import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -70,15 +73,18 @@ function StyledTreeItem(props) {
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                <Typography variant="body2" className={classes.labelText}>
+                <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                {onRenameItem ? <IconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
+                {/* 
+                {onRenameItem ? <FacetIconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
                     <EditIcon color="inherit" className={classes.labelIcon} />
-                </IconButton> : null}
+                </FacetIconButton> : null}
                 <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
                     <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
-                </IconButton>
+                </IconButton> */}
+
+                <FacetIconButton src={MoreSettingsIcon} />
             </div>
         </div>;
 
