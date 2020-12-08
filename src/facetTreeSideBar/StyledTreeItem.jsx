@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import { color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
+import FacetDropdown from '../shared/FacetDropdown/FacetDropdown.jsx';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -85,6 +86,7 @@ function StyledTreeItem(props) {
                 </IconButton> */}
 
                 <FacetIconButton src={MoreSettingsIcon} />
+                <FacetDropdown />
             </div>
         </div>;
 
