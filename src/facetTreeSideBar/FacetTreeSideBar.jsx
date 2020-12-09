@@ -31,6 +31,7 @@ import saveFacetLogo from '../static/images/facet_save.svg';
 import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
+import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,6 +77,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '.5rem',
     marginTop: '.5rem'
   },
+  fabGrid: {
+    display: 'grid',
+    alignItems: 'end',
+    justifyContent: 'end',
+    margin: '1rem'
+  }
 }));
 
 const TopDiv = styled.div`
@@ -267,6 +274,12 @@ export default function FacetTreeSideBar() {
         >
           {itemsElement}
         </TreeView>
+        <div className={classes.fabGrid}>
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </div>
+
       </Drawer>
       <main
         className={clsx(classes.content, {

@@ -175,25 +175,25 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             enqueueSnackbar = eSBar;
         }
 
-        // [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) * > :not(#facet-menu) * > :not(#facet-color-menu) *')]
-        //     .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
-        //         .includes(e)).forEach(e => {
-        //             // attaching these parameters into the event
-        //             e.selectedFacet = selectedFacet;
-        //             e.facetMap = facetMap;
-        //             e.setFacetMap = setFacetMap;
-        //             e.enqueueSnackbar = enqueueSnackbar;
-        //             if (addEventsFlag) {
-        //                 e.addEventListener("click", onMouseClickHandle, false);
-        //                 e.addEventListener("mouseenter", onMouseEnterHandle, false);
-        //                 e.addEventListener("mouseleave", onMouseLeaveHandle, false);
-        //             } else {
-        //                 e.removeEventListener("click", onMouseClickHandle, false);
-        //                 e.removeEventListener("mouseenter", onMouseEnterHandle, false);
-        //                 e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
-        //                 e.style.cursor = "cursor";
-        //             }
-        //         });
+        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
+            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
+                .includes(e)).forEach(e => {
+                    // attaching these parameters into the event
+                    e.selectedFacet = selectedFacet;
+                    e.facetMap = facetMap;
+                    e.setFacetMap = setFacetMap;
+                    e.enqueueSnackbar = enqueueSnackbar;
+                    if (addEventsFlag) {
+                        e.addEventListener("click", onMouseClickHandle, false);
+                        e.addEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.addEventListener("mouseleave", onMouseLeaveHandle, false);
+                    } else {
+                        e.removeEventListener("click", onMouseClickHandle, false);
+                        e.removeEventListener("mouseenter", onMouseEnterHandle, false);
+                        e.removeEventListener("mouseleave", onMouseLeaveHandle, false);
+                        e.style.cursor = "cursor";
+                    }
+                });
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }

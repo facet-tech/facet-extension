@@ -89,8 +89,8 @@ function StyledTreeItem(props) {
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                <SideColorDiv value='red'>
-                </SideColorDiv>
+                {/* <SideColorDiv value='red'>
+                </SideColorDiv> */}
                 <div style={{ backgroundColor: 'red' }}></div>
                 <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
