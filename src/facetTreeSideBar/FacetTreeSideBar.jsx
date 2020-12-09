@@ -35,15 +35,21 @@ import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'grid',
+  },
+  oneLineGrid: {
+    display: 'grid',
+    gridTemplateColumns: '90% 10%',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   drawer: {
     width: styles.drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: styles.drawerWidth,
     backgroundColor: color.darkGray,
+    width: styles.drawerWidth,
   },
   drawerHeader: {
     display: 'flex',
@@ -81,20 +87,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     alignItems: 'end',
     justifyContent: 'end',
-    margin: '1rem'
+    margin: '1rem',
+    // marginTop: '2rem'
   },
   fabBtn: {
     backgroundColor: color.lightGray,
-    // '&:hover': {
-    //   backgroundColor: color.darkGray,
-    //   boxShadow: 'none',
-    // },
-    // '&:active': {
-    //   boxShadow: 'none',
-    // },
-    // '&:focus': {
-    //   backgroundColor: color.darkGray,
-    // },
+    '&:hover': {
+      backgroundColor: color.ice,
+    },
   }
 }));
 
@@ -241,58 +241,65 @@ export default function FacetTreeSideBar() {
 
   return (
     <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.gridDiv}>
-          <TopDiv>
-            <div>
-              <FacetImage src={facetTypography} />
-            </div>
-            <div>
-              <FacetIconButton src={facetProfileLogo} />
-            </div>
-            <div>
-              <FacetIconButton src={settingsLogo} />
-            </div>
-            <div>
-              <FacetIconButton onClick={() => { logout() }} src={logoutLogo} />
-            </div>
-          </TopDiv>
-          <div className={classes.drawerHeader}>
-            {activateDeactivateElement}
-            <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} />
-            <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
-            <FacetIconButton src={resetLogo} onClick={() => { }} size="small" color="secondary" aria-label="Save" />
-          </div>
-          <div>
-            <h3 style={{ color: color.lightGray }}>My Facets</h3>
-          </div>
-        </div>
-        <Divider />
-        <TreeView
-          className={classes.treeView}
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-          expanded={expanded}
-          selected={selected}
-          onNodeToggle={handleNodeIdToggle}
-          onNodeSelect={handleNodeIdsSelect}
+      <div>
+        <Drawer
+          // className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
         >
-          {itemsElement}
-        </TreeView>
-        <div className={classes.fabGrid}>
-          <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
-            <AddIcon />
-          </Fab>
-        </div>
-      </Drawer>
+          <div className={classes.gridDiv}>
+            <TopDiv>
+              <div>
+                <FacetImage src={facetTypography} />
+              </div>
+              <div>
+                <FacetIconButton src={facetProfileLogo} />
+              </div>
+              <div>
+                <FacetIconButton src={settingsLogo} />
+              </div>
+              <div>
+                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} />
+              </div>
+            </TopDiv>
+            <div className={classes.drawerHeader}>
+              {activateDeactivateElement}
+              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} />
+              <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton src={resetLogo} onClick={() => { }} size="small" aria-label="Save" />
+            </div>
+            <div className={classes.oneLineGrid}>
+              <div>
+                <h3 style={{ color: color.lightGray }}>My Facets</h3>
+              </div>
+              <div>
+                <div className={classes.fabGrid}>
+                  <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
+                    <AddIcon />
+                  </Fab>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Divider />
+          <TreeView
+            className={classes.treeView}
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            expanded={expanded}
+            selected={selected}
+            onNodeToggle={handleNodeIdToggle}
+            onNodeSelect={handleNodeIdsSelect}
+          >
+            {itemsElement}
+          </TreeView>
+        </Drawer>
+
+      </div>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

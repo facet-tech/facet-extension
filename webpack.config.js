@@ -70,9 +70,6 @@ module.exports = (_, argv) => {
             extensions: ['*', '.js', '.jsx'],
         },
         devtool: 'inline-source-map',
-        devServer: {
-            contentBase: './build',
-        },
         plugins: [
             new CleanWebpackPlugin(),
             htmlPlugin,
@@ -97,6 +94,7 @@ module.exports = (_, argv) => {
         },
         devServer: {
             contentBase: path.resolve(__dirname, './build'),
+            hot: true
         },
     };
 }

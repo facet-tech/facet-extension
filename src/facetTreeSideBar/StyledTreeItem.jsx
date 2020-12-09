@@ -28,14 +28,14 @@ const useTreeItemStyles = makeStyles((theme) => ({
         '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
             backgroundColor: 'transparent',
         },
-        '& .MuiTreeItem-iconContainer': {
-            width: 0,
-            marginRight: '0px'
-        },
-        '& .MuiTreeItem-label': {
-            padding: 0,
-            margin: 0
-        }
+        // '& .MuiTreeItem-iconContainer': {
+        //     width: 0,
+        //     marginRight: '0px'
+        // },
+        // '& .MuiTreeItem-label': {
+        //     padding: 0,
+        //     margin: 0
+        // }
     },
     content: {
         color: theme.palette.text.secondary,
