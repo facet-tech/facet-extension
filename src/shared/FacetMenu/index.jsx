@@ -71,7 +71,7 @@ export default function FacetMenu() {
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={onColorMenuClick}>Color <ColorMenu/></StyledMenuItem>
+        <StyledMenuItem onClick={onColorMenuClick}>Color <ColorMenu /></StyledMenuItem>
         <StyledMenuItem onClick={() => { gotoClick(); handleCloseMenuEl() }}>Go to</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl() }}>Delete</StyledMenuItem>
       </StyledMenu>

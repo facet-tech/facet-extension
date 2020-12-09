@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AppContext from '../../AppContext';
 import { makeStyles, withStyles } from '@material-ui/core';
 import { color } from '../constant';
+import HorizontalColorPicker from '../HorizontalColorPicker';
 
 const StyledMenu = withStyles({
     paper: {
@@ -52,17 +53,16 @@ export default function ColorMenu() {
     return (
         <div>
             <StyledMenu
-                id="simple-menu"
+                id="facet-color-menu"
                 anchorEl={menuAnchorEl}
                 keepMounted
                 open={Boolean(menuAnchorEl)}
                 onClose={handleCloseMenuEl}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             >
-                <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>Red</StyledMenuItem>
-                <StyledMenuItem onClick={handleCloseMenuEl}>Blue</StyledMenuItem>
-                <StyledMenuItem onClick={() => { gotoClick(); handleCloseMenuEl() }}>Black</StyledMenuItem>
-                <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl() }}>Green</StyledMenuItem>
+                <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>
+                    <HorizontalColorPicker />
+                </StyledMenuItem>
             </StyledMenu>
         </div>
     );
