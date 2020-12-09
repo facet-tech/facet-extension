@@ -42,7 +42,7 @@ const StyledMenuItem = withStyles((theme) => ({
     '&:focus': {
       backgroundColor: color.lightGray,
       '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: theme.palette.common.white,
+        color: color.ice,
       },
     },
   },
@@ -52,10 +52,10 @@ const StyledMenuItem = withStyles((theme) => ({
 
 export default function FacetMenu() {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
-  const [colorMenuOpen, setColorMenuOpen] = useState(false);
-
+  const [colorMenuOpen, setColorMenuOpen] = useState(true);
+  console.log('colorMenuOpen', colorMenuOpen);
   const onColorMenuClick = (e) => {
-    setColorMenuOpen(!colorMenuOpen);
+    // setColorMenuOpen(!colorMenuOpen);
   }
 
   return (
@@ -67,13 +67,16 @@ export default function FacetMenu() {
         id="facet-menu"
         anchorEl={menuAnchorEl}
         keepMounted
-        open={Boolean(menuAnchorEl)}
+        open={true}
         onClose={handleCloseMenuEl}
       >
-        <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={onColorMenuClick}>Color <ColorMenu /></StyledMenuItem>
-        <StyledMenuItem onClick={() => { gotoClick(); handleCloseMenuEl() }}>Go to</StyledMenuItem>
-        <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl() }}>Delete</StyledMenuItem>
+        <StyledMenuItem onClick={() => { }}>Rename</StyledMenuItem>
+        <StyledMenuItem onClick={() => { }}>
+          Color {'>'}
+          <ColorMenu />
+        </StyledMenuItem>
+        <StyledMenuItem onClick={() => { }}>Go to</StyledMenuItem>
+        <StyledMenuItem onClick={() => { }}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>
   );

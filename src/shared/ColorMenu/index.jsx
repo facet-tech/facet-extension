@@ -20,7 +20,7 @@ const StyledMenu = withStyles({
 })((props) => (
     <Menu
         MenuListProps={{ disablePadding: true }}
-        backgroundColor={color.darkGray}
+        backgroundColor={color.redError}
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
@@ -54,15 +54,14 @@ export default function ColorMenu() {
         <div>
             <StyledMenu
                 id="facet-color-menu"
-                anchorEl={menuAnchorEl}
+                // anchorEl={menuAnchorEl}
                 keepMounted
-                open={Boolean(menuAnchorEl)}
-                onClose={handleCloseMenuEl}
+                open={true}
+                // onClose={handleCloseMenuEl}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             >
-                <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>
-                    <HorizontalColorPicker />
-                </StyledMenuItem>
+
+                <HorizontalColorPicker />
             </StyledMenu>
         </div>
     );
