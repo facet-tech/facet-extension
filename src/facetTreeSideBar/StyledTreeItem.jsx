@@ -9,24 +9,29 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
-import { color as colorConstant } from '../shared/constant.js';
+import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
+import styled from 'styled-components';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.text.primary,
+        margin: 0,
         '&:hover > $content': {
             backgroundColor: theme.palette.action.hover,
         },
         '&:focus > $content, &$selected > $content': {
-            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+            backgroundColor: `var(--tree-view-bg-color, ${color.ice})`,
             color: 'var(--tree-view-color)',
         },
         '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
             backgroundColor: 'transparent',
         },
+        '& .MuiTreeItem-iconContainer': {
+            width: 0,
+            marginRight: '0px'
+        }
     },
     content: {
         color: theme.palette.text.secondary,
@@ -64,6 +69,12 @@ const useTreeItemStyles = makeStyles((theme) => ({
     },
 }));
 
+const SideColorDiv = styled.div`
+    width: .5rem;
+    background-color: red;
+    align-self: stretch;
+`;
+
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
@@ -71,11 +82,12 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const [renameValue, setRenameValue] = useState('');
 
-
-
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
+                <SideColorDiv value='red'>
+                </SideColorDiv>
+                <div style={{ backgroundColor: 'red' }}></div>
                 <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
@@ -88,7 +100,7 @@ function StyledTreeItem(props) {
                 </IconButton> */}
 
                 <FacetIconButton src={MoreSettingsIcon} onClick={() => { }} />
-                <FacetMenu />
+                {/* <FacetMenu /> */}
             </div>
         </div>;
 
