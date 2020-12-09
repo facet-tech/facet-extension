@@ -82,6 +82,19 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'end',
     justifyContent: 'end',
     margin: '1rem'
+  },
+  fabBtn: {
+    backgroundColor: color.lightGray,
+    // '&:hover': {
+    //   backgroundColor: color.darkGray,
+    //   boxShadow: 'none',
+    // },
+    // '&:active': {
+    //   boxShadow: 'none',
+    // },
+    // '&:focus': {
+    //   backgroundColor: color.darkGray,
+    // },
   }
 }));
 
@@ -221,9 +234,9 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable" />
+      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
     ) : (
-      <FacetIconButton src={<DesktopWindowsIcon />} onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable" />
+      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" aria-label="Enable" />
     );
 
   return (
@@ -275,11 +288,10 @@ export default function FacetTreeSideBar() {
           {itemsElement}
         </TreeView>
         <div className={classes.fabGrid}>
-          <Fab color="primary" aria-label="add">
+          <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
             <AddIcon />
           </Fab>
         </div>
-
       </Drawer>
       <main
         className={clsx(classes.content, {

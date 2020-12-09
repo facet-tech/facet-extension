@@ -48,8 +48,6 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-
-
 export default function FacetMenu() {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
   const [colorMenuOpen, setColorMenuOpen] = useState(true);
