@@ -31,6 +31,10 @@ const useTreeItemStyles = makeStyles((theme) => ({
         '& .MuiTreeItem-iconContainer': {
             width: 0,
             marginRight: '0px'
+        },
+        '& .MuiTreeItem-label': {
+            padding: 0,
+            margin: 0
         }
     },
     content: {
@@ -58,7 +62,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelRoot: {
         display: 'flex',
         alignItems: 'center',
-        padding: theme.spacing(0.5, 0),
     },
     labelIcon: {
         marginRight: theme.spacing(1),
@@ -66,6 +69,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
+        margin: '1rem'
     },
 }));
 
