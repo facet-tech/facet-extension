@@ -36,12 +36,10 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
   const handleClickMenuEl = (event) => {
-    console.log('@CLICK',event.currentTarget)
     setMenuAnchorEl(event.currentTarget);
   };
 
   const handleCloseMenuEl = () => {
-    console.log('@close')
     setMenuAnchorEl(null);
   };
 

@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppContext from '../../AppContext';
-import { makeStyles, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { color } from '../constant';
+import facetPolygon from '../../static/images/facet_polygon.svg';
+import FacetImage from '../FacetImage';
+import ColorMenu from '../ColorMenu';
 
 const StyledMenu = withStyles({
   paper: {
@@ -45,25 +48,32 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
+
+
 export default function FacetMenu() {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
+  const [colorMenuOpen, setColorMenuOpen] = useState(false);
+
+  const onColorMenuClick = (e) => {
+    setColorMenuOpen(!colorMenuOpen);
+  }
 
   return (
     <div>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickMenuEl}>
+      <Button aria-controls="facet-menu" aria-haspopup="true" onClick={handleClickMenuEl}>
         Open Menu
       </Button>
       <StyledMenu
-        id="simple-menu"
+        id="facet-menu"
         anchorEl={menuAnchorEl}
         keepMounted
         open={Boolean(menuAnchorEl)}
         onClose={handleCloseMenuEl}
       >
-        <StyledMenuItem onClick={handleCloseMenuEl}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={handleCloseMenuEl}>Color</StyledMenuItem>
-        <StyledMenuItem onClick={handleCloseMenuEl}>Go to</StyledMenuItem>
-        <StyledMenuItem onClick={handleCloseMenuEl}>Delete</StyledMenuItem>
+        <StyledMenuItem onClick={() => { renameClick(); handleCloseMenuEl() }}>Rename</StyledMenuItem>
+        <StyledMenuItem onClick={onColorMenuClick}>Color <ColorMenu/></StyledMenuItem>
+        <StyledMenuItem onClick={() => { gotoClick(); handleCloseMenuEl() }}>Go to</StyledMenuItem>
+        <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl() }}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>
   );

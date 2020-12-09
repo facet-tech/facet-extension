@@ -175,7 +175,7 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             enqueueSnackbar = eSBar;
         }
 
-        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
+        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) * > :not(#facet-menu) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
                 .includes(e)).forEach(e => {
                     // attaching these parameters into the event
