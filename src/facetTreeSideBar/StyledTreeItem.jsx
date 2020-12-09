@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
@@ -14,6 +14,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
 import styled from 'styled-components';
+import AppContext from '../AppContext.jsx';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -84,6 +85,7 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet, onDeleteItem,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
+    const { handleClickMenuEl } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
 
     const defaultElement =
@@ -91,7 +93,6 @@ function StyledTreeItem(props) {
             <div className={classes.labelRoot}>
                 {/* <SideColorDiv value='red'>
                 </SideColorDiv> */}
-                <div style={{ backgroundColor: 'red' }}></div>
                 <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
@@ -102,9 +103,8 @@ function StyledTreeItem(props) {
                 <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
                     <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
                 </IconButton> */}
-
-                <FacetIconButton src={MoreSettingsIcon} onClick={() => { }} />
-                {/* <FacetMenu /> */}
+                <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} />
+                <FacetMenu />
             </div>
         </div>;
 

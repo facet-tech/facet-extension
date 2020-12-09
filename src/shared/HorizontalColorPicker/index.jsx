@@ -15,19 +15,19 @@ const GridDiv = styled.div`
 
 export default () => {
     return <GridDiv>
-        <div onClick={() => { console.log('HEY1') }}>
+        <div >
             {SvgIcon(colorConstant.menuColor.red)}
         </div>
-        <div onClick={() => { console.log('HEY2') }}>
+        <div >
             {SvgIcon(colorConstant.menuColor.lightGreen)}
         </div>
-        <div onClick={() => { console.log('HEY3') }}>
+        <div >
             {SvgIcon(colorConstant.menuColor.lightBlue)}
         </div>
-        <div onClick={() => { console.log('HEY4') }}>
+        <div >
             {SvgIcon(colorConstant.menuColor.lightPurple)}
         </div>
-        <div onClick={() => { console.log('HEY5') }}>
+        <div>
             {SvgIcon(colorConstant.menuColor.green)}
         </div>
     </GridDiv>

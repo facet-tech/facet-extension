@@ -50,29 +50,17 @@ const StyledMenuItem = withStyles((theme) => ({
 
 export default function FacetMenu() {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
-  const [colorMenuOpen, setColorMenuOpen] = useState(true);
-  console.log('colorMenuOpen', colorMenuOpen);
-  const onColorMenuClick = (e) => {
-    // setColorMenuOpen(!colorMenuOpen);
-  }
 
   return (
     <div>
-      <Button aria-controls="facet-menu" aria-haspopup="true" onClick={handleClickMenuEl}>
-        Open Menu
-      </Button>
       <StyledMenu
         id="facet-menu"
         anchorEl={menuAnchorEl}
         keepMounted
-        open={true}
+        open={Boolean(menuAnchorEl)}
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={() => { }}>
-          Color {'>'}
-          <ColorMenu />
-        </StyledMenuItem>
         <StyledMenuItem onClick={() => { }}>Go to</StyledMenuItem>
         <StyledMenuItem onClick={() => { }}>Delete</StyledMenuItem>
       </StyledMenu>

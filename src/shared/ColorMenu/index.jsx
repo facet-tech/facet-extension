@@ -7,6 +7,8 @@ import { makeStyles, withStyles } from '@material-ui/core';
 import { color } from '../constant';
 import HorizontalColorPicker from '../HorizontalColorPicker';
 
+// TODO this component is not being used
+// TBD When coloring-capabilities are added https://github.com/facets-io/facet-extension/issues/89
 const StyledMenu = withStyles({
     paper: {
         backgroundColor: color.lightGray,

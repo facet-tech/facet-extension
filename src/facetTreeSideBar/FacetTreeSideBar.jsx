@@ -109,7 +109,7 @@ export default function FacetTreeSideBar() {
   const [open, setOpen] = useState(true);
   const {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar,
-    showSideBar, setShowSideBar, reset, onSaveClick,
+    showSideBar, setShowSideBar, reset, onSaveClick, handleClickMenuEl
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
   const [selected, setSelected] = useState([]);
