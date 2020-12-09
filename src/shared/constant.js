@@ -38,7 +38,8 @@ const color = {
     darkGray: '#181D26',
     darkestGray: '#13171E',
     black: '#000000',
-    redError: '#CD0F11'
+    redError: '#CD0F11',
+    menuDivider: '#696969'
 }
 
 // information persisted in sync.storage

@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import { color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
-import FacetDropdown from '../shared/FacetDropdown/FacetDropdown.jsx';
+import FacetMenu from '../shared/FacetMenu/FacetMenu.jsx';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -71,6 +71,8 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const [renameValue, setRenameValue] = useState('');
 
+
+
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
@@ -85,8 +87,8 @@ function StyledTreeItem(props) {
                     <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
                 </IconButton> */}
 
-                <FacetIconButton src={MoreSettingsIcon} />
-                <FacetDropdown />
+                <FacetIconButton src={MoreSettingsIcon} onClick={() => { }} />
+                <FacetMenu />
             </div>
         </div>;
 

@@ -1,6 +1,6 @@
 /* global chrome */
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import get from 'lodash/get';
 import { Auth } from 'aws-amplify';
@@ -33,6 +33,17 @@ const AppProvider = ({ children }) => {
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+
+  const handleClickMenuEl = (event) => {
+    console.log('@CLICK',event.currentTarget)
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenuEl = () => {
+    console.log('@close')
+    setMenuAnchorEl(null);
+  };
 
   // popup stuff
   // email,id:  
@@ -196,6 +207,10 @@ const AppProvider = ({ children }) => {
       reset,
       authObject,
       setAuthObject,
+      menuAnchorEl,
+      setMenuAnchorEl,
+      handleClickMenuEl,
+      handleCloseMenuEl,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
