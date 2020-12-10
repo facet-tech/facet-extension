@@ -94,8 +94,7 @@ function StyledTreeItem(props) {
                 <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} />
-                <FacetMenu />
+                {props.containsIconButton ? <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} /> : null}
             </div>
         </div>;
 

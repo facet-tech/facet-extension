@@ -194,6 +194,7 @@ export default function FacetTreeSideBar() {
   const itemsElement = loadingSideBar ? <h2>Loading...</h2>
     : facetArray.map((facet) => {
       const { value } = facet;
+
       return (
         <StyledTreeItem
           nodeId={facet.name}
@@ -209,6 +210,7 @@ export default function FacetTreeSideBar() {
             setFacetMap(new Map(facetMap));
           }}
           renamingFacet={renamingFacet === facet.name}
+          containsIconButton={true}
         >
           {value && value.map((domElement, index) => (
             <StyledTreeItem
@@ -226,6 +228,7 @@ export default function FacetTreeSideBar() {
                 facetMap.set(facet.name, arr);
                 setFacetMap(new Map(facetMap.set(facet.name, arr)));
               }}
+              containsIconButton={false}
             />
           ))}
         </StyledTreeItem>
