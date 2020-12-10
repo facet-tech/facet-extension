@@ -20,11 +20,20 @@ import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import settingsLogo from '../static/images/facet_settings.svg';
 import logoutLogo from '../static/images/logout_new.svg';
+import logoutLogoHover from '../static/images/facet_logout_hover.svg';
+
 import facetProfileLogo from '../static/images/facet_profile.svg';
 import facetEnableLogo from '../static/images/facet_button.svg';
+import facetEnableHoverLogo from '../static/images/facet_button_hover.svg'
 import resetLogo from '../static/images/facet_restart_button.svg';
+import resetLogoHover from '../static/images/facet_restart_hover.svg';
+
 import saveFacetLogo from '../static/images/facet_save.svg';
+import saveFacetLogoHover from '../static/images/facet_Save_hover.svg';
+
 import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
+import copySnippetHoverLogo from '../static/images/facet_copy_snippet_hover.svg';
+
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
@@ -90,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   fabBtn: {
     backgroundColor: color.lightGray,
     '&:hover': {
-      backgroundColor: color.ice,
+      backgroundColor: color.electricB,
     },
   }
 }));
@@ -250,9 +259,9 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
+      <FacetIconButton hoverSrc={facetEnableLogo} src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
     ) : (
-      <FacetIconButton src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" aria-label="Enable" />
+      <FacetIconButton hoverSrc={facetEnableHoverLogo} src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" title="Enable" aria-label="Enable" />
     );
 
   return (
@@ -273,15 +282,15 @@ export default function FacetTreeSideBar() {
                 <FacetImage src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} />
+                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} hoverSrc={logoutLogoHover} />
               </div>
             </TopDiv>
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} />
-              <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} hoverSrc={resetLogoHover} />
+              <FacetIconButton src={saveFacetLogo} hoverSrc={saveFacetLogoHover} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton src={copySnippetLogo} onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton src={copySnippetLogo} hoverSrc={copySnippetHoverLogo} onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
             <div className={classes.oneLineGrid}>
