@@ -34,14 +34,30 @@ const AppProvider = ({ children }) => {
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [facetLabelMenu, setFacetMenuLabel] = useState(null);
 
-  const handleClickMenuEl = (event) => {
+  console.log('selectedFacet', selectedFacet);
+
+  const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
+    setFacetMenuLabel(facetName);
   };
 
   const handleCloseMenuEl = () => {
     setMenuAnchorEl(null);
   };
+
+  const onGotoClick = () => {
+    //TODO get selectedfacet
+    //taken from https://www.w3schools.com/jsref/met_element_scrollintoview.asp
+    //body>div#main>div>div>p#btn1>a#btn11
+    //figure out
+    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+    console.log('domPath!!', domPath);
+    const element = document.querySelector('body>div#main>div>div>p#btn1>a#btn11');
+    element.scrollIntoView();
+
+  }
 
   // popup stuff
   // email,id:  
@@ -134,9 +150,7 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log('@K1');
     (async () => {
-      console.log('@K2222');
       loadCopySnippet();
 
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
@@ -186,17 +200,12 @@ const AppProvider = ({ children }) => {
 
   const loadCopySnippet = async () => {
     try {
-      console.log('@ela man loadCopySnippet');
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      console.log('@1', workspaceId);
 
       const loc = new URL(window.location.host);
-      console.log('@2', loc);
       const domainRes = await getDomain(loc.hostname, workspaceId);
-      console.log('@domainRes', domainRes);
 
       const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
-      console.log('@text!!!', text, setTextToCopy);
 
       setTextToCopy(text);
       return text;
@@ -246,6 +255,9 @@ const AppProvider = ({ children }) => {
       logout,
       loadCopySnippet,
       textToCopy,
+      facetLabelMenu,
+      setFacetMenuLabel,
+      onGotoClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

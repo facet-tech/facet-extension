@@ -85,7 +85,7 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet, onDeleteItem,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
 
     const defaultElement =
@@ -96,8 +96,8 @@ function StyledTreeItem(props) {
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
                 {props.containsIconButton ? <div>
-                    <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} />
-                    <FacetMenu onRenameClick={onRenameItem} /></div> : null}
+                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => handleClickMenuEl(e, labelText)} />
+                    <FacetMenu gotoClick={onGotoClick} deleteClick={onDeleteItem} onRenameClick={() => { console.log('KLIKARA', labelText); onRenameItem(labelText) }} /></div> : null}
             </div>
         </div>;
 
