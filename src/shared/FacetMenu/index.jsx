@@ -45,7 +45,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function FacetMenu() {
+export default function FacetMenu({ onRenameClick, gotoClick, deleteClick }) {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
 
   return (
@@ -57,9 +57,9 @@ export default function FacetMenu() {
         open={Boolean(menuAnchorEl)}
         onClose={handleCloseMenuEl}
       >
-        <StyledMenuItem onClick={() => { }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={() => { }}>Go to</StyledMenuItem>
-        <StyledMenuItem onClick={() => { }}>Delete</StyledMenuItem>
+        <StyledMenuItem onClick={onRenameClick}>Rename</StyledMenuItem>
+        <StyledMenuItem onClick={gotoClick}>Go to</StyledMenuItem>
+        <StyledMenuItem onClick={deleteClick}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>
   );

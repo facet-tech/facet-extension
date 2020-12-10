@@ -108,7 +108,7 @@ export default function FacetTreeSideBar() {
   const [open, setOpen] = useState(true);
   const {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
-    showSideBar, setShowSideBar, reset, onSaveClick, textToCopy
+    showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -202,12 +202,13 @@ export default function FacetTreeSideBar() {
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
           onDeleteItem={(e) => { onDeleteFacet(facet); }}
-          onRenameItem={() => { setRenamingFacet(facet.name); }}
+          onRenameItem={() => { setRenamingFacet(facet.name); handleCloseMenuEl(); }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
+            handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
           containsIconButton={true}

@@ -91,10 +91,13 @@ function StyledTreeItem(props) {
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
+                <Typography style={{ color: colorConstant.lightGray }} variant="body2"
+                    className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                {props.containsIconButton ? <div><FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} /><FacetMenu /></div> : null}
+                {props.containsIconButton ? <div>
+                    <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} />
+                    <FacetMenu onRenameClick={onRenameItem} /></div> : null}
             </div>
         </div>;
 

@@ -93,8 +93,7 @@ module.exports = (_, argv) => {
             filename: 'bundle.js',
         },
         devServer: {
-            contentBase: path.resolve(__dirname, './build'),
-            hot: true
+            contentBase: path.resolve(__dirname, './build')
         },
     };
 }
