@@ -91,18 +91,9 @@ function StyledTreeItem(props) {
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                {/* <SideColorDiv value='red'>
-                </SideColorDiv> */}
                 <Typography style={{ color: colorConstant.lightGray }} variant="body2" className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                {/* 
-                {onRenameItem ? <FacetIconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
-                    <EditIcon color="inherit" className={classes.labelIcon} />
-                </FacetIconButton> : null}
-                <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
-                    <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
-                </IconButton> */}
                 <FacetIconButton src={MoreSettingsIcon} onClick={handleClickMenuEl} />
                 <FacetMenu />
             </div>

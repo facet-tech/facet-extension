@@ -1,13 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppContext from '../../AppContext';
 import { withStyles } from '@material-ui/core';
 import { color } from '../constant';
-import facetPolygon from '../../static/images/facet_polygon.svg';
-import FacetImage from '../FacetImage';
-import ColorMenu from '../ColorMenu';
 
 const StyledMenu = withStyles({
   paper: {

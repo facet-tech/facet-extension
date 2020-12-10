@@ -21,10 +21,9 @@ const performDOMTransformation = () => {
     if (isDevelopment()) {
         return
     }
-
     $('*') && $('*').filter(function () {
         return $(this).css('position') === 'fixed' && this.id !== 'facetizer' &&
-            this.className !== 'MuiPaper-root MuiDrawer-paper jss4 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
+            this.className !== 'MuiPaper-root MuiDrawer-paper jss5 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
     }).each(function () {
         $(this).css('position', 'absolute', 'important');
         $(this).css('left', `${styles.drawerWidth}px`, 'important');
@@ -175,8 +174,8 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             enqueueSnackbar = eSBar;
         }
 
-        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
-            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *")]
+        [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) * > :not(#facet-menu) *')]
+            .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {
                     // attaching these parameters into the event
                     e.selectedFacet = selectedFacet;

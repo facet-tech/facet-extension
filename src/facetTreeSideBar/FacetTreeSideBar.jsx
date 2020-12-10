@@ -102,6 +102,8 @@ const TopDiv = styled.div`
     display: grid;
     grid-template-columns: 50% 10% 10% 10%;
     grid-gap: 5%;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default function FacetTreeSideBar() {
