@@ -9,12 +9,13 @@ import isDevelopment from './utils/isDevelopment';
 import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
-import loadLocalStorage, { getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
+import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import {
   api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
 } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
+import triggerDOMReload from './shared/popup/triggerDOMReload';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -171,6 +172,15 @@ const AppProvider = ({ children }) => {
     window.selectedDOM = 'main';
   };
 
+  const logout = () => {
+    clearStorage();
+    Auth.signOut();
+    setCurrAuthState(authStateConstant.signingIn);
+    setJwt(undefined);
+    window.close();
+    triggerDOMReload();
+  };
+
   // sharing stuff among content script
   window.addedElements = addedElements;
   window.setAddedElements = setAddedElements;
@@ -209,6 +219,7 @@ const AppProvider = ({ children }) => {
       setMenuAnchorEl,
       handleClickMenuEl,
       handleCloseMenuEl,
+      logout,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

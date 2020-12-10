@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 50% 10% 10% 10%;
+    grid-template-columns: 70% 10%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
@@ -110,7 +110,7 @@ export default function FacetTreeSideBar() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const {
-    facetMap, setFacetMap, setSelectedFacet, loadingSideBar,
+    facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, handleClickMenuEl
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
@@ -257,12 +257,6 @@ export default function FacetTreeSideBar() {
             <TopDiv>
               <div>
                 <FacetImage src={facetTypography} />
-              </div>
-              <div>
-                <FacetIconButton src={facetProfileLogo} />
-              </div>
-              <div>
-                <FacetIconButton src={settingsLogo} />
               </div>
               <div>
                 <FacetIconButton onClick={() => { logout() }} src={logoutLogo} />
