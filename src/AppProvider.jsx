@@ -36,6 +36,7 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
   const handleClickMenuEl = (event) => {
+    console.log('checkme!')
     setMenuAnchorEl(event.currentTarget);
   };
 
