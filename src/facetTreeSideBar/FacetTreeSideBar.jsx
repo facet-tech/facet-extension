@@ -222,6 +222,7 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
+          onClick={(e) => { setSelected(facet.name); setSelectedFacet(facet.name); setExpanded([facet.name]) }}
           containsIconButton={true}
         >
           {value && value.map((domElement, index) => (
