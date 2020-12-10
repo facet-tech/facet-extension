@@ -109,10 +109,9 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    facetLabelMenu, setFacetMenuLabel
+    facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
-  const [selected, setSelected] = useState([]);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
@@ -130,19 +129,19 @@ export default function FacetTreeSideBar() {
     setExpanded([newName]);
   };
 
-  const onDeleteFacet = (facet) => {
-    facet && facet.value && facet.value.forEach((domElement) => {
-      onDeleteDOMElement(domElement.path);
-    });
-    facetMap.delete(facet.name);
-    setFacetMap(new Map(facetMap));
-    const keys = [...facetMap.keys()];
-    if (keys.length > 0) {
-      setSelectedFacet(keys[keys.length - 1]);
-    } else {
-      setSelectedFacet(defaultFacet);
-    }
-  };
+  // const onDeleteFacet = (facet) => {
+  //   facet && facet.value && facet.value.forEach((domElement) => {
+  //     onDeleteDOMElement(domElement.path);
+  //   });
+  //   facetMap.delete(facet.name);
+  //   setFacetMap(new Map(facetMap));
+  //   const keys = [...facetMap.keys()];
+  //   if (keys.length > 0) {
+  //     setSelectedFacet(keys[keys.length - 1]);
+  //   } else {
+  //     setSelectedFacet(defaultFacet);
+  //   }
+  // };
 
   const sideBarHandler = () => {
     // window.highlightMode = showSideBar;
@@ -176,22 +175,31 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdToggle = (event, nodeIds) => {
+    console.log('TRIGGARA handleNodeIdToggle');
     setExpanded(nodeIds);
   };
 
   const handleNodeIdsSelect = (event, nodeId) => {
-    console.log('@handleNodeIdsSelect', nodeId);
-    // contains logic for allowing one selection at a time
-    const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    if (fArray.find((e) => e.name === nodeId)) {
-      setSelected([nodeId]);
-      setSelectedFacet(nodeId);
-      if (expanded.includes(nodeId)) {
-        setExpanded([]);
-      } else {
-        setExpanded([nodeId]);
-      }
-    }
+    console.log('TRIGGARA handleNodeIdsSelect', nodeId);
+    // setSelected([nodeId]);
+    // setSelectedFacet(nodeId);
+    // if (expanded.includes(nodeId)) {
+    //   setExpanded([]);
+    // } else {
+    //   setExpanded([nodeId]);
+    // }
+
+    // // contains logic for allowing one selection at a time
+    // const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    // if (fArray.find((e) => e.name === nodeId)) {
+    //   setSelected([nodeId]);
+    //   setSelectedFacet(nodeId);
+    //   if (expanded.includes(nodeId)) {
+    //     setExpanded([]);
+    //   } else {
+    //     setExpanded([nodeId]);
+    //   }
+    // }
   };
 
   const itemsElement = loadingSideBar ? <h2>Loading...</h2>
@@ -204,7 +212,7 @@ export default function FacetTreeSideBar() {
           key={facet.name}
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
-          onDeleteItem={(e) => { onDeleteFacet(facet); }}
+          // onDeleteItem={(e) => { onDeleteFacet(e); }}
           onRenameItem={() => { console.log('RENAMING FACET', facetLabelMenu); setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
@@ -296,7 +304,7 @@ export default function FacetTreeSideBar() {
             expanded={expanded}
             selected={selected}
             onNodeToggle={handleNodeIdToggle}
-            onNodeSelect={handleNodeIdsSelect}
+          // onNodeSelect={handleNodeIdsSelect}
           >
             {itemsElement}
           </TreeView>

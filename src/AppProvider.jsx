@@ -30,6 +30,7 @@ const AppProvider = ({ children }) => {
   const [addedElements, setAddedElements] = useState(new Map());
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
+  const [selected, setSelected] = useState([]);
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
@@ -53,12 +54,28 @@ const AppProvider = ({ children }) => {
     //body>div#main>div>div>p#btn1>a#btn11
     //figure out
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    console.log('domPath!!', domPath);
     const element = document.querySelector('body>div#main>div>div>p#btn1>a#btn11');
-    element.scrollIntoView();
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    handleCloseMenuEl();
+  };
 
-  }
-
+  const onDeleteFacet = (facet) => {
+    console.log('DELETING FACET....', facet);
+    // facet && facet.value && facet.value.forEach((domElement) => {
+    //   onDeleteDOMElement(domElement.path);
+    // });
+    console.log('-----BEFORE--------',facetMap);
+    facetMap.delete(facet);
+    console.log('-----AFTER--------',facetMap);
+    setFacetMap(new Map(facetMap));
+    const keys = [...facetMap.keys()];
+    if (keys.length > 0) {
+      setSelectedFacet(keys[keys.length - 1]);
+    } else {
+      setSelectedFacet(defaultFacet);
+    }
+  };
+  console.log('facetmap', facetMap)
   // popup stuff
   // email,id:  
   const [loggedInUser, setLoggedInUser] = useState({});
@@ -214,6 +231,8 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  console.log('menuAnchorElCHECK', menuAnchorEl);
+
   // sharing stuff among content script
   window.addedElements = addedElements;
   window.setAddedElements = setAddedElements;
@@ -258,6 +277,7 @@ const AppProvider = ({ children }) => {
       facetLabelMenu,
       setFacetMenuLabel,
       onGotoClick,
+      selected, setSelected, onDeleteFacet,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

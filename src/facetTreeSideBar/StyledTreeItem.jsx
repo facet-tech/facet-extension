@@ -83,9 +83,9 @@ const SideColorDiv = styled.div`
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
-        bgColor, onRenameItem, renamingFacet, onDeleteItem,
+        bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick, setSelectedFacet, setSelected, selected, onDeleteFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
 
     const defaultElement =
@@ -96,8 +96,11 @@ function StyledTreeItem(props) {
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
                 {props.containsIconButton ? <div>
-                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => handleClickMenuEl(e, labelText)} />
-                    <FacetMenu gotoClick={onGotoClick} deleteClick={onDeleteItem} onRenameClick={() => { console.log('KLIKARA', labelText); onRenameItem(labelText) }} /></div> : null}
+                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); console.log('TIGINETE EDO??', labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
+                    <FacetMenu gotoClick={onGotoClick} deleteClick={() => { console.log('KAPPA', selected); onDeleteFacet(selected) }} onRenameClick={() => { console.log('KLIKARA', labelText); setSelectedFacet(labelText); onRenameItem(labelText) }} />
+                </div>
+                    : null
+                }
             </div>
         </div>;
 
@@ -111,7 +114,10 @@ function StyledTreeItem(props) {
     }
 
     const duringRenameElement = <div>
-        <Typography variant="body2" className={classes.labelText}>
+        <Typography
+            style={{ color: colorConstant.lightGray }}
+            className={classes.labelText}
+            variant="body2">
             {labelText}
         </Typography>
         <TextField

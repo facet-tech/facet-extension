@@ -10,10 +10,6 @@ const StyledMenu = withStyles({
   paper: {
     backgroundColor: color.lightGray,
     padding: 0,
-  },
-  '& .MuiList-padding ': {
-    paddingTop: 0,
-    paddingBotom: 0
   }
 })((props) => (
   <Menu
@@ -46,8 +42,8 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 export default function FacetMenu({ onRenameClick, gotoClick, deleteClick }) {
-  const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
-
+  const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl, selected, selectedFacet } = useContext(AppContext);
+  console.log('selected:', selected, selectedFacet);
   return (
     <div>
       <StyledMenu
@@ -57,9 +53,9 @@ export default function FacetMenu({ onRenameClick, gotoClick, deleteClick }) {
         open={Boolean(menuAnchorEl)}
         onClose={handleCloseMenuEl}
       >
-        <StyledMenuItem onClick={onRenameClick}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={gotoClick}>Go to</StyledMenuItem>
-        <StyledMenuItem onClick={deleteClick}>Delete</StyledMenuItem>
+        <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
+        <StyledMenuItem onClick={() => { gotoClick(); handleCloseMenuEl(); }}>Go to</StyledMenuItem>
+        <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>
   );
