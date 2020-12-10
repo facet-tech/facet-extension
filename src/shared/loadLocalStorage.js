@@ -74,6 +74,7 @@ const getLocalStorageObject = async () => {
  */
 const getKeyFromLocalStorage = async (key) => {
     if (isDevelopment()) {
+        console.log('GG!!')
         return true;
     }
     return new Promise((resolve, reject) => {

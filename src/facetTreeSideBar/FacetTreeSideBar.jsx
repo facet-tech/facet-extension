@@ -11,11 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import DesktopAccessDisabledIcon from '@material-ui/icons/DesktopAccessDisabled';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import SaveIcon from '@material-ui/icons/Save';
-import { defaultFacet, styles } from '../shared/constant';
+import { defaultFacet, styles, APIUrl } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
@@ -32,6 +28,7 @@ import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,13 +108,14 @@ export default function FacetTreeSideBar() {
   const [open, setOpen] = useState(true);
   const {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
-    showSideBar, setShowSideBar, reset, onSaveClick, handleClickMenuEl
+    showSideBar, setShowSideBar, reset, onSaveClick, textToCopy
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
   const [selected, setSelected] = useState([]);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
+
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     const newName = `Facet-${autoNumber}`;
@@ -266,7 +264,9 @@ export default function FacetTreeSideBar() {
               {activateDeactivateElement}
               <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} />
               <FacetIconButton src={saveFacetLogo} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
-              <FacetIconButton src={resetLogo} onClick={() => { }} size="small" aria-label="Save" />
+              <CopyToClipboard text={textToCopy}>
+                <FacetIconButton src={copySnippetLogo} onClick={() => { }} size="small" aria-label="Save" />
+              </CopyToClipboard>
             </div>
             <div className={classes.oneLineGrid}>
               <div>

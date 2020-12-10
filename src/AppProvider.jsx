@@ -10,9 +10,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import {
-  api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
-} from './shared/constant';
+import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -30,6 +28,7 @@ const AppProvider = ({ children }) => {
   const [disabledFacets, setDisabledFacets] = useState([]);
   const [newlyAddedFacet, setNewlyAddedFacet] = useState('Default-Facet');
   const [addedElements, setAddedElements] = useState(new Map());
+  const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
@@ -135,7 +134,11 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('@K1');
     (async () => {
+      console.log('@K2222');
+      loadCopySnippet();
+
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
       if (!isPluginEnabledVal) {
         return;
@@ -181,6 +184,27 @@ const AppProvider = ({ children }) => {
     triggerDOMReload();
   };
 
+  const loadCopySnippet = async () => {
+    try {
+      console.log('@ela man loadCopySnippet');
+      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      console.log('@1', workspaceId);
+
+      const loc = new URL(window.location.host);
+      console.log('@2', loc);
+      const domainRes = await getDomain(loc.hostname, workspaceId);
+      console.log('@domainRes', domainRes);
+
+      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
+      console.log('@text!!!', text, setTextToCopy);
+
+      setTextToCopy(text);
+      return text;
+    } catch (e) {
+      console.log('[ERROR]', e);
+    }
+  };
+
   // sharing stuff among content script
   window.addedElements = addedElements;
   window.setAddedElements = setAddedElements;
@@ -220,6 +244,8 @@ const AppProvider = ({ children }) => {
       handleClickMenuEl,
       handleCloseMenuEl,
       logout,
+      loadCopySnippet,
+      textToCopy,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
