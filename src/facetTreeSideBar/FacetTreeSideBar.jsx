@@ -259,7 +259,7 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton hoverSrc={facetEnableLogo} src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
+      <FacetIconButton src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
     ) : (
       <FacetIconButton hoverSrc={facetEnableHoverLogo} src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" title="Enable" aria-label="Enable" />
     );

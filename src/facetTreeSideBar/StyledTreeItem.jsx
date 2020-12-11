@@ -15,6 +15,7 @@ import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
 import styled from 'styled-components';
 import AppContext from '../AppContext.jsx';
+import FacetInput from '../shared/FacetInput/index.js';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -96,8 +97,8 @@ function StyledTreeItem(props) {
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
                 {props.containsIconButton ? <div>
-                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); console.log('TIGINETE EDO??', labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
-                    <FacetMenu gotoClick={onGotoClick} deleteClick={() => { console.log('KAPPA', selected); onDeleteFacet(selected) }} onRenameClick={() => { console.log('KLIKARA', labelText); setSelectedFacet(labelText); onRenameItem(labelText) }} />
+                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
+                    <FacetMenu gotoClick={onGotoClick} deleteClick={() => { setSelectedFacet(labelText) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
                     : null
                 }
@@ -120,12 +121,12 @@ function StyledTreeItem(props) {
             variant="body2">
             {labelText}
         </Typography>
-        <TextField
+        <FacetInput
             inputRef={input => input && input.focus()}
             autoFocus
-            style={{ width: '50%' }} onKeyDown={keyPress}
+            onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
-        </TextField>
+        </FacetInput>
         <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
             <CheckIcon color="inherit" className={classes.labelIcon} />
         </IconButton>

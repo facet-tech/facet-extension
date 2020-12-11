@@ -9,22 +9,14 @@ import { color } from '../constant';
 const StyledMenu = withStyles({
   paper: {
     backgroundColor: color.lightGray,
+    marginLeft: '2rem',
     padding: 0,
   }
 })((props) => (
   <Menu
     MenuListProps={{ disablePadding: true }}
     backgroundColor={color.darkGray}
-    elevation={0}
     getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
     {...props}
   />
 ));
@@ -43,7 +35,6 @@ const StyledMenuItem = withStyles((theme) => ({
 
 export default function FacetMenu({ onRenameClick, gotoClick, deleteClick }) {
   const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl, selected, selectedFacet } = useContext(AppContext);
-  console.log('selected:', selected, selectedFacet);
   return (
     <div>
       <StyledMenu
