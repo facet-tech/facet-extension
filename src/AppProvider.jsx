@@ -67,14 +67,11 @@ const AppProvider = ({ children }) => {
   };
 
   const onDeleteFacet = (facet) => {
-    console.log('DELETING FACET....', facet);
     const facetValue = facetMap.get(facet);
     facetValue && facetValue.forEach((domElement) => {
       onDeleteDOMElement(domElement.path);
     });
-    console.log('-----BEFORE--------', facetMap);
     facetMap.delete(facet);
-    console.log('-----AFTER--------', facetMap);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
     if (keys.length > 0) {
@@ -83,7 +80,6 @@ const AppProvider = ({ children }) => {
       setSelectedFacet(defaultFacet);
     }
   };
-  console.log('facetmap', facetMap)
   // popup stuff
   // email,id:  
   const [loggedInUser, setLoggedInUser] = useState({});
