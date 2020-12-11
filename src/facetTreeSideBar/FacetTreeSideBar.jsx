@@ -139,20 +139,6 @@ export default function FacetTreeSideBar() {
     setExpanded([newName]);
   };
 
-  // const onDeleteFacet = (facet) => {
-  //   facet && facet.value && facet.value.forEach((domElement) => {
-  //     onDeleteDOMElement(domElement.path);
-  //   });
-  //   facetMap.delete(facet.name);
-  //   setFacetMap(new Map(facetMap));
-  //   const keys = [...facetMap.keys()];
-  //   if (keys.length > 0) {
-  //     setSelectedFacet(keys[keys.length - 1]);
-  //   } else {
-  //     setSelectedFacet(defaultFacet);
-  //   }
-  // };
-
   const sideBarHandler = () => {
     // window.highlightMode = showSideBar;
     setShowSideBar(!showSideBar);
@@ -174,12 +160,10 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdToggle = (event, nodeIds) => {
-    console.log('TRIGGARA handleNodeIdToggle');
     setExpanded(nodeIds);
   };
 
   const handleNodeIdsSelect = (event, nodeId) => {
-    console.log('TRIGGARA handleNodeIdsSelect', nodeId);
     // setSelected([nodeId]);
     // setSelectedFacet(nodeId);
     // if (expanded.includes(nodeId)) {
@@ -212,7 +196,7 @@ export default function FacetTreeSideBar() {
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
           // onDeleteItem={(e) => { onDeleteFacet(e); }}
-          onRenameItem={() => { console.log('RENAMING FACET', facetLabelMenu); setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
+          onRenameItem={() => { setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));

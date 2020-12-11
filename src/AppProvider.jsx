@@ -39,8 +39,6 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
 
-  console.log('selectedFacet', selectedFacet);
-
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
     setFacetMenuLabel(facetName);
@@ -51,15 +49,7 @@ const AppProvider = ({ children }) => {
   };
 
   const onGotoClick = () => {
-    //TODO get selectedfacet
-    //taken from https://www.w3schools.com/jsref/met_element_scrollintoview.asp
-    //body>div#main>div>div>p#btn1>a#btn11
-    // figure out
-    console.log('BEFORE');
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    console.log("DOMPATH", domPath, 'check', $(domPath));
-    //"body>div#main>div:eq(3)>div>div>div>i#somewords"
-
     const element = $(domPath)[0];
     element?.scrollIntoView();
     handleCloseMenuEl();
