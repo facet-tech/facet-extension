@@ -10,11 +10,12 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl } from './shared/constant';
+import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import $ from 'jquery';
+import parsePath from './shared/parsePath';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -54,20 +55,33 @@ const AppProvider = ({ children }) => {
     //taken from https://www.w3schools.com/jsref/met_element_scrollintoview.asp
     //body>div#main>div>div>p#btn1>a#btn11
     // figure out
+    console.log('BEFORE');
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    console.log("DOMPATH", domPath);
+    console.log("DOMPATH", domPath, 'check', $(domPath));
     //"body>div#main>div:eq(3)>div>div>div>i#somewords"
 
-    const element = $('body>div#main>div>div>p#btn1>a#btn11')[0];
+    const element = $(domPath)[0];
     element?.scrollIntoView();
     handleCloseMenuEl();
   };
 
+  const onDeleteDOMElement = (path) => {
+    try {
+      // TODO DOM-related stuff should be handled through highlighter
+      const parsedPath = parsePath([path], false);
+      const element = $(parsedPath[0])[0];
+      element.style.setProperty('opacity', 'unset');
+    } catch (e) {
+      console.log('[ERROR] onDeleteElement', e);
+    }
+  };
+
   const onDeleteFacet = (facet) => {
     console.log('DELETING FACET....', facet);
-    // facet && facet.value && facet.value.forEach((domElement) => {
-    //   onDeleteDOMElement(domElement.path);
-    // });
+    const facetValue = facetMap.get(facet);
+    facetValue && facetValue.forEach((domElement) => {
+      onDeleteDOMElement(domElement.path);
+    });
     console.log('-----BEFORE--------', facetMap);
     facetMap.delete(facet);
     console.log('-----AFTER--------', facetMap);
@@ -235,8 +249,6 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  console.log('menuAnchorElCHECK', menuAnchorEl);
-
   // sharing stuff among content script
   window.addedElements = addedElements;
   window.setAddedElements = setAddedElements;
@@ -281,7 +293,10 @@ const AppProvider = ({ children }) => {
       facetLabelMenu,
       setFacetMenuLabel,
       onGotoClick,
-      selected, setSelected, onDeleteFacet,
+      selected,
+      setSelected,
+      onDeleteFacet,
+      onDeleteDOMElement,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

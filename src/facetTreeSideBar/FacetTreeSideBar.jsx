@@ -38,6 +38,7 @@ import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import FacetLabel from '../shared/FacetLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -160,17 +161,6 @@ export default function FacetTreeSideBar() {
     }
   };
 
-  const onDeleteDOMElement = (path) => {
-    try {
-      // TODO DOM-related stuff should be handled through highlighter
-      const parsedPath = parsePath([path], false);
-      const element = $(parsedPath[0])[0];
-      element.style.setProperty('opacity', 'unset');
-    } catch (e) {
-      console.log('[ERROR] onDeleteElement', e);
-    }
-  };
-
   // TODO duplicate, re-use function from highlighter
   const onMouseEnterHandle = function (path) {
     $(path).css('outline', '5px ridge #c25d29');
@@ -211,7 +201,7 @@ export default function FacetTreeSideBar() {
     // }
   };
 
-  const itemsElement = loadingSideBar ? <h2>Loading...</h2>
+  const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
     : facetArray.map((facet) => {
       const { value } = facet;
 

@@ -1,7 +1,7 @@
 import { Input, InputAdornment, InputLabel } from '@material-ui/core';
 import React from 'react';
 
-export default ({ text, color = '#A4A7AC', fontSize='small' }) => {
+export default ({ text, color = '#A4A7AC', fontSize = 'small' }) => {
     return <span
         style={{
             width: '100%',
