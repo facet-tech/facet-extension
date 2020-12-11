@@ -19,7 +19,7 @@ import { color } from '../shared/constant.js';
 import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import settingsLogo from '../static/images/facet_settings.svg';
-import logoutLogo from '../static/images/logout_new.svg';
+import logoutLogo from '../static/images/facet_logout.svg';
 import logoutLogoHover from '../static/images/facet_logout_hover.svg';
 
 import facetProfileLogo from '../static/images/facet_profile.svg';
