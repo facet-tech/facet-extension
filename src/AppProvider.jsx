@@ -14,6 +14,7 @@ import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateCon
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
+import $ from 'jquery';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -52,10 +53,13 @@ const AppProvider = ({ children }) => {
     //TODO get selectedfacet
     //taken from https://www.w3schools.com/jsref/met_element_scrollintoview.asp
     //body>div#main>div>div>p#btn1>a#btn11
-    //figure out
+    // figure out
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    const element = document.querySelector('body>div#main>div>div>p#btn1>a#btn11');
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    console.log("DOMPATH", domPath);
+    //"body>div#main>div:eq(3)>div>div>div>i#somewords"
+
+    const element = $('body>div#main>div>div>p#btn1>a#btn11')[0];
+    element?.scrollIntoView();
     handleCloseMenuEl();
   };
 
@@ -64,9 +68,9 @@ const AppProvider = ({ children }) => {
     // facet && facet.value && facet.value.forEach((domElement) => {
     //   onDeleteDOMElement(domElement.path);
     // });
-    console.log('-----BEFORE--------',facetMap);
+    console.log('-----BEFORE--------', facetMap);
     facetMap.delete(facet);
-    console.log('-----AFTER--------',facetMap);
+    console.log('-----AFTER--------', facetMap);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
     if (keys.length > 0) {

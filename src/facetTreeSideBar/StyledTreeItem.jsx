@@ -88,7 +88,6 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const { handleClickMenuEl, onGotoClick, setSelectedFacet, setSelected, selected, onDeleteFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
-
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
@@ -98,7 +97,7 @@ function StyledTreeItem(props) {
                 </Typography>
                 {props.containsIconButton ? <div>
                     <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
-                    <FacetMenu gotoClick={onGotoClick} deleteClick={() => { setSelectedFacet(labelText) }} onRenameClick={() => onRenameItem(selected)} />
+                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { setSelectedFacet(labelText) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
                     : null
                 }
