@@ -97,7 +97,7 @@ function StyledTreeItem(props) {
                 </Typography>
                 {props.containsIconButton ? <div>
                     <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
-                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { setSelectedFacet(labelText) }} onRenameClick={() => onRenameItem(selected)} />
+                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
                     : null
                 }
