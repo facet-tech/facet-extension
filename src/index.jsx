@@ -44,60 +44,61 @@ if (!document.getElementById('popup')) {
   }
 }
 
-if (document.getElementById('authentication')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SnackbarProvider
-        maxSnack={4}
-        disableWindowBlurListener
-        autoHideDuration={5000}
-        iconVariant={{
-          error: '✖️',
-          warning: '⚠️',
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div>
-          <AppProvider>
-            <Popup />
-          </AppProvider>
-        </div>
-      </SnackbarProvider>
-    </React.StrictMode>,
-    document.getElementById('authentication'),
-  );
-} else 
-if (document.getElementById('popup')) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SnackbarProvider
-        maxSnack={4}
-        disableWindowBlurListener
-        autoHideDuration={5000}
-        iconVariant={{
-          error: '✖️',
-          warning: '⚠️',
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div style={{ display: 'grid' }}>
-          <AppProvider>
-            <PopupProvider id='popup-provider'>
-              <SigninPopup />
-            </PopupProvider>
-          </AppProvider>
-        </div>
-      </SnackbarProvider>
-    </React.StrictMode>,
-    document.getElementById('popup'),
-  );
-} else if (document.getElementById('facetizer')) {
+// if (document.getElementById('authentication')) {
+//   ReactDOM.render(
+//     <React.StrictMode>
+//       <SnackbarProvider
+//         maxSnack={4}
+//         disableWindowBlurListener
+//         autoHideDuration={5000}
+//         iconVariant={{
+//           error: '✖️',
+//           warning: '⚠️',
+//         }}
+//         anchorOrigin={{
+//           vertical: 'top',
+//           horizontal: 'left',
+//         }}
+//       >
+//         <div>
+//           <AppProvider>
+//             <Popup />
+//           </AppProvider>
+//         </div>
+//       </SnackbarProvider>
+//     </React.StrictMode>,
+//     document.getElementById('authentication'),
+//   );
+// } else 
+// if (document.getElementById('popup')) {
+//   ReactDOM.render(
+//     <React.StrictMode>
+//       <SnackbarProvider
+//         maxSnack={4}
+//         disableWindowBlurListener
+//         autoHideDuration={5000}
+//         iconVariant={{
+//           error: '✖️',
+//           warning: '⚠️',
+//         }}
+//         anchorOrigin={{
+//           vertical: 'top',
+//           horizontal: 'left',
+//         }}
+//       >
+//         <div style={{ display: 'grid' }}>
+//           <AppProvider>
+//             <PopupProvider id='popup-provider'>
+//               <SigninPopup />
+//             </PopupProvider>
+//           </AppProvider>
+//         </div>
+//       </SnackbarProvider>
+//     </React.StrictMode>,
+//     document.getElementById('popup'),
+//   );
+// } else 
+if (document.getElementById('facetizer')) {
   ReactDOM.render(
     <React.StrictMode>
       <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">

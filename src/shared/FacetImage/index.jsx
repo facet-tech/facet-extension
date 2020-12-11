@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { color } from '../constant';
 
 const StyledImage = styled.img`
     pointer-events: none;

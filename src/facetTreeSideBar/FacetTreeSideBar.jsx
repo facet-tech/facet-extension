@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
@@ -12,25 +11,51 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import DesktopAccessDisabledIcon from '@material-ui/icons/DesktopAccessDisabled';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import SaveIcon from '@material-ui/icons/Save';
-import { defaultFacet, styles } from '../shared/constant';
+import { defaultFacet, styles, APIUrl } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
-import FacetSwitch from '../FacetSwitch';
+import { color } from '../shared/constant.js';
+import facetTypography from '../static/images/facet_typography.svg';
+import FacetImage from '../shared/FacetImage';
+import settingsLogo from '../static/images/facet_settings.svg';
+import logoutLogo from '../static/images/facet_logout.svg';
+import logoutLogoHover from '../static/images/facet_logout_hover.svg';
+
+import facetProfileLogo from '../static/images/facet_profile.svg';
+import facetEnableLogo from '../static/images/facet_button.svg';
+import facetEnableHoverLogo from '../static/images/facet_button_hover.svg'
+import resetLogo from '../static/images/facet_restart_button.svg';
+import resetLogoHover from '../static/images/facet_restart_hover.svg';
+
+import saveFacetLogo from '../static/images/facet_save.svg';
+import saveFacetLogoHover from '../static/images/facet_Save_hover.svg';
+
+import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
+import copySnippetHoverLogo from '../static/images/facet_copy_snippet_hover.svg';
+
+import styled from 'styled-components';
+import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
+import Fab from '@material-ui/core/Fab';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import FacetLabel from '../shared/FacetLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'grid',
+  },
+  oneLineGrid: {
+    display: 'grid',
+    gridTemplateColumns: '90% 10%',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   drawer: {
     width: styles.drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
+    backgroundColor: color.darkGray,
     width: styles.drawerWidth,
   },
   drawerHeader: {
@@ -61,25 +86,46 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDiv: {
     display: 'grid',
-    gridTemplateColumns: '100%',
-    justifyItems: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+    marginLeft: '.5rem',
+    marginRight: '.5rem',
+    marginTop: '.5rem'
   },
+  fabGrid: {
+    display: 'grid',
+    alignItems: 'end',
+    justifyContent: 'end',
+    margin: '1rem',
+    // marginTop: '2rem'
+  },
+  fabBtn: {
+    backgroundColor: color.lightGray,
+    '&:hover': {
+      backgroundColor: color.electricB,
+    },
+  }
 }));
+
+const TopDiv = styled.div`
+    display: grid;
+    grid-template-columns: 70% 10%;
+    grid-gap: 5%;
+    align-items: center;
+    justify-content: center;
+`;
 
 export default function FacetTreeSideBar() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const {
-    facetMap, setFacetMap, setSelectedFacet, loadingSideBar,
-    showSideBar, setShowSideBar, reset, onSaveClick,
+    facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
+    showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
+    facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
   } = useContext(AppContext);
   const [expanded, setExpanded] = useState([]);
-  const [selected, setSelected] = useState([]);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
+
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     const newName = `Facet-${autoNumber}`;
@@ -93,36 +139,11 @@ export default function FacetTreeSideBar() {
     setExpanded([newName]);
   };
 
-  const onDeleteFacet = (facet) => {
-    facet && facet.value && facet.value.forEach((domElement) => {
-      onDeleteDOMElement(domElement.path);
-    });
-    facetMap.delete(facet.name);
-    setFacetMap(new Map(facetMap));
-    const keys = [...facetMap.keys()];
-    if (keys.length > 0) {
-      setSelectedFacet(keys[keys.length - 1]);
-    } else {
-      setSelectedFacet(defaultFacet);
-    }
-  };
-
   const sideBarHandler = () => {
     // window.highlightMode = showSideBar;
     setShowSideBar(!showSideBar);
     if (!showSideBar) {
       // TODO removeEventListeners
-    }
-  };
-
-  const onDeleteDOMElement = (path) => {
-    try {
-      // TODO DOM-related stuff should be handled through highlighter
-      const parsedPath = parsePath([path], false);
-      const element = $(parsedPath[0])[0];
-      element.style.setProperty('opacity', 'unset');
-    } catch (e) {
-      console.log('[ERROR] onDeleteElement', e);
     }
   };
 
@@ -143,36 +164,49 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdsSelect = (event, nodeId) => {
-    const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    if (fArray.find((e) => e.name === nodeId)) {
-      setSelected([nodeId]);
-      setSelectedFacet(nodeId);
-      if (expanded.includes(nodeId)) {
-        setExpanded([]);
-      } else {
-        setExpanded([nodeId]);
-      }
-    }
+    // setSelected([nodeId]);
+    // setSelectedFacet(nodeId);
+    // if (expanded.includes(nodeId)) {
+    //   setExpanded([]);
+    // } else {
+    //   setExpanded([nodeId]);
+    // }
+
+    // // contains logic for allowing one selection at a time
+    // const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
+    // if (fArray.find((e) => e.name === nodeId)) {
+    //   setSelected([nodeId]);
+    //   setSelectedFacet(nodeId);
+    //   if (expanded.includes(nodeId)) {
+    //     setExpanded([]);
+    //   } else {
+    //     setExpanded([nodeId]);
+    //   }
+    // }
   };
 
-  const itemsElement = loadingSideBar ? <h2>Loading...</h2>
+  const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
     : facetArray.map((facet) => {
       const { value } = facet;
+
       return (
         <StyledTreeItem
           nodeId={facet.name}
           key={facet.name}
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
-          onDeleteItem={(e) => { onDeleteFacet(facet); }}
-          onRenameItem={() => { setRenamingFacet(facet.name); }}
+          // onDeleteItem={(e) => { onDeleteFacet(e); }}
+          onRenameItem={() => { setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
+            handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
+          onClick={(e) => { setSelected(facet.name); setSelectedFacet(facet.name); setExpanded([facet.name]) }}
+          containsIconButton={true}
         >
           {value && value.map((domElement, index) => (
             <StyledTreeItem
@@ -190,6 +224,7 @@ export default function FacetTreeSideBar() {
                 facetMap.set(facet.name, arr);
                 setFacetMap(new Map(facetMap.set(facet.name, arr)));
               }}
+              containsIconButton={false}
             />
           ))}
         </StyledTreeItem>
@@ -198,56 +233,68 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <IconButton onClick={() => sideBarHandler()} title="Disable" size="small" color="secondary" aria-label="Disable">
-        <DesktopAccessDisabledIcon />
-      </IconButton>
+      <FacetIconButton src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
     ) : (
-      <IconButton onClick={() => sideBarHandler()} size="small" color="secondary" aria-label="Enable">
-        <DesktopWindowsIcon />
-      </IconButton>
+      <FacetIconButton hoverSrc={facetEnableHoverLogo} src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" title="Enable" aria-label="Enable" />
     );
 
   return (
     <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.gridDiv}>
-          <div>
-            <h3>Facets</h3>
-          </div>
-        </div>
-        <div className={classes.drawerHeader}>
-          {activateDeactivateElement}
-          <IconButton onClick={() => { reset(); }} title="Reset" size="small" color="secondary" aria-label="Reset">
-            <RotateLeftIcon />
-          </IconButton>
-          <IconButton onClick={() => { addFacet(); }} size="small" color="secondary" aria-label="add">
-            <AddIcon />
-          </IconButton>
-          <IconButton onClick={() => { onSaveClick(); }} size="medium" color="secondary" aria-label="Save">
-            <SaveIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <TreeView
-          className={classes.treeView}
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-          expanded={expanded}
-          selected={selected}
-          onNodeToggle={handleNodeIdToggle}
-          onNodeSelect={handleNodeIdsSelect}
+      <div>
+        <Drawer
+          // className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
         >
-          {itemsElement}
-        </TreeView>
-      </Drawer>
+          <div className={classes.gridDiv}>
+            <TopDiv>
+              <div>
+                <FacetImage src={facetTypography} />
+              </div>
+              <div>
+                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} hoverSrc={logoutLogoHover} />
+              </div>
+            </TopDiv>
+            <div className={classes.drawerHeader}>
+              {activateDeactivateElement}
+              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} hoverSrc={resetLogoHover} />
+              <FacetIconButton src={saveFacetLogo} hoverSrc={saveFacetLogoHover} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <CopyToClipboard text={textToCopy}>
+                <FacetIconButton src={copySnippetLogo} hoverSrc={copySnippetHoverLogo} onClick={() => { }} size="small" aria-label="Save" />
+              </CopyToClipboard>
+            </div>
+            <div className={classes.oneLineGrid}>
+              <div>
+                <h3 style={{ color: color.lightGray }}>My Facets</h3>
+              </div>
+              <div>
+                <div className={classes.fabGrid}>
+                  <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
+                    <AddIcon />
+                  </Fab>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Divider />
+          <TreeView
+            className={classes.treeView}
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            expanded={expanded}
+            selected={selected}
+            onNodeToggle={handleNodeIdToggle}
+          // onNodeSelect={handleNodeIdsSelect}
+          >
+            {itemsElement}
+          </TreeView>
+        </Drawer>
+
+      </div>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

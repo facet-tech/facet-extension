@@ -1,6 +1,6 @@
 /* global chrome */
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import get from 'lodash/get';
 import { Auth } from 'aws-amplify';
@@ -9,12 +9,13 @@ import isDevelopment from './utils/isDevelopment';
 import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
-import loadLocalStorage, { getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import {
-  api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant,
-} from './shared/constant';
+import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
+import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
+import triggerDOMReload from './shared/popup/triggerDOMReload';
+import $ from 'jquery';
+import parsePath from './shared/parsePath';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -22,18 +23,67 @@ const AppProvider = ({ children }) => {
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
+  const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
 
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
   const [disabledFacets, setDisabledFacets] = useState([]);
   const [newlyAddedFacet, setNewlyAddedFacet] = useState('Default-Facet');
   const [addedElements, setAddedElements] = useState(new Map());
+  const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
+  const [selected, setSelected] = useState([]);
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
-  const [loadingSideBar, setLoadingSideBar] = useState(true);
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [facetLabelMenu, setFacetMenuLabel] = useState(null);
 
+  const handleClickMenuEl = (event, facetName) => {
+    setMenuAnchorEl(event.currentTarget);
+    setFacetMenuLabel(facetName);
+  };
+
+  const handleCloseMenuEl = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const onGotoClick = () => {
+    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+    const element = $(domPath)[0];
+    element?.scrollIntoView();
+    handleCloseMenuEl();
+  };
+
+  const onDeleteDOMElement = (path) => {
+    try {
+      // TODO DOM-related stuff should be handled through highlighter
+      const parsedPath = parsePath([path], false);
+      const element = $(parsedPath[0])[0];
+      element.style.setProperty('opacity', 'unset');
+    } catch (e) {
+      console.log('[ERROR] onDeleteElement', e);
+    }
+  };
+
+  const onDeleteFacet = (facet) => {
+    console.log('DELETING FACET....', facet);
+    const facetValue = facetMap.get(facet);
+    facetValue && facetValue.forEach((domElement) => {
+      onDeleteDOMElement(domElement.path);
+    });
+    console.log('-----BEFORE--------', facetMap);
+    facetMap.delete(facet);
+    console.log('-----AFTER--------', facetMap);
+    setFacetMap(new Map(facetMap));
+    const keys = [...facetMap.keys()];
+    if (keys.length > 0) {
+      setSelectedFacet(keys[keys.length - 1]);
+    } else {
+      setSelectedFacet(defaultFacet);
+    }
+  };
+  console.log('facetmap', facetMap)
   // popup stuff
   // email,id:  
   const [loggedInUser, setLoggedInUser] = useState({});
@@ -126,16 +176,18 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      loadCopySnippet();
+
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
       if (!isPluginEnabledVal) {
         return;
       }
       const storageEmail = await getKeyFromLocalStorage(storage.username);
-      const workspaceResponse = await getOrCreateWorkspace(storageEmail,false);
+      const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
       const workspaceId = workspaceResponse?.response?.workspaceId;
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
-      await initSessionData({workspaceId, domainId});
+      await initSessionData({ workspaceId, domainId });
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
@@ -160,6 +212,31 @@ const AppProvider = ({ children }) => {
     setNewlyAddedFacet(label);
     enqueueSnackbar(`Facet "${label}" was created!`, { variant: 'success' });
     window.selectedDOM = 'main';
+  };
+
+  const logout = () => {
+    clearStorage();
+    Auth.signOut();
+    setCurrAuthState(authStateConstant.signingIn);
+    setJwt(undefined);
+    window.close();
+    triggerDOMReload();
+  };
+
+  const loadCopySnippet = async () => {
+    try {
+      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+
+      const loc = new URL(window.location.host);
+      const domainRes = await getDomain(loc.hostname, workspaceId);
+
+      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
+
+      setTextToCopy(text);
+      return text;
+    } catch (e) {
+      console.log('[ERROR]', e);
+    }
   };
 
   // sharing stuff among content script
@@ -196,6 +273,20 @@ const AppProvider = ({ children }) => {
       reset,
       authObject,
       setAuthObject,
+      menuAnchorEl,
+      setMenuAnchorEl,
+      handleClickMenuEl,
+      handleCloseMenuEl,
+      logout,
+      loadCopySnippet,
+      textToCopy,
+      facetLabelMenu,
+      setFacetMenuLabel,
+      onGotoClick,
+      selected,
+      setSelected,
+      onDeleteFacet,
+      onDeleteDOMElement,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

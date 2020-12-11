@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
@@ -9,15 +9,22 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
+import { color, color as colorConstant } from '../shared/constant.js';
+import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
+import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
+import FacetMenu from '../shared/FacetMenu/index.jsx';
+import styled from 'styled-components';
+import AppContext from '../AppContext.jsx';
+import FacetInput from '../shared/FacetInput/index.js';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
-        color: theme.palette.text.primary,
+        margin: 0,
         '&:hover > $content': {
             backgroundColor: theme.palette.action.hover,
         },
         '&:focus > $content, &$selected > $content': {
-            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+            backgroundColor: `var(--tree-view-bg-color, ${color.ice})`,
             color: 'var(--tree-view-color)',
         },
         '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
@@ -49,7 +56,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelRoot: {
         display: 'flex',
         alignItems: 'center',
-        padding: theme.spacing(0.5, 0),
     },
     labelIcon: {
         marginRight: theme.spacing(1),
@@ -57,28 +63,36 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
+        margin: '1rem'
     },
 }));
+
+const SideColorDiv = styled.div`
+    width: .5rem;
+    background-color: red;
+    align-self: stretch;
+`;
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
-        bgColor, onRenameItem, renamingFacet, onDeleteItem,
+        bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
+    const { handleClickMenuEl, onGotoClick, setSelectedFacet, setSelected, selected, onDeleteFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
-
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                <Typography variant="body2" className={classes.labelText}>
+                <Typography style={{ color: colorConstant.lightGray }} variant="body2"
+                    className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                {onRenameItem ? <IconButton onClick={() => { onRenameItem() }} aria-label="rename" component="span">
-                    <EditIcon color="inherit" className={classes.labelIcon} />
-                </IconButton> : null}
-                <IconButton onClick={() => { onDeleteItem() }} aria-label="upload picture" component="span">
-                    <DeleteForeverIcon color="inherit" className={classes.labelIcon} />
-                </IconButton>
+                {props.containsIconButton ? <div>
+                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
+                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                </div>
+                    : null
+                }
             </div>
         </div>;
 
@@ -92,15 +106,18 @@ function StyledTreeItem(props) {
     }
 
     const duringRenameElement = <div>
-        <Typography variant="body2" className={classes.labelText}>
+        <Typography
+            style={{ color: colorConstant.lightGray }}
+            className={classes.labelText}
+            variant="body2">
             {labelText}
         </Typography>
-        <TextField
+        <FacetInput
             inputRef={input => input && input.focus()}
             autoFocus
-            style={{ width: '50%' }} onKeyDown={keyPress}
+            onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
-        </TextField>
+        </FacetInput>
         <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
             <CheckIcon color="inherit" className={classes.labelIcon} />
         </IconButton>

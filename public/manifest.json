@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Facet",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "Facet.ninja | Deploy - Learn - Adapt",
     "icons": {
         "512": "facet_ninja_logo.png"
@@ -32,7 +32,6 @@
     "permissions": [
         "<all_urls>",
         "storage",
-        "tabs",
-        "activeTab"
+        "tabs"
     ]
 }
