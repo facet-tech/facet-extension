@@ -33,6 +33,7 @@ const AppProvider = ({ children }) => {
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [selected, setSelected] = useState([]);
+  const [expanded, setExpanded] = useState([]);
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
@@ -292,6 +293,8 @@ const AppProvider = ({ children }) => {
       setSelected,
       onDeleteFacet,
       onDeleteDOMElement,
+      expanded,
+      setExpanded,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

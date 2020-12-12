@@ -116,14 +116,17 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
+    expanded, setExpanded
   } = useContext(AppContext);
-  const [expanded, setExpanded] = useState([]);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
 
+  console.log('selected', selected);
+  console.log('expanded', expanded);
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
+    console.log('@ADDFACET')
     const newName = `Facet-${autoNumber}`;
     if (facetMap.get(newName)) {
       addFacet(autoNumber + 1);
@@ -156,7 +159,7 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdToggle = (event, nodeIds) => {
-    setExpanded(nodeIds);
+    // setExpanded(nodeIds);
   };
 
   const handleNodeIdsSelect = (event, nodeId) => {
@@ -201,7 +204,13 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
-          onClick={(e) => { setSelected(facet.name); setSelectedFacet(facet.name); setExpanded([facet.name]) }}
+          onLabelClick={(e) => {
+            e.preventDefault();
+            // console.log('CLICKED', facet.name);
+            // setSelected(facet.name);
+            // setSelectedFacet(facet.name);
+            // setExpanded([facet.name])
+          }}
           containsIconButton={true}
         >
           {value && value.map((domElement, index) => (
@@ -283,7 +292,8 @@ export default function FacetTreeSideBar() {
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
             selected={selected}
-            onNodeToggle={handleNodeIdToggle}
+            // disableSelection={true}
+          // onNodeToggle={handleNodeIdToggle}
           // onNodeSelect={handleNodeIdsSelect}
           >
             {itemsElement}

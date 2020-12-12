@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             minWidth: '344px !important',
         },
-        padding: '2rem'
+        // padding: '2rem'
     },
     card: {
         display: 'grid',
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         gridTemplateColumns: '15% 85%',
         alignItems: 'center',
         justifyContent: 'center',
-        border: '2px solid #FFFFFF'
+        border: '1px solid #FFFFFF'
     },
     icon: {
         textAlign: 'center'
@@ -75,10 +75,6 @@ const FacetSnackbar = React.forwardRef((props, ref) => {
     const { closeSnackbar } = useSnackbar();
     const [expanded, setExpanded] = useState(false);
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
     const handleDismiss = () => {
         closeSnackbar(props.id);
     };
@@ -89,7 +85,7 @@ const FacetSnackbar = React.forwardRef((props, ref) => {
                 <div className={classes.icon}>
                     <Icon
                         name={snackbarConstants[variant]['iconName']}
-                        size='xlarge'
+                        size='large'
                         fill={snackbarConstants[variant]['fill']}
                     />
                 </div>

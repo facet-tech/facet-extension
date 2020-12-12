@@ -62,8 +62,8 @@ const snackbar = {
     },
     info: {
         text: 'info',
-        iconName: 'message-square-outline',
-        fill: color.lightGray
+        iconName: 'message-circle-outline',
+        fill: color.ice
     }
 }
 

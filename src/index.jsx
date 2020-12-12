@@ -106,7 +106,7 @@ if (document.getElementById('facetizer')) {
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
-          autoHideDuration={5000}
+          autoHideDuration={555000}
           iconVariant={{
             error: '✖️',
             warning: '⚠️',
