@@ -1,18 +1,40 @@
-import { IconButton } from '@material-ui/core';
-import React from 'react';
-import Icon from 'react-eva-icons';
+import { IconButton, makeStyles } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import * as eva from "eva-icons";
 import { color } from '../constant';
 
-export default ({ name = "log-out-outline", size = "large", fill = color.lightGray, children, ...other }) => {
+const useStyles = makeStyles({
+    iconButton: {
+        padding: '.25rem',
+        display: 'grid',
+        backgroundColor: props => props.isSelected ? color.ice : '',
+        "&:hover": {
+            backgroundColor: color.ice,
+            borderRadius: '50%',
+        }
+    },
+    i: {
+        display: 'grid'
+    }
+});
+
+export default ({ name = "log-out-outline", size = "small", fill = color.lightGray, isSelected = false, children, ...other }) => {
+    const classes = useStyles({ isSelected });
+
+    useEffect(() => {
+        eva.replace();
+    }, []);
 
     return <IconButton
         {...other}
-        iconStyle={{}} color="primary" aria-label="settings"
-        component="span">
-        <Icon
-            name={name}
-            size={size}
+        className={classes.iconButton}>
+        <i
+            className={classes.i}
             fill={fill}
+            data-eva={name}
+            data-eva-hover="true"
+            data-eva-infinite="true"
+            data-eva-size={"small"}
         />
         {children}
     </IconButton>

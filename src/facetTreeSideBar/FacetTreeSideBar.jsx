@@ -238,7 +238,7 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
+      <FacetIconButton isSelected={true} name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
     ) : (
       <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Enable" aria-label="Enable" />
     );
