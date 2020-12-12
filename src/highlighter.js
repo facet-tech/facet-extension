@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
-import { api, styles } from './shared/constant';
+import { api, snackbar, styles } from './shared/constant';
 import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
 import isDevelopment from './utils/isDevelopment';
@@ -71,7 +71,10 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
-                enqueueSnackbar(`Element was removed from the "${key}" facet.`, { variant: "info" });
+                enqueueSnackbar({
+                    message: `Element was removed from the "${key}" facet.`,
+                    variant: snackbar.info.text
+                });
             }
             setFacetMap(new Map(facetMap.set(key, newFacetArr)));
             return;

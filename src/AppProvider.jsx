@@ -10,7 +10,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet } from './shared/constant';
+import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -160,7 +160,10 @@ const AppProvider = ({ children }) => {
         domainId: domainRes.response.id,
         urlPath: window.location.pathname,
       };
-      enqueueSnackbar('Facets reset.', { variant: 'success' });
+      enqueueSnackbar({
+        message: 'Facets reset.',
+        variant: snackbar.success.text
+      });
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
       if (!isDevelopment()) {
         window.location.reload();
@@ -201,12 +204,18 @@ const AppProvider = ({ children }) => {
 
   const onFacetAdd = (label) => {
     if (addedFacets.includes(label)) {
-      enqueueSnackbar('Please choose a unique name for your Facet.', { variant: 'error' });
+      enqueueSnackbar({
+        message: 'Please choose a unique name for your Facet.',
+        variant: snackbar.error.text
+      });
       return;
     }
     setAddedFacets([label, ...addedFacets]);
     setNewlyAddedFacet(label);
-    enqueueSnackbar(`Facet "${label}" was created!`, { variant: 'success' });
+    enqueueSnackbar({
+      message: `Facet "${label}" was created!`,
+      variant: snackbar.success.text
+    });
     window.selectedDOM = 'main';
   };
 

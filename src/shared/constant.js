@@ -1,5 +1,4 @@
 import isDevelopment from "../utils/isDevelopment";
-
 const facetizerId = 'facetizer';
 const facetKey = 'facet-settings'
 const isPluginEnabled = 'isPluginEnabled';
@@ -40,12 +39,31 @@ const color = {
     black: '#000000',
     redError: '#CD0F11',
     menuDivider: '#696969',
+    white: '#FFFFFF',
     menuColor: {
         red: '#ED4D4D',
         lightGreen: '#8EB914',
         lightBlue: '#23E7DB',
         lightPurple: '#927EE2',
         green: '#00D222'
+    }
+}
+
+const snackbar = {
+    success: {
+        text: 'success',
+        iconName: 'checkmark-circle-2-outline',
+        fill: 'green'
+    },
+    error: {
+        text: 'error',
+        iconName: 'alert-circle-outline',
+        fill: color.redError
+    },
+    info: {
+        text: 'info',
+        iconName: 'message-square-outline',
+        fill: color.lightGray
     }
 }
 
@@ -100,7 +118,7 @@ const HTTPMethods = {
 };
 
 export {
-    facetizerId, facetKey, isPluginEnabled,
+    facetizerId, facetKey, isPluginEnabled, snackbar,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
     authStorage, ChromeRequestType, color, fontSize

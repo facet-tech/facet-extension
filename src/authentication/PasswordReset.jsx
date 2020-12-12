@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
-import { authState as authStateConstant, color } from '../shared/constant';
+import { authState as authStateConstant, color, snackbar } from '../shared/constant';
 import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
 import FacetLink from '../shared/FacetLink';
@@ -46,7 +46,10 @@ export default () => {
   const resendConfirmationCode = async () => {
     try {
       const response = await Auth.resendSignUp(authObject.email);
-      enqueueSnackbar('Confirmation code has been sent in your email.', { variant: 'success' });
+      enqueueSnackbar({
+        message: 'Confirmation code has been sent in your email.',
+        variant: snackbar.success.text
+      });
     } catch (e) {
       console.log('[ERROR]', e);
     }
@@ -56,7 +59,7 @@ export default () => {
     <>
       <br />
       <FacetFormContainer>
-      <h3 style={{ color: color.ice }}>Reset Password</h3>
+        <h3 style={{ color: color.ice }}>Reset Password</h3>
         <div>
           <FacetLabel text="Check your email, a verification code has been sent. Don't see the code? " />
           <FacetLink color={color.electricB} text="Click here to resend" href="#" onClick={() => { resendConfirmationCode(); }} />

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
-import { useSnackbar } from 'notistack';
 import AppContext from './AppContext';
 import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
 
@@ -11,8 +10,6 @@ const StyledDiv = styled.div`
 `;
 
 export default function FacetToolbar() {
-  const { facetMap } = useContext(AppContext);
-  const { enqueueSnackbar } = useSnackbar();
 
   const useStyles = makeStyles((theme) => ({
     divider: {

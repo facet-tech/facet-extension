@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
-import { authState as authStateConstant, color } from '../shared/constant';
+import { authState as authStateConstant, color, snackbar } from '../shared/constant';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import facetLogo from '../static/images/facet_main_logo.svg';
@@ -38,7 +38,10 @@ export default () => {
     const resendConfirmationCode = async () => {
         try {
             const response = await Auth.resendSignUp(authObject.email);
-            enqueueSnackbar(`Confirmation code has been sent in your email.`, { variant: "success" });
+            enqueueSnackbar({
+                message: `Confirmation code has been sent in your email.`,
+                variant: snackbar.success.text
+            });
         } catch (e) {
             console.log('[ERROR]', e);
         }
@@ -75,10 +78,10 @@ export default () => {
                 {serverError && <Alert severity="error">{serverError}</Alert>}
                 <br />
                 <div style={{ textAlign: 'center' }}>
-                <b>
-                    <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
-                </b>
-            </div>
+                    <b>
+                        <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
+                    </b>
+                </div>
             </FacetFormContainer>
         </ >
     );

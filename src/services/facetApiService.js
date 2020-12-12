@@ -1,4 +1,4 @@
-import { HTTPMethods, APIUrl, storage } from "../shared/constant";
+import { HTTPMethods, APIUrl, storage, snackbar } from "../shared/constant";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 import { api } from '../shared/constant';
 import MockService from './MockService'
@@ -248,9 +248,15 @@ const saveFacets = async (facetMap, enqueueSnackbar) => {
         let getDomainRes = await getOrPostDomain(workspaceId);
         const body = generateRequestBodyFromFacetMap(facetMap, getDomainRes.response.id);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
-        enqueueSnackbar(`Hooray ~ Configuration has been saved 🙌!`, { variant: "success" });
+        enqueueSnackbar({
+            message: `Hooray ~ Configuration has been saved!`,
+            variant: "success"
+        });
     } catch (e) {
-        enqueueSnackbar(`Apologies, something went wrong. Please try again later.`, { variant: "error" });
+        enqueueSnackbar({
+            message: `Apologies, something went wrong. Please try again later.`,
+            variant: snackbar.error.text
+        });
         console.log(`[ERROR] [onSaveClick] `, e)
     }
 }
