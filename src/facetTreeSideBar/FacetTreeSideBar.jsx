@@ -238,9 +238,9 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
+      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
     ) : (
-      <FacetIconButton hoverSrc={facetEnableHoverLogo} src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" title="Enable" aria-label="Enable" />
+      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Enable" aria-label="Enable" />
     );
 
   return (
@@ -261,7 +261,7 @@ export default function FacetTreeSideBar() {
                 <FacetImage src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} hoverSrc={logoutLogoHover} />
+                <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
               </div>
             </TopDiv>
             <div className={classes.drawerHeader}>
@@ -292,7 +292,7 @@ export default function FacetTreeSideBar() {
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
             selected={selected}
-            // disableSelection={true}
+          // disableSelection={true}
           // onNodeToggle={handleNodeIdToggle}
           // onNodeSelect={handleNodeIdsSelect}
           >

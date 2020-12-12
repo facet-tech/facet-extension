@@ -1,26 +1,19 @@
 import { IconButton } from '@material-ui/core';
-import React, { useState } from 'react';
-import FacetImage from '../FacetImage';
+import React from 'react';
+import Icon from 'react-eva-icons';
+import { color } from '../constant';
 
-export default ({ src, hoverSrc, children, ...other }) => {
-    const [activeSrc, setActiveSrc] = useState(src);
-
-    const onMouseOver = () => {
-        if (hoverSrc) {
-            setActiveSrc(hoverSrc);
-        }
-    }
-
-    const onMouseOut = () => {
-        setActiveSrc(src);
-    }
+export default ({ name = "log-out-outline", size = "large", fill = color.lightGray, children, ...other }) => {
 
     return <IconButton
         {...other}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
         iconStyle={{}} color="primary" aria-label="settings"
-        component="span"><FacetImage src={activeSrc} />
+        component="span">
+        <Icon
+            name={name}
+            size={size}
+            fill={fill}
+        />
         {children}
     </IconButton>
 }

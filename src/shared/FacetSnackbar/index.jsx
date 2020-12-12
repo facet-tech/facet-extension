@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             minWidth: '344px !important',
         },
-        // padding: '2rem'
+        padding: '2rem'
     },
     card: {
         display: 'grid',
@@ -36,37 +36,6 @@ const useStyles = makeStyles(theme => ({
     },
     icon: {
         textAlign: 'center'
-    },
-    typography: {
-        fontWeight: 'bold',
-    },
-    actionRoot: {
-        padding: '8px 8px 8px 16px',
-    },
-    icons: {
-        marginLeft: 'auto',
-    },
-    expand: {
-        padding: '8px 8px',
-        transform: 'rotate(0deg)',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    collapse: {
-        padding: 16,
-    },
-    checkIcon: {
-        fontSize: 20,
-        color: color.white,
-        paddingRight: 4,
-    },
-    button: {
-        padding: 0,
-        textTransform: 'none',
     },
 }));
 
