@@ -57,7 +57,8 @@ const useTreeItemStyles = makeStyles((theme) => ({
         marginLeft: '.2rem'
     },
     labelRoot: {
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '80% 10% 10%',
         alignItems: 'center',
     },
     labelIcon: {
@@ -81,16 +82,24 @@ function StyledTreeItem(props) {
     const defaultElement =
         <div>
             <div className={classes.labelRoot}>
-                <Typography
-                    style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
-                    variant="body2"
-                    className={classes.labelText}>
-                    {onRenameItem ? <b>{labelText}</b> : labelText}
-                </Typography>
-                {props.isFacet ? <div>
-                    <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
-                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                <div>
+                    <Typography
+                        style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
+                        variant="body2"
+                        className={classes.labelText}>
+                        {onRenameItem ? <b>{labelText}</b> : labelText}
+                    </Typography>
                 </div>
+                {props.isFacet ?
+                    <>
+                        <div>
+                            <FacetIconButton name="eye-outline" />
+                        </div>
+                        <div>
+                            <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                            <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                        </div>
+                    </>
                     : <div>
                         <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
                     </div>
