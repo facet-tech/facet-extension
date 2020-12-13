@@ -90,12 +90,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'end',
     justifyContent: 'end',
     margin: '1rem',
-    // marginTop: '2rem'
   },
   fabBtn: {
-    backgroundColor: color.lightGray,
+    color: color.ice,
+    backgroundColor: color.darkGray,
     '&:hover': {
-      backgroundColor: color.ice,
+      backgroundColor: color.darkGray,
     },
   }
 }));
