@@ -41,6 +41,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
         '$expanded > &': {
             fontWeight: theme.typography.fontWeightRegular,
         },
+        paddingLeft: 0,
     },
     group: {
         marginLeft: 0,
@@ -64,11 +65,13 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
-        margin: '1rem'
+        paddingRight: 0,
+        padding: 0
     },
 }));
 
 function StyledTreeItem(props) {
+    console.log('checkare me', props)
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
@@ -79,16 +82,19 @@ function StyledTreeItem(props) {
         <div>
             <div className={classes.labelRoot}>
                 <Typography
-                    style={{ color: colorConstant.lightGray }}
+                    style={{ color: colorConstant.ice }}
                     variant="body2"
                     className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-                {props.containsIconButton ? <div>
+
+                {props.isFacet ? <div>
                     <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
                     <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
-                    : null
+                    : <div>
+                        <FacetIconButton onClick={() => props.onDeleteItem()} name="trash-2" />
+                    </div>
                 }
             </div>
         </div>;

@@ -213,7 +213,7 @@ export default function FacetTreeSideBar() {
             // setSelectedFacet(facet.name);
             // setExpanded([facet.name])
           }}
-          containsIconButton={true}
+          isFacet={true}
         >
           {value && value.map((domElement, index) => (
             <StyledTreeItem
@@ -231,7 +231,7 @@ export default function FacetTreeSideBar() {
                 facetMap.set(facet.name, arr);
                 setFacetMap(new Map(facetMap.set(facet.name, arr)));
               }}
-              containsIconButton={false}
+              isFacet={false}
             />
           ))}
         </StyledTreeItem>
