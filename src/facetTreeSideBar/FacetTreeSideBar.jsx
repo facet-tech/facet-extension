@@ -118,7 +118,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
-    expanded, setExpanded
+    expanded, setExpanded, onDeleteDOMElement
   } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -225,6 +225,7 @@ export default function FacetTreeSideBar() {
               labelIcon={WebAssetIcon}
               onDeleteItem={() => {
                 // TODO move on individual function
+                console.log('triggaara!', domElement);
                 onDeleteDOMElement(domElement.path);
                 let arr = facetMap.get(facet.name);
                 arr = arr.filter((e) => e.name !== domElement.name);

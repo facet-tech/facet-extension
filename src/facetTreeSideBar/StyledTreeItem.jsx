@@ -33,20 +33,20 @@ const useTreeItemStyles = makeStyles((theme) => ({
         },
     },
     content: {
-        color: theme.palette.text.secondary,
-        borderTopRightRadius: theme.spacing(2),
-        borderBottomRightRadius: theme.spacing(2),
-        paddingRight: theme.spacing(1),
-        fontWeight: theme.typography.fontWeightMedium,
-        '$expanded > &': {
-            fontWeight: theme.typography.fontWeightRegular,
-        },
-        paddingLeft: 0,
+        // color: theme.palette.text.secondary,
+        // borderTopRightRadius: theme.spacing(2),
+        // borderBottomRightRadius: theme.spacing(2),
+        // paddingRight: theme.spacing(1),
+        // fontWeight: theme.typography.fontWeightMedium,
+        // '$expanded > &': {
+        //     fontWeight: theme.typography.fontWeightRegular,
+        // },
+        // paddingLeft: 0,
     },
     group: {
         marginLeft: 0,
         '& $content': {
-            paddingLeft: theme.spacing(2),
+            // paddingLeft: theme.spacing(2),
         },
     },
     expanded: {},
@@ -54,6 +54,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     label: {
         fontWeight: 'inherit',
         color: 'inherit',
+        marginLeft: '.2rem'
     },
     labelRoot: {
         display: 'flex',
@@ -82,7 +83,7 @@ function StyledTreeItem(props) {
         <div>
             <div className={classes.labelRoot}>
                 <Typography
-                    style={{ color: colorConstant.ice }}
+                    style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
                     variant="body2"
                     className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
