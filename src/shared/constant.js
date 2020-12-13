@@ -117,9 +117,19 @@ const HTTPMethods = {
     DELETE: 'DELETE'
 };
 
+// helper during local debugging
+const isActivelyBeingDebugged = (id) => {
+    const activelyDebuggingElementIds = ['facetizer'];
+    if (!isDevelopment()) {
+        return true;
+    }
+    return activelyDebuggingElementIds.includes(id);
+}
+
 export {
     facetizerId, facetKey, isPluginEnabled, snackbar,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
-    authStorage, ChromeRequestType, color, fontSize
+    authStorage, ChromeRequestType, color, fontSize,
+    isActivelyBeingDebugged
 };
