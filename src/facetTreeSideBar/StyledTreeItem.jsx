@@ -42,6 +42,9 @@ const useTreeItemStyles = makeStyles((theme) => ({
         //     fontWeight: theme.typography.fontWeightRegular,
         // },
         // paddingLeft: 0,
+        "& svg": {
+            fill: color.lightGray,
+        }
     },
     group: {
         marginLeft: 0,
@@ -60,6 +63,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
         display: 'grid',
         gridTemplateColumns: '80% 10% 10%',
         alignItems: 'center',
+        marginRight: '.5rem',
     },
     labelIcon: {
         marginRight: theme.spacing(1),
@@ -100,9 +104,11 @@ function StyledTreeItem(props) {
                             <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                         </div>
                     </>
-                    : <div>
-                        <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
-                    </div>
+                    : <>
+                        <div></div>
+                        <div>
+                            <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
+                        </div></>
                 }
             </div>
         </div>;
