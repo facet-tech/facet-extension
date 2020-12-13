@@ -12,8 +12,9 @@ function App() {
   const { enqueueSnackbar } = useSnackbar();
   const { showSideBar, isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
 
+  // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
-    async function (request, sendResponse) {
+    async function (message, sendResponse) {
       await getKeyFromLocalStorage(isPluginEnabledConstant);
       window.location.reload();
     });

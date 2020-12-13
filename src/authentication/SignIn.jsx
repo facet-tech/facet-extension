@@ -68,7 +68,7 @@ export default () => {
         <h3 style={{ color: '#C4DDF2' }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
           <FacetLabel htmlFor="email" text="Email"></FacetLabel>
-          <MarginTop value='.5rem'/>
+          <MarginTop value='.5rem' />
           <FacetInput
             id="email"
             name="email"
@@ -86,7 +86,7 @@ export default () => {
           {errors.email && <FacetFormError role="alert" text={errors.email.message}></FacetFormError>}
           <br />
           <FacetLabel text="Password" />
-          <MarginTop value='.5rem'/>
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password"
             type="password"

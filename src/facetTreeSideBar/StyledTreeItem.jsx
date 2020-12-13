@@ -68,12 +68,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     },
 }));
 
-const SideColorDiv = styled.div`
-    width: .5rem;
-    background-color: red;
-    align-self: stretch;
-`;
-
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
@@ -91,7 +85,7 @@ function StyledTreeItem(props) {
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
                 {props.containsIconButton ? <div>
-                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                    <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
                     <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
                     : null

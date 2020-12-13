@@ -1,3 +1,5 @@
+/* global chrome */
+
 import React, { useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -81,10 +83,7 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
   },
   gridDiv: {
-    display: 'grid',
-    marginLeft: '.5rem',
-    marginRight: '.5rem',
-    marginTop: '.5rem'
+    display: 'grid'
   },
   fabGrid: {
     display: 'grid',
@@ -96,17 +95,20 @@ const useStyles = makeStyles((theme) => ({
   fabBtn: {
     backgroundColor: color.lightGray,
     '&:hover': {
-      backgroundColor: color.electricB,
+      backgroundColor: color.ice,
     },
   }
 }));
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 70% 10%;
+    grid-template-columns: 70% 10% 10%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
 `;
 
 export default function FacetTreeSideBar() {
@@ -261,20 +263,34 @@ export default function FacetTreeSideBar() {
                 <FacetImage src={facetTypography} />
               </div>
               <div>
+                <FacetIconButton onClick={() => {
+                  console.log('KLIKARISTIKA');
+                  chrome.runtime.sendMessage({
+                    msg: "auth",
+                    data: {
+                      subject: "Loading",
+                      content: "Just completed!"
+                    }
+                  });
+                }} name="info-outline" />
+              </div>
+              <div>
                 <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
               </div>
             </TopDiv>
+            <br />
+            <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} hoverSrc={resetLogoHover} />
-              <FacetIconButton src={saveFacetLogo} hoverSrc={saveFacetLogoHover} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
+              <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton src={copySnippetLogo} hoverSrc={copySnippetHoverLogo} onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton name="copy" onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
             <div className={classes.oneLineGrid}>
               <div>
-                <h3 style={{ color: color.lightGray }}>My Facets</h3>
+                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My Facets</h3>
               </div>
               <div>
                 <div className={classes.fabGrid}>

@@ -7,14 +7,19 @@ const useStyles = makeStyles({
     iconButton: {
         padding: '.25rem',
         display: 'grid',
-        backgroundColor: props => props.isSelected ? color.ice : '',
         "&:hover": {
-            backgroundColor: color.ice,
-            borderRadius: '50%',
+            // backgroundColor: color.ice,
+            // borderRadius: '50%',
         }
     },
     i: {
-        display: 'grid'
+        display: 'grid',
+        fill: props => props.isSelected ? color.electricB : '',
+        "&:hover": {
+            fill: color.ice
+            // backgroundColor: color.ice,
+            // borderRadius: '50%',
+        }
     }
 });
 

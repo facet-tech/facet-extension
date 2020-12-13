@@ -132,6 +132,15 @@ const AppProvider = ({ children }) => {
     */
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async (request, sender, sendResponse) => {
+      console.log('AKOUW', request);
+      if (request === 'auth') {
+        console.log('mpika')
+        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
+          var currTab = tabs[0];
+          chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
+        });
+        return true;
+      }
       if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
         const data = await AmplifyService.getCurrentSession();
         sendResponse({
@@ -231,15 +240,15 @@ const AppProvider = ({ children }) => {
 
   const loadCopySnippet = async () => {
     try {
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      // const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
 
-      const loc = new URL(window.location.host);
-      const domainRes = await getDomain(loc.hostname, workspaceId);
+      // const loc = new URL(window.location.host);
+      // const domainRes = await getDomain(loc.hostname, workspaceId);
 
-      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
+      // const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
 
-      setTextToCopy(text);
-      return text;
+      // setTextToCopy(text);
+      // return text;
     } catch (e) {
       console.log('[ERROR]', e);
     }

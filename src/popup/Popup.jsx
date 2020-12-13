@@ -41,9 +41,12 @@ export default () => {
       }
     }
     loadState();
-  }, [])
+  }, []);
 
-  if (jwt || currAuthState === authStateConstant.signedIn) {
+  console.log('jwt', jwt);
+  console.log('currAuthState', currAuthState);
+
+  if (currAuthState === authStateConstant.signedIn) {
     // Commented this in favor of WelcomeAbroad component
     // chrome.tabs.getCurrent(function (tab) {
     //   const queryString = window.location.search;
