@@ -23,7 +23,8 @@ const useStyles = makeStyles({
     }
 });
 
-export default ({ name = "log-out-outline", size = "small", fill = color.lightGray, isSelected = false, children, ...other }) => {
+export default ({ name, size = "small", fill = color.lightGray,
+    isSelected = false, customHeight, children, ...other }) => {
     const classes = useStyles({ isSelected });
 
     useEffect(() => {
@@ -32,14 +33,17 @@ export default ({ name = "log-out-outline", size = "small", fill = color.lightGr
 
     return <IconButton
         {...other}
+        size="small"
         className={classes.iconButton}>
         <i
+            style={{
+                height: customHeight ? customHeight : ''
+            }}
             className={classes.i}
             fill={fill}
             data-eva={name}
             data-eva-hover="true"
             data-eva-infinite="true"
-            data-eva-size={"small"}
         />
         {children}
     </IconButton>

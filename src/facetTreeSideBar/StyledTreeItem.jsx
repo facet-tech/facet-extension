@@ -72,7 +72,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
 }));
 
 function StyledTreeItem(props) {
-    console.log('checkare me', props)
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
@@ -88,13 +87,12 @@ function StyledTreeItem(props) {
                     className={classes.labelText}>
                     {onRenameItem ? <b>{labelText}</b> : labelText}
                 </Typography>
-
                 {props.isFacet ? <div>
                     <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
                     <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                 </div>
                     : <div>
-                        <FacetIconButton onClick={() => props.onDeleteItem()} name="trash-2" />
+                        <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
                     </div>
                 }
             </div>
