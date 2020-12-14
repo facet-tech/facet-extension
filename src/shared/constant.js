@@ -125,7 +125,7 @@ const domIds = {
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.facetizer];
+    const activelyDebuggingElementIds = [domIds.authentication];
     if (!isDevelopment()) {
         return true;
     }

@@ -8,7 +8,6 @@ import isDevelopment from '../utils/isDevelopment';
 import Main from './Main';
 import logo from '../static/images/facet_main_logo.svg';
 import FacetButton from '../shared/FacetButton';
-import FacetLabel from '../shared/FacetLabel';
 import FacetLink from '../shared/FacetLink';
 import StyledPopupDiv from './StyledPopupDiv';
 import { color } from '../shared/constant';

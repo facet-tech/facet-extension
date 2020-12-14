@@ -5,7 +5,6 @@ import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant, color, snackbar } from '../shared/constant';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
-import facetLogo from '../static/images/facet_main_logo.svg';
 import Alert from '@material-ui/lab/Alert';
 import { useSnackbar } from 'notistack';
 import FacetFormContainer from "../shared/FacetFormContainer";

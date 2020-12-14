@@ -7,7 +7,6 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import PopupContext from '../popup/PopupContext';
 import { authState as authStateConstant, color, snackbar } from '../shared/constant';
-import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from '../AppContext';
 import FacetLink from '../shared/FacetLink';
 import FacetInput from '../shared/FacetInput';
