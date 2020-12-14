@@ -51,13 +51,13 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
       <SnackbarProvider
         maxSnack={4}
         disableWindowBlurListener
-        autoHideDuration={5000}
+        autoHideDuration={3000}
         iconVariant={{
           error: '✖️',
           warning: '⚠️',
         }}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left',
         }}
       >
@@ -77,13 +77,13 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
-          autoHideDuration={5000}
+          autoHideDuration={3000}
           iconVariant={{
             error: '✖️',
             warning: '⚠️',
           }}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'left',
           }}
         >
@@ -105,13 +105,13 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
           <SnackbarProvider
             maxSnack={4}
             disableWindowBlurListener
-            autoHideDuration={5000}
+            autoHideDuration={3000}
             iconVariant={{
               error: '✖️',
               warning: '⚠️',
             }}
             anchorOrigin={{
-              vertical: 'top',
+              vertical: 'bottom',
               horizontal: 'left',
             }}
             content={(key, message) => (

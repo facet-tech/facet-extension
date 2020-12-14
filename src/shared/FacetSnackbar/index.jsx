@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
             minWidth: '344px !important',
         },
-        padding: '2rem'
+        padding: '1rem',
+        marginLeft: '16rem'
     },
     card: {
         display: 'grid',
@@ -32,7 +33,8 @@ const useStyles = makeStyles(theme => ({
         gridTemplateColumns: '15% 85%',
         alignItems: 'center',
         justifyContent: 'center',
-        border: '1px solid #FFFFFF'
+        border: '1px solid #FFFFFF',
+        marginTop: '-2.5rem'
     },
     icon: {
         textAlign: 'center'
