@@ -52,8 +52,9 @@ const useTreeItemStyles = makeStyles((theme) => ({
             // paddingLeft: theme.spacing(2),
         },
     },
-    expanded: {},
-    selected: {},
+    expanded: {
+        border: `2px solid ${color.ice}`,
+    },
     label: {
         fontWeight: 'inherit',
         color: 'inherit',
@@ -81,11 +82,12 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick, setExpanded, setSelectedFacet, setSelected, selected, onDeleteFacet } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick, setExpanded, setSelectedFacet, setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
+
     const defaultElement =
         <div>
-            <div className={classes.labelRoot}>
+            <div onClick={() => { if (props.isFacet) { onFacetClick(labelText) } }} className={classes.labelRoot}>
                 <div>
                     <Typography
                         style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}

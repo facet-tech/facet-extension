@@ -229,6 +229,13 @@ const AppProvider = ({ children }) => {
     window.selectedDOM = 'main';
   };
 
+  const onFacetClick = (labelText) => {
+    console.log('LABELTEXT',labelText);
+    setExpanded([labelText]);
+    setSelected(labelText);
+    setSelectedFacet(labelText);
+  }
+
   const logout = () => {
     clearStorage();
     Auth.signOut();
@@ -304,6 +311,7 @@ const AppProvider = ({ children }) => {
       onDeleteDOMElement,
       expanded,
       setExpanded,
+      onFacetClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

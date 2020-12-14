@@ -161,10 +161,12 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdToggle = (event, nodeIds) => {
+    console.log('@handleNodeIdToggle');
     // setExpanded(nodeIds);
   };
 
   const handleNodeIdsSelect = (event, nodeId) => {
+    // console.log('@handleNodeIdsSelect');
     // setSelected([nodeId]);
     // setSelectedFacet(nodeId);
     // if (expanded.includes(nodeId)) {
@@ -206,8 +208,15 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
+          onNodeSelect={() => {
+            console.log('klikara man m')
+            // console.log('CLICKED')
+            // setExpanded([facet.name]); 
+            // setSelected(facet.name); 
+            // setSelectedFacet(facet.name);
+          }}
           onLabelClick={(e) => {
-            e.preventDefault();
+            // e.preventDefault();
             // console.log('CLICKED', facet.name);
             // setSelected(facet.name);
             // setSelectedFacet(facet.name);
