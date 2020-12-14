@@ -62,6 +62,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Last name" htmlFor="sname" />
+          <br />
           <FacetInput
             id="lastName"
             name="lastName"
@@ -74,6 +75,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Email" htmlFor="email"></FacetLabel>
+          <br />
           <FacetInput
             id="email"
             name="email"
@@ -97,6 +99,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Password" />
+          <br />
           <FacetInput
             name="password"
             type="password"
@@ -119,6 +122,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Repeat password" />
+          <br />
           <FacetInput
             name="password_repeat"
             type="password"

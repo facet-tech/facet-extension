@@ -15,9 +15,7 @@ export default () => {
             <FacetLabel fontSize={fontSize.xxLarge} color={color.ice} text="Welcome abroad!" />
             <br />
             <br />
-            <FacetLabel text="Congratulations! You are part of our community from now on." />
-            <br />
-            <FacetLabel text="Get started with the following material:" />
+            <FacetLabel text="Welcome aboard!" />
             <br />
             <br />
             <b>

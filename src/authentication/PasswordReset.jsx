@@ -61,14 +61,15 @@ export default () => {
       <FacetFormContainer>
         <h3 style={{ color: color.ice }}>Reset Password</h3>
         <div>
-          <FacetLabel text="Check your email, a verification code has been sent. Don't see the code? " />
-          <FacetLink color={color.electricB} text="Click here to resend" href="#" onClick={() => { resendConfirmationCode(); }} />
+          <FacetLabel text="A verification key was sent to you email. Don’t see the key? " />
+          <FacetLink color={color.electricB} text="Resend" href="#" onClick={() => { resendConfirmationCode(); }} />
         </div>
         <br />
         <br />
         <form onSubmit={(e) => e.preventDefault()}>
           <div>
-            <FacetLabel text="Enter your verification code" htmlFor="code" />
+            <FacetLabel text="Enter your verification key" htmlFor="key" />
+            <br />
             <FacetInput
               id="code"
               name="code"
@@ -83,6 +84,7 @@ export default () => {
           <br />
           <div>
             <FacetLabel text="Password" />
+            <br />
             <FacetInput
               name="password"
               type="password"
@@ -94,11 +96,13 @@ export default () => {
                 },
               })}
             />
+            <br />
             {errors.password && <FacetFormError text={errors.password.message} />}
           </div>
           <br />
           <div>
             <FacetLabel text="Repeat password" />
+            <br />
             <FacetInput
               name="password_repeat"
               type="password"
@@ -118,7 +122,7 @@ export default () => {
         <br />
         <div>
           <FacetLabel text="Don't have an account? " />
-          <FacetLink text="Register" href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)} />
+          <FacetLink text="Sign up" href="#" onClick={() => setCurrAuthState(authStateConstant.signingUp)} />
         </div>
       </FacetFormContainer>
     </>

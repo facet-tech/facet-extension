@@ -108,12 +108,12 @@ export default () => {
             <br />
             <Typography>
               <b>
-                <FacetLabel text='No profile? ' />
-                <FacetLink color='#758EBF' text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+                <FacetLabel text='Not registered? ' />
+                <FacetLink color='#758EBF' text='Sign up.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
               </b>
               <br />
               <br />
-              <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
+              <FacetLabel text="By logging into Facet you agree to the terms of use and conditions of you and the privacy policy." />
             </Typography>
           </div>
         </form>

@@ -63,9 +63,6 @@ export default () => {
             <img src={logo} />
             <br />
             <br />
-            <FacetLabel text="Please Login to your account or register on our free platform" />
-            <br />
-            <br />
             <FacetButton variant="contained" color="primary" type="submit" text="LOGIN" onClick={() => onLoginClick()}></FacetButton>
             <br />
             <FacetLink onClick={() => { onRegisterClick() }} color="#758EBF" underline="always" text="REGISTER" />

@@ -51,16 +51,13 @@ export default () => {
         <>
             <br />
             <FacetFormContainer>
-                <FacetLabel text="An email has been sent to your address with an authorization key." />
+                <FacetLabel text="Authorization Key" />
+                <FacetLabel text="An authorization key was sent to your email." />
                 <br />
-                <FacetLabel text="I did not get any email. " />
-                <FacetLink color={color.electricB} text="Resend key to my email" onClick={() => { resendConfirmationCode() }} />
-                <FacetLabel text=" or " />
-                <FacetLink color={color.electricB} text="Register again" onClick={() => { setCurrAuthState(auth) }} />
+                <FacetLink color={color.electricB} text="Resend email" onClick={() => { resendConfirmationCode() }} />
                 <br />
                 <br />
                 <form onSubmit={e => e.preventDefault()}>
-                    <FacetLabel text="KEY" />
                     <br />
                     <FacetInput
                         id="confirmationCode"
@@ -79,7 +76,7 @@ export default () => {
                 <br />
                 <div style={{ textAlign: 'center' }}>
                     <b>
-                        <FacetLink text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
+                        <FacetLink text="Sign in" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} />
                     </b>
                 </div>
             </FacetFormContainer>
