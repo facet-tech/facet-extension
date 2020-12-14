@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { color, fontSize } from '../constant';
 import FacetFormContainer from '../FacetFormContainer';
+import FacetIconButton from '../FacetIconButton/FacetIconButton';
 import FacetLabel from '../FacetLabel';
 import FacetLink from '../FacetLink';
 
@@ -19,18 +20,16 @@ export default () => {
             <br />
             <br />
             <b>
+                <FacetIconButton name="play-circle-outline" />
                 <FacetLink color={color.electricB} text="Watch tutorial" />
             </b>
             <br />
             <br />
             <b>
-                <FacetLink color={color.electricB} text="Test Drive facet-extension" />
+                <FacetIconButton name="external-link-outline" />
+                <FacetLink color={color.electricB} text="Try it now!" />
             </b>
             <br />
-            <br />
-            <b>
-                <FacetLink color={color.electricB} text="My profile" />
-            </b>
         </FacetFormContainer>
     </CenteredDiv>
 }
