@@ -53,7 +53,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
         },
     },
     expanded: {
-        border: `2px solid ${color.ice}`,
+        border: `1px solid ${color.ice}`,
     },
     label: {
         fontWeight: 'inherit',
