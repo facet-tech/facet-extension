@@ -230,6 +230,12 @@ const AppProvider = ({ children }) => {
   };
 
   const onFacetClick = (labelText) => {
+    console.log('@ONFACETCLICK', menuAnchorEl)
+    // get around buggy behavior on opened menu
+    if (menuAnchorEl) {
+      handleCloseMenuEl();
+      return;
+    }
     setExpanded([labelText]);
     setSelected(labelText);
     setSelectedFacet(labelText);

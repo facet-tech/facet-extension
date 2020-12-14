@@ -199,7 +199,10 @@ export default function FacetTreeSideBar() {
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
           // onDeleteItem={(e) => { onDeleteFacet(e); }}
-          onRenameItem={() => { setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
+          onRenameItem={() => {
+            setRenamingFacet(facetLabelMenu);
+            handleCloseMenuEl();
+          }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));
@@ -208,20 +211,6 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
-          onNodeSelect={() => {
-            console.log('klikara man m')
-            // console.log('CLICKED')
-            // setExpanded([facet.name]); 
-            // setSelected(facet.name); 
-            // setSelectedFacet(facet.name);
-          }}
-          onLabelClick={(e) => {
-            // e.preventDefault();
-            // console.log('CLICKED', facet.name);
-            // setSelected(facet.name);
-            // setSelectedFacet(facet.name);
-            // setExpanded([facet.name])
-          }}
           isFacet={true}
         >
           {value && value.map((domElement, index) => (
