@@ -20,6 +20,8 @@ import FacetSnackbar from './shared/FacetSnackbar';
 
 Amplify.configure(awsExports);
 
+const autoHideDuration = 3000;
+
 // TODO fix duplication
 
 if (process.env.NODE_ENV !== 'development') {
@@ -51,7 +53,7 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
       <SnackbarProvider
         maxSnack={4}
         disableWindowBlurListener
-        autoHideDuration={3000}
+        autoHideDuration={autoHideDuration}
         iconVariant={{
           error: '✖️',
           warning: '⚠️',
@@ -77,7 +79,7 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
-          autoHideDuration={3000}
+          autoHideDuration={autoHideDuration}
           iconVariant={{
             error: '✖️',
             warning: '⚠️',
@@ -105,7 +107,7 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
           <SnackbarProvider
             maxSnack={4}
             disableWindowBlurListener
-            autoHideDuration={3000}
+            autoHideDuration={autoHideDuration}
             iconVariant={{
               error: '✖️',
               warning: '⚠️',
