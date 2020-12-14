@@ -65,7 +65,7 @@ export default () => {
             <br />
             <FacetButton variant="contained" color="primary" type="submit" text="LOGIN" onClick={() => onLoginClick()}></FacetButton>
             <br />
-            <FacetLink onClick={() => { onRegisterClick() }} color="#758EBF" underline="always" text="REGISTER" />
+            <FacetLink onClick={() => { onRegisterClick() }} color={color.electricB} underline="always" text="Sign up" />
         </InnerStyledDiv>
     </StyledPopupDiv>
 

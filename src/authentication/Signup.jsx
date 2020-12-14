@@ -48,7 +48,7 @@ export default () => {
   return (
     <>
       <FacetFormContainer>
-        <h3 style={{ color: color.ice }}>Register</h3>
+        <h3 style={{ color: color.ice }}>Sign up</h3>
         <form onSubmit={e => e.preventDefault()}>
           <FacetLabel text="First name" htmlFor="fname" />
           <MarginTop value='.5rem' />
