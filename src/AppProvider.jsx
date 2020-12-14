@@ -230,7 +230,6 @@ const AppProvider = ({ children }) => {
   };
 
   const onFacetClick = (labelText) => {
-    console.log('LABELTEXT',labelText);
     setExpanded([labelText]);
     setSelected(labelText);
     setSelectedFacet(labelText);
