@@ -10,7 +10,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar } from './shared/constant';
+import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -132,9 +132,9 @@ const AppProvider = ({ children }) => {
     */
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async (request, sender, sendResponse) => {
-      console.log('AKOUW', request);
+      // console.log('AKOUW', request);
       if (request === 'auth') {
-        console.log('mpika')
+        // console.log('mpika')
         chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
           var currTab = tabs[0];
           chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
@@ -188,13 +188,15 @@ const AppProvider = ({ children }) => {
       loadCopySnippet();
 
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
-      if (!isPluginEnabledVal) {
+      // dirty quick fix
+      const isAuthenticationDOM = document.getElementById(domIds.authentication);
+      const isPopup = document.getElementById(domIds.popup);
+      if (!isPluginEnabledVal || isAuthenticationDOM || isPopup) {
         return;
       }
       const storageEmail = await getKeyFromLocalStorage(storage.username);
       const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
       const workspaceId = workspaceResponse?.response?.workspaceId;
-      console.log('CHECKME @APPRPIVDER USEEFECT',window.location.hostname);
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
       await initSessionData({ workspaceId, domainId });
@@ -231,7 +233,6 @@ const AppProvider = ({ children }) => {
   };
 
   const onFacetClick = (labelText) => {
-    console.log('CHECKME @ONFACETCLICK', menuAnchorEl)
     // get around buggy behavior on opened menu
     if (menuAnchorEl) {
       handleCloseMenuEl();

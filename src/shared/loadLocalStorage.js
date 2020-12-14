@@ -9,7 +9,6 @@ const facetKey = 'facet-settings';
  * @param {object} object containing workspaceId and domainId
  */
 const initSessionData = async ({ workspaceId, domainId }) => {
-    console.log('Checkme @initSessionData', window.location.hostname);
     const localStorageObj = await getLocalStorageObject();
     const aboutToSet = {
         [facetKey]: {

@@ -18,7 +18,6 @@ class AmplifyService {
                 if (!response) {
                     const email = await getKeyFromLocalStorage(storage.username);
                     const password = await getKeyFromLocalStorage(storage.password);
-                    // console.log('@sendMsgPromise', email, password);
                     await Auth.signIn(email, password);
                     let ans = await AmplifyService.getCurrentSession();
                     if (!ans) {
@@ -39,7 +38,6 @@ class AmplifyService {
         try {
             let ans = await AmplifyService.getCurrentSession();
             if (ans) {
-                // console.log("[getCurrentUserJTW] ANS", ans);
                 return ans;
             }
             const jwtToken = await this.sendMessagePromise();
@@ -55,7 +53,6 @@ class AmplifyService {
         try {
             const result = await Auth.currentSession();
             const jwtToken = result?.accessToken?.jwtToken;
-            // console.log('[getCurrentSession] RETRIEVED curr: ', result);
             return jwtToken;
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)

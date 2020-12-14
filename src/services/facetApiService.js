@@ -113,8 +113,6 @@ const getDomain = async (domainName, workspaceId, readFromStorage = true) => {
 
 const getOrPostDomain = async (workspaceId) => {
     try {
-        console.log('@getOrPostDomain', window.location.hostname);
-
         let domainRes = await getDomain(window.location.hostname, workspaceId);
         const domainExists = domainRes && domainRes.response.id !== undefined;
         // create domain if it doesn't exist
@@ -233,7 +231,6 @@ const extractFacetArray = (facetMap) => {
 }
 
 const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
-    console.log('CHECKME @generateRequestBodyFromFacetMap', window.location.pathname)
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
         domainId,

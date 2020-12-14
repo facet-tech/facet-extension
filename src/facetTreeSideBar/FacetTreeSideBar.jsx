@@ -126,7 +126,6 @@ export default function FacetTreeSideBar() {
   useEffect(() => { setExpanded(['Facet-1']); }, []);
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
-    console.log('@ADDFACET')
     const newName = `Facet-${autoNumber}`;
     if (facetMap.get(newName)) {
       addFacet(autoNumber + 1);
@@ -156,34 +155,6 @@ export default function FacetTreeSideBar() {
   const onMouseLeaveHandle = function (path) {
     $(path).css('outline', 'unset');
     $(path).css('cursor', 'unset');
-  };
-
-  const handleNodeIdToggle = (event, nodeIds) => {
-    // console.log('@handleNodeIdToggle');
-    // setExpanded(nodeIds);
-  };
-
-  const handleNodeIdsSelect = (event, nodeId) => {
-    // console.log('@handleNodeIdsSelect');
-    // setSelected([nodeId]);
-    // setSelectedFacet(nodeId);
-    // if (expanded.includes(nodeId)) {
-    //   setExpanded([]);
-    // } else {
-    //   setExpanded([nodeId]);
-    // }
-
-    // // contains logic for allowing one selection at a time
-    // const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    // if (fArray.find((e) => e.name === nodeId)) {
-    //   setSelected([nodeId]);
-    //   setSelectedFacet(nodeId);
-    //   if (expanded.includes(nodeId)) {
-    //     setExpanded([]);
-    //   } else {
-    //     setExpanded([nodeId]);
-    //   }
-    // }
   };
 
   const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
@@ -261,7 +232,6 @@ export default function FacetTreeSideBar() {
               </div>
               <div>
                 <FacetIconButton onClick={() => {
-                  console.log('KLIKARISTIKA');
                   chrome.runtime.sendMessage({
                     msg: "auth",
                     data: {
