@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
         border: '1px solid #FFFFFF',
-        marginTop: '-2.5rem'
+        marginTop: '-1rem'
     },
     icon: {
         textAlign: 'center'

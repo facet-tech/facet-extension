@@ -9,7 +9,7 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { styles, activelyDebuggingElementId, isActivelyBeingDebugged } from './shared/constant';
+import { styles, domIds, isActivelyBeingDebugged } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
@@ -39,13 +39,13 @@ if (!document.getElementById('popup')) {
   const { body } = document;
   const facetDiv = document.createElement('div');
   facetDiv.setAttribute('style', `width: ${styles.drawerWidth}px !important`);
-  facetDiv.id = 'facetizer';
+  facetDiv.id = domIds.facetizer;
   if (body) {
     body.prepend(facetDiv);
   }
 }
 
-if (document.getElementById('authentication') && isActivelyBeingDebugged('authentication')) {
+if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(domIds.authentication)) {
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
@@ -57,8 +57,8 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
           warning: '⚠️',
         }}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <div>
@@ -68,10 +68,10 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
         </div>
       </SnackbarProvider>
     </React.StrictMode>,
-    document.getElementById('authentication'),
+    document.getElementById(domIds.authentication),
   );
 } else
-  if (document.getElementById('popup') && isActivelyBeingDebugged('popup')) {
+  if (document.getElementById(domIds.popup) && isActivelyBeingDebugged(domIds.popup)) {
     ReactDOM.render(
       <React.StrictMode>
         <SnackbarProvider
@@ -83,8 +83,8 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
             warning: '⚠️',
           }}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'right',
           }}
         >
           <div style={{ display: 'grid' }}>
@@ -96,9 +96,9 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
           </div>
         </SnackbarProvider>
       </React.StrictMode>,
-      document.getElementById('popup'),
+      document.getElementById(domIds.popup),
     );
-  } else if (document.getElementById('facetizer') && isActivelyBeingDebugged('facetizer')) {
+  } else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
     ReactDOM.render(
       <React.StrictMode>
         <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
@@ -111,8 +111,8 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
               warning: '⚠️',
             }}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
+              vertical: 'top',
+              horizontal: 'right',
             }}
             content={(key, message) => (
               <FacetSnackbar id={key} {...message} />
@@ -127,6 +127,6 @@ if (document.getElementById('authentication') && isActivelyBeingDebugged('authen
 
         </div>
       </React.StrictMode >,
-      document.getElementById('facetizer'),
+      document.getElementById(domIds.facetizer),
     );
   }

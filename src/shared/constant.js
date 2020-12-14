@@ -117,9 +117,15 @@ const HTTPMethods = {
     DELETE: 'DELETE'
 };
 
+const domIds = {
+    popup: 'popup',
+    authentication: 'authentication',
+    facetizer: 'facetizer'
+}
+
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = ['facetizer'];
+    const activelyDebuggingElementIds = [domIds.facetizer];
     if (!isDevelopment()) {
         return true;
     }
@@ -131,5 +137,5 @@ export {
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
     authStorage, ChromeRequestType, color, fontSize,
-    isActivelyBeingDebugged
+    isActivelyBeingDebugged, domIds
 };

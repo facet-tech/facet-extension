@@ -14,6 +14,7 @@ import FacetLabel from "../shared/FacetLabel";
 import FacetInput from "../shared/FacetInput";
 import FacetFormError from "../shared/FacetFormError";
 import FacetButton from "../shared/FacetButton";
+import MarginTop from "../shared/MarginTop";
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -60,15 +61,15 @@ export default () => {
                 <form onSubmit={e => e.preventDefault()}>
                     <br />
                     <FacetInput
-                        id="confirmationCode"
-                        name="confirmationCode"
+                        id="key"
+                        name="KEY"
                         aria-invalid={errors.email ? "true" : "false"}
                         inputRef={register({
                             required: "required"
                         })}
                     />
                     {errors.email && <FacetFormError text="errors.confirmationCode.message" role="alert" />}
-                    <br />
+                    <MarginTop value='.5rem' />
                     <FacetButton text="CONFIRM" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
                 </form>
                 <br />

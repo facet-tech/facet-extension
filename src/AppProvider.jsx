@@ -194,6 +194,7 @@ const AppProvider = ({ children }) => {
       const storageEmail = await getKeyFromLocalStorage(storage.username);
       const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
       const workspaceId = workspaceResponse?.response?.workspaceId;
+      console.log('CHECKME @APPRPIVDER USEEFECT',window.location.hostname);
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
       await initSessionData({ workspaceId, domainId });
@@ -230,7 +231,7 @@ const AppProvider = ({ children }) => {
   };
 
   const onFacetClick = (labelText) => {
-    console.log('@ONFACETCLICK', menuAnchorEl)
+    console.log('CHECKME @ONFACETCLICK', menuAnchorEl)
     // get around buggy behavior on opened menu
     if (menuAnchorEl) {
       handleCloseMenuEl();

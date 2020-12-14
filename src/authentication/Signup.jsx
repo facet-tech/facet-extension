@@ -11,6 +11,7 @@ import FacetInput from "../shared/FacetInput";
 import FacetButton from "../shared/FacetButton";
 import FacetFormContainer from "../shared/FacetFormContainer";
 import FacetFormError from "../shared/FacetFormError";
+import MarginTop from "../shared/MarginTop";
 
 export default () => {
 
@@ -50,6 +51,7 @@ export default () => {
         <h3 style={{ color: color.ice }}>Register</h3>
         <form onSubmit={e => e.preventDefault()}>
           <FacetLabel text="First name" htmlFor="fname" />
+          <MarginTop value='.5rem' />
           <FacetInput
             id="name"
             name="name"
@@ -62,7 +64,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Last name" htmlFor="sname" />
-          <br />
+          <MarginTop value='.5rem' />
           <FacetInput
             id="lastName"
             name="lastName"
@@ -75,7 +77,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Email" htmlFor="email"></FacetLabel>
-          <br />
+          <MarginTop value='.5rem' />
           <FacetInput
             id="email"
             name="email"
@@ -99,7 +101,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Password" />
-          <br />
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password"
             type="password"
@@ -122,7 +124,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Repeat password" />
-          <br />
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password_repeat"
             type="password"
@@ -140,7 +142,7 @@ export default () => {
         {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
         <div style={{ textAlign: 'center' }}>
-          <b><FacetLink fontSize="medium" text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
+          <b><FacetLink fontSize="medium" text="Sign in" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
         </div>
       </FacetFormContainer>
     </ >

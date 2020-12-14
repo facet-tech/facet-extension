@@ -7,6 +7,8 @@ const useStyles = makeStyles({
     iconButton: {
         padding: '.25rem',
         display: 'grid',
+        textAlign: 'center',
+        width: props => props.width ? props.width : '',
         "&:hover": {
             // backgroundColor: color.ice,
             // borderRadius: '50%',
@@ -24,8 +26,8 @@ const useStyles = makeStyles({
 });
 
 export default ({ name, size = "small", fill = color.lightGray,
-    isSelected = false, customHeight, children, ...other }) => {
-    const classes = useStyles({ isSelected });
+    isSelected = false, customHeight, width, children, ...other }) => {
+    const classes = useStyles({ isSelected, width });
 
     useEffect(() => {
         eva.replace();

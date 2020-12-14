@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fabBtn: {
     color: color.ice,
+    fill: color.ice,
     backgroundColor: color.darkGray,
     '&:hover': {
       backgroundColor: color.darkGray,
@@ -123,9 +124,6 @@ export default function FacetTreeSideBar() {
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
-
-  console.log('selected', selected);
-  console.log('expanded', expanded);
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     console.log('@ADDFACET')
@@ -161,7 +159,7 @@ export default function FacetTreeSideBar() {
   };
 
   const handleNodeIdToggle = (event, nodeIds) => {
-    console.log('@handleNodeIdToggle');
+    // console.log('@handleNodeIdToggle');
     // setExpanded(nodeIds);
   };
 

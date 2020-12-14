@@ -43,8 +43,8 @@ export default () => {
     loadState();
   }, []);
 
-  console.log('jwt', jwt);
-  console.log('currAuthState', currAuthState);
+  // console.log('jwt', jwt);
+  // console.log('currAuthState', currAuthState);
 
   if (currAuthState === authStateConstant.signedIn) {
     // Commented this in favor of WelcomeAbroad component
