@@ -4,14 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
-import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
-import styled from 'styled-components';
 import AppContext from '../AppContext.jsx';
 import FacetInput from '../shared/FacetInput/index.js';
 
