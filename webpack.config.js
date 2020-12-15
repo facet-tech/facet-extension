@@ -77,9 +77,11 @@ module.exports = (_, argv) => {
             new CopyPlugin({
                 patterns: [
                     { from: "./public/manifest.json", to: "./" },
-                    { from: "./public/facet_ninja_logo.png", to: "./" },
+                    { from: "./public/facet_logo.png", to: "./" },
                     { from: "./public/popup.html", to: "./" },
                     { from: "./public/authentication.html", to: "./" },
+                    { from: "./public/welcome.html", to: "./" },
+                    { from: "./public/background.js", to: "./" },
                 ],
             }),
             // fix "process is not defined" error: https://stackoverflow.com/a/64553486/1373465

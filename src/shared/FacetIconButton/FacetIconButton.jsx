@@ -1,26 +1,46 @@
-import { IconButton } from '@material-ui/core';
-import React, { useState } from 'react';
-import FacetImage from '../FacetImage';
+import { IconButton, makeStyles } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import * as eva from "eva-icons";
+import { color } from '../constant';
 
-export default ({ src, hoverSrc, children, ...other }) => {
-    const [activeSrc, setActiveSrc] = useState(src);
-
-    const onMouseOver = () => {
-        if (hoverSrc) {
-            setActiveSrc(hoverSrc);
+const useStyles = makeStyles({
+    iconButton: {
+        padding: '.25rem',
+        display: 'grid',
+        textAlign: 'center',
+        width: props => props.width ? props.width : '',
+    },
+    i: {
+        display: 'grid',
+        fill: props => props.isSelected ? color.electricB : '',
+        "&:hover": {
+            fill: color.ice
         }
     }
+});
 
-    const onMouseOut = () => {
-        setActiveSrc(src);
-    }
+export default ({ name, size = "small", fill = color.lightGray,
+    isSelected = false, customHeight, width, children, ...other }) => {
+    const classes = useStyles({ isSelected, width });
+
+    useEffect(() => {
+        eva.replace();
+    }, []);
 
     return <IconButton
         {...other}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        iconStyle={{}} color="primary" aria-label="settings"
-        component="span"><FacetImage src={activeSrc} />
+        size="small"
+        className={classes.iconButton}>
+        <i
+            style={{
+                height: customHeight ? customHeight : ''
+            }}
+            className={classes.i}
+            fill={fill}
+            data-eva={name}
+            data-eva-hover="true"
+            data-eva-infinite="true"
+        />
         {children}
     </IconButton>
 }

@@ -1,8 +1,7 @@
 /* global chrome */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import get from 'lodash/get';
 import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
@@ -10,7 +9,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -33,6 +32,7 @@ const AppProvider = ({ children }) => {
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [selected, setSelected] = useState([]);
+  const [expanded, setExpanded] = useState([]);
   const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
@@ -126,20 +126,6 @@ const AppProvider = ({ children }) => {
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
   }, [setJwt]);
 
-  /**
-    * TODO this listener should probably live into the Provider
-    */
-  chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
-    async (request, sender, sendResponse) => {
-      if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
-        const data = await AmplifyService.getCurrentSession();
-        sendResponse({
-          data,
-        });
-      }
-    },
-  );
-
   const onSaveClick = async () => {
     try {
       await saveFacets(facetMap, enqueueSnackbar);
@@ -160,7 +146,10 @@ const AppProvider = ({ children }) => {
         domainId: domainRes.response.id,
         urlPath: window.location.pathname,
       };
-      enqueueSnackbar('Facets reset.', { variant: 'success' });
+      enqueueSnackbar({
+        message: 'Facets reset.',
+        variant: snackbar.success.text
+      });
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
       if (!isDevelopment()) {
         window.location.reload();
@@ -172,10 +161,17 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      // not loading facetizer for extension-related pages
+      if (window.location.hostname === appId) {
+        return;
+      }
       loadCopySnippet();
 
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
-      if (!isPluginEnabledVal) {
+      // dirty quick fix
+      const isAuthenticationDOM = document.getElementById(domIds.authentication);
+      const isPopup = document.getElementById(domIds.popup);
+      if (!isPluginEnabledVal || isAuthenticationDOM || isPopup) {
         return;
       }
       const storageEmail = await getKeyFromLocalStorage(storage.username);
@@ -201,14 +197,31 @@ const AppProvider = ({ children }) => {
 
   const onFacetAdd = (label) => {
     if (addedFacets.includes(label)) {
-      enqueueSnackbar('Please choose a unique name for your Facet.', { variant: 'error' });
+      enqueueSnackbar({
+        message: 'Please choose a unique name for your Facet.',
+        variant: snackbar.error.text
+      });
       return;
     }
     setAddedFacets([label, ...addedFacets]);
     setNewlyAddedFacet(label);
-    enqueueSnackbar(`Facet "${label}" was created!`, { variant: 'success' });
+    enqueueSnackbar({
+      message: `Facet "${label}" was created!`,
+      variant: snackbar.success.text
+    });
     window.selectedDOM = 'main';
   };
+
+  const onFacetClick = (labelText) => {
+    // get around buggy behavior on opened menu
+    if (menuAnchorEl) {
+      handleCloseMenuEl();
+      return;
+    }
+    setExpanded([labelText]);
+    setSelected(labelText);
+    setSelectedFacet(labelText);
+  }
 
   const logout = () => {
     clearStorage();
@@ -221,15 +234,15 @@ const AppProvider = ({ children }) => {
 
   const loadCopySnippet = async () => {
     try {
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      // const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
 
-      const loc = new URL(window.location.host);
-      const domainRes = await getDomain(loc.hostname, workspaceId);
+      // const loc = new URL(window.location.host);
+      // const domainRes = await getDomain(loc.hostname, workspaceId);
 
-      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
+      // const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
 
-      setTextToCopy(text);
-      return text;
+      // setTextToCopy(text);
+      // return text;
     } catch (e) {
       console.log('[ERROR]', e);
     }
@@ -283,6 +296,9 @@ const AppProvider = ({ children }) => {
       setSelected,
       onDeleteFacet,
       onDeleteDOMElement,
+      expanded,
+      setExpanded,
+      onFacetClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

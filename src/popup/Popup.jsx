@@ -8,7 +8,6 @@ import { authState, authState as authStateConstant } from '../shared/constant';
 import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
-import Main from './Main';
 import AppContext from '../AppContext';
 import WelcomeAbroad from '../shared/WelcomeAbroad/WelcomeAbroad';
 
@@ -41,20 +40,9 @@ export default () => {
       }
     }
     loadState();
-  }, [])
+  }, []);
 
-  if (jwt || currAuthState === authStateConstant.signedIn) {
-    // Commented this in favor of WelcomeAbroad component
-    // chrome.tabs.getCurrent(function (tab) {
-    //   const queryString = window.location.search;
-    //   const urlParams = new URLSearchParams(queryString);
-    //   const redirectTabId = urlParams.get('redirectTabId');
-    //   if (redirectTabId) {
-    //     chrome.tabs.reload(parseInt(redirectTabId));
-    //   }
-    //   // todo uncomment
-    //   chrome.tabs.remove(tab.id);
-    // });
+  if (currAuthState === authStateConstant.signedIn) {
     displayElement = <WelcomeAbroad />;
   } else if (currAuthState === authStateConstant.signingIn) {
     displayElement = <SignIn />;

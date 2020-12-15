@@ -15,7 +15,8 @@ const initSessionData = async ({ workspaceId, domainId }) => {
             ...localStorageObj,
             [storage.sessionData]: {
                 workspaceId,
-                domainId
+                domainId,
+                hostname: window.location.hostname
             }
         }
     };

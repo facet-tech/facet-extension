@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Typography, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import {
-  authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
+  authState as authStateConstant, isPluginEnabled, storage, api as apiConstant, color,
 } from '../shared/constant';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
@@ -65,10 +65,10 @@ export default () => {
   return (
     <>
       <FacetFormContainer>
-        <h3 style={{ color: '#C4DDF2' }}>Login</h3>
+        <h3 style={{ color: color.ice }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
           <FacetLabel htmlFor="email" text="Email"></FacetLabel>
-          <MarginTop value='.5rem'/>
+          <MarginTop value='.5rem' />
           <FacetInput
             id="email"
             name="email"
@@ -86,7 +86,7 @@ export default () => {
           {errors.email && <FacetFormError role="alert" text={errors.email.message}></FacetFormError>}
           <br />
           <FacetLabel text="Password" />
-          <MarginTop value='.5rem'/>
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password"
             type="password"
@@ -108,12 +108,12 @@ export default () => {
             <br />
             <Typography>
               <b>
-                <FacetLabel text='No profile? ' />
-                <FacetLink color='#758EBF' text='Register here.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+                <FacetLabel text='Not registered? ' />
+                <FacetLink color='#758EBF' text='Sign up.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
               </b>
               <br />
               <br />
-              <FacetLabel text="By logging into Facet you agree to the terms of use and privacy policy." />
+              <FacetLabel text="By logging into Facet you agree to the terms of use and conditions of you and the privacy policy." />
             </Typography>
           </div>
         </form>

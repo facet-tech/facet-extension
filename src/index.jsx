@@ -9,18 +9,25 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { styles } from './shared/constant';
+import { styles, domIds, isActivelyBeingDebugged, ChromeRequestType } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
 import SigninPopup from './popup/SigninPopup';
-import styled from 'styled-components';
 import 'typeface-roboto';
+import FacetSnackbar from './shared/FacetSnackbar';
+import AmplifyService from './services/AmplifyService';
+import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
 
 Amplify.configure(awsExports);
 
-// TODO fix duplication
+const snackbarConfig = {
+  autoHideDuration: 3000,
+  vertical: 'bottom',
+  horizontal: 'left'
+}
 
+// TODO fix duplication
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: 'https://1060dd3ea4384475b0e957d971fa376b@o460218.ingest.sentry.io/5460107',
@@ -33,31 +40,46 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
+/**
+  *  TODO: Maybe this goes in bg script
+  */
+chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+  async (request, sender, sendResponse) => {
+    console.log('AKOUW', request);
+    if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+      const data = await AmplifyService.getCurrentSession();
+      sendResponse({
+        data,
+      });
+    }
+  },
+);
+
 // TODO this needs cleanup
-if (!document.getElementById('popup')) {
+if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page')) {
   const { body } = document;
   const facetDiv = document.createElement('div');
   facetDiv.setAttribute('style', `width: ${styles.drawerWidth}px !important`);
-  facetDiv.id = 'facetizer';
+  facetDiv.id = domIds.facetizer;
   if (body) {
     body.prepend(facetDiv);
   }
 }
 
-if (document.getElementById('authentication')) {
+if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(domIds.authentication)) {
   ReactDOM.render(
     <React.StrictMode>
       <SnackbarProvider
         maxSnack={4}
         disableWindowBlurListener
-        autoHideDuration={5000}
+        autoHideDuration={snackbarConfig.autoHideDuration}
         iconVariant={{
           error: '✖️',
           warning: '⚠️',
         }}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
+          vertical: snackbarConfig.vertical,
+          horizontal: snackbarConfig.horizontal,
         }}
       >
         <div>
@@ -67,62 +89,71 @@ if (document.getElementById('authentication')) {
         </div>
       </SnackbarProvider>
     </React.StrictMode>,
-    document.getElementById('authentication'),
+    document.getElementById(domIds.authentication),
   );
-} else
-  if (document.getElementById('popup')) {
-    ReactDOM.render(
-      <React.StrictMode>
+} else if (document.getElementById(domIds.popup) && isActivelyBeingDebugged(domIds.popup)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <SnackbarProvider
+        maxSnack={4}
+        disableWindowBlurListener
+        autoHideDuration={snackbarConfig.autoHideDuration}
+        iconVariant={{
+          error: '✖️',
+          warning: '⚠️',
+        }}
+        anchorOrigin={{
+          vertical: snackbarConfig.vertical,
+          horizontal: snackbarConfig.horizontal,
+        }}
+      >
+        <div style={{ display: 'grid' }}>
+          <AppProvider>
+            <PopupProvider id='popup-provider'>
+              <SigninPopup />
+            </PopupProvider>
+          </AppProvider>
+        </div>
+      </SnackbarProvider>
+    </React.StrictMode>,
+    document.getElementById(domIds.popup),
+  );
+} else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
-          autoHideDuration={5000}
+          autoHideDuration={snackbarConfig.autoHideDuration}
           iconVariant={{
             error: '✖️',
             warning: '⚠️',
           }}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: snackbarConfig.vertical,
+            horizontal: snackbarConfig.horizontal,
           }}
+          content={(key, message) => (
+            <FacetSnackbar id={key} {...message} />
+          )}
         >
-          <div style={{ display: 'grid' }}>
-            <AppProvider>
-              <PopupProvider id='popup-provider'>
-                <SigninPopup />
-              </PopupProvider>
-            </AppProvider>
-          </div>
+          <AppProvider>
+            <CoreProvider>
+              <App />
+            </CoreProvider>
+          </AppProvider>
         </SnackbarProvider>
-      </React.StrictMode>,
-      document.getElementById('popup'),
-    );
-  } else if (document.getElementById('facetizer')) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
-          <SnackbarProvider
-            maxSnack={4}
-            disableWindowBlurListener
-            autoHideDuration={5000}
-            iconVariant={{
-              error: '✖️',
-              warning: '⚠️',
-            }}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-          >
-            <AppProvider>
-              <CoreProvider>
-                <App />
-              </CoreProvider>
-            </AppProvider>
-          </SnackbarProvider>
 
-        </div>
-      </React.StrictMode>,
-      document.getElementById('facetizer'),
-    );
-  }
+      </div>
+    </React.StrictMode >,
+    document.getElementById(domIds.facetizer),
+  );
+} else if (document.getElementById(domIds.welcome) && isActivelyBeingDebugged(domIds.welcome)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <WelcomeAbroadStandalone />
+    </React.StrictMode>,
+    document.getElementById(domIds.welcome),
+  );
+}

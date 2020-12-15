@@ -1,9 +1,10 @@
+/* global chrome */
+
 import React, { useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
@@ -11,29 +12,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { defaultFacet, styles, APIUrl } from '../shared/constant';
+import { styles, ChromeRequestType } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
-import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
 import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
-import settingsLogo from '../static/images/facet_settings.svg';
-import logoutLogo from '../static/images/facet_logout.svg';
-import logoutLogoHover from '../static/images/facet_logout_hover.svg';
-
-import facetProfileLogo from '../static/images/facet_profile.svg';
-import facetEnableLogo from '../static/images/facet_button.svg';
-import facetEnableHoverLogo from '../static/images/facet_button_hover.svg'
-import resetLogo from '../static/images/facet_restart_button.svg';
-import resetLogoHover from '../static/images/facet_restart_hover.svg';
-
-import saveFacetLogo from '../static/images/facet_save.svg';
-import saveFacetLogoHover from '../static/images/facet_Save_hover.svg';
-
-import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
-import copySnippetHoverLogo from '../static/images/facet_copy_snippet_hover.svg';
-
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
@@ -85,32 +69,33 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
   },
   gridDiv: {
-    display: 'grid',
-    marginLeft: '.5rem',
-    marginRight: '.5rem',
-    marginTop: '.5rem'
+    display: 'grid'
   },
   fabGrid: {
     display: 'grid',
     alignItems: 'end',
     justifyContent: 'end',
     margin: '1rem',
-    // marginTop: '2rem'
   },
   fabBtn: {
-    backgroundColor: color.lightGray,
+    color: color.ice,
+    fill: color.ice,
+    backgroundColor: color.darkGray,
     '&:hover': {
-      backgroundColor: color.electricB,
+      backgroundColor: color.darkGray,
     },
   }
 }));
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 70% 10%;
+    grid-template-columns: 70% 10% 10%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
 `;
 
 export default function FacetTreeSideBar() {
@@ -120,12 +105,11 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
+    expanded, setExpanded, onDeleteDOMElement
   } = useContext(AppContext);
-  const [expanded, setExpanded] = useState([]);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded(['Facet-1']); }, []);
-
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     const newName = `Facet-${autoNumber}`;
@@ -140,7 +124,6 @@ export default function FacetTreeSideBar() {
   };
 
   const sideBarHandler = () => {
-    // window.highlightMode = showSideBar;
     setShowSideBar(!showSideBar);
     if (!showSideBar) {
       // TODO removeEventListeners
@@ -159,32 +142,6 @@ export default function FacetTreeSideBar() {
     $(path).css('cursor', 'unset');
   };
 
-  const handleNodeIdToggle = (event, nodeIds) => {
-    setExpanded(nodeIds);
-  };
-
-  const handleNodeIdsSelect = (event, nodeId) => {
-    // setSelected([nodeId]);
-    // setSelectedFacet(nodeId);
-    // if (expanded.includes(nodeId)) {
-    //   setExpanded([]);
-    // } else {
-    //   setExpanded([nodeId]);
-    // }
-
-    // // contains logic for allowing one selection at a time
-    // const fArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-    // if (fArray.find((e) => e.name === nodeId)) {
-    //   setSelected([nodeId]);
-    //   setSelectedFacet(nodeId);
-    //   if (expanded.includes(nodeId)) {
-    //     setExpanded([]);
-    //   } else {
-    //     setExpanded([nodeId]);
-    //   }
-    // }
-  };
-
   const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
     : facetArray.map((facet) => {
       const { value } = facet;
@@ -195,8 +152,10 @@ export default function FacetTreeSideBar() {
           key={facet.name}
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
-          // onDeleteItem={(e) => { onDeleteFacet(e); }}
-          onRenameItem={() => { setRenamingFacet(facetLabelMenu); handleCloseMenuEl(); }}
+          onRenameItem={() => {
+            setRenamingFacet(facetLabelMenu);
+            handleCloseMenuEl();
+          }}
           onRenameCancelClick={() => setRenamingFacet(undefined)}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));
@@ -205,8 +164,7 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet.name}
-          onClick={(e) => { setSelected(facet.name); setSelectedFacet(facet.name); setExpanded([facet.name]) }}
-          containsIconButton={true}
+          isFacet={true}
         >
           {value && value.map((domElement, index) => (
             <StyledTreeItem
@@ -217,14 +175,16 @@ export default function FacetTreeSideBar() {
               labelText={domElement.name}
               labelIcon={WebAssetIcon}
               onDeleteItem={() => {
+                // TODO is this needed?
                 // TODO move on individual function
+                console.log('triggaara!', domElement);
                 onDeleteDOMElement(domElement.path);
                 let arr = facetMap.get(facet.name);
                 arr = arr.filter((e) => e.name !== domElement.name);
                 facetMap.set(facet.name, arr);
                 setFacetMap(new Map(facetMap.set(facet.name, arr)));
               }}
-              containsIconButton={false}
+              isFacet={false}
             />
           ))}
         </StyledTreeItem>
@@ -233,16 +193,15 @@ export default function FacetTreeSideBar() {
 
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton src={facetEnableHoverLogo} onClick={() => sideBarHandler()} title="Disable" size="small" aria-label="Disable" />
+      <FacetIconButton isSelected={true} name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
     ) : (
-      <FacetIconButton hoverSrc={facetEnableHoverLogo} src={facetEnableLogo} onClick={() => sideBarHandler()} size="small" title="Enable" aria-label="Enable" />
+      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Enable" aria-label="Enable" />
     );
 
   return (
     <div className={classes.root}>
       <div>
         <Drawer
-          // className={classes.drawer}
           variant="persistent"
           anchor="left"
           open={open}
@@ -256,20 +215,27 @@ export default function FacetTreeSideBar() {
                 <FacetImage src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton onClick={() => { logout() }} src={logoutLogo} hoverSrc={logoutLogoHover} />
+                <FacetIconButton name="info-outline" onClick={() => {
+                  chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
+                }} />
+              </div>
+              <div>
+                <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
               </div>
             </TopDiv>
+            <br />
+            <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" src={resetLogo} hoverSrc={resetLogoHover} />
-              <FacetIconButton src={saveFacetLogo} hoverSrc={saveFacetLogoHover} onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
+              <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton src={copySnippetLogo} hoverSrc={copySnippetHoverLogo} onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton name="copy" onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
             <div className={classes.oneLineGrid}>
               <div>
-                <h3 style={{ color: color.lightGray }}>My Facets</h3>
+                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My facets</h3>
               </div>
               <div>
                 <div className={classes.fabGrid}>
@@ -287,8 +253,6 @@ export default function FacetTreeSideBar() {
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
             selected={selected}
-            onNodeToggle={handleNodeIdToggle}
-          // onNodeSelect={handleNodeIdsSelect}
           >
             {itemsElement}
           </TreeView>

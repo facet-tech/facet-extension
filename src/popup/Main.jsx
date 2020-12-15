@@ -13,7 +13,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Auth } from 'aws-amplify';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import {
-  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize,
+  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar,
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
@@ -90,7 +90,10 @@ export default () => {
     deleteUser(invitee, workspaceId);
     createNewUser(invitee, workspaceId);
 
-    enqueueSnackbar('Invite sent!', { variant: 'success' });
+    enqueueSnackbar({
+      message: 'Invite sent!',
+      variant: snackbar.success.text
+    });
   };
 
   const onEnablePluginCB = async (e) => {

@@ -8,7 +8,6 @@ import isDevelopment from '../utils/isDevelopment';
 import Main from './Main';
 import logo from '../static/images/facet_main_logo.svg';
 import FacetButton from '../shared/FacetButton';
-import FacetLabel from '../shared/FacetLabel';
 import FacetLink from '../shared/FacetLink';
 import StyledPopupDiv from './StyledPopupDiv';
 import { color } from '../shared/constant';
@@ -63,12 +62,9 @@ export default () => {
             <img src={logo} />
             <br />
             <br />
-            <FacetLabel text="Please Login to your account or register on our free platform" />
-            <br />
-            <br />
             <FacetButton variant="contained" color="primary" type="submit" text="LOGIN" onClick={() => onLoginClick()}></FacetButton>
             <br />
-            <FacetLink onClick={() => { onRegisterClick() }} color="#758EBF" underline="always" text="REGISTER" />
+            <FacetLink onClick={() => { onRegisterClick() }} color={color.electricB} underline="always" text="Sign up" />
         </InnerStyledDiv>
     </StyledPopupDiv>
 

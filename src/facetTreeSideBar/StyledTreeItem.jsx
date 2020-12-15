@@ -4,11 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
-import TextField from '@material-ui/core/TextField';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
@@ -23,39 +21,31 @@ const useTreeItemStyles = makeStyles((theme) => ({
         '&:hover > $content': {
             backgroundColor: theme.palette.action.hover,
         },
-        '&:focus > $content, &$selected > $content': {
-            backgroundColor: `var(--tree-view-bg-color, ${color.ice})`,
-            color: 'var(--tree-view-color)',
-        },
         '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
             backgroundColor: 'transparent',
         },
     },
     content: {
-        color: theme.palette.text.secondary,
-        borderTopRightRadius: theme.spacing(2),
-        borderBottomRightRadius: theme.spacing(2),
-        paddingRight: theme.spacing(1),
-        fontWeight: theme.typography.fontWeightMedium,
-        '$expanded > &': {
-            fontWeight: theme.typography.fontWeightRegular,
-        },
+        "& svg": {
+            fill: color.lightGray,
+        }
     },
     group: {
         marginLeft: 0,
-        '& $content': {
-            paddingLeft: theme.spacing(2),
-        },
     },
-    expanded: {},
-    selected: {},
+    expanded: {
+        border: `1px solid ${color.ice}`,
+    },
     label: {
         fontWeight: 'inherit',
         color: 'inherit',
+        marginLeft: '.2rem'
     },
     labelRoot: {
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '80% 10% 10%',
         alignItems: 'center',
+        marginRight: '.5rem',
     },
     labelIcon: {
         marginRight: theme.spacing(1),
@@ -63,35 +53,45 @@ const useTreeItemStyles = makeStyles((theme) => ({
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
-        margin: '1rem'
+        paddingRight: 0,
+        padding: 0
     },
 }));
-
-const SideColorDiv = styled.div`
-    width: .5rem;
-    background-color: red;
-    align-self: stretch;
-`;
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick, setSelectedFacet, setSelected, selected, onDeleteFacet } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick, setExpanded, setSelectedFacet, setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
+
     const defaultElement =
         <div>
-            <div className={classes.labelRoot}>
-                <Typography style={{ color: colorConstant.lightGray }} variant="body2"
-                    className={classes.labelText}>
-                    {onRenameItem ? <b>{labelText}</b> : labelText}
-                </Typography>
-                {props.containsIconButton ? <div>
-                    <FacetIconButton src={MoreSettingsIcon} onClick={(e) => { handleClickMenuEl(e, labelText); setSelected(labelText); setSelectedFacet(labelText); }} />
-                    <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+            <div onClick={() => { if (props.isFacet) { onFacetClick(labelText) } }} className={classes.labelRoot}>
+                <div>
+                    <Typography
+                        style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
+                        variant="body2"
+                        className={classes.labelText}>
+                        {onRenameItem ? <b>{labelText}</b> : labelText}
+                    </Typography>
                 </div>
-                    : null
+                {props.isFacet ?
+                    <>
+                        <div>
+                            <FacetIconButton name="eye-outline" />
+                        </div>
+                        <div>
+                            <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                            <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                        </div>
+                    </>
+                    : <>
+                        <div></div>
+                        <div>
+                            <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
+                        </div></>
                 }
             </div>
         </div>;
@@ -114,7 +114,6 @@ function StyledTreeItem(props) {
         </Typography>
         <FacetInput
             inputRef={input => input && input.focus()}
-            autoFocus
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
         </FacetInput>
@@ -128,10 +127,12 @@ function StyledTreeItem(props) {
 
     return (
         <TreeItem
+            {...other}
             // check if those are needed
             onClick={(e) => { e.preventDefault(); }}
             onLabelClick={(e) => { e.preventDefault(); }}
             onIconClick={(e) => { e.preventDefault(); }}
+            // disableSelection={true}
             label={
                 renamingFacet ? duringRenameElement : defaultElement
             }
@@ -147,7 +148,6 @@ function StyledTreeItem(props) {
                 group: classes.group,
                 label: classes.label,
             }}
-            {...other}
         />
     );
 }

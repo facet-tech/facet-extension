@@ -2,7 +2,6 @@ import React, { useRef, useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
 import { authState as authStateConstant, color } from '../shared/constant';
-import facetLogo from '../static/images/facet_main_logo.svg';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
 import FacetLink from "../shared/FacetLink";
@@ -11,6 +10,7 @@ import FacetInput from "../shared/FacetInput";
 import FacetButton from "../shared/FacetButton";
 import FacetFormContainer from "../shared/FacetFormContainer";
 import FacetFormError from "../shared/FacetFormError";
+import MarginTop from "../shared/MarginTop";
 
 export default () => {
 
@@ -47,9 +47,10 @@ export default () => {
   return (
     <>
       <FacetFormContainer>
-        <h3 style={{ color: color.ice }}>Register</h3>
+        <h3 style={{ color: color.ice }}>Sign up</h3>
         <form onSubmit={e => e.preventDefault()}>
           <FacetLabel text="First name" htmlFor="fname" />
+          <MarginTop value='.5rem' />
           <FacetInput
             id="name"
             name="name"
@@ -62,6 +63,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Last name" htmlFor="sname" />
+          <MarginTop value='.5rem' />
           <FacetInput
             id="lastName"
             name="lastName"
@@ -74,6 +76,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Email" htmlFor="email"></FacetLabel>
+          <MarginTop value='.5rem' />
           <FacetInput
             id="email"
             name="email"
@@ -97,6 +100,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Password" />
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password"
             type="password"
@@ -119,6 +123,7 @@ export default () => {
           <br />
           <br />
           <FacetLabel text="Repeat password" />
+          <MarginTop value='.5rem' />
           <FacetInput
             name="password_repeat"
             type="password"
@@ -136,7 +141,7 @@ export default () => {
         {serverError && <Alert severity="error">{serverError}</Alert>}
         <br />
         <div style={{ textAlign: 'center' }}>
-          <b><FacetLink fontSize="medium" text="Login" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
+          <b><FacetLink fontSize="medium" text="Sign in" color={color.electricB} onClick={() => setCurrAuthState(authStateConstant.signingIn)} /></b>
         </div>
       </FacetFormContainer>
     </ >

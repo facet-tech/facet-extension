@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import facetLogo from '../../static/images/facet_main_logo.svg';
+import facetLogo from '../../static/images/facet_ice_logo.svg';
 import FacetImage from '../FacetImage';
 import facetTypographyIcon from '../../static/images/facet_typography.svg';
 import { makeStyles } from '@material-ui/core';
@@ -24,7 +24,7 @@ export default ({ children }) => {
     return <>
         <MarginTop value="2rem" />
         <div style={{ textAlign: 'center' }}>
-            <FacetImage src={facetLogo} />
+            <FacetImage fill={color.ice} src={facetLogo} />
         </div>
         <br />
         <BorderDiv>

@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant, color } from '../shared/constant';
-import faceLogo from '../static/images/facet_main_logo.svg';
 import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import AppContext from "../AppContext";
