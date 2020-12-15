@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import get from 'lodash/get';
 import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
@@ -10,7 +9,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, ChromeRequestType, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -128,27 +127,28 @@ const AppProvider = ({ children }) => {
   }, [setJwt]);
 
   /**
+   *  TODO remove
     * TODO this listener should probably live into the Provider
     */
-  chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
-    async (request, sender, sendResponse) => {
-      // console.log('AKOUW', request);
-      if (request === 'auth') {
-        // console.log('mpika')
-        chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
-          var currTab = tabs[0];
-          chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
-        });
-        return true;
-      }
-      if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
-        const data = await AmplifyService.getCurrentSession();
-        sendResponse({
-          data,
-        });
-      }
-    },
-  );
+  // chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+  //   async (request, sender, sendResponse) => {
+  //     console.log('AKOUW', request);
+  //     if (request === 'auth') {
+  //       // console.log('mpika')
+  // chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
+  //   var currTab = tabs[0];
+  //   chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
+  // });
+  //       return true;
+  //     }
+  //     if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+  //       const data = await AmplifyService.getCurrentSession();
+  //       sendResponse({
+  //         data,
+  //       });
+  //     }
+  //   },
+  // );
 
   const onSaveClick = async () => {
     try {
@@ -185,6 +185,10 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      // not loading facetizer for extension-related pages
+      if (window.location.hostname === appId) {
+        return;
+      }
       loadCopySnippet();
 
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);

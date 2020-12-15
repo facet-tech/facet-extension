@@ -13,25 +13,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { defaultFacet, styles, APIUrl } from '../shared/constant';
+import { defaultFacet, styles, APIUrl, ChromeRequestType } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
 import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
-import settingsLogo from '../static/images/facet_settings.svg';
-import logoutLogo from '../static/images/facet_logout.svg';
-import logoutLogoHover from '../static/images/facet_logout_hover.svg';
-import facetProfileLogo from '../static/images/facet_profile.svg';
-import facetEnableLogo from '../static/images/facet_button.svg';
-import facetEnableHoverLogo from '../static/images/facet_button_hover.svg'
-import resetLogo from '../static/images/facet_restart_button.svg';
-import resetLogoHover from '../static/images/facet_restart_hover.svg';
-import saveFacetLogo from '../static/images/facet_save.svg';
-import saveFacetLogoHover from '../static/images/facet_Save_hover.svg';
-import copySnippetLogo from '../static/images/facet_copy_snippet_button.svg';
-import copySnippetHoverLogo from '../static/images/facet_copy_snippet_hover.svg';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
@@ -191,6 +179,7 @@ export default function FacetTreeSideBar() {
               labelText={domElement.name}
               labelIcon={WebAssetIcon}
               onDeleteItem={() => {
+                // TODO is this needed?
                 // TODO move on individual function
                 console.log('triggaara!', domElement);
                 onDeleteDOMElement(domElement.path);
@@ -231,15 +220,10 @@ export default function FacetTreeSideBar() {
                 <FacetImage src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton onClick={() => {
-                  chrome.runtime.sendMessage({
-                    msg: "auth",
-                    data: {
-                      subject: "Loading",
-                      content: "Just completed!"
-                    }
-                  });
-                }} name="info-outline" />
+                <FacetIconButton name="info-outline" onClick={() => {
+                  chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
+                  // window.open(`chrome-extension://hpkpjkdhgldjhcopdkmljdgceeojoglh/authentication.html`);
+                }} />
               </div>
               <div>
                 <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />

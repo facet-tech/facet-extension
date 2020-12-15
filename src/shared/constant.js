@@ -99,7 +99,8 @@ const storage = {
 };
 
 const ChromeRequestType = {
-    GET_LOGGED_IN_USER: 'GET_LOGGED_IN_USER'
+    GET_LOGGED_IN_USER: 'GET_LOGGED_IN_USER',
+    OPEN_WELCOME_PAGE: 'OPEN_WELCOME_PAGE'
 };
 
 const api = {
@@ -120,12 +121,16 @@ const HTTPMethods = {
 const domIds = {
     popup: 'popup',
     authentication: 'authentication',
-    facetizer: 'facetizer'
+    facetizer: 'facetizer',
+    welcome: 'facet-welcome-page'
 }
+
+// chrome extension id
+const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.authentication];
+    const activelyDebuggingElementIds = [domIds.welcome];
     if (!isDevelopment()) {
         return true;
     }
@@ -137,5 +142,5 @@ export {
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
     authStorage, ChromeRequestType, color, fontSize,
-    isActivelyBeingDebugged, domIds
+    isActivelyBeingDebugged, domIds, appId
 };

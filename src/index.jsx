@@ -9,21 +9,21 @@ import Amplify from 'aws-amplify';
 import App from './App';
 import AppProvider from './AppProvider';
 import CoreProvider from './CoreProvider';
-import { styles, domIds, isActivelyBeingDebugged } from './shared/constant';
+import { styles, domIds, isActivelyBeingDebugged, ChromeRequestType } from './shared/constant';
 import awsExports from './aws-exports';
 import Popup from './popup/Popup';
 import PopupProvider from './popup/PopupProvider';
 import SigninPopup from './popup/SigninPopup';
-import styled from 'styled-components';
 import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
+import AmplifyService from './services/AmplifyService';
+import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
 
 Amplify.configure(awsExports);
 
 const autoHideDuration = 3000;
 
 // TODO fix duplication
-
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: 'https://1060dd3ea4384475b0e957d971fa376b@o460218.ingest.sentry.io/5460107',
@@ -36,8 +36,26 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
+/**
+ *  maybe this goes in bg script
+  * TODO this listener should probably live into the Provider
+  */
+chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
+  async (request, sender, sendResponse) => {
+    console.log('AKOUW', request);
+    if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
+      const data = await AmplifyService.getCurrentSession();
+      sendResponse({
+        data,
+      });
+    }
+  },
+);
+
+console.log('document.getElementById(domIds.welcome)', document.getElementById(domIds.welcome), '++', isActivelyBeingDebugged(domIds.welcome));
+
 // TODO this needs cleanup
-if (!document.getElementById('popup')) {
+if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page')) {
   const { body } = document;
   const facetDiv = document.createElement('div');
   facetDiv.setAttribute('style', `width: ${styles.drawerWidth}px !important`);
@@ -72,10 +90,37 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
     </React.StrictMode>,
     document.getElementById(domIds.authentication),
   );
-} else
-  if (document.getElementById(domIds.popup) && isActivelyBeingDebugged(domIds.popup)) {
-    ReactDOM.render(
-      <React.StrictMode>
+} else if (document.getElementById(domIds.popup) && isActivelyBeingDebugged(domIds.popup)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <SnackbarProvider
+        maxSnack={4}
+        disableWindowBlurListener
+        autoHideDuration={autoHideDuration}
+        iconVariant={{
+          error: '✖️',
+          warning: '⚠️',
+        }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <div style={{ display: 'grid' }}>
+          <AppProvider>
+            <PopupProvider id='popup-provider'>
+              <SigninPopup />
+            </PopupProvider>
+          </AppProvider>
+        </div>
+      </SnackbarProvider>
+    </React.StrictMode>,
+    document.getElementById(domIds.popup),
+  );
+} else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
@@ -88,47 +133,26 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
             vertical: 'top',
             horizontal: 'right',
           }}
+          content={(key, message) => (
+            <FacetSnackbar id={key} {...message} />
+          )}
         >
-          <div style={{ display: 'grid' }}>
-            <AppProvider>
-              <PopupProvider id='popup-provider'>
-                <SigninPopup />
-              </PopupProvider>
-            </AppProvider>
-          </div>
+          <AppProvider>
+            <CoreProvider>
+              <App />
+            </CoreProvider>
+          </AppProvider>
         </SnackbarProvider>
-      </React.StrictMode>,
-      document.getElementById(domIds.popup),
-    );
-  } else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
-          <SnackbarProvider
-            maxSnack={4}
-            disableWindowBlurListener
-            autoHideDuration={autoHideDuration}
-            iconVariant={{
-              error: '✖️',
-              warning: '⚠️',
-            }}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            content={(key, message) => (
-              <FacetSnackbar id={key} {...message} />
-            )}
-          >
-            <AppProvider>
-              <CoreProvider>
-                <App />
-              </CoreProvider>
-            </AppProvider>
-          </SnackbarProvider>
 
-        </div>
-      </React.StrictMode >,
-      document.getElementById(domIds.facetizer),
-    );
-  }
+      </div>
+    </React.StrictMode >,
+    document.getElementById(domIds.facetizer),
+  );
+} else if (document.getElementById(domIds.welcome) && isActivelyBeingDebugged(domIds.welcome)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <WelcomeAbroadStandalone />
+    </React.StrictMode>,
+    document.getElementById(domIds.welcome),
+  );
+}

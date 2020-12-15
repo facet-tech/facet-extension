@@ -4,13 +4,19 @@
     "version": "0.2.7",
     "description": "Facet.ninja | Deploy - Learn - Adapt",
     "icons": {
-        "512": "facet_ninja_logo.png"
+        "512": "facet_logo.png"
     },
     "browser_action": {
-        "default_icon": "facet_ninja_logo.png",
+        "default_icon": "facet_logo.png",
         "default_popup": "popup.html"
     },
     "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
     "content_scripts": [
         {
             "matches": [

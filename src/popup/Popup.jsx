@@ -8,7 +8,6 @@ import { authState, authState as authStateConstant } from '../shared/constant';
 import ConfirmationCode from '../authentication/ConfirmationCode';
 import ForgotPassword from '../authentication/ForgotPassword';
 import PasswordReset from '../authentication/PasswordReset';
-import Main from './Main';
 import AppContext from '../AppContext';
 import WelcomeAbroad from '../shared/WelcomeAbroad/WelcomeAbroad';
 
