@@ -6,6 +6,7 @@ import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
 import { Fab } from '@material-ui/core';
 import { color } from './shared/constant';
 import AddIcon from '@material-ui/icons/Add';
+import FacetLabel from './shared/FacetLabel';
 
 const StyledDiv = styled.div`
     width: ${(props) => (props.drawer ? '100%' : '0')};
@@ -31,10 +32,20 @@ export default function FacetToolbar() {
     fabGrid: {
       backgroundColor: color.darkGray,
       display: 'grid',
-      alignItems: 'end',
-      justifyContent: 'end',
+      // grid-template-columns: 75% 12.5% 12.5%;
+      gridTemplateColumns: '90%  10%',
+      // alignItems: 'end',
+      // justifyContent: 'end',
       marginRight: '1rem'
     },
+    grid1: {
+      alignSelf: 'center',
+      justifySelf: 'center'
+    },
+    grid2: {
+      alignSelf: 'end',
+      justifySelf: 'end',
+    }
   }));
 
   const sideBarHandler = () => {
@@ -56,9 +67,14 @@ export default function FacetToolbar() {
         </StyledDiv>
       </div>
       <div onClick={() => addFacet()} className={classes.fabGrid}>
-        <Fab size='small' className={classes.fabBtn} aria-label="add">
-          <AddIcon />
-        </Fab>
+        <div className={classes.grid1}>
+          <FacetLabel text="© Facet 2021 - All rights reserved." />
+        </div>
+        <div className={classes.grid2}>
+          <Fab size='small' className={classes.fabBtn} aria-label="add">
+            <AddIcon />
+          </Fab>
+        </div>
       </div>
     </div>
   );
