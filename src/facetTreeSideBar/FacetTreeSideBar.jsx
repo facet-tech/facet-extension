@@ -241,7 +241,7 @@ export default function FacetTreeSideBar() {
             </div>
             <div className={classes.oneLineGrid}>
               <div>
-                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My Facets</h3>
+                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My facets</h3>
               </div>
               <div>
                 <div className={classes.fabGrid}>
