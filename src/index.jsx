@@ -21,7 +21,11 @@ import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandal
 
 Amplify.configure(awsExports);
 
-const autoHideDuration = 3000;
+const snackbarConfig = {
+  autoHideDuration: 3000,
+  vertical: 'bottom',
+  horizontal: 'left'
+}
 
 // TODO fix duplication
 if (process.env.NODE_ENV !== 'development') {
@@ -37,8 +41,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 /**
- *  maybe this goes in bg script
-  * TODO this listener should probably live into the Provider
+  *  TODO: Maybe this goes in bg script
   */
 chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
   async (request, sender, sendResponse) => {
@@ -51,8 +54,6 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     }
   },
 );
-
-console.log('document.getElementById(domIds.welcome)', document.getElementById(domIds.welcome), '++', isActivelyBeingDebugged(domIds.welcome));
 
 // TODO this needs cleanup
 if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page')) {
@@ -71,14 +72,14 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
       <SnackbarProvider
         maxSnack={4}
         disableWindowBlurListener
-        autoHideDuration={autoHideDuration}
+        autoHideDuration={snackbarConfig.autoHideDuration}
         iconVariant={{
           error: '✖️',
           warning: '⚠️',
         }}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: snackbarConfig.vertical,
+          horizontal: snackbarConfig.horizontal,
         }}
       >
         <div>
@@ -96,14 +97,14 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
       <SnackbarProvider
         maxSnack={4}
         disableWindowBlurListener
-        autoHideDuration={autoHideDuration}
+        autoHideDuration={snackbarConfig.autoHideDuration}
         iconVariant={{
           error: '✖️',
           warning: '⚠️',
         }}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: snackbarConfig.vertical,
+          horizontal: snackbarConfig.horizontal,
         }}
       >
         <div style={{ display: 'grid' }}>
@@ -124,14 +125,14 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
         <SnackbarProvider
           maxSnack={4}
           disableWindowBlurListener
-          autoHideDuration={autoHideDuration}
+          autoHideDuration={snackbarConfig.autoHideDuration}
           iconVariant={{
             error: '✖️',
             warning: '⚠️',
           }}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: snackbarConfig.vertical,
+            horizontal: snackbarConfig.horizontal,
           }}
           content={(key, message) => (
             <FacetSnackbar id={key} {...message} />
