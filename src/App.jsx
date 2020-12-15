@@ -40,10 +40,8 @@ function App() {
   }
 
   return (
-    <div>
-      {isPluginEnabled ? <div>
-        <FacetToolbar />
-      </div> : null}
+    <div style={{ height: '100%' }}>
+      {isPluginEnabled ? <FacetToolbar /> : null}
     </div >
   );
 }

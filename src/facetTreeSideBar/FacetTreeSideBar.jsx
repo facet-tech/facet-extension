@@ -26,13 +26,7 @@ import FacetLabel from '../shared/FacetLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'grid',
-  },
-  oneLineGrid: {
-    display: 'grid',
-    gridTemplateColumns: '90% 10%',
-    alignItems: 'center',
-    justifyContent: 'center'
+    display: 'grid'
   },
   drawer: {
     width: styles.drawerWidth,
@@ -41,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     backgroundColor: color.darkGray,
     width: styles.drawerWidth,
+    border: 'none',
+    height: '90%'
   },
   drawerHeader: {
     display: 'flex',
@@ -233,18 +229,6 @@ export default function FacetTreeSideBar() {
                 <FacetIconButton name="copy" onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
-            <div className={classes.oneLineGrid}>
-              <div>
-                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My facets</h3>
-              </div>
-              <div>
-                <div className={classes.fabGrid}>
-                  <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
-                    <AddIcon />
-                  </Fab>
-                </div>
-              </div>
-            </div>
           </div>
           <Divider />
           <TreeView
@@ -257,7 +241,6 @@ export default function FacetTreeSideBar() {
             {itemsElement}
           </TreeView>
         </Drawer>
-
       </div>
       <main
         className={clsx(classes.content, {

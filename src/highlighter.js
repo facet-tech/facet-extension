@@ -23,7 +23,7 @@ const performDOMTransformation = () => {
     }
     $('*') && $('*').filter(function () {
         return $(this).css('position') === 'fixed' && this.id !== 'facetizer' &&
-            this.className !== 'MuiPaper-root MuiDrawer-paper jss5 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
+            this.className !== 'MuiPaper-root MuiDrawer-paper jss6 MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft MuiPaper-elevation0';
     }).each(function () {
         $(this).css('position', 'absolute', 'important');
         $(this).css('left', `${styles.drawerWidth}px`, 'important');
