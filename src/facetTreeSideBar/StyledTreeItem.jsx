@@ -4,11 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
-import TextField from '@material-ui/core/TextField';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import MoreSettingsIcon from '../static/images/facet_more_settings.svg';
@@ -23,34 +21,17 @@ const useTreeItemStyles = makeStyles((theme) => ({
         '&:hover > $content': {
             backgroundColor: theme.palette.action.hover,
         },
-        '&:focus > $content, &$selected > $content': {
-            // FIXME this is buggy
-            // backgroundColor: `var(--tree-view-bg-color, ${color.ice})`,
-            // color: 'var(--tree-view-color)',
-        },
         '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
             backgroundColor: 'transparent',
         },
     },
     content: {
-        // color: theme.palette.text.secondary,
-        // borderTopRightRadius: theme.spacing(2),
-        // borderBottomRightRadius: theme.spacing(2),
-        // paddingRight: theme.spacing(1),
-        // fontWeight: theme.typography.fontWeightMedium,
-        // '$expanded > &': {
-        //     fontWeight: theme.typography.fontWeightRegular,
-        // },
-        // paddingLeft: 0,
         "& svg": {
             fill: color.lightGray,
         }
     },
     group: {
         marginLeft: 0,
-        '& $content': {
-            // paddingLeft: theme.spacing(2),
-        },
     },
     expanded: {
         border: `1px solid ${color.ice}`,
@@ -133,7 +114,6 @@ function StyledTreeItem(props) {
         </Typography>
         <FacetInput
             inputRef={input => input && input.focus()}
-            // autoFocus
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
         </FacetInput>

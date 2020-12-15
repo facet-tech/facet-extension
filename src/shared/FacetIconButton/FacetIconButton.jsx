@@ -9,18 +9,12 @@ const useStyles = makeStyles({
         display: 'grid',
         textAlign: 'center',
         width: props => props.width ? props.width : '',
-        "&:hover": {
-            // backgroundColor: color.ice,
-            // borderRadius: '50%',
-        }
     },
     i: {
         display: 'grid',
         fill: props => props.isSelected ? color.electricB : '',
         "&:hover": {
             fill: color.ice
-            // backgroundColor: color.ice,
-            // borderRadius: '50%',
         }
     }
 });

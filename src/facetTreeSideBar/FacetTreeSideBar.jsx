@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
@@ -13,9 +12,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { defaultFacet, styles, APIUrl, ChromeRequestType } from '../shared/constant';
+import { styles, ChromeRequestType } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
-import parsePath from '../shared/parsePath';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
 import facetTypography from '../static/images/facet_typography.svg';
@@ -126,7 +124,6 @@ export default function FacetTreeSideBar() {
   };
 
   const sideBarHandler = () => {
-    // window.highlightMode = showSideBar;
     setShowSideBar(!showSideBar);
     if (!showSideBar) {
       // TODO removeEventListeners
@@ -155,7 +152,6 @@ export default function FacetTreeSideBar() {
           key={facet.name}
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
-          // onDeleteItem={(e) => { onDeleteFacet(e); }}
           onRenameItem={() => {
             setRenamingFacet(facetLabelMenu);
             handleCloseMenuEl();
@@ -206,7 +202,6 @@ export default function FacetTreeSideBar() {
     <div className={classes.root}>
       <div>
         <Drawer
-          // className={classes.drawer}
           variant="persistent"
           anchor="left"
           open={open}
@@ -222,7 +217,6 @@ export default function FacetTreeSideBar() {
               <div>
                 <FacetIconButton name="info-outline" onClick={() => {
                   chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
-                  // window.open(`chrome-extension://hpkpjkdhgldjhcopdkmljdgceeojoglh/authentication.html`);
                 }} />
               </div>
               <div>
@@ -259,9 +253,6 @@ export default function FacetTreeSideBar() {
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
             selected={selected}
-          // disableSelection={true}
-          // onNodeToggle={handleNodeIdToggle}
-          // onNodeSelect={handleNodeIdsSelect}
           >
             {itemsElement}
           </TreeView>
