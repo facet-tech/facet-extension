@@ -60,7 +60,7 @@ export default () => {
                 <br />
                 <form onSubmit={e => e.preventDefault()}>
                     <br />
-                    <FacetLabel text="KEY" />
+                    <FacetLabel />
                     <br />
                     <FacetInput
                         id="confirmationCode"
