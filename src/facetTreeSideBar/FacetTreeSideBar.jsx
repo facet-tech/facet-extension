@@ -171,9 +171,7 @@ export default function FacetTreeSideBar() {
               labelText={domElement.name}
               labelIcon={WebAssetIcon}
               onDeleteItem={() => {
-                // TODO is this needed?
-                // TODO move on individual function
-                console.log('triggaara!', domElement);
+                // TODO move on individual function on the Provider
                 onDeleteDOMElement(domElement.path);
                 let arr = facetMap.get(facet.name);
                 arr = arr.filter((e) => e.name !== domElement.name);
