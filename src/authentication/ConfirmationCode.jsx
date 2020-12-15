@@ -51,7 +51,8 @@ export default () => {
         <>
             <br />
             <FacetFormContainer>
-                <FacetLabel text="Authorization Key" />
+                <h3 style={{ color: color.ice }}>Authorization Key</h3>
+                <MarginTop value='.5rem' />
                 <FacetLabel text="An authorization key was sent to your email." />
                 <br />
                 <FacetLink color={color.electricB} text="Resend email" onClick={() => { resendConfirmationCode() }} />
@@ -59,9 +60,11 @@ export default () => {
                 <br />
                 <form onSubmit={e => e.preventDefault()}>
                     <br />
+                    <FacetLabel text="KEY" />
+                    <br />
                     <FacetInput
-                        id="key"
-                        name="KEY"
+                        id="confirmationCode"
+                        name="confirmationCode"
                         aria-invalid={errors.email ? "true" : "false"}
                         inputRef={register({
                             required: "required"

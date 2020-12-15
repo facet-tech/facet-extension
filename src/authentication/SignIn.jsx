@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Typography, makeStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import {
-  authState as authStateConstant, isPluginEnabled, storage, api as apiConstant,
+  authState as authStateConstant, isPluginEnabled, storage, api as apiConstant, color,
 } from '../shared/constant';
 import AppContext from '../AppContext';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
@@ -65,7 +65,7 @@ export default () => {
   return (
     <>
       <FacetFormContainer>
-        <h3 style={{ color: '#C4DDF2' }}>Login</h3>
+        <h3 style={{ color: color.ice }}>Login</h3>
         <form onSubmit={(e) => e.preventDefault()}>
           <FacetLabel htmlFor="email" text="Email"></FacetLabel>
           <MarginTop value='.5rem' />

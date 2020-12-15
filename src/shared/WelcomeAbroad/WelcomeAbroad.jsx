@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { color, fontSize } from '../constant';
 import FacetFormContainer from '../FacetFormContainer';
-import FacetIconButton from '../FacetIconButton/FacetIconButton';
 import FacetLabel from '../FacetLabel';
 import FacetLink from '../FacetLink';
 import MarginTop from '../MarginTop';
+import * as eva from "eva-icons";
 
 const CenteredDiv = styled.div`
-    text-align: center
+    text-align: center;
 `;
 
 const StyledDiv = styled.div`
@@ -17,40 +17,65 @@ const StyledDiv = styled.div`
     grid-gap: 1rem;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 `;
 
 export default () => {
 
-    const onPlayVideoClick = () => {
+    useEffect(() => {
+        eva.replace();
+    }, []);
 
+    const onPlayVideoClick = () => {
+        window.open("https://video.facet.ninja/mvp");
     }
 
+    /**
+     * Redirects to the originating page and closes current tab
+     */
     const onTryNowClick = () => {
-
+        chrome.tabs.getCurrent(function (tab) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const redirectTabId = urlParams.get('redirectTabId');
+            if (redirectTabId) {
+                chrome?.tabs?.reload(parseInt(redirectTabId));
+            }
+            // todo uncomment
+            chrome.tabs.remove(tab.id);
+        });
     }
 
     return <CenteredDiv>
         <FacetFormContainer>
             <FacetLabel fontSize={fontSize.xxLarge} color={color.ice} text="Welcome abroad!" />
             <MarginTop value='2rem' />
-            <FacetLabel fontSize={fontSize.large} text="Welcome aboard!" />
-            <MarginTop value='2rem' />
-            <StyledDiv>
+            <StyledDiv onClick={() => { onPlayVideoClick() }}>
                 <div>
-                    <FacetIconButton onClick={() => { onPlayVideoClick() }} width='100%' name="play-circle-outline" />
+                    <i
+                        fill={color.electricB}
+                        data-eva="play-circle-outline"
+                        data-eva-hover="true"
+                        data-eva-infinite="true"
+                    />
                 </div>
                 <div>
-                    <FacetLink onClick={() => { onPlayVideoClick() }} color={color.electricB} text="Watch tutorial" />
+                    <FacetLink color={color.electricB} text="Watch tutorial" />
                 </div>
             </StyledDiv>
             <br />
             <br />
-            <StyledDiv>
+            <StyledDiv onClick={() => { onTryNowClick() }}>
                 <div>
-                    <FacetIconButton onClick={() => { onTryNowClick() }} width='100%' name="external-link-outline" />
+                    <i
+                        fill={color.electricB}
+                        data-eva="external-link-outline"
+                        data-eva-hover="true"
+                        data-eva-infinite="true"
+                    />
                 </div>
                 <div>
-                    <FacetLink onClick={() => { onTryNowClick() }} color={color.electricB} text="Try it now!" />
+                    <FacetLink color={color.electricB} text="Try it now!" />
                 </div>
             </StyledDiv>
             <br />
