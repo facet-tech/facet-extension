@@ -1,6 +1,6 @@
 /* global chrome */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
@@ -125,30 +125,6 @@ const AppProvider = ({ children }) => {
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
   }, [setJwt]);
-
-  /**
-   *  TODO remove
-    * TODO this listener should probably live into the Provider
-    */
-  // chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
-  //   async (request, sender, sendResponse) => {
-  //     console.log('AKOUW', request);
-  //     if (request === 'auth') {
-  //       // console.log('mpika')
-  // chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
-  //   var currTab = tabs[0];
-  //   chrome.tabs.create({ url: chrome.extension.getURL(`authentication.html?redirectTabId=${currTab.id}&type=register`) });
-  // });
-  //       return true;
-  //     }
-  //     if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
-  //       const data = await AmplifyService.getCurrentSession();
-  //       sendResponse({
-  //         data,
-  //       });
-  //     }
-  //   },
-  // );
 
   const onSaveClick = async () => {
     try {
