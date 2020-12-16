@@ -12,10 +12,11 @@
   z-index: 99999999;
 }
 
-/* Hides but still allows scroll */
+/* FIXME Hides but still allows scroll */
 html {
   overflow: auto;
 }
+
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* make scrollbar transparent */
