@@ -148,6 +148,10 @@ const AppProvider = ({ children }) => {
 
   const reset = async () => {
     try {
+      if (!confirm("Are you sure you want to delete all your facets?")) {
+        return;
+      }
+
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
       const domainRes = await getOrPostDomain(workspaceId);
 
