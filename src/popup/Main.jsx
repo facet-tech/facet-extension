@@ -29,6 +29,7 @@ import FacetCard from '../shared/FacetCard/FacetCard';
 import FacetInput from '../shared/FacetInput';
 import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
 import InviteIcon from '../static/images/facet_invite_person.svg';
+import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 
 const GridDiv = styled.div`
     display: grid;
@@ -140,9 +141,9 @@ export default () => {
           </IconButton>
         </div>
         <div>
-          <IconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
+          <FacetIconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
             <FacetImage src={logoutLogo} />
-          </IconButton>
+          </FacetIconButton>
         </div>
       </GridDiv>
       <GridDivTwoColumn>
