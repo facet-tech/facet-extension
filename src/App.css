@@ -14,7 +14,7 @@
 
 /* FIXME Hides but still allows scroll */
 html {
-  overflow: auto;
+  overflow: overlay;
 }
 
 ::-webkit-scrollbar {
