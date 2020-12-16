@@ -77,7 +77,7 @@ module.exports = (_, argv) => {
             new CopyPlugin({
                 patterns: [
                     { from: "./public/manifest.json", to: "./" },
-                    { from: "./public/facet_logo.png", to: "./" },
+                    { from: "./public/facet_logo_512x512.png", to: "./" },
                     { from: "./public/popup.html", to: "./" },
                     { from: "./public/authentication.html", to: "./" },
                     { from: "./public/welcome.html", to: "./" },

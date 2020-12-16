@@ -18,6 +18,7 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
+import { color } from './shared/constant.js';
 
 Amplify.configure(awsExports);
 
@@ -121,8 +122,9 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
 } else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
   ReactDOM.render(
     <React.StrictMode>
-      <div style={{ width: `${styles.drawerWidth}px` }} id="facet-sidebar">
+      <div style={{ width: `${styles.drawerWidth}px`, height: '100%' }} id="facet-sidebar">
         <SnackbarProvider
+          style={{ height: '100%' }}
           maxSnack={4}
           disableWindowBlurListener
           autoHideDuration={snackbarConfig.autoHideDuration}

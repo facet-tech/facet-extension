@@ -26,13 +26,7 @@ import FacetLabel from '../shared/FacetLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'grid',
-  },
-  oneLineGrid: {
-    display: 'grid',
-    gridTemplateColumns: '90% 10%',
-    alignItems: 'center',
-    justifyContent: 'center'
+    display: 'grid'
   },
   drawer: {
     width: styles.drawerWidth,
@@ -41,11 +35,13 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     backgroundColor: color.darkGray,
     width: styles.drawerWidth,
+    border: 'none',
+    height: '90%'
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
+    padding: '0px 2rem',
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
@@ -89,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 70% 10% 10%;
+    grid-template-columns: 60% 10% 10%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
@@ -175,9 +171,7 @@ export default function FacetTreeSideBar() {
               labelText={domElement.name}
               labelIcon={WebAssetIcon}
               onDeleteItem={() => {
-                // TODO is this needed?
-                // TODO move on individual function
-                console.log('triggaara!', domElement);
+                // TODO move on individual function on the Provider
                 onDeleteDOMElement(domElement.path);
                 let arr = facetMap.get(facet.name);
                 arr = arr.filter((e) => e.name !== domElement.name);
@@ -230,20 +224,8 @@ export default function FacetTreeSideBar() {
               <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
               <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton name="copy" onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton fill={color.ice} name="copy" onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
-            </div>
-            <div className={classes.oneLineGrid}>
-              <div>
-                <h3 style={{ color: color.lightGray, marginLeft: '1rem' }}>My facets</h3>
-              </div>
-              <div>
-                <div className={classes.fabGrid}>
-                  <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
-                    <AddIcon />
-                  </Fab>
-                </div>
-              </div>
             </div>
           </div>
           <Divider />
@@ -257,7 +239,6 @@ export default function FacetTreeSideBar() {
             {itemsElement}
           </TreeView>
         </Drawer>
-
       </div>
       <main
         className={clsx(classes.content, {

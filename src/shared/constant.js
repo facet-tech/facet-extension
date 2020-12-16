@@ -130,7 +130,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.welcome];
+    const activelyDebuggingElementIds = [domIds.facetizer];
     if (!isDevelopment()) {
         return true;
     }

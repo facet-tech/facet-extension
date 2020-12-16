@@ -20,7 +20,6 @@ const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
   // TODO these need to change during dev
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
-  const [isEnabled, setIsEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
 
@@ -80,15 +79,13 @@ const AppProvider = ({ children }) => {
       setSelectedFacet(defaultFacet);
     }
   };
-  // popup stuff
-  // email,id:  
+
   const [loggedInUser, setLoggedInUser] = useState({});
   const [url, setUrl] = useState('');
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [workspaceId, setWorkspaceId] = useState(undefined);
   const [jwt, setJwt] = useState('');
-  // deprecate this..
   const [loadLogin, setLoadLogin] = useState(false);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
   const login = async () => {
@@ -248,6 +245,18 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const addFacet = (autoNumber = facetMap.size + 1) => {
+    const newName = `Facet-${autoNumber}`;
+    if (facetMap.get(newName)) {
+      addFacet(autoNumber + 1);
+      return;
+    }
+    setFacetMap(facetMap.set(newName, []));
+    setSelectedFacet(newName);
+    setSelected(newName);
+    setExpanded([newName]);
+  };
+
   // sharing stuff among content script
   window.addedElements = addedElements;
   window.setAddedElements = setAddedElements;
@@ -267,8 +276,6 @@ const AppProvider = ({ children }) => {
       setDisabledFacets,
       showSideBar,
       setShowSideBar,
-      isEnabled,
-      setIsEnabled,
       isPluginEnabled,
       setIsPluginEnabled,
       enqueueSnackbar,
@@ -299,6 +306,7 @@ const AppProvider = ({ children }) => {
       expanded,
       setExpanded,
       onFacetClick,
+      addFacet,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

@@ -1,14 +1,23 @@
 #facetizer {
-    position: fixed !important;
-    top: 0px !important;
-    left: 0px !important;
-    right: 0px !important;
-    bottom: 0px !important;
-    border: none !important;
-    width: auto !important;
-    height: 0;
-    margin: 0px !important;
-    padding: 0px !important;
-    background-color: transparent !important;
-    z-index: 99999999;
+  position: fixed !important;
+  top: 0px !important;
+  left: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  border: none !important;
+  width: 280px;
+  margin: 0px !important;
+  padding: 0px !important;
+  background-color: transparent !important;
+  z-index: 99999999;
+}
+
+/* FIXME Hides but still allows scroll */
+html {
+  overflow: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
