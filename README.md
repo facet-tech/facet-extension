@@ -1,6 +1,6 @@
 <div align="center">
-  <a href="https://github.com/facets-io/facet-extension">
-    <img width="200" src="https://facet.ninja/images/facet-logo.png">
+   <a href="https://github.com/facets-io/facet-extension">
+    <img width="150" src="./readme_assets/facet512.svg">
   </a>
   <br>
   <a href='https://spectrum.chat/facet'>

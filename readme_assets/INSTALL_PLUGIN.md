@@ -1,3 +1,10 @@
+<div align="center">
+  <a href="https://github.com/facets-io/facet-extension">
+    <img width="150" src="./facet512.svg">
+  </a>
+</div>
+<br/>
+
 ## Install via Google Web Store
 
 Check the plugin live from the Google Web Store: https://chrome.google.com/webstore/detail/facetninja/hpkpjkdhgldjhcopdkmljdgceeojoglh
