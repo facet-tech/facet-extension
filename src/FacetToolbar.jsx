@@ -22,11 +22,11 @@ export default function FacetToolbar() {
       border: '2px lightgray solid',
     },
     fabBtn: {
-      color: color.ice,
-      fill: color.ice,
-      backgroundColor: color.darkGray,
+      color: color.darkGray,
+      fill: color.darkGray,
+      backgroundColor: color.lightGray,
       '&:hover': {
-        backgroundColor: color.darkGray,
+        // backgroundColor: color.darkGray,
       },
     },
     fabGrid: {
@@ -38,12 +38,15 @@ export default function FacetToolbar() {
       marginRight: '1rem'
     },
     grid1: {
-      alignSelf: 'center',
-      justifySelf: 'center'
+      alignSelf: 'end',
+      justifySelf: 'center',
+      marginBottom: '.4rem'
     },
     grid2: {
       alignSelf: 'center',
       justifySelf: 'end',
+      marginRight: '1rem',
+      marginBottom: '2rem',
     }
   }));
 
