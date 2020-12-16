@@ -30,10 +30,11 @@ export default function FacetToolbar() {
       },
     },
     fabGrid: {
+      height: '10%',
       backgroundColor: color.darkGray,
       display: 'grid',
       // grid-template-columns: 75% 12.5% 12.5%;
-      gridTemplateColumns: '90%  10%',
+      gridTemplateColumns: '90% 10%',
       // alignItems: 'end',
       // justifyContent: 'end',
       marginRight: '1rem'
@@ -43,7 +44,7 @@ export default function FacetToolbar() {
       justifySelf: 'center'
     },
     grid2: {
-      alignSelf: 'end',
+      alignSelf: 'center',
       justifySelf: 'end',
     }
   }));
