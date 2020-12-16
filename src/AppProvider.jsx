@@ -117,10 +117,22 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const loadCopySnippet = async () => {
+    try {
+      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      const domainRes = await getDomain(window.location.hostname, workspaceId);
+      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+      setTextToCopy(text);
+    } catch (e) {
+      console.log('[ERROR][loadCopySnippet]', e);
+    }
+  };
+
   useEffect(() => {
     loadJWT();
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
+    loadCopySnippet();
   }, [setJwt]);
 
   const onSaveClick = async () => {
@@ -227,22 +239,6 @@ const AppProvider = ({ children }) => {
     setJwt(undefined);
     window.close();
     triggerDOMReload();
-  };
-
-  const loadCopySnippet = async () => {
-    try {
-      // const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-
-      // const loc = new URL(window.location.host);
-      // const domainRes = await getDomain(loc.hostname, workspaceId);
-
-      // const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
-
-      // setTextToCopy(text);
-      // return text;
-    } catch (e) {
-      console.log('[ERROR]', e);
-    }
   };
 
   const addFacet = (autoNumber = facetMap.size + 1) => {

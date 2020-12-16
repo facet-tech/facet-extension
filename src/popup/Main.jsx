@@ -33,7 +33,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 75% 12.5% 12.5%;
+    grid-template-columns: 85% 15%;
     align-items: center;
     justify-content: center;
 `;
@@ -136,14 +136,7 @@ export default () => {
           <FacetImage src={facetLogo} />
         </div>
         <div>
-          <IconButton color="primary" aria-label="settings" component="span">
-            <FacetImage src={settingsLogo} />
-          </IconButton>
-        </div>
-        <div>
-          <FacetIconButton onClick={() => { logout() }} color="primary" aria-label="logout" component="span">
-            <FacetImage src={logoutLogo} />
-          </FacetIconButton>
+          <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
         </div>
       </GridDiv>
       <GridDivTwoColumn>

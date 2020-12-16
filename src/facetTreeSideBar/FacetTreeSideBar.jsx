@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { styles, ChromeRequestType } from '../shared/constant';
+import { styles, ChromeRequestType, snackbar } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
@@ -101,7 +101,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
-    expanded, setExpanded, onDeleteDOMElement
+    expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar
   } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -224,7 +224,12 @@ export default function FacetTreeSideBar() {
               <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
               <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton fill={color.ice} name="copy" onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton fill={color.ice} name="copy" onClick={() => {
+                  enqueueSnackbar({
+                    message: `Copied snippet to clipboard!`,
+                    variant: snackbar.info.text
+                  });
+                }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
           </div>
