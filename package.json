@@ -34,7 +34,7 @@
         "react-copy-to-clipboard": "^5.0.2",
         "react-dom": "^16.14.0",
         "react-eva-icons": "^0.0.8",
-        "react-hook-form": "^6.12.2",
+        "react-hook-form": "^6.13.1",
         "react-router-dom": "^5.2.0",
         "reactstrap": "^8.7.1",
         "style-loader": "2.0.0",
