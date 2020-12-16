@@ -15,7 +15,7 @@ Check the plugin live from the Google Web Store: https://chrome.google.com/webst
 2. Navigate to `chrome://extensions` and enable "Developer mode":
 
    ![Developer mode](./developer_mode.png)
-   
+
 3. Click Load unpacked extension
 4. Select the unzipped facet-extension folder
 5. Click on Manage Extensions and Pin the facet-extension
