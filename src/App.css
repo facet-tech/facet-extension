@@ -14,7 +14,7 @@
 
 /* Hides but still allows scroll */
 html {
-  overflow: scroll;
+  overflow: auto;
 }
 ::-webkit-scrollbar {
   width: 0px;

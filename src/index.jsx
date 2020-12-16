@@ -122,7 +122,7 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
 } else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
   ReactDOM.render(
     <React.StrictMode>
-      <div style={{ width: `${styles.drawerWidth}px`, backgroundColor: color.darkGray, height: '100%' }} id="facet-sidebar">
+      <div style={{ width: `${styles.drawerWidth}px`, height: '100%' }} id="facet-sidebar">
         <SnackbarProvider
           style={{ height: '100%' }}
           maxSnack={4}
