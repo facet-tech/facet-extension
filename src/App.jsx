@@ -7,6 +7,7 @@ import { performDOMTransformation, updateEvents } from './highlighter';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
+import $ from 'jquery';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
@@ -37,6 +38,15 @@ function App() {
     } else {
       updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
+  }
+
+  // removing width/height hack
+  if (!isPluginEnabled) {
+    $("#facet-sidebar").css("width", "0");
+    $("#facetizer").css("width", "0");
+  } else {
+    $("#facet-sidebar").css("width", '280px');
+    $("#facetizer").css("width", "280px");
   }
 
   return (
