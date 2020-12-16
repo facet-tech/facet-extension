@@ -31,12 +31,10 @@ export default function FacetToolbar() {
     },
     fabGrid: {
       height: '10%',
+      width: '100%',
       backgroundColor: color.darkGray,
       display: 'grid',
-      // grid-template-columns: 75% 12.5% 12.5%;
       gridTemplateColumns: '90% 10%',
-      // alignItems: 'end',
-      // justifyContent: 'end',
       marginRight: '1rem'
     },
     grid1: {

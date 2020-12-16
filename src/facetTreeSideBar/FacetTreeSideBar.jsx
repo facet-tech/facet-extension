@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
+    padding: '0px 2rem',
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopDiv = styled.div`
     display: grid;
-    grid-template-columns: 70% 10% 10%;
+    grid-template-columns: 60% 10% 10%;
     grid-gap: 5%;
     align-items: center;
     justify-content: center;
@@ -224,7 +224,7 @@ export default function FacetTreeSideBar() {
               <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
               <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton name="copy" onClick={() => { }} size="small" aria-label="Save" />
+                <FacetIconButton fill={color.ice} name="copy" onClick={() => { }} size="small" aria-label="Save" />
               </CopyToClipboard>
             </div>
           </div>
