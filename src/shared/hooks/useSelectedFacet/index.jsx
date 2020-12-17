@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { setSelectedFacetHighlighter } from "../../../highlighter";
+import { defaultFacetName } from "../../constant";
 
-const useSelectedFacet = () => {
-    const [selectedFacet, setSelectedFacet] = useState('');
-
+const useSelectedFacet = (initialValue = defaultFacetName) => {
+    const [selectedFacet, setSelectedFacet] = useState(initialValue);
     // proxying request to highlighter object
     let setSelectedFacetValue = (value) => {
         setSelectedFacet(value);

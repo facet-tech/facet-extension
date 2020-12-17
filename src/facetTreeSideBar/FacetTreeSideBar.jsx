@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { styles, ChromeRequestType, snackbar } from '../shared/constant';
+import { styles, ChromeRequestType, snackbar, defaultFacetName } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
@@ -23,6 +23,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FacetLabel from '../shared/FacetLabel';
+import useSelectedFacet from '../shared/hooks/useSelectedFacet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,14 +101,14 @@ export default function FacetTreeSideBar() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const {
-    facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
+    facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
-    expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar
-  } = useContext(AppContext);
+    facetLabelMenu, selected, setSelected, expanded, setExpanded, onDeleteDOMElement,
+    enqueueSnackbar } = useContext(AppContext);
+  const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [renamingFacet, setRenamingFacet] = useState();
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-  useEffect(() => { setExpanded(['Facet-1']); }, []);
+  useEffect(() => { setExpanded([defaultFacetName]); }, []);
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     const newName = `Facet-${autoNumber}`;

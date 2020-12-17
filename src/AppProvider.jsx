@@ -17,7 +17,7 @@ import parsePath from './shared/parsePath';
 import $ from 'jquery';
 import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
-import useSelectedFacet from './shared/hooks/useSelectedFacet/useSelectedFacet';
+import useSelectedFacet from './shared/hooks/useSelectedFacet';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -35,12 +35,11 @@ const AppProvider = ({ children }) => {
 
   const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState([]);
-  const [selectedFacet, setSelectedFacet] = useState('Facet-1');
   const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
-  const [selectedFacetVal, setSelectedFacetVal] = useSelectedFacet();
+  const [selectedFacet, setSelectedFacet] = useSelectedFacet('Facet-1');
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);

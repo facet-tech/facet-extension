@@ -11,6 +11,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
 import AppContext from '../AppContext.jsx';
 import FacetInput from '../shared/FacetInput/index.js';
+import useSelectedFacet from '../shared/hooks/useSelectedFacet';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -60,9 +61,9 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick, setExpanded, selectedFacet, setSelectedFacet,
-        setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick, setExpanded, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
+    const [selectedFacet, setSelectedFacet] = useSelectedFacet();
 
     const defaultElement =
         <div>
@@ -81,8 +82,10 @@ function StyledTreeItem(props) {
                             <FacetIconButton fill={colorConstant.grayA} name="eye-outline" />
                         </div>
                         <div>
-                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
-                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
+                                onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }}
+                                deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                         </div>
                     </>
                     : <>

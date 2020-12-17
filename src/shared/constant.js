@@ -137,10 +137,12 @@ const isActivelyBeingDebugged = (id) => {
     return activelyDebuggingElementIds.includes(id);
 };
 
+const defaultFacetName = 'Facet-1';
+
 export {
     facetizerId, facetKey, isPluginEnabled, snackbar,
     storage, LoginTypes, api, HTTPMethods,
     APIUrl, defaultFacet, styles, authState,
     authStorage, ChromeRequestType, color, fontSize,
-    isActivelyBeingDebugged, domIds, appId
+    isActivelyBeingDebugged, domIds, appId, defaultFacetName
 };
