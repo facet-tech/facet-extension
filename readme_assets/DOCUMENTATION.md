@@ -22,10 +22,10 @@ Declaring a facet is as easy as clicking on the element of interest, as shown be
 
 ## Holding off and rolling out facets
 
-By clicking on the display/hide icon next to each facet, you are able to rollout facets in production.
+By clicking on the display/hide icon next to each facet, you can rollout facets in production.
 Once your configuration is ready, save your changes and your configuration will be applied into your application.
 
-## One-line of code integration
+## One-line code integration
 
 Last but not least, copy the snippet of code generated from the facet-extension.
 (//todo image)
