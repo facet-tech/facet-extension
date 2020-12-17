@@ -78,17 +78,17 @@ function StyledTreeItem(props) {
                 {props.isFacet ?
                     <>
                         <div>
-                            <FacetIconButton name="eye-outline" />
+                            <FacetIconButton fill={colorConstant.grayA} name="eye-outline" />
                         </div>
                         <div>
-                            <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
                             <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                         </div>
                     </>
                     : <>
                         <div></div>
                         <div>
-                            <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
+                            <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
                         </div></>
                 }
             </div>

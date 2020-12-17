@@ -30,6 +30,13 @@ const performDOMTransformation = () => {
     })
 }
 
+// selectedFacet
+let selectedFacet;
+const setSelectedFacetHighlighter = (value) => {
+    console.log('[highlighter] updated', value);
+    selectedFacet = value;
+}
+
 // facetMap & setFacetMap
 // singletons
 let domainId;
@@ -102,7 +109,8 @@ const loadInitialState = (facetMap) => {
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
-    const selectedFacet = event.currentTarget.selectedFacet;
+    // const selectedFacet = event.currentTarget.selectedFacet;
+    console.log('SELECTEFACET', selectedFacet);
     const setFacetMap = event.currentTarget.setFacetMap;
     const facetMap = event.currentTarget.facetMap;
     const domPath = getDomPath(event.target);
@@ -198,10 +206,13 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
                         e.style.cursor = "cursor";
                     }
                 });
-                console.log('---------FINISHED UPDATING EVENTS-----------')
+        console.log('---------FINISHED UPDATING EVENTS-----------')
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
 }
 
-export { updateEvents, onMouseEnterHandle, loadInitialState, performDOMTransformation };
+export {
+    updateEvents, onMouseEnterHandle, loadInitialState,
+    performDOMTransformation, setSelectedFacetHighlighter
+};

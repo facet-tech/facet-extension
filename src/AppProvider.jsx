@@ -17,6 +17,7 @@ import parsePath from './shared/parsePath';
 import $ from 'jquery';
 import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
+import useSelectedFacet from './shared/hooks/useSelectedFacet/useSelectedFacet';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -39,6 +40,7 @@ const AppProvider = ({ children }) => {
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
+  const [selectedFacetVal, setSelectedFacetVal] = useSelectedFacet();
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -257,6 +259,7 @@ const AppProvider = ({ children }) => {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
+    setSelectedFacetVal('keepo' + autoNumber);
     setSelected(newName);
     setExpanded([newName]);
   };

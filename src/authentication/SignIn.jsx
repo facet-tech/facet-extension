@@ -54,7 +54,6 @@ export default () => {
       triggerDOMReload();
       setSubmitting(false);
     } catch (error) {
-      console.log('CHECK', submitting, setSubmitting)
       console.log('[ERROR]][SignIn]', error);
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
