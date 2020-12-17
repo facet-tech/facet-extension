@@ -13,8 +13,10 @@ import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defa
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
-import $ from 'jquery';
 import parsePath from './shared/parsePath';
+import $ from 'jquery';
+import 'jquery-ui-bundle';
+import 'jquery-ui-bundle/jquery-ui.css';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -49,6 +51,8 @@ const AppProvider = ({ children }) => {
 
   const onGotoClick = () => {
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+    // animate
+    $(domPath).effect("shake", { direction: "up", times: 4, distance: 10 }, 1000);
     const element = $(domPath)[0];
     element?.scrollIntoView();
     handleCloseMenuEl();
