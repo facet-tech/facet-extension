@@ -7,10 +7,10 @@
    A facet is a set elements that construe a feature. For instance, a login form could be considered a facet, with the elements being `username` and `password`.
    (//todo add image)
 
-3. Is JS/HTML code delivered at all after disabling a facet?
+3. Is JS/HTML code delivered at all after disabling a facet?<br/>
    JS code is delivered all the times to the end user. The facet CDN script observes facets and hides them from the website, but code is still being delivered to the website.
 
-4. My facet is declared in multiple pages (ie: menu). Can I declare a global facets?
+4. My facet is declared in multiple pages (ie: menu). Can I declare a global facets?<br/>
    Not yet. coming soon!
 
 5. How to hide a facet before rolling out to production?<br/>
