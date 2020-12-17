@@ -17,10 +17,10 @@
    Not yet. coming soon!
 
 6. Can I declare facets within backend technologies? <br/>
-   Not yet. Our team is working hard to offer facet declaration for backend systems. We will be launching a pilot soon, targeting Java as the piloting language. However, we are planning mzkd the underlying API open source, so that affiliating SDKs can be implemented in whichever language of interest.
+   Not yet. Our team is working hard to offer facet declaration for backend systems. We will be launching a pilot soon, targeting Java as the piloting language. However, we are planning to make the underlying API open source, so that affiliating SDKs can be implemented in whichever language of interest.
 
 7. Is using facets secure? <br/>
-   At facet, Security is at the center of our priorities. We have integrated with multiple vendors who champion DevSecOps,including [Snyk](https://snyk.io/) and [Github](https://github.com/dependabot), to ensure secure codebases. We are also working on getting ISO, HIIPA and other security compliance licenses.
+   At facet, Security is at the center of our priorities. We have integrated with multiple vendors who champion DevSecOps, including [Snyk](https://snyk.io/) and [Github](https://github.com/dependabot), to ensure secure codebases. We are also working on getting ISO, HIIPA and other security compliance licenses.
 
 8. Is facet open source? <br/>
    Currently, facet-extension is open source. We believe in open source and we plan to make many of our systems open source as they become ready for release.
