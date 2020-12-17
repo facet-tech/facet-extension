@@ -1,23 +1,21 @@
 import { Button } from '@material-ui/core';
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { green, purple } from '@material-ui/core/colors';
+import { color } from '../constant';
 
-const ColorButton = withStyles((theme) => ({
+const ColorButton = withStyles(() => ({
     root: {
-        color: '#4A4E59',
-        backgroundColor: '#C4DDF2',
+        color: color.grayA,
+        backgroundColor: color.ice,
         '&:hover': {
-            backgroundColor: '#758EBF',
+            backgroundColor: color.electricB,
         },
     },
 }))(Button);
 
-const useStyles = makeStyles((theme) => ({
-    root: {},
-}));
+const useStyles = makeStyles(() => ({ root: {} }));
 
-export default ({ onClick, text, disabled }) => {
+export default ({ onClick, text, disabled, ...props }) => {
     const classes = useStyles();
 
     return <div className={classes.root}>
@@ -30,7 +28,8 @@ export default ({ onClick, text, disabled }) => {
             onClick={() => { onClick() }}
             variant="contained"
             color="primary"
-            size="small">
+            size="small"
+            {...props}>
             {text}
         </ColorButton>
     </div >

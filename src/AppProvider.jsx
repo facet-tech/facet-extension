@@ -13,8 +13,10 @@ import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defa
 import { loadInitialState } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
-import $ from 'jquery';
 import parsePath from './shared/parsePath';
+import $ from 'jquery';
+import 'jquery-ui-bundle';
+import 'jquery-ui-bundle/jquery-ui.css';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -49,6 +51,8 @@ const AppProvider = ({ children }) => {
 
   const onGotoClick = () => {
     const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+    // animate
+    $(domPath).effect("shake", { direction: "up", times: 4, distance: 10 }, 1000);
     const element = $(domPath)[0];
     element?.scrollIntoView();
     handleCloseMenuEl();
@@ -117,10 +121,22 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const loadCopySnippet = async () => {
+    try {
+      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      const domainRes = await getDomain(window.location.hostname, workspaceId);
+      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+      setTextToCopy(text);
+    } catch (e) {
+      console.log('[ERROR][loadCopySnippet]', e);
+    }
+  };
+
   useEffect(() => {
     loadJWT();
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
+    loadCopySnippet();
   }, [setJwt]);
 
   const onSaveClick = async () => {
@@ -136,6 +152,10 @@ const AppProvider = ({ children }) => {
 
   const reset = async () => {
     try {
+      if (!confirm("Are you sure you want to delete all your facets?")) {
+        return;
+      }
+
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
       const domainRes = await getOrPostDomain(workspaceId);
 
@@ -227,22 +247,6 @@ const AppProvider = ({ children }) => {
     setJwt(undefined);
     window.close();
     triggerDOMReload();
-  };
-
-  const loadCopySnippet = async () => {
-    try {
-      // const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-
-      // const loc = new URL(window.location.host);
-      // const domainRes = await getDomain(loc.hostname, workspaceId);
-
-      // const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes?.response?.id}"></script>`;
-
-      // setTextToCopy(text);
-      // return text;
-    } catch (e) {
-      console.log('[ERROR]', e);
-    }
   };
 
   const addFacet = (autoNumber = facetMap.size + 1) => {

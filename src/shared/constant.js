@@ -26,7 +26,7 @@ const fontSize = {
     xLarge: 'x-large',
     xxLarge: 'xx-large',
     xxxLarge: 'xxx-large'
-}
+};
 
 const color = {
     electricA: '#5979D9',
@@ -46,8 +46,8 @@ const color = {
         lightBlue: '#23E7DB',
         lightPurple: '#927EE2',
         green: '#00D222'
-    }
-}
+    },
+};
 
 const snackbar = {
     success: {
@@ -65,7 +65,7 @@ const snackbar = {
         iconName: 'message-circle-outline',
         fill: color.ice
     }
-}
+};
 
 // information persisted in sync.storage
 const authStorage = {
@@ -75,7 +75,7 @@ const authStorage = {
 
 const styles = {
     drawerWidth: 280
-}
+};
 
 const APIUrl = {
     apiBaseURL,
@@ -123,7 +123,7 @@ const domIds = {
     authentication: 'authentication',
     facetizer: 'facetizer',
     welcome: 'facet-welcome-page'
-}
+};
 
 // chrome extension id
 const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
@@ -135,7 +135,7 @@ const isActivelyBeingDebugged = (id) => {
         return true;
     }
     return activelyDebuggingElementIds.includes(id);
-}
+};
 
 export {
     facetizerId, facetKey, isPluginEnabled, snackbar,

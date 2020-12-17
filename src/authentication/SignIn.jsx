@@ -27,9 +27,8 @@ const useStyles = makeStyles(() => ({
 export default () => {
   const classes = useStyles();
   const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
-  const {
-    register, errors, handleSubmit, watch,
-  } = useForm({});
+  const { register, errors, handleSubmit, watch } = useForm({});
+  const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState(undefined);
 
   const password = useRef({});
@@ -38,6 +37,7 @@ export default () => {
   const onSubmit = async (data) => {
     // abstract this method... to be used during signup too
     try {
+      setSubmitting(true);
       const { email, password } = data;
       await setKeyInLocalStorage(isPluginEnabled, true);
       await setKeyInLocalStorage(storage.username, email);
@@ -52,13 +52,16 @@ export default () => {
         email,
       });
       triggerDOMReload();
+      setSubmitting(false);
     } catch (error) {
+      console.log('CHECK', submitting, setSubmitting)
       console.log('[ERROR]][SignIn]', error);
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
       } else {
         setServerError(error.message);
       }
+      setSubmitting(false);
     }
   };
 
@@ -98,7 +101,7 @@ export default () => {
           {errors.password && <FacetFormError role="alert" text={errors.password.message}></FacetFormError>}
           <br />
           <div>
-            <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
+            <FacetButton disabled={submitting} style={{ width: '100%' }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} text="Login"></FacetButton>
           </div>
           <br />
           <div className={classes.center}>
@@ -109,7 +112,7 @@ export default () => {
             <Typography>
               <b>
                 <FacetLabel text='Not registered? ' />
-                <FacetLink color='#758EBF' text='Sign up.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
+                <FacetLink color={color.electricB} text='Sign up.' href="#" onClick={() => { setCurrAuthState(authStateConstant.signingUp) }} />
               </b>
               <br />
               <br />
