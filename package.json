@@ -9,7 +9,7 @@
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@sentry/browser": "^5.29.1",
-        "@sentry/tracing": "^5.29.0",
+        "@sentry/tracing": "^5.29.1",
         "aws-amplify": "^3.3.12",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
         "chalk": "^4.1.0",
