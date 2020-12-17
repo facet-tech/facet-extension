@@ -31,12 +31,14 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: styles.drawerWidth,
     flexShrink: 0,
+    overflow: 'overlay'
   },
   drawerPaper: {
     backgroundColor: color.darkGray,
     width: styles.drawerWidth,
     border: 'none',
-    height: '90%'
+    height: '90%',
+    overflow: 'overlay'
   },
   drawerHeader: {
     display: 'flex',
