@@ -29,16 +29,25 @@ function App() {
   }
 
   useEffect(() => {
+    console.log('@USEEFFECT');
     loadLocalStorageValues();
-  }, [setIsPluginEnabled]);
-
-  if (isPluginEnabled) {
+    if (!isPluginEnabled) {
+      return;
+    }
     if (showSideBar) {
       updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     } else {
       updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
-  }
+  }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
+
+  // if (isPluginEnabled) {
+  //   if (showSideBar) {
+  //     updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
+  //   } else {
+  //     updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
+  //   }
+  // }
 
   // removing width/height hack
   if (!isPluginEnabled) {

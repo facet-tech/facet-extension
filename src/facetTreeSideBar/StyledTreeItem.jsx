@@ -66,7 +66,7 @@ function StyledTreeItem(props) {
 
     const defaultElement =
         <div>
-            <div onClick={() => { if (props.isFacet) { onFacetClick(labelText) } }} className={classes.labelRoot}>
+            <div className={classes.labelRoot}>
                 <div>
                     <Typography
                         style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
@@ -92,7 +92,7 @@ function StyledTreeItem(props) {
                         </div></>
                 }
             </div>
-        </div>;
+        </div >;
 
     const keyPress = (e) => {
         if (e.key === "Escape") {
@@ -127,7 +127,7 @@ function StyledTreeItem(props) {
         <TreeItem
             {...other}
             // check if those are needed
-            onClick={(e) => { console.log('ELA0'); e.preventDefault(); }}
+            onClick={(e) => { console.log('ELA0'); if (props.isFacet) { onFacetClick(labelText) }; e.preventDefault(); }}
             onLabelClick={(e) => { console.log('ELA1'); e.preventDefault(); }}
             onIconClick={(e) => { console.log('ELA2'); e.preventDefault(); }}
             label={

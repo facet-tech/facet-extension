@@ -163,6 +163,7 @@ function getDomPath(el) {
  */
 const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
     try {
+        console.log('-----------TRIGGERRING UPDATING EVENTS-----------')
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
         if (!workspaceId) {
@@ -197,6 +198,7 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
                         e.style.cursor = "cursor";
                     }
                 });
+                console.log('---------FINISHED UPDATING EVENTS-----------')
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
