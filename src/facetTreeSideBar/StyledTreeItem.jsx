@@ -60,7 +60,8 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo, color,
         bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick, setExpanded, setSelectedFacet, setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
+    const { handleClickMenuEl, onGotoClick, setExpanded, selectedFacet, setSelectedFacet,
+        setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
 
     const defaultElement =
@@ -81,7 +82,7 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
-                            <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
                         </div>
                     </>
                     : <>
@@ -126,10 +127,9 @@ function StyledTreeItem(props) {
         <TreeItem
             {...other}
             // check if those are needed
-            onClick={(e) => { e.preventDefault(); }}
-            onLabelClick={(e) => { e.preventDefault(); }}
-            onIconClick={(e) => { e.preventDefault(); }}
-            // disableSelection={true}
+            onClick={(e) => { console.log('ELA0'); e.preventDefault(); }}
+            onLabelClick={(e) => { console.log('ELA1'); e.preventDefault(); }}
+            onIconClick={(e) => { console.log('ELA2'); e.preventDefault(); }}
             label={
                 renamingFacet ? duringRenameElement : defaultElement
             }
