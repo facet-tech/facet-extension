@@ -18,15 +18,18 @@ export default () => {
     const { authObject, setAuthObject } = React.useContext(AppContext);
     const { register, errors, handleSubmit } = useForm({});
     const [serverError, setServerError] = useState(undefined);
+    const [submitting, setSubmitting] = useState(false);
 
     const onSubmit = async data => {
-        const { email } = data;
 
         try {
+            setSubmitting(true);
+            const { email } = data;
             const confirmSignUpResponse = await Auth.forgotPassword(email);
             setCurrAuthState(authStateConstant.onPasswordReset);
         } catch (error) {
             setServerError(error.message);
+            setSubmitting(false);
         }
     };
 
@@ -58,7 +61,7 @@ export default () => {
                 {serverError && <Alert severity="error">{serverError}</Alert>}
                 <br />
                 <div>
-                    <FacetButton text="Confirm email" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
+                    <FacetButton disabled={submitting} text="Confirm email" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
                 </div>
                 <div>
                     <br />

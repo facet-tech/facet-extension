@@ -22,23 +22,27 @@ export default () => {
   } = useForm({});
   const { authObject, setAuthObject } = useContext(AppContext);
   const [serverError, setServerError] = useState(undefined);
+  const [submitting, setSubmitting] = useState(false);
 
   const password = useRef({});
   password.current = watch('password', '');
 
   const onSubmit = async (data) => {
+    setSubmitting(true);
     const { email } = authObject;
     const { code, password } = data;
 
     try {
-      const pwResetResponse = await Auth.forgotPasswordSubmit(email, code, password);
+      await Auth.forgotPasswordSubmit(email, code, password);
       setCurrAuthState(authStateConstant.signedIn);
+      setSubmitting(false);
     } catch (error) {
       if (error.code === 'UserNotConfirmedException') {
         setCurrAuthState(authStateConstant.confirmingSignup);
       } else {
         setServerError(error.message);
       }
+      setSubmitting(false);
     }
   };
 
@@ -113,7 +117,7 @@ export default () => {
           </div>
           <br />
           <div>
-            <FacetButton style={{ width: '100%' }} variant="contained" color="primary" type="submit" text="Reset password" onClick={handleSubmit(onSubmit)} />
+            <FacetButton disabled={submitting} style={{ width: '100%' }} variant="contained" color="primary" type="submit" text="Reset password" onClick={handleSubmit(onSubmit)} />
           </div>
         </form>
         <br />

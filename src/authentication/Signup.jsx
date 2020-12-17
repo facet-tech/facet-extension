@@ -18,17 +18,19 @@ export default () => {
   const { register, errors, handleSubmit, watch } = useForm({});
   const { setCurrAuthState } = useContext(AppContext);
   const [serverError, setServerError] = useState(undefined);
+  const [submitting, setSubmitting] = useState(false);
 
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = async data => {
-    const { email, password } = data;
-    setAuthObject({
-      ...authObject,
-      email
-    });
     try {
+      setSubmitting(true);
+      const { email, password } = data;
+      setAuthObject({
+        ...authObject,
+        email
+      });
       Auth.confirmSignUp()
       await Auth.signUp({
         username: email,
@@ -37,10 +39,11 @@ export default () => {
           email,
         }
       });
-
       setCurrAuthState(authStateConstant.confirmingSignup);
+      setSubmitting(false);
     } catch (error) {
       setServerError(error.message);
+      setSubmitting(false);
     }
   };
 
@@ -135,7 +138,7 @@ export default () => {
           {errors.password_repeat && <FacetFormError text={errors.password_repeat.message} />}
           <br />
           <br />
-          <FacetButton text="REGISTER" variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
+          <FacetButton disabled={submitting} text="REGISTER" variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
         </form>
         <br />
         {serverError && <Alert severity="error">{serverError}</Alert>}

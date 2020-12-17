@@ -21,17 +21,23 @@ export default () => {
     const { setCurrAuthState } = React.useContext(AppContext);
     const { register, errors, handleSubmit, watch } = useForm({});
     const [serverError, setServerError] = useState(undefined);
+    const [submitting, setSubmitting] = useState(false);
+
     const password = useRef({});
     password.current = watch("password", "");
 
     const onSubmit = async data => {
-        const { confirmationCode } = data;
+
 
         try {
+            setSubmitting(true);
+            const { confirmationCode } = data;
             const confirmSignUpResponse = await Auth.confirmSignUp(authObject.email, confirmationCode);
             setCurrAuthState(authStateConstant.signedIn);
+            setSubmitting(false);
         } catch (error) {
             setServerError(error.message);
+            setSubmitting(false);
         }
     };
 
@@ -72,7 +78,7 @@ export default () => {
                     />
                     {errors.email && <FacetFormError text="errors.confirmationCode.message" role="alert" />}
                     <MarginTop value='.5rem' />
-                    <FacetButton text="CONFIRM" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
+                    <FacetButton disabled={submitting} text="CONFIRM" style={{ width: "100%" }} variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)} />
                 </form>
                 <br />
                 {serverError && <Alert severity="error">{serverError}</Alert>}

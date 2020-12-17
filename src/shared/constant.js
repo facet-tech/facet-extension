@@ -46,7 +46,7 @@ const color = {
         lightBlue: '#23E7DB',
         lightPurple: '#927EE2',
         green: '#00D222'
-    }
+    },
 };
 
 const snackbar = {
@@ -130,7 +130,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.facetizer];
+    const activelyDebuggingElementIds = [domIds.authentication];
     if (!isDevelopment()) {
         return true;
     }
