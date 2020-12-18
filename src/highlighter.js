@@ -30,7 +30,6 @@ const performDOMTransformation = () => {
     })
 }
 
-// selectedFacet
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
@@ -203,7 +202,6 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {
                     // attaching these parameters into the event
-                    // e.selectedFacet = selectedFacet;
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;
                     e.enqueueSnackbar = enqueueSnackbar;
