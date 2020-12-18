@@ -40,7 +40,6 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
-  console.log('CURRENTLY SELECTED:', selectedFacet);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -101,6 +100,21 @@ const AppProvider = ({ children }) => {
     await setKeyInLocalStorage(storage.isPluginEnabled, true);
     await setKeyInLocalStorage(LoginTypes.email, email);
     triggerDOMReload();
+  }
+
+  const persistLogin = async (email, password) => {
+    await setKeyInLocalStorage(storage.isPluginEnabled, true);
+    await setKeyInLocalStorage(storage.username, email);
+    await setKeyInLocalStorage(storage.password, password);
+    await Auth.signIn(email, password);
+    const workspaceResponse = await getOrCreateWorkspace(email);
+    await setKeyInLocalStorage(api.workspace.workspaceId,
+      workspaceResponse?.response?.workspaceId);
+    setCurrAuthState(authStateConstant.signedIn);
+    setAuthObject({
+      ...authObject,
+      email,
+    });
   }
 
   const onLoginClick = (val) => {
@@ -306,6 +320,7 @@ const AppProvider = ({ children }) => {
       setExpanded,
       onFacetClick,
       addFacet,
+      persistLogin,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,

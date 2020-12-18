@@ -18,21 +18,19 @@ import MarginTop from "../shared/MarginTop";
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
     const { authObject } = React.useContext(AppContext);
-    const { setCurrAuthState } = React.useContext(AppContext);
+    const { setCurrAuthState, persistLogin } = React.useContext(AppContext);
     const { register, errors, handleSubmit, watch } = useForm({});
     const [serverError, setServerError] = useState(undefined);
     const [submitting, setSubmitting] = useState(false);
 
     const password = useRef({});
     password.current = watch("password", "");
-
     const onSubmit = async data => {
-
-
         try {
             setSubmitting(true);
             const { confirmationCode } = data;
-            const confirmSignUpResponse = await Auth.confirmSignUp(authObject.email, confirmationCode);
+            const response = await Auth.confirmSignUp(authObject.email, confirmationCode);
+            await persistLogin(authObject.email, authObject.password);
             setCurrAuthState(authStateConstant.signedIn);
             setSubmitting(false);
         } catch (error) {

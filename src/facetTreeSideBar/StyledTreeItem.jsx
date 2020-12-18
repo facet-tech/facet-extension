@@ -107,7 +107,6 @@ function StyledTreeItem(props) {
         }
     }
 
-    console.log('KAPPA!', renameValue);
     const duringRenameElement = <div>
         <FacetInput
             value={renameValue}
@@ -127,9 +126,9 @@ function StyledTreeItem(props) {
         <TreeItem
             {...other}
             // check if those are needed
-            onClick={(e) => { console.log('ELA0'); if (props.isFacet) { onFacetClick(labelText) }; e.preventDefault(); }}
-            onLabelClick={(e) => { console.log('ELA1'); e.preventDefault(); }}
-            onIconClick={(e) => { console.log('ELA2'); e.preventDefault(); }}
+            onClick={(e) => { if (props.isFacet) { onFacetClick(labelText) }; e.preventDefault(); }}
+            onLabelClick={(e) => { e.preventDefault(); }}
+            onIconClick={(e) => { e.preventDefault(); }}
             label={
                 renamingFacet ? duringRenameElement : defaultElement
             }

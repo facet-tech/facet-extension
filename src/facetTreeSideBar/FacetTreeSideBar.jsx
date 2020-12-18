@@ -9,7 +9,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import { styles, ChromeRequestType, snackbar, defaultFacetName } from '../shared/constant';
@@ -20,7 +19,6 @@ import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
-import Fab from '@material-ui/core/Fab';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FacetLabel from '../shared/FacetLabel';
 
@@ -140,7 +138,6 @@ export default function FacetTreeSideBar() {
 
   const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
     : facetArray.map((facet) => {
-      console.log('FACET!!!', facet);
       const { value } = facet;
 
       return (

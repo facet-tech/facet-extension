@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 export default () => {
   const classes = useStyles();
-  const { authObject, setAuthObject, setCurrAuthState } = React.useContext(AppContext);
+  const { authObject, setAuthObject, setCurrAuthState, persistLogin } = React.useContext(AppContext);
   const { register, errors, handleSubmit, watch } = useForm({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState(undefined);
@@ -35,27 +35,20 @@ export default () => {
   password.current = watch('password', '');
 
   const onSubmit = async (data) => {
-    // abstract this method... to be used during signup too
+    setSubmitting(true);
+    const { email, password } = data;
     try {
-      setSubmitting(true);
-      const { email, password } = data;
-      await setKeyInLocalStorage(isPluginEnabled, true);
-      await setKeyInLocalStorage(storage.username, email);
-      await setKeyInLocalStorage(storage.password, password);
-      await Auth.signIn(email, password);
-      const workspaceResponse = await getOrCreateWorkspace(email);
-      await setKeyInLocalStorage(apiConstant.workspace.workspaceId,
-        workspaceResponse?.response?.workspaceId);
-      setCurrAuthState(authStateConstant.signedIn);
-      setAuthObject({
-        ...authObject,
-        email,
-      });
+      await persistLogin(email, password);
       triggerDOMReload();
       setSubmitting(false);
     } catch (error) {
       console.log('[ERROR]][SignIn]', error);
       if (error.code === 'UserNotConfirmedException') {
+        setAuthObject({
+          ...authObject,
+          email,
+          password
+        });
         setCurrAuthState(authStateConstant.confirmingSignup);
       } else {
         setServerError(error.message);

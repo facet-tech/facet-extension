@@ -7,7 +7,6 @@ const useSelectedFacet = (initialValue = new Map()) => {
     const [facetMap, setFacetMap] = useState(defaultVal);
 
     useEffect(() => {
-        console.log('MONO ONCE @useSelectedFacet');
         setFacetMapHighlighter(initialValue);
     }, []);
 

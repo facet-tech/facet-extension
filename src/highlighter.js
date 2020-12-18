@@ -122,7 +122,6 @@ const loadInitialState = (facetMap) => {
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
-    console.log('SELECTEFACET', selectedFacet);
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
