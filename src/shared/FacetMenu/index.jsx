@@ -15,7 +15,6 @@ const StyledMenu = withStyles({
 })((props) => (
   <Menu
     MenuListProps={{ disablePadding: true }}
-    backgroundColor={color.darkGray}
     getContentAnchorEl={null}
     {...props}
   />
