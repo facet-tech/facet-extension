@@ -10,7 +10,7 @@
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@sentry/browser": "^5.29.2",
         "@sentry/tracing": "^5.29.2",
-        "aws-amplify": "^3.3.12",
+        "aws-amplify": "^3.3.13",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
         "chalk": "^4.1.0",
         "clsx": "^1.1.1",
