@@ -33,12 +33,21 @@ const performDOMTransformation = () => {
 // selectedFacet
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
-    console.log('[highlighter] updated', value);
     selectedFacet = value;
 }
 
 const getSelectedFacet = () => {
     return selectedFacet;
+}
+
+let facetMap;
+
+let getFacetMap = (value) => {
+    return facetMap;
+}
+
+let setFacetMapHighlighter = (value) => {
+    facetMap = value;
 }
 
 // facetMap & setFacetMap
@@ -113,10 +122,10 @@ const loadInitialState = (facetMap) => {
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
-    const selectedFacet = getSelectedFacet();
     console.log('SELECTEFACET', selectedFacet);
+    const selectedFacet = getSelectedFacet();
+    const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
-    const facetMap = event.currentTarget.facetMap;
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
     if (allPaths.includes(domPath)) {
@@ -218,5 +227,6 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
 
 export {
     updateEvents, onMouseEnterHandle, loadInitialState,
-    performDOMTransformation, setSelectedFacetHighlighter
+    performDOMTransformation, setSelectedFacetHighlighter,
+    setFacetMapHighlighter
 };

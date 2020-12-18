@@ -18,6 +18,7 @@ import $ from 'jquery';
 import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
 import useSelectedFacet from './shared/hooks/useSelectedFacet';
+import useFacetMap from './shared/hooks/useFacetMap';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -35,7 +36,7 @@ const AppProvider = ({ children }) => {
 
   const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState([]);
-  const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
+  const [facetMap, setFacetMap] = useFacetMap();
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
