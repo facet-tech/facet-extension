@@ -64,7 +64,7 @@ function StyledTreeItem(props) {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick,
         selectedFacet, setSelectedFacet } = useContext(AppContext);
-    const [renameValue, setRenameValue] = useState('');
+    const [renameValue, setRenameValue] = useState(labelText);
 
     const defaultElement =
         <div>
@@ -107,15 +107,10 @@ function StyledTreeItem(props) {
         }
     }
 
-    console.log('DURING...', renamingFacet);
+    console.log('KAPPA!', renameValue);
     const duringRenameElement = <div>
-        <Typography
-            style={{ color: colorConstant.lightGray }}
-            className={classes.labelText}
-            variant="body2">
-            {labelText}
-        </Typography>
         <FacetInput
+            value={renameValue}
             inputRef={input => input && input.focus()}
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>

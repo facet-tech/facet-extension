@@ -105,7 +105,6 @@ export default function FacetTreeSideBar() {
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
     enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
-  console.log('facetMap', facetMap);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
 
@@ -155,9 +154,13 @@ export default function FacetTreeSideBar() {
             handleCloseMenuEl();
           }}
           onRenameCancelClick={() => {
-            setRenamingFacet(undefined);
+            setRenamingFacet(false);
           }}
           onRenameSaveClick={(newFacetName) => {
+            if (newFacetName === facet.name) {
+              setRenamingFacet(false);
+              return;
+            }
             if (facetMap.has(newFacetName)) {
               enqueueSnackbar({
                 message: `A facet already exists with the given name. Please provide a unique name for your facet.`,
@@ -169,7 +172,6 @@ export default function FacetTreeSideBar() {
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
             setSelectedFacet(newFacetName);
-            handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet?.name}
           isFacet={true}

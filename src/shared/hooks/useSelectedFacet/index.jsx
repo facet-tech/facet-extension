@@ -6,7 +6,6 @@ const useSelectedFacet = (initialValue = defaultFacetName) => {
     const [selectedFacet, setSelectedFacet] = useState(initialValue);
 
     useEffect(() => {
-        console.log('TRIGGARA USEEEFFECT ONCE')
         setSelectedFacetHighlighter(initialValue);
     }, []);
 
