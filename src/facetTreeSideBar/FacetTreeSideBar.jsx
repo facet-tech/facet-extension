@@ -66,20 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDiv: {
     display: 'grid'
-  },
-  fabGrid: {
-    display: 'grid',
-    alignItems: 'end',
-    justifyContent: 'end',
-    margin: '1rem',
-  },
-  fabBtn: {
-    color: color.ice,
-    fill: color.ice,
-    backgroundColor: color.darkGray,
-    '&:hover': {
-      backgroundColor: color.darkGray,
-    },
   }
 }));
 

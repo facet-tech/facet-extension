@@ -78,6 +78,6 @@ export default function FacetToolbar() {
           </Fab>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

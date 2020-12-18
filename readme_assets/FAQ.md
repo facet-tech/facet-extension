@@ -33,6 +33,10 @@ Not yet. Our team is working hard to offer facet declaration for backend systems
 
 Currently, facet-extension is open source. We believe in open source and we plan to make many of our systems open source as they become ready for release.
 
-### 9. How to contact? <br/>
+### 9. What is the roadmap?
+
+The roadmap for facet-extension can be tracked through our [Github board](https://github.com/facets-io/facet-extension/projects/1).
+
+### 10. How to contact? <br/>
 
 You can open [github issue](https://github.com/facets-io/facet-extension/issues) or email us at support@facet.ninja.
