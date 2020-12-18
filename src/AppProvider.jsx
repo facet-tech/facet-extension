@@ -144,9 +144,6 @@ const AppProvider = ({ children }) => {
   const onSaveClick = async () => {
     try {
       await saveFacets(facetMap, enqueueSnackbar);
-      if (!isDevelopment()) {
-        window.location.reload();
-      }
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
