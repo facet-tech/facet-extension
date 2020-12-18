@@ -151,16 +151,24 @@ export default function FacetTreeSideBar() {
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
           onRenameItem={() => {
-            // setRenamingFacet(facetLabelMenu);
+            setRenamingFacet(facetLabelMenu);
             handleCloseMenuEl();
           }}
           onRenameCancelClick={() => {
-            // setRenamingFacet(undefined);
+            setRenamingFacet(undefined);
           }}
-          onRenameSaveClick={(e) => {
-            facetMap.set(e, facetMap.get(facet.name));
+          onRenameSaveClick={(newFacetName) => {
+            if (facetMap.has(newFacetName)) {
+              enqueueSnackbar({
+                message: `A facet already exists with the given name. Please provide a unique name for your facet.`,
+                variant: snackbar.error.text
+              });
+              return;
+            }
+            facetMap.set(newFacetName, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
+            setSelectedFacet(newFacetName);
             handleCloseMenuEl();
           }}
           renamingFacet={renamingFacet === facet?.name}

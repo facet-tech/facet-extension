@@ -22,7 +22,7 @@ import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandal
 Amplify.configure(awsExports);
 
 const snackbarConfig = {
-  autoHideDuration: 3000,
+  autoHideDuration: 5000,
   vertical: 'bottom',
   horizontal: 'left'
 }
