@@ -23,7 +23,6 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import Fab from '@material-ui/core/Fab';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FacetLabel from '../shared/FacetLabel';
-import useSelectedFacet from '../shared/hooks/useSelectedFacet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -104,10 +103,9 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, selected, setSelected, expanded, setExpanded, onDeleteDOMElement,
-    enqueueSnackbar } = useContext(AppContext);
-  const [selectedFacet, setSelectedFacet] = useSelectedFacet();
+    enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
-  console.log('RENAMING', renamingFacet);
+  console.log('facetMap', facetMap);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
 
