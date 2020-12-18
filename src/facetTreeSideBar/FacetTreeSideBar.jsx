@@ -9,10 +9,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { styles, ChromeRequestType, snackbar } from '../shared/constant';
+import { styles, ChromeRequestType, snackbar, defaultFacetName } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
@@ -20,7 +19,6 @@ import facetTypography from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
-import Fab from '@material-ui/core/Fab';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FacetLabel from '../shared/FacetLabel';
 
@@ -100,14 +98,13 @@ export default function FacetTreeSideBar() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const {
-    facetMap, setFacetMap, setSelectedFacet, loadingSideBar, logout,
+    facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    facetLabelMenu, setFacetMenuLabel, selected, setSelected, onDeleteFacet,
-    expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar
-  } = useContext(AppContext);
-  const [renamingFacet, setRenamingFacet] = useState();
+    facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
+    enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
+  const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-  useEffect(() => { setExpanded(['Facet-1']); }, []);
+  useEffect(() => { setExpanded([defaultFacetName]); }, []);
 
   const addFacet = (autoNumber = facetMap.size + 1) => {
     const newName = `Facet-${autoNumber}`;
@@ -117,7 +114,6 @@ export default function FacetTreeSideBar() {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
-    setSelected(newName);
     setExpanded([newName]);
   };
 
@@ -154,14 +150,27 @@ export default function FacetTreeSideBar() {
             setRenamingFacet(facetLabelMenu);
             handleCloseMenuEl();
           }}
-          onRenameCancelClick={() => setRenamingFacet(undefined)}
-          onRenameSaveClick={(e) => {
-            facetMap.set(e, facetMap.get(facet.name));
+          onRenameCancelClick={() => {
+            setRenamingFacet(false);
+          }}
+          onRenameSaveClick={(newFacetName) => {
+            if (newFacetName === facet.name) {
+              setRenamingFacet(false);
+              return;
+            }
+            if (facetMap.has(newFacetName)) {
+              enqueueSnackbar({
+                message: `A facet already exists with the given name. Please provide a unique name for your facet.`,
+                variant: snackbar.error.text
+              });
+              return;
+            }
+            facetMap.set(newFacetName, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
-            handleCloseMenuEl();
+            setSelectedFacet(newFacetName);
           }}
-          renamingFacet={renamingFacet === facet.name}
+          renamingFacet={renamingFacet === facet?.name}
           isFacet={true}
         >
           {value && value.map((domElement, index) => (
@@ -241,7 +250,6 @@ export default function FacetTreeSideBar() {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
-            selected={selected}
           >
             {itemsElement}
           </TreeView>

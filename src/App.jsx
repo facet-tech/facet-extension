@@ -30,15 +30,15 @@ function App() {
 
   useEffect(() => {
     loadLocalStorageValues();
-  }, [setIsPluginEnabled]);
-
-  if (isPluginEnabled) {
+    if (!isPluginEnabled) {
+      return;
+    }
     if (showSideBar) {
       updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     } else {
       updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
     }
-  }
+  }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
   if (!isPluginEnabled) {

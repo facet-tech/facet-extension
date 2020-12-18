@@ -57,15 +57,18 @@ const useTreeItemStyles = makeStyles((theme) => ({
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, color,
-        bgColor, onRenameItem, renamingFacet,
+    const { labelText, labelIcon: LabelIcon, labelInfo,
+        color, bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
-    const { handleClickMenuEl, onGotoClick, setExpanded, setSelectedFacet, setSelected, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
-    const [renameValue, setRenameValue] = useState('');
+    const {
+        handleClickMenuEl, onGotoClick, setExpanded,
+        onDeleteFacet, onFacetClick,
+        selectedFacet, setSelectedFacet } = useContext(AppContext);
+    const [renameValue, setRenameValue] = useState(labelText);
 
     const defaultElement =
         <div>
-            <div onClick={() => { if (props.isFacet) { onFacetClick(labelText) } }} className={classes.labelRoot}>
+            <div className={classes.labelRoot}>
                 <div>
                     <Typography
                         style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
@@ -77,21 +80,23 @@ function StyledTreeItem(props) {
                 {props.isFacet ?
                     <>
                         <div>
-                            <FacetIconButton name="eye-outline" />
+                            <FacetIconButton fill={colorConstant.grayA} name="eye-outline" />
                         </div>
                         <div>
-                            <FacetIconButton name="more-vertical-outline" onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
-                            <FacetMenu gotoClick={() => { onGotoClick() }} deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
+                                onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelectedFacet(labelText); }} />
+                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }}
+                                deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
                     : <>
                         <div></div>
                         <div>
-                            <FacetIconButton customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
+                            <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
                         </div></>
                 }
             </div>
-        </div>;
+        </div >;
 
     const keyPress = (e) => {
         if (e.key === "Escape") {
@@ -103,13 +108,8 @@ function StyledTreeItem(props) {
     }
 
     const duringRenameElement = <div>
-        <Typography
-            style={{ color: colorConstant.lightGray }}
-            className={classes.labelText}
-            variant="body2">
-            {labelText}
-        </Typography>
         <FacetInput
+            value={renameValue}
             inputRef={input => input && input.focus()}
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
@@ -126,10 +126,9 @@ function StyledTreeItem(props) {
         <TreeItem
             {...other}
             // check if those are needed
-            onClick={(e) => { e.preventDefault(); }}
+            onClick={(e) => { if (props.isFacet) { onFacetClick(labelText) }; e.preventDefault(); }}
             onLabelClick={(e) => { e.preventDefault(); }}
             onIconClick={(e) => { e.preventDefault(); }}
-            // disableSelection={true}
             label={
                 renamingFacet ? duringRenameElement : defaultElement
             }

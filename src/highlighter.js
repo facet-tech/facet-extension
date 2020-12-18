@@ -30,6 +30,25 @@ const performDOMTransformation = () => {
     })
 }
 
+let selectedFacet;
+const setSelectedFacetHighlighter = (value) => {
+    selectedFacet = value;
+}
+
+const getSelectedFacet = () => {
+    return selectedFacet;
+}
+
+let facetMap;
+
+let getFacetMap = (value) => {
+    return facetMap;
+}
+
+let setFacetMapHighlighter = (value) => {
+    facetMap = value;
+}
+
 // facetMap & setFacetMap
 // singletons
 let domainId;
@@ -102,9 +121,9 @@ const loadInitialState = (facetMap) => {
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
-    const selectedFacet = event.currentTarget.selectedFacet;
+    const selectedFacet = getSelectedFacet();
+    const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
-    const facetMap = event.currentTarget.facetMap;
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
     if (allPaths.includes(domPath)) {
@@ -163,6 +182,7 @@ function getDomPath(el) {
  */
 const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
     try {
+        console.log('-----------TRIGGERRING UPDATING EVENTS-----------')
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
         if (!workspaceId) {
@@ -182,7 +202,6 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {
                     // attaching these parameters into the event
-                    e.selectedFacet = selectedFacet;
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;
                     e.enqueueSnackbar = enqueueSnackbar;
@@ -197,9 +216,14 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
                         e.style.cursor = "cursor";
                     }
                 });
+        console.log('---------FINISHED UPDATING EVENTS-----------')
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
 }
 
-export { updateEvents, onMouseEnterHandle, loadInitialState, performDOMTransformation };
+export {
+    updateEvents, onMouseEnterHandle, loadInitialState,
+    performDOMTransformation, setSelectedFacetHighlighter,
+    setFacetMapHighlighter
+};

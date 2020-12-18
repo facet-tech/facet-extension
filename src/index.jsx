@@ -18,12 +18,11 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
-import { color } from './shared/constant.js';
 
 Amplify.configure(awsExports);
 
 const snackbarConfig = {
-  autoHideDuration: 3000,
+  autoHideDuration: 5000,
   vertical: 'bottom',
   horizontal: 'left'
 }
@@ -46,7 +45,6 @@ if (process.env.NODE_ENV !== 'development') {
   */
 chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
   async (request, sender, sendResponse) => {
-    console.log('AKOUW', request);
     if (request.data === ChromeRequestType.GET_LOGGED_IN_USER) {
       const data = await AmplifyService.getCurrentSession();
       sendResponse({

@@ -15,7 +15,6 @@ const StyledMenu = withStyles({
 })((props) => (
   <Menu
     MenuListProps={{ disablePadding: true }}
-    backgroundColor={color.darkGray}
     getContentAnchorEl={null}
     {...props}
   />
@@ -33,15 +32,14 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function FacetMenu({ onRenameClick, gotoClick, deleteClick }) {
-  const { handleClickMenuEl, handleCloseMenuEl, menuAnchorEl, selected, selectedFacet } = useContext(AppContext);
+export default function FacetMenu({ isOpen = false, onRenameClick, gotoClick, deleteClick }) {
+  const { handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
   return (
     <div>
       <StyledMenu
         id="facet-menu"
         anchorEl={menuAnchorEl}
-        keepMounted
-        open={Boolean(menuAnchorEl)}
+        open={Boolean(menuAnchorEl && isOpen)}
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>

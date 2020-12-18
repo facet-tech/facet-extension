@@ -17,6 +17,8 @@ import parsePath from './shared/parsePath';
 import $ from 'jquery';
 import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
+import useSelectedFacet from './shared/hooks/useSelectedFacet';
+import useFacetMap from './shared/hooks/useFacetMap';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -32,13 +34,12 @@ const AppProvider = ({ children }) => {
   const [addedElements, setAddedElements] = useState(new Map());
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
-  const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState([]);
-  const [selectedFacet, setSelectedFacet] = useState('Facet-1');
-  const [facetMap, setFacetMap] = useState(new Map([['Facet-1', []]]));
+  const [facetMap, setFacetMap] = useFacetMap();
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
+  const [selectedFacet, setSelectedFacet] = useSelectedFacet();
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -101,6 +102,21 @@ const AppProvider = ({ children }) => {
     triggerDOMReload();
   }
 
+  const persistLogin = async (email, password) => {
+    await setKeyInLocalStorage(storage.isPluginEnabled, true);
+    await setKeyInLocalStorage(storage.username, email);
+    await setKeyInLocalStorage(storage.password, password);
+    await Auth.signIn(email, password);
+    const workspaceResponse = await getOrCreateWorkspace(email);
+    await setKeyInLocalStorage(api.workspace.workspaceId,
+      workspaceResponse?.response?.workspaceId);
+    setCurrAuthState(authStateConstant.signedIn);
+    setAuthObject({
+      ...authObject,
+      email,
+    });
+  }
+
   const onLoginClick = (val) => {
     setLoadLogin(val);
   }
@@ -142,9 +158,6 @@ const AppProvider = ({ children }) => {
   const onSaveClick = async () => {
     try {
       await saveFacets(facetMap, enqueueSnackbar);
-      if (!isDevelopment()) {
-        window.location.reload();
-      }
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
@@ -236,7 +249,6 @@ const AppProvider = ({ children }) => {
       return;
     }
     setExpanded([labelText]);
-    setSelected(labelText);
     setSelectedFacet(labelText);
   }
 
@@ -257,7 +269,6 @@ const AppProvider = ({ children }) => {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
-    setSelected(newName);
     setExpanded([newName]);
   };
 
@@ -303,14 +314,13 @@ const AppProvider = ({ children }) => {
       facetLabelMenu,
       setFacetMenuLabel,
       onGotoClick,
-      selected,
-      setSelected,
       onDeleteFacet,
       onDeleteDOMElement,
       expanded,
       setExpanded,
       onFacetClick,
       addFacet,
+      persistLogin,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
