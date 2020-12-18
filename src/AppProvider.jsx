@@ -34,7 +34,6 @@ const AppProvider = ({ children }) => {
   const [addedElements, setAddedElements] = useState(new Map());
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
-  const [selected, setSelected] = useState([]);
   const [expanded, setExpanded] = useState([]);
   const [facetMap, setFacetMap] = useFacetMap();
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
@@ -239,7 +238,6 @@ const AppProvider = ({ children }) => {
       return;
     }
     setExpanded([labelText]);
-    setSelected(labelText);
     setSelectedFacet(labelText);
   }
 
@@ -260,7 +258,6 @@ const AppProvider = ({ children }) => {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
-    setSelected(newName);
     setExpanded([newName]);
   };
 
@@ -306,8 +303,6 @@ const AppProvider = ({ children }) => {
       facetLabelMenu,
       setFacetMenuLabel,
       onGotoClick,
-      selected,
-      setSelected,
       onDeleteFacet,
       onDeleteDOMElement,
       expanded,

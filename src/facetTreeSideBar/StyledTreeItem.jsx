@@ -61,7 +61,7 @@ function StyledTreeItem(props) {
         color, bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const {
-        handleClickMenuEl, onGotoClick, setExpanded, selected,
+        handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick,
         selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
@@ -84,9 +84,9 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
-                                onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelected(labelText); setSelectedFacet(labelText); }} />
+                                onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelectedFacet(labelText); }} />
                             <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }}
-                                deleteClick={() => { onDeleteFacet(selected) }} onRenameClick={() => onRenameItem(selected)} />
+                                deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
                     : <>

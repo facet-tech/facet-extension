@@ -102,7 +102,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    facetLabelMenu, selected, setSelected, expanded, setExpanded, onDeleteDOMElement,
+    facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
     enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   console.log('facetMap', facetMap);
@@ -117,7 +117,6 @@ export default function FacetTreeSideBar() {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
-    setSelected(newName);
     setExpanded([newName]);
   };
 
@@ -244,7 +243,6 @@ export default function FacetTreeSideBar() {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             expanded={expanded}
-            selected={selected}
           >
             {itemsElement}
           </TreeView>
