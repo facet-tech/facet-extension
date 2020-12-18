@@ -106,7 +106,8 @@ export default function FacetTreeSideBar() {
     facetLabelMenu, selected, setSelected, expanded, setExpanded, onDeleteDOMElement,
     enqueueSnackbar } = useContext(AppContext);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
-  const [renamingFacet, setRenamingFacet] = useState();
+  const [renamingFacet, setRenamingFacet] = useState(false);
+  console.log('RENAMING', renamingFacet);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
 
@@ -143,6 +144,7 @@ export default function FacetTreeSideBar() {
 
   const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
     : facetArray.map((facet) => {
+      console.log('FACET!!!', facet);
       const { value } = facet;
 
       return (
@@ -152,17 +154,19 @@ export default function FacetTreeSideBar() {
           labelText={`${facet.name}`}
           labelIcon={ChangeHistoryIcon}
           onRenameItem={() => {
-            setRenamingFacet(facetLabelMenu);
+            // setRenamingFacet(facetLabelMenu);
             handleCloseMenuEl();
           }}
-          onRenameCancelClick={() => setRenamingFacet(undefined)}
+          onRenameCancelClick={() => {
+            // setRenamingFacet(undefined);
+          }}
           onRenameSaveClick={(e) => {
             facetMap.set(e, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
             handleCloseMenuEl();
           }}
-          renamingFacet={renamingFacet === facet.name}
+          renamingFacet={renamingFacet === facet?.name}
           isFacet={true}
         >
           {value && value.map((domElement, index) => (

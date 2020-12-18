@@ -39,7 +39,8 @@ const AppProvider = ({ children }) => {
   const [authObject, setAuthObject] = useState({ email: '', password: '' });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
-  const [selectedFacet, setSelectedFacet] = useSelectedFacet('Facet-1');
+  const [selectedFacet, setSelectedFacet] = useSelectedFacet();
+  console.log('CURRENTLY SELECTED:', selectedFacet);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -258,7 +259,6 @@ const AppProvider = ({ children }) => {
     }
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
-    setSelectedFacetVal('keepo' + autoNumber);
     setSelected(newName);
     setExpanded([newName]);
   };

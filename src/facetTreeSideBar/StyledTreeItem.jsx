@@ -58,8 +58,8 @@ const useTreeItemStyles = makeStyles((theme) => ({
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, color,
-        bgColor, onRenameItem, renamingFacet,
+    const { labelText, labelIcon: LabelIcon, labelInfo,
+        color, bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const { handleClickMenuEl, onGotoClick, setExpanded, selected, onDeleteFacet, onFacetClick } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState('');
@@ -106,6 +106,7 @@ function StyledTreeItem(props) {
         }
     }
 
+    console.log('DURING...', renamingFacet);
     const duringRenameElement = <div>
         <Typography
             style={{ color: colorConstant.lightGray }}

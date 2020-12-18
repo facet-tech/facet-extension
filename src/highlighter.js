@@ -37,6 +37,10 @@ const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
 }
 
+const getSelectedFacet = () => {
+    return selectedFacet;
+}
+
 // facetMap & setFacetMap
 // singletons
 let domainId;
@@ -109,7 +113,7 @@ const loadInitialState = (facetMap) => {
  * DOM Event Listener of Facet selection
  */
 const onMouseClickHandle = function (event) {
-    // const selectedFacet = event.currentTarget.selectedFacet;
+    const selectedFacet = getSelectedFacet();
     console.log('SELECTEFACET', selectedFacet);
     const setFacetMap = event.currentTarget.setFacetMap;
     const facetMap = event.currentTarget.facetMap;
