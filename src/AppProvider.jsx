@@ -50,9 +50,7 @@ const AppProvider = ({ children }) => {
     setMenuAnchorEl(null);
   };
 
-  const onGotoClick = () => {
-    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    // animate
+  const onGotoClick = (domPath) => {
     $(domPath).effect("shake", { direction: "up", times: 4, distance: 10 }, 1000);
     const element = $(domPath)[0];
     element?.scrollIntoView();

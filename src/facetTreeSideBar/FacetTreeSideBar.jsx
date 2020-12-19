@@ -87,7 +87,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
-    enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
+    enqueueSnackbar, setSelectedFacet, onGotoClick } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
@@ -175,6 +175,7 @@ export default function FacetTreeSideBar() {
                 facetMap.set(facet.name, arr);
                 setFacetMap(new Map(facetMap.set(facet.name, arr)));
               }}
+              onGotoItem={() => { onGotoClick(domElement.path) }}
               isFacet={false}
             />
           ))}
