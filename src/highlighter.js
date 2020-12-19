@@ -70,6 +70,14 @@ const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("cursor", "unset");
 }
 
+/**
+ * 
+ * Recursively iterates on existing domElements, and assigns the correct incremental suffix to the domElement
+ * 
+ * @param {*} elementName 
+ * @param {*} facet 
+ * @param {*} currNumber 
+ */
 const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
     const nameArr = elementName.split('-');
     if (nameArr.length === 1) {
@@ -86,7 +94,7 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
         concatenatedName += nameArr[i];
     }
     const finalResult = `${concatenatedName}-${lastNumber}`;
-    if (facet.includes(finalResult)) {
+    if (facet.filter(e => e.name === finalResult).length > 0) {
         return getIncreasedElementNameNumber(finalResult, facet, currNumber + 1);
     }
     return finalResult;
@@ -94,6 +102,7 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
 
 const convertToDomElementObject = (path, facet) => {
     let name = getElementNameFromPath(path, facet);
+    console.log('facet', facet, 'name', name);
     if (facet.filter(e => e.name === name).length > 0) {
         name = getIncreasedElementNameNumber(name, facet);
     }

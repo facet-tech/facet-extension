@@ -62,7 +62,7 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
-        onDeleteFacet, onFacetClick,
+        onDeleteFacet, onFacetClick, facetMap,
         selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
