@@ -70,9 +70,35 @@ const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("cursor", "unset");
 }
 
-const convertToDomElementObject = (path) => {
+const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
+    const nameArr = elementName.split('-');
+    if (nameArr.length === 1) {
+        const result = `${elementName}-${currNumber}`;
+        if (facet.filter(e => e.name === result).length > 0) {
+            return getIncreasedElementNameNumber(result, facet, currNumber + 1);
+        } else {
+            return result;
+        }
+    }
+    const lastNumber = parseInt(nameArr[nameArr.length - 1]) + 1;
+    let concatenatedName = '';
+    for (let i = 0; i < nameArr.length - 1; i++) {
+        concatenatedName += nameArr[i];
+    }
+    const finalResult = `${concatenatedName}-${lastNumber}`;
+    if (facet.includes(finalResult)) {
+        return getIncreasedElementNameNumber(finalResult, facet, currNumber + 1);
+    }
+    return finalResult;
+}
+
+const convertToDomElementObject = (path, facet) => {
+    let name = getElementNameFromPath(path, facet);
+    if (facet.filter(e => e.name === name).length > 0) {
+        name = getIncreasedElementNameNumber(name, facet);
+    }
     return {
-        name: getElementNameFromPath(path),
+        name,
         path: path
     }
 }
@@ -133,7 +159,7 @@ const onMouseClickHandle = function (event) {
     } else {
         // add element
         let facet = facetMap.get(selectedFacet) || [];
-        const domElementObj = convertToDomElementObject(domPath);
+        const domElementObj = convertToDomElementObject(domPath, facet);
         facet.push(domElementObj)
         setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
         event.target.style.setProperty("opacity", "0.3", "important");
