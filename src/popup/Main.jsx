@@ -136,7 +136,7 @@ export default () => {
           <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
         </div>
         <div>
-          <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
+          <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
         </div>
       </GridDiv>
       <GridDivTwoColumn>

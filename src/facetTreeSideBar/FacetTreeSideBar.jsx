@@ -203,15 +203,15 @@ export default function FacetTreeSideBar() {
           <div className={classes.gridDiv}>
             <TopDiv>
               <div>
-                <FacetImage src={facetTypography} />
+                <FacetImage title="facet" href="https://facet.ninja/" src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton name="info-outline" onClick={() => {
+                <FacetIconButton title="info" name="info-outline" onClick={() => {
                   chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
                 }} />
               </div>
               <div>
-                <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
+                <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
               </div>
             </TopDiv>
             <br />
@@ -219,9 +219,9 @@ export default function FacetTreeSideBar() {
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
               <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
-              <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton fill={color.ice} name="copy" onClick={() => {
+                <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {
                   enqueueSnackbar({
                     message: `Copied snippet to clipboard!`,
                     variant: snackbar.info.text
