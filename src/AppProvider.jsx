@@ -30,7 +30,6 @@ const AppProvider = ({ children }) => {
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
   const [disabledFacets, setDisabledFacets] = useState([]);
-  const [newlyAddedFacet, setNewlyAddedFacet] = useState('Default-Facet');
   const [addedElements, setAddedElements] = useState(new Map());
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
@@ -50,9 +49,7 @@ const AppProvider = ({ children }) => {
     setMenuAnchorEl(null);
   };
 
-  const onGotoClick = () => {
-    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-    // animate
+  const onGotoClick = (domPath) => {
     $(domPath).effect("shake", { direction: "up", times: 4, distance: 10 }, 1000);
     const element = $(domPath)[0];
     element?.scrollIntoView();
@@ -79,9 +76,11 @@ const AppProvider = ({ children }) => {
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
     if (keys.length > 0) {
-      setSelectedFacet(keys[keys.length - 1]);
+      setSelectedFacet();
+      setExpanded([keys[keys.length - 1]]);
     } else {
       setSelectedFacet(defaultFacet);
+      setExpanded([defaultFacet]);
     }
   };
 
@@ -234,7 +233,6 @@ const AppProvider = ({ children }) => {
       return;
     }
     setAddedFacets([label, ...addedFacets]);
-    setNewlyAddedFacet(label);
     enqueueSnackbar({
       message: `Facet "${label}" was created!`,
       variant: snackbar.success.text
@@ -281,8 +279,6 @@ const AppProvider = ({ children }) => {
       onFacetAdd,
       addedFacets,
       setAddedFacets,
-      newlyAddedFacet,
-      setNewlyAddedFacet,
       addedElements,
       setAddedElements,
       canDeleteElement,

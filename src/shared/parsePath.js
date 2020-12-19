@@ -36,8 +36,7 @@ const getElementNameFromPath = (path) => {
         return 'element';
     }
     const str = splitArr[splitArr.length - 1];
-    return str.length > 15 ?
-        `${str.substring(0, 15)}...` : splitArr[splitArr.length - 1];
+    return str.length > 15 ? `${str.substring(0, 15)}...` : splitArr[splitArr.length - 1];
 }
 
 export { getElementNameFromPath };

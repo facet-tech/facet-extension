@@ -70,9 +70,44 @@ const onMouseLeaveHandle = function (event) {
     event.target.style.setProperty("cursor", "unset");
 }
 
-const convertToDomElementObject = (path) => {
+/**
+ * 
+ * Recursively iterates on existing domElements, and assigns the correct incremental suffix to the domElement
+ * 
+ * @param {*} elementName 
+ * @param {*} facet 
+ * @param {*} currNumber 
+ */
+const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
+    const nameArr = elementName.split('-');
+    if (nameArr.length === 1) {
+        const result = `${elementName}-${currNumber}`;
+        if (facet.filter(e => e.name === result).length > 0) {
+            return getIncreasedElementNameNumber(result, facet, currNumber + 1);
+        } else {
+            return result;
+        }
+    }
+    const lastNumber = parseInt(nameArr[nameArr.length - 1]) + 1;
+    let concatenatedName = '';
+    for (let i = 0; i < nameArr.length - 1; i++) {
+        concatenatedName += nameArr[i];
+    }
+    const finalResult = `${concatenatedName}-${lastNumber}`;
+    if (facet.filter(e => e.name === finalResult).length > 0) {
+        return getIncreasedElementNameNumber(finalResult, facet, currNumber + 1);
+    }
+    return finalResult;
+}
+
+const convertToDomElementObject = (path, facet) => {
+    let name = getElementNameFromPath(path, facet);
+    console.log('facet', facet, 'name', name);
+    if (facet.filter(e => e.name === name).length > 0) {
+        name = getIncreasedElementNameNumber(name, facet);
+    }
     return {
-        name: getElementNameFromPath(path),
+        name,
         path: path
     }
 }
@@ -133,7 +168,7 @@ const onMouseClickHandle = function (event) {
     } else {
         // add element
         let facet = facetMap.get(selectedFacet) || [];
-        const domElementObj = convertToDomElementObject(domPath);
+        const domElementObj = convertToDomElementObject(domPath, facet);
         facet.push(domElementObj)
         setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
         event.target.style.setProperty("opacity", "0.3", "important");
@@ -197,7 +232,6 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
             enqueueSnackbar = eSBar;
         }
 
-        //> :not(#facet-menu) *
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {

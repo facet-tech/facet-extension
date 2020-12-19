@@ -62,7 +62,7 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
-        onDeleteFacet, onFacetClick,
+        onDeleteFacet, onFacetClick, facetMap,
         selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
@@ -84,13 +84,21 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
-                                onClick={(e) => { handleClickMenuEl(e, labelText); setExpanded([labelText]); setSelectedFacet(labelText); }} />
-                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => { onGotoClick() }}
+                                onClick={(e) => {
+                                    handleClickMenuEl(e, labelText); setExpanded([labelText]);
+                                    setSelectedFacet(labelText);
+                                }} />
+                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => {
+                                const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+                                onGotoClick(domPath);
+                            }}
                                 deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
                     : <>
-                        <div></div>
+                        <div>
+                            <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onGotoItem()} name="diagonal-arrow-right-up-outline" />
+                        </div>
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
                         </div></>

@@ -66,20 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDiv: {
     display: 'grid'
-  },
-  fabGrid: {
-    display: 'grid',
-    alignItems: 'end',
-    justifyContent: 'end',
-    margin: '1rem',
-  },
-  fabBtn: {
-    color: color.ice,
-    fill: color.ice,
-    backgroundColor: color.darkGray,
-    '&:hover': {
-      backgroundColor: color.darkGray,
-    },
   }
 }));
 
@@ -101,7 +87,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
-    enqueueSnackbar, selectedFacet, setSelectedFacet } = useContext(AppContext);
+    enqueueSnackbar, setSelectedFacet, onGotoClick } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
@@ -173,25 +159,29 @@ export default function FacetTreeSideBar() {
           renamingFacet={renamingFacet === facet?.name}
           isFacet={true}
         >
-          {value && value.map((domElement, index) => (
-            <StyledTreeItem
-              onMouseOver={() => onMouseEnterHandle(domElement.path)}
-              onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
-              nodeId={`${facet.name}-element-${index + 1}`}
-              key={`${facet.name}-element-${index + 1}`}
-              labelText={domElement.name}
-              labelIcon={WebAssetIcon}
-              onDeleteItem={() => {
-                // TODO move on individual function on the Provider
-                onDeleteDOMElement(domElement.path);
-                let arr = facetMap.get(facet.name);
-                arr = arr.filter((e) => e.name !== domElement.name);
-                facetMap.set(facet.name, arr);
-                setFacetMap(new Map(facetMap.set(facet.name, arr)));
-              }}
-              isFacet={false}
-            />
-          ))}
+          {value && value.map((domElement, index) => {
+            return (
+              <StyledTreeItem
+                onMouseOver={() => onMouseEnterHandle(domElement.path)}
+                onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
+                nodeId={`${facet.name}-element-${index + 1}`}
+                key={`${facet.name}-element-${index + 1}`}
+                labelText={domElement.name}
+                labelIcon={WebAssetIcon}
+                onDeleteItem={() => {
+                  // TODO move on individual function on the Provider
+                  onDeleteDOMElement(domElement.path);
+                  let arr = facetMap.get(facet.name);
+                  arr = arr.filter((e) => e.name !== domElement.name);
+                  facetMap.set(facet.name, arr);
+                  setFacetMap(new Map(facetMap.set(facet.name, arr)));
+                }}
+                onGotoItem={() => { onGotoClick(domElement.path); }}
+                isFacet={false}
+              />
+            )
+          }
+          )}
         </StyledTreeItem>
       );
     });
@@ -217,15 +207,15 @@ export default function FacetTreeSideBar() {
           <div className={classes.gridDiv}>
             <TopDiv>
               <div>
-                <FacetImage src={facetTypography} />
+                <FacetImage title="facet" href="https://facet.ninja/" src={facetTypography} />
               </div>
               <div>
-                <FacetIconButton name="info-outline" onClick={() => {
+                <FacetIconButton title="info" name="info-outline" onClick={() => {
                   chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
                 }} />
               </div>
               <div>
-                <FacetIconButton onClick={() => { logout() }} name="log-out-outline" size="large" />
+                <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
               </div>
             </TopDiv>
             <br />
@@ -233,9 +223,9 @@ export default function FacetTreeSideBar() {
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
               <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
-              <FacetIconButton name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
-                <FacetIconButton fill={color.ice} name="copy" onClick={() => {
+                <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {
                   enqueueSnackbar({
                     message: `Copied snippet to clipboard!`,
                     variant: snackbar.info.text
