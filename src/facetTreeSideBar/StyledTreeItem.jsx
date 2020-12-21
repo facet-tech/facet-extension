@@ -22,8 +22,9 @@ const useTreeItemStyles = makeStyles((theme) => ({
             backgroundColor: 'transparent',
         },
     },
+    // color of the dropdown
     content: {
-        "& svg": {
+        "& .MuiTreeItem-iconContainer svg": {
             fill: color.lightGray,
         }
     },
@@ -53,6 +54,12 @@ const useTreeItemStyles = makeStyles((theme) => ({
         paddingRight: 0,
         padding: 0
     },
+    renameDiv: {
+        display: 'grid',
+        gridTemplateColumns: '60% 10% 10%',
+        columnGap: '7%',
+        alignItems: 'end'
+    }
 }));
 
 function StyledTreeItem(props) {
@@ -115,19 +122,15 @@ function StyledTreeItem(props) {
         }
     }
 
-    const duringRenameElement = <div>
+    const duringRenameElement = <div className={classes.renameDiv}>
         <FacetInput
             value={renameValue}
             inputRef={input => input && input.focus()}
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
         </FacetInput>
-        <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
-            <CheckIcon color="inherit" className={classes.labelIcon} />
-        </IconButton>
-        <IconButton onClick={() => { onRenameCancelClick() }} aria-label="delete" component="span">
-            <CancelIcon color="inherit" className={classes.labelIcon} />
-        </IconButton>
+        <FacetIconButton name="checkmark-outline" onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span" />
+        <FacetIconButton name="close-circle" onClick={() => { onRenameCancelClick() }} aria-label="delete" component="span" />
     </div>;
 
     return (
