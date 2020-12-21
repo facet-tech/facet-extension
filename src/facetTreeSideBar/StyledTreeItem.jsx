@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import CheckIcon from '@material-ui/icons/Check';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
@@ -108,7 +105,8 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
-                        </div></>
+                        </div>
+                    </>
                 }
             </div>
         </div >;

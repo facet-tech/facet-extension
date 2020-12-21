@@ -161,24 +161,26 @@ export default function FacetTreeSideBar() {
         >
           {value && value.map((domElement, index) => {
             return (
-              <StyledTreeItem
-                onMouseOver={() => onMouseEnterHandle(domElement.path)}
-                onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
-                nodeId={`${facet.name}-element-${index + 1}`}
-                key={`${facet.name}-element-${index + 1}`}
-                labelText={domElement.name}
-                labelIcon={WebAssetIcon}
-                onDeleteItem={() => {
-                  // TODO move on individual function on the Provider
-                  onDeleteDOMElement(domElement.path);
-                  let arr = facetMap.get(facet.name);
-                  arr = arr.filter((e) => e.name !== domElement.name);
-                  facetMap.set(facet.name, arr);
-                  setFacetMap(new Map(facetMap.set(facet.name, arr)));
-                }}
-                onGotoItem={() => { onGotoClick(domElement.path); }}
-                isFacet={false}
-              />
+              <>
+                <StyledTreeItem
+                  onMouseOver={() => onMouseEnterHandle(domElement.path)}
+                  onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
+                  nodeId={`${facet.name}-element-${index + 1}`}
+                  key={`${facet.name}-element-${index + 1}`}
+                  labelText={domElement.name}
+                  labelIcon={WebAssetIcon}
+                  onDeleteItem={() => {
+                    // TODO move on individual function on the Provider
+                    onDeleteDOMElement(domElement.path);
+                    let arr = facetMap.get(facet.name);
+                    arr = arr.filter((e) => e.name !== domElement.name);
+                    facetMap.set(facet.name, arr);
+                    setFacetMap(new Map(facetMap.set(facet.name, arr)));
+                  }}
+                  onGotoItem={() => { onGotoClick(domElement.path); }}
+                  isFacet={false}
+                />
+              </>
             )
           }
           )}
