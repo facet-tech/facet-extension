@@ -43,7 +43,6 @@ export default function FacetMenu({ isOpen = false, onRenameClick, gotoClick, de
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={() => { gotoClick(); }}>Go to</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>

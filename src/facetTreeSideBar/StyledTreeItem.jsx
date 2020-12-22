@@ -89,13 +89,15 @@ function StyledTreeItem(props) {
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
                                 onClick={(e) => {
-                                    handleClickMenuEl(e, labelText); setExpanded([labelText]);
+                                    handleClickMenuEl(e, labelText);
+                                    setExpanded([labelText]);
                                     setSelectedFacet(labelText);
                                 }} />
-                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => {
-                                const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-                                onGotoClick(domPath);
-                            }}
+                            <FacetMenu isOpen={labelText === selectedFacet}
+                                gotoClick={() => {
+                                    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+                                    onGotoClick(domPath);
+                                }}
                                 deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
