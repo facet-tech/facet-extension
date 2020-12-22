@@ -100,7 +100,7 @@ function StyledTreeItem(props) {
                         </div>
                     </>
                     : <>
-                        <div>
+                        <div style={{ marginBottom: '.4rem' }}>
                             <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onGotoItem()} name="diagonal-arrow-right-up-outline" />
                         </div>
                         <div>
