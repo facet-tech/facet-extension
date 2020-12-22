@@ -21,12 +21,11 @@ const useStyles = makeStyles({
 
 export default ({ name, size = "small", fill = color.lightGray,
     isSelected = false, customHeight, width, children, ...other }) => {
-
     const classes = useStyles({ isSelected, width });
-
     useEffect(() => {
+        console.log('NAME', name);
         eva.replace();
-    }, []);
+    }, [name]);
 
     return <IconButton
         {...other}
@@ -40,7 +39,6 @@ export default ({ name, size = "small", fill = color.lightGray,
             fill={fill}
             data-eva={name}
             data-eva-hover="true"
-            data-eva-infinite="true"
         />
         {children}
     </IconButton>

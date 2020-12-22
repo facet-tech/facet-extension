@@ -39,6 +39,7 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
+  const [enabledFacets, setEnabledFacets] = useState([]);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -320,7 +321,7 @@ const AppProvider = ({ children }) => {
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-      currAuthState, setCurrAuthState, jwt, setJwt
+      currAuthState, setCurrAuthState, jwt, setJwt, enabledFacets, setEnabledFacets
     }}
     >
       {children}

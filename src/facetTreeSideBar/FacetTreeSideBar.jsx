@@ -224,7 +224,7 @@ export default function FacetTreeSideBar() {
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
+              <FacetIconButton name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" size="small" aria-label="Delete All" />
               <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
                 <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {

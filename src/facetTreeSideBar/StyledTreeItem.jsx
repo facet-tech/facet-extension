@@ -59,7 +59,15 @@ const useTreeItemStyles = makeStyles((theme) => ({
     }
 }));
 
+let generateId = () => {
+    return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+}
 function StyledTreeItem(props) {
+
+
+
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo,
         color, bgColor, onRenameItem, renamingFacet,
@@ -67,27 +75,45 @@ function StyledTreeItem(props) {
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
-        selectedFacet, setSelectedFacet } = useContext(AppContext);
+        selectedFacet, setSelectedFacet, enabledFacets, setEnabledFacets } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
+    const enableFacetIconBtn = <FacetIconButton name="eye-outline" onClick={() => {
+        setEnabledFacets([...enabledFacets, labelText])
+    }}
+        fill={colorConstant.grayA} />;
+
+    const disableFacetIconBtn = <FacetIconButton
+        onClick={() => {
+            setEnabledFacets(enabledFacets?.filter(e => e !== labelText));
+        }}
+        fill={colorConstant.grayA}
+        name={"eye-off-outline"} />;
+
     const defaultElement =
-        <div>
+        <div key={generateId(6)}>
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
-                        style={{ color: colorConstant.ice, margin: props.isFacet ? '0' : '0 0 .4rem 1rem' }}
+                        style={{
+                            color: colorConstant.ice,
+                            margin: props.isFacet ? '0' : '0 0 .4rem 1rem'
+                        }}
                         variant="body2"
                         className={classes.labelText}>
                         {onRenameItem ? <b>{labelText}</b> : labelText}
                     </Typography>
                 </div>
+
                 {props.isFacet ?
                     <>
                         <div>
-                            <FacetIconButton fill={colorConstant.grayA} name="eye-outline" />
+                            {!enabledFacets.includes(labelText) ? enableFacetIconBtn : disableFacetIconBtn}
                         </div>
                         <div>
-                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
+                            <FacetIconButton
+                                fill={colorConstant.grayA}
+                                name="more-vertical-outline"
                                 onClick={(e) => {
                                     handleClickMenuEl(e, labelText);
                                     setExpanded([labelText]);
@@ -158,13 +184,5 @@ function StyledTreeItem(props) {
         />
     );
 }
-
-StyledTreeItem.propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string,
-    labelIcon: PropTypes.elementType.isRequired,
-    labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired,
-};
 
 export default StyledTreeItem;

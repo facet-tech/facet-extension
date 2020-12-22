@@ -160,19 +160,11 @@ const onMouseClickHandle = function (event) {
     const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
     const domPath = getDomPath(event.target);
-    const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
-    if (allPaths.includes(domPath)) {
-        // remove element
-        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
-        event.target.style.setProperty("opacity", "unset");
-    } else {
-        // add element
-        let facet = facetMap.get(selectedFacet) || [];
-        const domElementObj = convertToDomElementObject(domPath, facet);
-        facet.push(domElementObj)
-        setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
-        event.target.style.setProperty("opacity", "0.3", "important");
-    }
+    let facet = facetMap.get(selectedFacet) || [];
+    const domElementObj = convertToDomElementObject(domPath, facet);
+    facet.push(domElementObj)
+    setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
+    event.target.style.setProperty("opacity", "0.3", "important");
     event.preventDefault();
     event.stopPropagation();
 }
