@@ -59,7 +59,6 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
 
     // newly added values
     afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
-        console.log('@updatedDOMNonRolledOutFacets VAL!', val);
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr.forEach(element => {
@@ -150,11 +149,6 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
 }
 
 const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
-    
-    // const facetArr = facetMap.get(selectedFacet);
-    // const newFacetArr = facetArr.filter(e => e.path !== domPath);
-    // setFacetMap(new Map(facetMap.set(selectedFacet, newFacetArr)));
-
     facetMap && facetMap.forEach((facet, key) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
@@ -171,7 +165,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 }
 
 /**
- * @deprecated not need no more
+ * TODO need to refactor
  * 
  * @param {*} facetMap
  */
@@ -186,16 +180,6 @@ const loadInitialState = (facetMap) => {
             // $(domElement.path).css("opacity", "0.3", "important");
         })
     })
-}
-
-/**
- * Returns whether a facet contains a path or not
- * 
- * @param {*} facet 
- * @param {*} path 
- */
-const facetContainsPath = (facet, path) => {
-    return facet?.some(e => e.path === path);
 }
 
 /**
@@ -252,9 +236,6 @@ function getDomPath(el) {
     return withoutSpaces;
 }
 
-// TODO refactor
-// must refactor -> a lot of stuff in here...
-// this function should only register/unregister callbacks, ideally it shouldn't handle any req
 /**
  * 
  * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM

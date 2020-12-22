@@ -19,7 +19,6 @@ import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
 import useSelectedFacet from './shared/hooks/useSelectedFacet';
 import useFacetMap from './shared/hooks/useFacetMap';
-import useNonRolledOutFacets from './shared/hooks/useNonRolledOutFacets';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -40,7 +39,7 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
-  const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets([]);
+  const [nonRolledOutFacets, setNonRolledOutFacets] = useState([]);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -150,14 +149,14 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-  //   nonRolledOutFacets.forEach(facetName => {
-  //     const facetArr = facetMap.get(facetName);
-  //     facetArr.forEach(element => {
-  //       $(element.path).css("opacity", "0.3", "important");
-  //     })
-  //   });
-  // }, [nonRolledOutFacets]);
+  useEffect(() => {
+    nonRolledOutFacets.forEach(facetName => {
+      const facetArr = facetMap.get(facetName);
+      facetArr.forEach(element => {
+        $(element.path).css("opacity", "0.3", "important");
+      })
+    });
+  }, [nonRolledOutFacets]);
 
   useEffect(() => {
     loadJWT();

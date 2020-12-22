@@ -85,7 +85,7 @@ function StyledTreeItem(props) {
 
     const isEnabled = nonRolledOutFacets.includes(labelText);
     const defaultElement =
-        <div key={labelText + isEnabled + Math.floor(Math.random() * 10)}>
+        <div key={labelText + isEnabled}>
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
@@ -106,19 +106,24 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton
+                                key={labelText}
                                 fill={colorConstant.grayA}
                                 name="more-vertical-outline"
                                 onClick={(e) => {
+                                    console.log('MORE CLICKED', e)
                                     handleClickMenuEl(e, labelText);
                                     setExpanded([labelText]);
                                     setSelectedFacet(labelText);
                                 }} />
-                            <FacetMenu isOpen={labelText === selectedFacet}
+                            <FacetMenu
+                                isOpen={labelText === selectedFacet}
                                 gotoClick={() => {
-                                    const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
+                                    const domPath = facetMap.get(selectedFacet) &&
+                                        facetMap.get(selectedFacet)[0]?.path;
                                     onGotoClick(domPath);
                                 }}
-                                deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
+                                deleteClick={() => { onDeleteFacet(selectedFacet) }}
+                                onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
                     : <>
