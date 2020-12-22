@@ -75,7 +75,7 @@ function StyledTreeItem(props) {
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
-                        style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
+                        style={{ color: colorConstant.ice, margin: props.isFacet ? '0' : '0 0 .4rem 1rem' }}
                         variant="body2"
                         className={classes.labelText}>
                         {onRenameItem ? <b>{labelText}</b> : labelText}
@@ -100,7 +100,7 @@ function StyledTreeItem(props) {
                         </div>
                     </>
                     : <>
-                        <div style={{ marginBottom: '.4rem' }}>
+                        <div>
                             <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onGotoItem()} name="diagonal-arrow-right-up-outline" />
                         </div>
                         <div>
