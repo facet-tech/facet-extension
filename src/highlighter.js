@@ -11,8 +11,6 @@ import isDevelopment from './utils/isDevelopment';
  * Performs transformation on client's DOM
  */
 const performDOMTransformation = () => {
-    console.log('[facet.ninja][loader]');
-
     // push the body
     $('body').attr('style', function (i, s) {
         return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
@@ -50,7 +48,6 @@ let setFacetMapHighlighter = (value) => {
 
 let nonRolledOutFacetsHighlighter = [];
 let setNonRolledOutFacetsHighlighter = (value) => {
-    console.log('nonRolledOutFacetsHighlighter', nonRolledOutFacetsHighlighter, 'VS', value);
     updatedDOMNonRolledOutFacets(nonRolledOutFacetsHighlighter, value);
     nonRolledOutFacetsHighlighter = value;
 }
@@ -130,7 +127,6 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
 
 const convertToDomElementObject = (path, facet) => {
     let name = getElementNameFromPath(path, facet);
-    console.log('facet', facet, 'name', name);
     if (facet.filter(e => e.name === name).length > 0) {
         name = getIncreasedElementNameNumber(name, facet);
     }
@@ -245,7 +241,6 @@ function getDomPath(el) {
  */
 const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
     try {
-        console.log('-----------TRIGGERRING UPDATING EVENTS-----------')
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
         if (!workspaceId) {
@@ -278,7 +273,6 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
                         e.style.cursor = "cursor";
                     }
                 });
-        console.log('---------FINISHED UPDATING EVENTS-----------')
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }

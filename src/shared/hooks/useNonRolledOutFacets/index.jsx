@@ -9,7 +9,6 @@ const useNonRolledOutFacets = (initialValue = []) => {
     }, []);
 
     let setNonRolledOutFacetsValue = (value) => {
-        console.log('CHECKMEHAH', value);
         setNonRolledOutFacets(value);
         setNonRolledOutFacetsHighlighter(value);
     };
