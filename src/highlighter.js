@@ -56,7 +56,6 @@ let setNonRolledOutFacetsHighlighter = (value) => {
 }
 
 const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
-    // console.log(prevVal, 'afterVal', afterVal);
 
     // newly added values
     afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
@@ -68,14 +67,14 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         });
     });
 
-    // previously removed values
+    // removed values
     prevVal.filter(e => !afterVal.includes(e)).forEach(val => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr.forEach(element => {
             $(element.path).css("opacity", "unset");
         });
-    })
+    });
 
 }
 
@@ -151,22 +150,24 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
 }
 
 const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
-    const facetArr = facetMap.get(selectedFacet);
-    const newFacetArr = facetArr.filter(e => e.path !== domPath);
-    setFacetMap(new Map(facetMap.set(selectedFacet, newFacetArr)));
-    // facetMap && facetMap.forEach((facet, key) => {
-    //     var newFacetArr = facet.filter(e => e.path !== domPath);
-    //     if (facet.length !== newFacetArr.length) {
-    //         if (key !== selectedFacet) {
-    //             enqueueSnackbar({
-    //                 message: `Element was removed from the "${key}" facet.`,
-    //                 variant: snackbar.info.text
-    //             });
-    //         }
-    //         setFacetMap(new Map(facetMap.set(key, newFacetArr)));
-    //         return;
-    //     }
-    // });
+    
+    // const facetArr = facetMap.get(selectedFacet);
+    // const newFacetArr = facetArr.filter(e => e.path !== domPath);
+    // setFacetMap(new Map(facetMap.set(selectedFacet, newFacetArr)));
+
+    facetMap && facetMap.forEach((facet, key) => {
+        var newFacetArr = facet.filter(e => e.path !== domPath);
+        if (facet.length !== newFacetArr.length) {
+            if (key !== selectedFacet) {
+                enqueueSnackbar({
+                    message: `Element was removed from the "${key}" facet.`,
+                    variant: snackbar.info.text
+                });
+            }
+            setFacetMap(new Map(facetMap.set(key, newFacetArr)));
+            return;
+        }
+    });
 }
 
 /**
@@ -207,14 +208,17 @@ const onMouseClickHandle = function (event) {
     const setFacetMap = event.currentTarget.setFacetMap;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
-    if (facetContainsPath(selectedFacetName, domPath)) {
+    const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
     } else {
         const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
         selectedFacetName.push(domElementObj);
         setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
-        // event.target.style.setProperty("opacity", "0.3", "important");
+        if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
+            event.target.style.setProperty("opacity", "0.3", "important");
+        }
     }
     event.preventDefault();
     event.stopPropagation();
