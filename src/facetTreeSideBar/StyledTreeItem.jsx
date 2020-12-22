@@ -59,15 +59,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     }
 }));
 
-let generateId = () => {
-    return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-}
 function StyledTreeItem(props) {
-
-
-
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo,
         color, bgColor, onRenameItem, renamingFacet,
@@ -75,23 +67,25 @@ function StyledTreeItem(props) {
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
-        selectedFacet, setSelectedFacet, enabledFacets, setEnabledFacets } = useContext(AppContext);
+        nonRolledOutFacets, setNonRolledOutFacets,
+        selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
     const enableFacetIconBtn = <FacetIconButton name="eye-outline" onClick={() => {
-        setEnabledFacets([...enabledFacets, labelText])
+        setNonRolledOutFacets([...nonRolledOutFacets, labelText])
     }}
         fill={colorConstant.grayA} />;
 
     const disableFacetIconBtn = <FacetIconButton
         onClick={() => {
-            setEnabledFacets(enabledFacets?.filter(e => e !== labelText));
+            setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
         }}
         fill={colorConstant.grayA}
         name={"eye-off-outline"} />;
 
+    const isEnabled = nonRolledOutFacets.includes(labelText);
     const defaultElement =
-        <div key={generateId(6)}>
+        <div key={labelText + isEnabled + Math.floor(Math.random() * 10)}>
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
@@ -108,7 +102,7 @@ function StyledTreeItem(props) {
                 {props.isFacet ?
                     <>
                         <div>
-                            {!enabledFacets.includes(labelText) ? enableFacetIconBtn : disableFacetIconBtn}
+                            {!nonRolledOutFacets.includes(labelText) ? enableFacetIconBtn : disableFacetIconBtn}
                         </div>
                         <div>
                             <FacetIconButton

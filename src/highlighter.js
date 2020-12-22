@@ -30,23 +30,53 @@ const performDOMTransformation = () => {
     })
 }
 
+// TODO repetitive task; consider abstraction
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
 }
-
 const getSelectedFacet = () => {
     return selectedFacet;
 }
 
 let facetMap;
-
 let getFacetMap = (value) => {
     return facetMap;
 }
-
 let setFacetMapHighlighter = (value) => {
     facetMap = value;
+
+}
+
+let nonRolledOutFacetsHighlighter = [];
+let setNonRolledOutFacetsHighlighter = (value) => {
+    console.log('nonRolledOutFacetsHighlighter', nonRolledOutFacetsHighlighter, 'VS', value);
+    updatedDOMNonRolledOutFacets(nonRolledOutFacetsHighlighter, value);
+    nonRolledOutFacetsHighlighter = value;
+}
+
+const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
+    // console.log(prevVal, 'afterVal', afterVal);
+
+    // newly added values
+    afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
+        console.log('@updatedDOMNonRolledOutFacets VAL!', val);
+        const facetMap = getFacetMap();
+        const pathArr = facetMap.get(val);
+        pathArr.forEach(element => {
+            $(element.path).css("opacity", "0.3", "important");
+        });
+    });
+
+    // previously removed values
+    prevVal.filter(e => !afterVal.includes(e)).forEach(val => {
+        const facetMap = getFacetMap();
+        const pathArr = facetMap.get(val);
+        pathArr.forEach(element => {
+            $(element.path).css("opacity", "unset");
+        });
+    })
+
 }
 
 // facetMap & setFacetMap
@@ -121,23 +151,28 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
 }
 
 const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
-    facetMap && facetMap.forEach((facet, key) => {
-        var newFacetArr = facet.filter(e => e.path !== domPath);
-        if (facet.length !== newFacetArr.length) {
-            if (key !== selectedFacet) {
-                enqueueSnackbar({
-                    message: `Element was removed from the "${key}" facet.`,
-                    variant: snackbar.info.text
-                });
-            }
-            setFacetMap(new Map(facetMap.set(key, newFacetArr)));
-            return;
-        }
-    });
+    const facetArr = facetMap.get(selectedFacet);
+    const newFacetArr = facetArr.filter(e => e.path !== domPath);
+    setFacetMap(new Map(facetMap.set(selectedFacet, newFacetArr)));
+    // facetMap && facetMap.forEach((facet, key) => {
+    //     var newFacetArr = facet.filter(e => e.path !== domPath);
+    //     if (facet.length !== newFacetArr.length) {
+    //         if (key !== selectedFacet) {
+    //             enqueueSnackbar({
+    //                 message: `Element was removed from the "${key}" facet.`,
+    //                 variant: snackbar.info.text
+    //             });
+    //         }
+    //         setFacetMap(new Map(facetMap.set(key, newFacetArr)));
+    //         return;
+    //     }
+    // });
 }
 
 /**
- * @param {*} facetMap 
+ * @deprecated not need no more
+ * 
+ * @param {*} facetMap
  */
 const loadInitialState = (facetMap) => {
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -145,11 +180,21 @@ const loadInitialState = (facetMap) => {
         const value = facet.value;
         value && value.forEach(domElement => {
             const path = parsePath([domElement.path], true);
-            $(path[0]).css("opacity", "0.3", "important");
+            // $(path[0]).css("opacity", "0.3", "important");
             // TODO tmp hack find out why path not computing properly
-            $(domElement.path).css("opacity", "0.3", "important");
+            // $(domElement.path).css("opacity", "0.3", "important");
         })
     })
+}
+
+/**
+ * Returns whether a facet contains a path or not
+ * 
+ * @param {*} facet 
+ * @param {*} path 
+ */
+const facetContainsPath = (facet, path) => {
+    return facet?.some(e => e.path === path);
 }
 
 /**
@@ -158,13 +203,19 @@ const loadInitialState = (facetMap) => {
 const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
+
     const setFacetMap = event.currentTarget.setFacetMap;
+    let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
-    let facet = facetMap.get(selectedFacet) || [];
-    const domElementObj = convertToDomElementObject(domPath, facet);
-    facet.push(domElementObj)
-    setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
-    event.target.style.setProperty("opacity", "0.3", "important");
+    if (facetContainsPath(selectedFacetName, domPath)) {
+        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
+        event.target.style.setProperty("opacity", "unset");
+    } else {
+        const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
+        selectedFacetName.push(domElementObj);
+        setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
+        // event.target.style.setProperty("opacity", "0.3", "important");
+    }
     event.preventDefault();
     event.stopPropagation();
 }
@@ -251,5 +302,5 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
 export {
     updateEvents, onMouseEnterHandle, loadInitialState,
     performDOMTransformation, setSelectedFacetHighlighter,
-    setFacetMapHighlighter
+    setFacetMapHighlighter, setNonRolledOutFacetsHighlighter
 };

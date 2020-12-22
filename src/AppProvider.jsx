@@ -19,6 +19,7 @@ import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
 import useSelectedFacet from './shared/hooks/useSelectedFacet';
 import useFacetMap from './shared/hooks/useFacetMap';
+import useNonRolledOutFacets from './shared/hooks/useNonRolledOutFacets';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -39,7 +40,7 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
-  const [enabledFacets, setEnabledFacets] = useState([]);
+  const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets([]);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -59,6 +60,7 @@ const AppProvider = ({ children }) => {
 
   const onDeleteDOMElement = (path) => {
     try {
+      console.log('@onDeleteDOMElement');
       // TODO DOM-related stuff should be handled through highlighter
       const parsedPath = parsePath([path], false);
       const element = $(parsedPath[0])[0];
@@ -148,46 +150,21 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   nonRolledOutFacets.forEach(facetName => {
+  //     const facetArr = facetMap.get(facetName);
+  //     facetArr.forEach(element => {
+  //       $(element.path).css("opacity", "0.3", "important");
+  //     })
+  //   });
+  // }, [nonRolledOutFacets]);
+
   useEffect(() => {
     loadJWT();
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
     loadCopySnippet();
   }, [setJwt]);
-
-  const onSaveClick = async () => {
-    try {
-      await saveFacets(facetMap, enqueueSnackbar);
-    } catch (e) {
-      console.log('[ERROR] [onSaveClick] ', e);
-    }
-  };
-
-  const reset = async () => {
-    try {
-      if (!confirm("Are you sure you want to delete all your facets?")) {
-        return;
-      }
-
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      const domainRes = await getOrPostDomain(workspaceId);
-
-      const body = {
-        domainId: domainRes.response.id,
-        urlPath: window.location.pathname,
-      };
-      enqueueSnackbar({
-        message: 'Facets reset.',
-        variant: snackbar.success.text
-      });
-      await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
-      if (!isDevelopment()) {
-        window.location.reload();
-      }
-    } catch (e) {
-      console.log('[ERROR]', e);
-    }
-  };
 
   useEffect(() => {
     (async () => {
@@ -224,6 +201,40 @@ const AppProvider = ({ children }) => {
       setLoadingSideBar(false);
     })();
   }, []);
+
+  const onSaveClick = async () => {
+    try {
+      await saveFacets(facetMap, enqueueSnackbar);
+    } catch (e) {
+      console.log('[ERROR] [onSaveClick] ', e);
+    }
+  };
+
+  const reset = async () => {
+    try {
+      if (!confirm("Are you sure you want to delete all your facets?")) {
+        return;
+      }
+
+      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+      const domainRes = await getOrPostDomain(workspaceId);
+
+      const body = {
+        domainId: domainRes.response.id,
+        urlPath: window.location.pathname,
+      };
+      enqueueSnackbar({
+        message: 'Facets reset.',
+        variant: snackbar.success.text
+      });
+      await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
+      if (!isDevelopment()) {
+        window.location.reload();
+      }
+    } catch (e) {
+      console.log('[ERROR]', e);
+    }
+  };
 
   const onFacetAdd = (label) => {
     if (addedFacets.includes(label)) {
@@ -321,7 +332,7 @@ const AppProvider = ({ children }) => {
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-      currAuthState, setCurrAuthState, jwt, setJwt, enabledFacets, setEnabledFacets
+      currAuthState, setCurrAuthState, jwt, setJwt, nonRolledOutFacets, setNonRolledOutFacets
     }}
     >
       {children}
