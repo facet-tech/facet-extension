@@ -58,7 +58,7 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
     afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
-        pathArr.forEach(element => {
+        pathArr?.forEach(element => {
             $(element.path).css("opacity", "0.3", "important");
         });
     });
@@ -67,7 +67,7 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
     prevVal.filter(e => !afterVal.includes(e)).forEach(val => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
-        pathArr.forEach(element => {
+        pathArr?.forEach(element => {
             $(element.path).css("opacity", "unset");
         });
     });
@@ -161,21 +161,27 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 }
 
 /**
- * TODO need to refactor
- * 
- * @param {*} facetMap
+ *  @param {*} facetMap
+ *  @param {*} setNonRolledOutFacets
  */
-const loadInitialState = (facetMap) => {
+const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
+    let nonRolledOutFacets = [];
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
         const value = facet.value;
-        value && value.forEach(domElement => {
-            const path = parsePath([domElement.path], true);
-            // $(path[0]).css("opacity", "0.3", "important");
-            // TODO tmp hack find out why path not computing properly
-            // $(domElement.path).css("opacity", "0.3", "important");
+        if (value.enabled) {
+            nonRolledOutFacets.push(facet.name);
+        }
+        value.forEach(val => {
+            if (!val.enabled) {
+                return;
+            }
+            const path = parsePath([val.path], true);
+            $(path[0]).css("opacity", "0.3", "important");
+            $(val.path).css("opacity", "0.3", "important");
         })
-    })
+    });
+    setNonRolledOutFacets(nonRolledOutFacets);
 }
 
 /**
@@ -277,7 +283,7 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
 }
 
 export {
-    updateEvents, onMouseEnterHandle, loadInitialState,
+    updateEvents, onMouseEnterHandle, loadInitialStateInDOM,
     performDOMTransformation, setSelectedFacetHighlighter,
     setFacetMapHighlighter, setNonRolledOutFacetsHighlighter
 };

@@ -109,7 +109,6 @@ function StyledTreeItem(props) {
                                 fill={colorConstant.grayA}
                                 name="more-vertical-outline"
                                 onClick={(e) => {
-                                    console.log('MORE CLICKED', e)
                                     handleClickMenuEl(e, labelText);
                                     setExpanded([labelText]);
                                     setSelectedFacet(labelText);

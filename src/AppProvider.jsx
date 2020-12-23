@@ -10,7 +10,7 @@ import {
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
-import { loadInitialState } from './highlighter';
+import { loadInitialStateInDOM } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -152,7 +152,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     nonRolledOutFacets.forEach(facetName => {
       const facetArr = facetMap.get(facetName);
-      facetArr.forEach(element => {
+      facetArr?.forEach(element => {
         $(element.path).css("opacity", "0.3", "important");
       })
     });
@@ -189,13 +189,14 @@ const AppProvider = ({ children }) => {
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+        // TODO COMPUTE nonRolledOutFacets
         if (fMap.size > 0) {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
         setFacetMap(new Map(fMap));
-        loadInitialState(fMap);
+        loadInitialStateInDOM(fMap, setNonRolledOutFacets);
       } else {
-        setFacetMap(new Map([['Facet-1', []]]));
+        setFacetMap(new Map([[defaultFacetName, []]]));
       }
       setLoadingSideBar(false);
     })();
@@ -203,7 +204,7 @@ const AppProvider = ({ children }) => {
 
   const onSaveClick = async () => {
     try {
-      await saveFacets(facetMap, enqueueSnackbar);
+      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar);
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
