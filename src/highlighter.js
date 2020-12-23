@@ -150,7 +150,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
                 enqueueSnackbar({
-                    message: `Element was removed from the "${key}" facet.`,
+                    message: `Element was moved from the "${key}" facet.`,
                     variant: snackbar.info.text
                 });
             }
@@ -192,13 +192,12 @@ const onMouseClickHandle = function (event) {
     if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
-    } else {
-        const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
-        selectedFacetName.push(domElementObj);
-        setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
-        if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
-            event.target.style.setProperty("opacity", "0.3", "important");
-        }
+    }
+    const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
+    selectedFacetName.push(domElementObj);
+    setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
+    if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
+        event.target.style.setProperty("opacity", "0.3", "important");
     }
     event.preventDefault();
     event.stopPropagation();
@@ -235,11 +234,10 @@ function getDomPath(el) {
 /**
  * 
  * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM
- * @param {*} selectedFacet Currently selected facet
  * @param {*} facetMap Map of facets
  * @param {*} enqueueSnackbar notification context
  */
-const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
+const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
