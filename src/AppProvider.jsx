@@ -60,7 +60,6 @@ const AppProvider = ({ children }) => {
 
   const onDeleteDOMElement = (path) => {
     try {
-      console.log('@onDeleteDOMElement');
       // TODO DOM-related stuff should be handled through highlighter
       const parsedPath = parsePath([path], false);
       const element = $(parsedPath[0])[0];

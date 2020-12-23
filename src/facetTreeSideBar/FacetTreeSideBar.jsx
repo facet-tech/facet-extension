@@ -82,7 +82,7 @@ const TopDiv = styled.div`
 
 export default function FacetTreeSideBar() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open] = useState(true);
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
