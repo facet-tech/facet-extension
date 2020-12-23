@@ -198,12 +198,13 @@ const onMouseClickHandle = function (event) {
     if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
-    }
-    const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
-    selectedFacetName.push(domElementObj);
-    setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
-    if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
-        event.target.style.setProperty("opacity", "0.3", "important");
+    } else {
+        const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
+        selectedFacetName.push(domElementObj);
+        setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
+        if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
+            event.target.style.setProperty("opacity", "0.3", "important");
+        }
     }
     event.preventDefault();
     event.stopPropagation();
