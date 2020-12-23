@@ -172,8 +172,8 @@ const getFacet = async (domainId, urlPath) => {
 /**
  * @param {*} domElementArr domElement array
  */
-const convertDOMElement = (domElementArr) => {
-    return (domElementArr && domElementArr.map(domElement => {
+const convertDOMElement = (facet) => {
+    return (facet?.domElement?.map(domElement => {
         return {
             ...domElement,
             withoutFacetizer: true
@@ -184,8 +184,9 @@ const convertDOMElement = (domElementArr) => {
 const convertGetFacetResponseToMap = (responseBody) => {
     let facetMap = new Map();
     responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
-        const transformedDomElement = convertDOMElement(facet.domElement)
-        facetMap.set(facet.name, transformedDomElement || [])
+        const element = convertDOMElement(facet)
+        element.enabled = facet.enabled;
+        facetMap.set(facet.name, element || [])
     })
     return facetMap;
 }
@@ -214,13 +215,12 @@ const generateDomElements = (domElements) => {
     return result;
 }
 
-const extractFacetArray = (facetMap) => {
+const extractFacetArray = (facetMap, nonRolledOutFacets) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
-
         return facetArray.map(facet => {
             return {
-                enabled: false,
+                enabled: nonRolledOutFacets.includes(facet.name),
                 name: facet.name,
                 domElement: generateDomElements(facetMap.get(facet.name))
             }
@@ -230,23 +230,23 @@ const extractFacetArray = (facetMap) => {
     }
 }
 
-const generateRequestBodyFromFacetMap = (facetMap, domainId) => {
+const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId) => {
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
         domainId,
         urlPath: window.location.pathname,
-        facet: extractFacetArray(facetMap),
+        facet: extractFacetArray(facetMap, nonRolledOutFacets),
         version: facetObjectVersion,
     }
     return body;
 }
 
-const saveFacets = async (facetMap, enqueueSnackbar) => {
+const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const body = generateRequestBodyFromFacetMap(facetMap, getDomainRes.response.id);
+        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar({
             message: `Hooray ~ Configuration has been saved!`,

@@ -11,8 +11,6 @@ import isDevelopment from './utils/isDevelopment';
  * Performs transformation on client's DOM
  */
 const performDOMTransformation = () => {
-    console.log('[facet.ninja][loader]');
-
     // push the body
     $('body').attr('style', function (i, s) {
         return (s || '') + `position: absolute !important;left: ${styles.drawerWidth}px !important;right: 0px !important;min-height: calc(100% - 96px) !important;overflow-x: initial !important;`;
@@ -30,23 +28,50 @@ const performDOMTransformation = () => {
     })
 }
 
+// TODO repetitive task; consider abstraction
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
 }
-
 const getSelectedFacet = () => {
     return selectedFacet;
 }
 
 let facetMap;
-
 let getFacetMap = (value) => {
     return facetMap;
 }
-
 let setFacetMapHighlighter = (value) => {
     facetMap = value;
+
+}
+
+let nonRolledOutFacetsHighlighter = [];
+let setNonRolledOutFacetsHighlighter = (value) => {
+    updatedDOMNonRolledOutFacets(nonRolledOutFacetsHighlighter, value);
+    nonRolledOutFacetsHighlighter = value;
+}
+
+const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
+
+    // newly added values
+    afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
+        const facetMap = getFacetMap();
+        const pathArr = facetMap.get(val);
+        pathArr?.forEach(element => {
+            $(element.path).css("opacity", "0.3", "important");
+        });
+    });
+
+    // removed values
+    prevVal.filter(e => !afterVal.includes(e)).forEach(val => {
+        const facetMap = getFacetMap();
+        const pathArr = facetMap.get(val);
+        pathArr?.forEach(element => {
+            $(element.path).css("opacity", "unset");
+        });
+    });
+
 }
 
 // facetMap & setFacetMap
@@ -102,7 +127,6 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
 
 const convertToDomElementObject = (path, facet) => {
     let name = getElementNameFromPath(path, facet);
-    console.log('facet', facet, 'name', name);
     if (facet.filter(e => e.name === name).length > 0) {
         name = getIncreasedElementNameNumber(name, facet);
     }
@@ -126,7 +150,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
                 enqueueSnackbar({
-                    message: `Element was removed from the "${key}" facet.`,
+                    message: `Element was moved from the "${key}" facet.`,
                     variant: snackbar.info.text
                 });
             }
@@ -137,19 +161,27 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 }
 
 /**
- * @param {*} facetMap 
+ *  @param {*} facetMap
+ *  @param {*} setNonRolledOutFacets
  */
-const loadInitialState = (facetMap) => {
+const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
+    let nonRolledOutFacets = [];
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
         const value = facet.value;
-        value && value.forEach(domElement => {
-            const path = parsePath([domElement.path], true);
+        if (value.enabled) {
+            nonRolledOutFacets.push(facet.name);
+        }
+        value.forEach(val => {
+            if (!val.enabled) {
+                return;
+            }
+            const path = parsePath([val.path], true);
             $(path[0]).css("opacity", "0.3", "important");
-            // TODO tmp hack find out why path not computing properly
-            $(domElement.path).css("opacity", "0.3", "important");
+            $(val.path).css("opacity", "0.3", "important");
         })
-    })
+    });
+    setNonRolledOutFacets(nonRolledOutFacets);
 }
 
 /**
@@ -158,20 +190,21 @@ const loadInitialState = (facetMap) => {
 const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
+
     const setFacetMap = event.currentTarget.setFacetMap;
+    let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
     if (allPaths.includes(domPath)) {
-        // remove element
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
     } else {
-        // add element
-        let facet = facetMap.get(selectedFacet) || [];
-        const domElementObj = convertToDomElementObject(domPath, facet);
-        facet.push(domElementObj)
-        setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
-        event.target.style.setProperty("opacity", "0.3", "important");
+        const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
+        selectedFacetName.push(domElementObj);
+        setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
+        if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
+            event.target.style.setProperty("opacity", "0.3", "important");
+        }
     }
     event.preventDefault();
     event.stopPropagation();
@@ -205,19 +238,14 @@ function getDomPath(el) {
     return withoutSpaces;
 }
 
-// TODO refactor
-// must refactor -> a lot of stuff in here...
-// this function should only register/unregister callbacks, ideally it shouldn't handle any req
 /**
  * 
  * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM
- * @param {*} selectedFacet Currently selected facet
  * @param {*} facetMap Map of facets
  * @param {*} enqueueSnackbar notification context
  */
-const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap, eSBar) => {
+const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
-        console.log('-----------TRIGGERRING UPDATING EVENTS-----------')
         // 1 time instantiation of singletons
         // kinda ugly, define a loader function her
         if (!workspaceId) {
@@ -250,14 +278,13 @@ const updateEvents = async (addEventsFlag, selectedFacet, facetMap, setFacetMap,
                         e.style.cursor = "cursor";
                     }
                 });
-        console.log('---------FINISHED UPDATING EVENTS-----------')
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
 }
 
 export {
-    updateEvents, onMouseEnterHandle, loadInitialState,
+    updateEvents, onMouseEnterHandle, loadInitialStateInDOM,
     performDOMTransformation, setSelectedFacetHighlighter,
-    setFacetMapHighlighter
+    setFacetMapHighlighter, setNonRolledOutFacetsHighlighter
 };

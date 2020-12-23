@@ -82,12 +82,12 @@ const TopDiv = styled.div`
 
 export default function FacetTreeSideBar() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open] = useState(true);
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    facetLabelMenu, expanded, setExpanded, onDeleteDOMElement,
-    enqueueSnackbar, setSelectedFacet, onGotoClick } = useContext(AppContext);
+    facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
+    setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
@@ -151,6 +151,9 @@ export default function FacetTreeSideBar() {
               });
               return;
             }
+            const newNonRolledOutFacets = nonRolledOutFacets.filter(e => e !== facet.name);
+            newNonRolledOutFacets.push(newFacetName);
+            setNonRolledOutFacets(newNonRolledOutFacets);
             facetMap.set(newFacetName, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));
@@ -161,24 +164,26 @@ export default function FacetTreeSideBar() {
         >
           {value && value.map((domElement, index) => {
             return (
-              <StyledTreeItem
-                onMouseOver={() => onMouseEnterHandle(domElement.path)}
-                onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
-                nodeId={`${facet.name}-element-${index + 1}`}
-                key={`${facet.name}-element-${index + 1}`}
-                labelText={domElement.name}
-                labelIcon={WebAssetIcon}
-                onDeleteItem={() => {
-                  // TODO move on individual function on the Provider
-                  onDeleteDOMElement(domElement.path);
-                  let arr = facetMap.get(facet.name);
-                  arr = arr.filter((e) => e.name !== domElement.name);
-                  facetMap.set(facet.name, arr);
-                  setFacetMap(new Map(facetMap.set(facet.name, arr)));
-                }}
-                onGotoItem={() => { onGotoClick(domElement.path); }}
-                isFacet={false}
-              />
+              <>
+                <StyledTreeItem
+                  onMouseOver={() => onMouseEnterHandle(domElement.path)}
+                  onMouseLeave={() => onMouseLeaveHandle(domElement.path)}
+                  nodeId={`${facet.name}-element-${index + 1}`}
+                  key={`${facet.name}-element-${index + 1}`}
+                  labelText={domElement.name}
+                  labelIcon={WebAssetIcon}
+                  onDeleteItem={() => {
+                    // TODO move on individual function on the Provider
+                    onDeleteDOMElement(domElement.path);
+                    let arr = facetMap.get(facet.name);
+                    arr = arr.filter((e) => e.name !== domElement.name);
+                    facetMap.set(facet.name, arr);
+                    setFacetMap(new Map(facetMap.set(facet.name, arr)));
+                  }}
+                  onGotoItem={() => { onGotoClick(domElement.path); }}
+                  isFacet={false}
+                />
+              </>
             )
           }
           )}
@@ -222,7 +227,7 @@ export default function FacetTreeSideBar() {
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton name="refresh-outline" onClick={() => { reset(); }} title="Reset" size="small" aria-label="Reset" />
+              <FacetIconButton name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" size="small" aria-label="Delete All" />
               <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
               <CopyToClipboard text={textToCopy}>
                 <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {

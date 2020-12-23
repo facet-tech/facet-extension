@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppContext from '../../AppContext';
@@ -43,7 +42,6 @@ export default function FacetMenu({ isOpen = false, onRenameClick, gotoClick, de
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
-        <StyledMenuItem onClick={() => { gotoClick(); }}>Go to</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>
       </StyledMenu>
     </div>

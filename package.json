@@ -3,6 +3,14 @@
     "version": "0.1.0",
     "homepage": "https://github.com/facets-io/facet-extension",
     "private": true,
+    "scripts": {
+        "start": "webpack serve --open 'Google Chrome' --mode='development'",
+        "build": "webpack --mode='production'",
+        "create-zip": "yarn build && mv build extension-chrome-facet-ninja && rm -rf extension-chrome-facet-ninja/build && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
     "dependencies": {
         "@aws-amplify/ui-react": "^0.2.33",
         "@material-ui/core": "^4.11.2",
@@ -70,13 +78,5 @@
         "svg-url-loader": "^7.1.1",
         "webpack-cli": "^4.2.0",
         "zip-folder": "^1.0.0"
-    },
-    "scripts": {
-        "start": "webpack serve --open 'Google Chrome' --mode='development'",
-        "build": "webpack --mode='production'",
-        "create-zip": "yarn build && mv build extension-chrome-facet-ninja && rm -rf extension-chrome-facet-ninja/build && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
     }
 }

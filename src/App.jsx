@@ -34,9 +34,9 @@ function App() {
       return;
     }
     if (showSideBar) {
-      updateEvents(true, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
+      updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
     } else {
-      updateEvents(false, selectedFacet, facetMap, setFacetMap, enqueueSnackbar);
+      updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
     }
   }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
 

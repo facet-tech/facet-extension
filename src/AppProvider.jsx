@@ -10,7 +10,7 @@ import {
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
-import { loadInitialState } from './highlighter';
+import { loadInitialStateInDOM } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -19,6 +19,7 @@ import 'jquery-ui-bundle';
 import 'jquery-ui-bundle/jquery-ui.css';
 import useSelectedFacet from './shared/hooks/useSelectedFacet';
 import useFacetMap from './shared/hooks/useFacetMap';
+import useNonRolledOutFacets from './shared/hooks/useNonRolledOutFacets';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -39,6 +40,7 @@ const AppProvider = ({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
+  const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -148,15 +150,61 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    nonRolledOutFacets.forEach(facetName => {
+      const facetArr = facetMap.get(facetName);
+      facetArr?.forEach(element => {
+        $(element.path).css("opacity", "0.3", "important");
+      })
+    });
+  }, [nonRolledOutFacets]);
+
+  useEffect(() => {
     loadJWT();
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
     loadCopySnippet();
   }, [setJwt]);
 
+  useEffect(() => {
+    (async () => {
+      // not loading facetizer for extension-related pages
+      if (window.location.hostname === appId) {
+        return;
+      }
+      loadCopySnippet();
+
+      const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
+      // dirty quick fix
+      const isAuthenticationDOM = document.getElementById(domIds.authentication);
+      const isPopup = document.getElementById(domIds.popup);
+      if (!isPluginEnabledVal || isAuthenticationDOM || isPopup) {
+        return;
+      }
+      const storageEmail = await getKeyFromLocalStorage(storage.username);
+      const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
+      const workspaceId = workspaceResponse?.response?.workspaceId;
+      const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
+      const domainId = domainResponse?.response?.id;
+      await initSessionData({ workspaceId, domainId });
+      const getFacetRequest = await getFacet(domainId, window.location.pathname);
+      if (getFacetRequest.status === 200) {
+        const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+        // TODO COMPUTE nonRolledOutFacets
+        if (fMap.size > 0) {
+          setSelectedFacet(fMap.entries().next().value[0]);
+        }
+        setFacetMap(new Map(fMap));
+        loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+      } else {
+        setFacetMap(new Map([[defaultFacetName, []]]));
+      }
+      setLoadingSideBar(false);
+    })();
+  }, []);
+
   const onSaveClick = async () => {
     try {
-      await saveFacets(facetMap, enqueueSnackbar);
+      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar);
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
@@ -187,42 +235,6 @@ const AppProvider = ({ children }) => {
       console.log('[ERROR]', e);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      // not loading facetizer for extension-related pages
-      if (window.location.hostname === appId) {
-        return;
-      }
-      loadCopySnippet();
-
-      const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
-      // dirty quick fix
-      const isAuthenticationDOM = document.getElementById(domIds.authentication);
-      const isPopup = document.getElementById(domIds.popup);
-      if (!isPluginEnabledVal || isAuthenticationDOM || isPopup) {
-        return;
-      }
-      const storageEmail = await getKeyFromLocalStorage(storage.username);
-      const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
-      const workspaceId = workspaceResponse?.response?.workspaceId;
-      const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
-      const domainId = domainResponse?.response?.id;
-      await initSessionData({ workspaceId, domainId });
-      const getFacetRequest = await getFacet(domainId, window.location.pathname);
-      if (getFacetRequest.status === 200) {
-        const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-        if (fMap.size > 0) {
-          setSelectedFacet(fMap.entries().next().value[0]);
-        }
-        setFacetMap(new Map(fMap));
-        loadInitialState(fMap);
-      } else {
-        setFacetMap(new Map([['Facet-1', []]]));
-      }
-      setLoadingSideBar(false);
-    })();
-  }, []);
 
   const onFacetAdd = (label) => {
     if (addedFacets.includes(label)) {
@@ -320,7 +332,7 @@ const AppProvider = ({ children }) => {
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
-      currAuthState, setCurrAuthState, jwt, setJwt
+      currAuthState, setCurrAuthState, jwt, setJwt, nonRolledOutFacets, setNonRolledOutFacets
     }}
     >
       {children}

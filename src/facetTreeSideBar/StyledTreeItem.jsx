@@ -1,11 +1,7 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import CheckIcon from '@material-ui/icons/Check';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
 import FacetMenu from '../shared/FacetMenu/index.jsx';
@@ -22,8 +18,9 @@ const useTreeItemStyles = makeStyles((theme) => ({
             backgroundColor: 'transparent',
         },
     },
+    // color of the dropdown
     content: {
-        "& svg": {
+        "& .MuiTreeItem-iconContainer svg": {
             fill: color.lightGray,
         }
     },
@@ -53,6 +50,12 @@ const useTreeItemStyles = makeStyles((theme) => ({
         paddingRight: 0,
         padding: 0
     },
+    renameDiv: {
+        display: 'grid',
+        gridTemplateColumns: '60% 10% 10%',
+        columnGap: '7%',
+        alignItems: 'end'
+    }
 }));
 
 function StyledTreeItem(props) {
@@ -63,36 +66,62 @@ function StyledTreeItem(props) {
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
+        nonRolledOutFacets, setNonRolledOutFacets,
         selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
+    const enableFacetIconBtn = <FacetIconButton name="eye-outline" onClick={() => {
+        setNonRolledOutFacets([...nonRolledOutFacets, labelText])
+    }}
+        fill={colorConstant.grayA} />;
+
+    const disableFacetIconBtn = <FacetIconButton
+        onClick={() => {
+            setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
+        }}
+        fill={colorConstant.grayA}
+        name={"eye-off-outline"} />;
+
+    const isEnabled = nonRolledOutFacets.includes(labelText);
     const defaultElement =
-        <div>
+        <div key={labelText + isEnabled}>
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
-                        style={{ color: colorConstant.ice, marginLeft: props.isFacet ? '0' : '1rem' }}
+                        style={{
+                            color: colorConstant.ice,
+                            margin: props.isFacet ? '0' : '0 0 .4rem 1rem'
+                        }}
                         variant="body2"
                         className={classes.labelText}>
                         {onRenameItem ? <b>{labelText}</b> : labelText}
                     </Typography>
                 </div>
+
                 {props.isFacet ?
                     <>
                         <div>
-                            <FacetIconButton fill={colorConstant.grayA} name="eye-outline" />
+                            {!nonRolledOutFacets.includes(labelText) ? enableFacetIconBtn : disableFacetIconBtn}
                         </div>
                         <div>
-                            <FacetIconButton fill={colorConstant.grayA} name="more-vertical-outline"
+                            <FacetIconButton
+                                key={labelText}
+                                fill={colorConstant.grayA}
+                                name="more-vertical-outline"
                                 onClick={(e) => {
-                                    handleClickMenuEl(e, labelText); setExpanded([labelText]);
+                                    handleClickMenuEl(e, labelText);
+                                    setExpanded([labelText]);
                                     setSelectedFacet(labelText);
                                 }} />
-                            <FacetMenu isOpen={labelText === selectedFacet} gotoClick={() => {
-                                const domPath = facetMap.get(selectedFacet) && facetMap.get(selectedFacet)[0]?.path;
-                                onGotoClick(domPath);
-                            }}
-                                deleteClick={() => { onDeleteFacet(selectedFacet) }} onRenameClick={() => onRenameItem(selectedFacet)} />
+                            <FacetMenu
+                                isOpen={labelText === selectedFacet}
+                                gotoClick={() => {
+                                    const domPath = facetMap.get(selectedFacet) &&
+                                        facetMap.get(selectedFacet)[0]?.path;
+                                    onGotoClick(domPath);
+                                }}
+                                deleteClick={() => { onDeleteFacet(selectedFacet) }}
+                                onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>
                     </>
                     : <>
@@ -101,7 +130,8 @@ function StyledTreeItem(props) {
                         </div>
                         <div>
                             <FacetIconButton fill={colorConstant.grayA} customHeight="1.1rem" onClick={() => props.onDeleteItem()} name="trash-2" />
-                        </div></>
+                        </div>
+                    </>
                 }
             </div>
         </div >;
@@ -115,19 +145,15 @@ function StyledTreeItem(props) {
         }
     }
 
-    const duringRenameElement = <div>
+    const duringRenameElement = <div className={classes.renameDiv}>
         <FacetInput
             value={renameValue}
             inputRef={input => input && input.focus()}
             onKeyDown={keyPress}
             onChange={(e) => { setRenameValue(e.target.value) }}>
         </FacetInput>
-        <IconButton onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span">
-            <CheckIcon color="inherit" className={classes.labelIcon} />
-        </IconButton>
-        <IconButton onClick={() => { onRenameCancelClick() }} aria-label="delete" component="span">
-            <CancelIcon color="inherit" className={classes.labelIcon} />
-        </IconButton>
+        <FacetIconButton name="checkmark-outline" onClick={() => { onRenameSaveClick(renameValue) }} aria-label="delete" component="span" />
+        <FacetIconButton name="close-circle" onClick={() => { onRenameCancelClick() }} aria-label="delete" component="span" />
     </div>;
 
     return (
@@ -155,13 +181,5 @@ function StyledTreeItem(props) {
         />
     );
 }
-
-StyledTreeItem.propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string,
-    labelIcon: PropTypes.elementType.isRequired,
-    labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired,
-};
 
 export default StyledTreeItem;
