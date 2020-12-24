@@ -144,23 +144,18 @@ const getUser = async () => {
     const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
 
     let suffix = `/user?email=${email}`;
-    console.log('suffix', suffix);
-
     const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
-    console.log('KAPPA getUserResponse', getUserResponse);
 
     return getUserResponse;
 };
 
 const hasWhitelistedDomain = async (domain) => {
-    console.log('keepo?', domain);
     const getUserResponse = await getUser();
     const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
-    console.log('EEEE', whitelistedDomain, 'VVSSS', getUserResponse?.response);
     return whitelistedDomain?.includes(domain);
 }
 
-const updateWhiteListedDomains = async (domain) => {
+const addWhiteListedDomain = async (domain) => {
     const userResponse = await getUser();
     let whitelistedDomain;
     if (!userResponse) {
@@ -178,6 +173,18 @@ const updateWhiteListedDomains = async (domain) => {
         email, workspaceId, id: userResponse?.response?.id, whitelistedDomain
     });
 };
+
+const removeWhitelistedDomain = async (domain) => {
+    const getUserResponse = await getUser();
+    const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
+    const newArr = whitelistedDomain.filter(e => e !== domain);
+    const email = await getKeyFromLocalStorage(storage.username);
+    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
+
+    await postUser({
+        email, workspaceId, id: getUserResponse?.response?.id, whitelistedDomain: newArr
+    });
+}
 
 const getOrCreateWorkspace = async (email, readFromStorage = true) => {
     try {
@@ -318,6 +325,6 @@ export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
     getOrCreateWorkspace, deleteUser, postUser,
-    saveFacets, convertGetFacetResponseToMap, updateWhiteListedDomains,
-    hasWhitelistedDomain
+    saveFacets, convertGetFacetResponseToMap, addWhiteListedDomain,
+    hasWhitelistedDomain, removeWhitelistedDomain
 };

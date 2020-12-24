@@ -9,7 +9,6 @@ import triggerDOMReload from '../shared/popup/triggerDOMReload';
 import AmplifyService from '../services/AmplifyService';
 import { Auth } from 'aws-amplify';
 
-// THIS IS NOT BEING USED.
 export default ({ children }) => {
     // email,id:  
     const [loggedInUser, setLoggedInUser] = useState({});
@@ -19,8 +18,7 @@ export default ({ children }) => {
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
     const [jwt, setJwt] = useState('');
-    // deprecate this..
-    const [loadLogin, setLoadLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
@@ -32,7 +30,7 @@ export default ({ children }) => {
     }
 
     const onLoginClick = (val) => {
-        setLoadLogin(val);
+        setLoading(val);
     }
 
     const loadJWT = async () => {
@@ -60,7 +58,7 @@ export default ({ children }) => {
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+        workspaceId, email, setEmail, loading, setLoading, onLoginClick,
         currAuthState, setCurrAuthState, jwt, setJwt
     }}>
         {children}

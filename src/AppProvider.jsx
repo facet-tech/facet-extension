@@ -94,7 +94,7 @@ const AppProvider = ({ children }) => {
   const [email, setEmail] = useState('');
   const [workspaceId, setWorkspaceId] = useState(undefined);
   const [jwt, setJwt] = useState('');
-  const [loadLogin, setLoadLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
   const login = async () => {
     const workspaceResponse = await getOrCreateWorkspace(email);
@@ -121,7 +121,7 @@ const AppProvider = ({ children }) => {
   }
 
   const onLoginClick = (val) => {
-    setLoadLogin(val);
+    setLoading(val);
   }
 
   const loadJWT = async () => {
@@ -335,7 +335,7 @@ const AppProvider = ({ children }) => {
       persistLogin,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
-      workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+      workspaceId, email, setEmail, loading, setLoading, onLoginClick,
       currAuthState, setCurrAuthState, jwt, setJwt, nonRolledOutFacets, setNonRolledOutFacets
     }}
     >

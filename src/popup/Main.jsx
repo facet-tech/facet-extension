@@ -10,17 +10,15 @@ import {
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import { getDomain, hasWhitelistedDomain, postUser, updateWhiteListedDomains } from '../services/facetApiService';
+import { getDomain, hasWhitelistedDomain, addWhiteListedDomain, removeWhitelistedDomain } from '../services/facetApiService';
 import AppContext from '../AppContext';
 import facetLogo from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
 import FacetLabel from '../shared/FacetLabel';
-import FacetCard from '../shared/FacetCard/FacetCard';
-import FacetInput from '../shared/FacetInput';
-import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
-import InviteIcon from '../static/images/facet_invite_person.svg';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import FacetButton from '../shared/FacetButton';
+import FacetLink from '../shared/FacetLink';
+import PopupProvider from './PopupProvider';
 
 const GridDiv = styled.div`
     display: grid;
@@ -62,10 +60,11 @@ padding: 1rem;
 export default () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
-    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl,
+    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading
   } = useContext(AppContext);
   const [invitee, setInvitee] = useState('');
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(false);
 
   const logout = () => {
@@ -110,46 +109,68 @@ export default () => {
   }, [url, setTextToCopy]);
 
   useEffect(() => {
-
+    setLoading(true);
     async function loadState() {
       chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const result = await hasWhitelistedDomain(loc.hostname);
         console.log('res', result);
+        setLoading(false);
         setHasWhitelistedDomainVal(result);
       });
-
     }
-    console.log('MPIKA1')
     loadState();
   }, [])
 
-  const addWhitelist = async (url) => {
-    await updateWhiteListedDomains(url);
+  const whiteListDomain = async (url) => {
+    setLoading(true);
+    await addWhiteListedDomain(url);
+    setHasWhitelistedDomainVal(true);
+    setLoading(false);
   }
-  console.log('hasWhitelistedDomainVal!', hasWhitelistedDomainVal);
-  const btnElement = hasWhitelistedDomainVal ?
-    <FacetButton onClick={() => { addWhitelist(url) }} text={`Whitelist ${url}`} /> :
-    <FacetButton onClick={() => { alert('TODO!') }} text={`Remove ${url} from whitelist`} />;
 
-  return (
-    <TopDiv>
-      <GridDiv>
-        <div>
-          <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
-        </div>
-        <div>
-          <FacetIconButton title="info" name="info-outline" onClick={() => {
-            chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
-          }} />
-        </div>
-        <div>
-          <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
-        </div>
-      </GridDiv>
-      <MarginTop value=".5rem" />
-      {btnElement}
+  const removeWhitelistUrl = async (url) => {
+    setLoading(true);
+    await removeWhitelistedDomain(url);
+    setHasWhitelistedDomainVal(false);
+    setLoading(false);
+  }
+
+  console.log('hasWhitelistedDomainVal', hasWhitelistedDomainVal, 'for URL', url);
+  const btnElement = hasWhitelistedDomainVal ? <div>
+    <FacetLabel text={`This domain (${url}) is whitelisted. `} />
+    <FacetLink color={color.electricB} onClick={() => { removeWhitelistUrl(url) }} text="Click here" />
+    <FacetLabel text=" to remove it from the whitelist" />
+  </div> : <FacetButton onClick={() => { whiteListDomain(url) }} text={`Whitelist ${url}`} />;
+
+  const loadingElement = <TopDiv>
+    <GridDiv>
+      <div>
+        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+      </div>
+    </GridDiv>
+    <MarginTop value=".5rem" />
+    <FacetLabel text=" Loading ..." />
+  </TopDiv>
+
+  const coreElement = <TopDiv>
+    <GridDiv>
+      <div>
+        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+      </div>
+      <div>
+        <FacetIconButton title="info" name="info-outline" onClick={() => {
+          chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
+        }} />
+      </div>
+      <div>
+        <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
+      </div>
+    </GridDiv>
+    <MarginTop value=".5rem" />
+    {btnElement}
+    {hasWhitelistedDomainVal ? <>
       <MarginTop value=".5rem" />
       <GridDivTwoColumn>
         <div>
@@ -159,6 +180,11 @@ export default () => {
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
         </div>
       </GridDivTwoColumn>
-    </TopDiv>
+    </> : null}
+
+  </TopDiv>;
+
+  return (
+    loading ? loadingElement : coreElement
   );
 };
