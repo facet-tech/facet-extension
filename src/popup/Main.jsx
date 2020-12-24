@@ -30,10 +30,11 @@ import FacetInput from '../shared/FacetInput';
 import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
 import InviteIcon from '../static/images/facet_invite_person.svg';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
+import FacetButton from '../shared/FacetButton';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 85% 15%;
+    grid-template-columns: 80% 10% 10%;
     align-items: center;
     justify-content: center;
 `;
@@ -71,7 +72,7 @@ padding: 1rem;
 export default () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
-    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState,
+    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl
   } = useContext(AppContext);
   const [invitee, setInvitee] = useState('');
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
@@ -81,20 +82,7 @@ export default () => {
     Auth.signOut();
     setCurrAuthState(authStateConstant.signingIn);
     setJwt(undefined);
-    window.close();
     triggerDOMReload();
-  };
-
-  const invite = async () => {
-    // TODO http call
-    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-    deleteUser(invitee, workspaceId);
-    createNewUser(invitee, workspaceId);
-
-    enqueueSnackbar({
-      message: 'Invite sent!',
-      variant: snackbar.success.text
-    });
   };
 
   const onEnablePluginCB = async (e) => {
@@ -117,6 +105,7 @@ export default () => {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const domainRes = await getDomain(loc.hostname, workspaceId);
+        setUrl(loc.hostname);
         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
         setTextToCopy(text);
       });
@@ -129,16 +118,26 @@ export default () => {
     loadCopySnippet();
   }, [url, setTextToCopy]);
 
-  const enableFacetizerElement = (
+  console.log('URL', url);
+
+  return (
     <TopDiv>
       <GridDiv>
         <div>
           <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
         </div>
         <div>
+          <FacetIconButton title="info" name="info-outline" onClick={() => {
+            chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
+          }} />
+        </div>
+        <div>
           <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
         </div>
       </GridDiv>
+      <MarginTop value=".5rem" />
+      <FacetButton text={`Whitelist ${url}`} />
+      <MarginTop value=".5rem" />
       <GridDivTwoColumn>
         <div>
           <FacetLabel fontSize={fontSize.large} color={color.ice} text="Enable Plugin" />
@@ -148,37 +147,5 @@ export default () => {
         </div>
       </GridDivTwoColumn>
     </TopDiv>
-  );
-
-  const element = isPluginEnabled ? (
-    <div>
-      {enableFacetizerElement}
-      <Divider />
-      <Divider />
-      <PaddingDiv>
-        <FacetCard>
-          <CenteredDiv>
-            <FacetLabel fontSize={fontSize.medium} color={color.grayA} text="Send Invitation" />
-          </CenteredDiv>
-          <br />
-          <TwoGridDiv>
-            <div>
-              {/* setInvitee(e.target.value) */}
-              <FacetInput onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
-            </div>
-            <div>
-              <FacetImageButton onClick={() => invite()} color={color.ice} startIconSrc={InviteIcon} text="Invite" />
-            </div>
-          </TwoGridDiv>
-        </FacetCard>
-      </PaddingDiv>
-      <Divider />
-      <MarginTop value=".5rem" />
-    </div>
-  ) : enableFacetizerElement;
-  return (
-    <div>
-      {element}
-    </div>
   );
 };

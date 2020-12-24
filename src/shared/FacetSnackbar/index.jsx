@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         border: '3px solid #FFFFFF',
         height: '5rem',
-        borderRadius: '2rem',
+        borderRadius: '3rem',
         gridTemplateColumns: '15% 85%',
         alignItems: 'center',
         justifyContent: 'center',
