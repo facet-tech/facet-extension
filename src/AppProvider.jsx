@@ -9,7 +9,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName } from './shared/constant';
 import { loadInitialStateInDOM } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -77,6 +77,8 @@ const AppProvider = ({ children }) => {
     facetMap.delete(facet);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
+
+    // base cases if no facets are present
     if (keys.length > 0) {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
@@ -197,6 +199,7 @@ const AppProvider = ({ children }) => {
         loadInitialStateInDOM(fMap, setNonRolledOutFacets);
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
+        setNonRolledOutFacets([defaultFacetName]);
       }
       setLoadingSideBar(false);
     })();
@@ -277,6 +280,7 @@ const AppProvider = ({ children }) => {
       addFacet(autoNumber + 1);
       return;
     }
+    setNonRolledOutFacets([...nonRolledOutFacets, newName]);
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
     setExpanded([newName]);

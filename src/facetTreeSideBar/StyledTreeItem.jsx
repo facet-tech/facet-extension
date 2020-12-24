@@ -80,7 +80,7 @@ function StyledTreeItem(props) {
             setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
         }}
         fill={colorConstant.grayA}
-        name={"eye-off-outline"} />;
+        name="eye-off-outline" />;
 
     const isEnabled = nonRolledOutFacets.includes(labelText);
     const defaultElement =
