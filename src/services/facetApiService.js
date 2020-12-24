@@ -1,6 +1,6 @@
 import { HTTPMethods, APIUrl, storage, snackbar } from "../shared/constant";
 import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
-import { api } from '../shared/constant';
+import { api, LoginTypes } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
 import parsePath from "../shared/parsePath";
@@ -56,13 +56,26 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
     }
 }
 
-const createNewUser = (email, workspaceId) => {
+const postUser = async ({ email, id, workspaceId, whitelistedDomain }) => {
     const body = {
+        id,
         email,
-        workspaceId
+        workspaceId,
+        attribute: {
+            whitelistedDomain
+        }
     }
     const suffix = '/user';
     return triggerApiCall(HTTPMethods.POST, suffix, body);
+}
+
+const userExists = async ({ email, workspaceId }) => {
+    let suffix = `/user?email=${email}`;
+    const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+    if (getUserResponse && getUserResponse.status >= 400 && getUserResponse.status <= 500) {
+        return false;
+    }
+    return getUserResponse;
 }
 
 const deleteUser = async (email, workspaceId) => {
@@ -125,6 +138,46 @@ const getOrPostDomain = async (workspaceId) => {
         console.log(`[ERROR] [getOrPostDomain] `, e);
     }
 }
+
+const getUser = async () => {
+    const email = await getKeyFromLocalStorage(storage.username);
+    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
+
+    let suffix = `/user?email=${email}`;
+    console.log('suffix', suffix);
+
+    const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+    console.log('KAPPA getUserResponse', getUserResponse);
+
+    return getUserResponse;
+};
+
+const hasWhitelistedDomain = async (domain) => {
+    console.log('keepo?', domain);
+    const getUserResponse = await getUser();
+    const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
+    console.log('EEEE', whitelistedDomain, 'VVSSS', getUserResponse?.response);
+    return whitelistedDomain?.includes(domain);
+}
+
+const updateWhiteListedDomains = async (domain) => {
+    const userResponse = await getUser();
+    let whitelistedDomain;
+    if (!userResponse) {
+        whitelistedDomain = [domain]
+    } else {
+        const currWhitelistedDomains = userResponse?.response?.attribute?.whitelistedDomain || [];
+        let uniqDomainSet = new Set([...currWhitelistedDomains, domain]);
+
+        whitelistedDomain = [...uniqDomainSet];
+    }
+    const email = await getKeyFromLocalStorage(storage.username);
+    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
+
+    await postUser({
+        email, workspaceId, id: userResponse?.response?.id, whitelistedDomain
+    });
+};
 
 const getOrCreateWorkspace = async (email, readFromStorage = true) => {
     try {
@@ -264,6 +317,7 @@ const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar) => {
 export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
-    getOrCreateWorkspace, deleteUser, createNewUser,
-    saveFacets, convertGetFacetResponseToMap
+    getOrCreateWorkspace, deleteUser, postUser,
+    saveFacets, convertGetFacetResponseToMap, updateWhiteListedDomains,
+    hasWhitelistedDomain
 };

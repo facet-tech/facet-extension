@@ -11,6 +11,7 @@ import FacetButton from "../shared/FacetButton";
 import FacetFormContainer from "../shared/FacetFormContainer";
 import FacetFormError from "../shared/FacetFormError";
 import MarginTop from "../shared/MarginTop";
+import { getOrCreateWorkspace, postUser } from "../services/facetApiService";
 
 export default () => {
 
@@ -39,6 +40,7 @@ export default () => {
           email,
         }
       });
+      await getOrCreateWorkspace(email);
       setCurrAuthState(authStateConstant.confirmingSignup);
       setSubmitting(false);
     } catch (error) {

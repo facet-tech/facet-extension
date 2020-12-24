@@ -2,28 +2,18 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Auth } from 'aws-amplify';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import {
-  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar,
+  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar, LoginTypes, ChromeRequestType,
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import { createNewUser, deleteUser, getDomain } from '../services/facetApiService';
+import { getDomain, hasWhitelistedDomain, postUser, updateWhiteListedDomains } from '../services/facetApiService';
 import AppContext from '../AppContext';
 import facetLogo from '../static/images/facet_typography.svg';
-import logoutLogo from '../static/images/facet_logout.svg';
 import FacetImage from '../shared/FacetImage';
-import settingsLogo from '../static/images/facet_settings.svg';
-import IconButton from '@material-ui/core/IconButton';
 import FacetLabel from '../shared/FacetLabel';
 import FacetCard from '../shared/FacetCard/FacetCard';
 import FacetInput from '../shared/FacetInput';
@@ -72,10 +62,11 @@ padding: 1rem;
 export default () => {
   const { enqueueSnackbar } = useSnackbar();
   const {
-    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl
+    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl,
   } = useContext(AppContext);
   const [invitee, setInvitee] = useState('');
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+  const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(false);
 
   const logout = () => {
     clearStorage();
@@ -118,7 +109,29 @@ export default () => {
     loadCopySnippet();
   }, [url, setTextToCopy]);
 
-  console.log('URL', url);
+  useEffect(() => {
+
+    async function loadState() {
+      chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
+        var currentTab = tabs[0]; // there will be only one in this array
+        const loc = new URL(currentTab.url);
+        const result = await hasWhitelistedDomain(loc.hostname);
+        console.log('res', result);
+        setHasWhitelistedDomainVal(result);
+      });
+
+    }
+    console.log('MPIKA1')
+    loadState();
+  }, [])
+
+  const addWhitelist = async (url) => {
+    await updateWhiteListedDomains(url);
+  }
+  console.log('hasWhitelistedDomainVal!', hasWhitelistedDomainVal);
+  const btnElement = hasWhitelistedDomainVal ?
+    <FacetButton onClick={() => { addWhitelist(url) }} text={`Whitelist ${url}`} /> :
+    <FacetButton onClick={() => { alert('TODO!') }} text={`Remove ${url} from whitelist`} />;
 
   return (
     <TopDiv>
@@ -136,7 +149,7 @@ export default () => {
         </div>
       </GridDiv>
       <MarginTop value=".5rem" />
-      <FacetButton text={`Whitelist ${url}`} />
+      {btnElement}
       <MarginTop value=".5rem" />
       <GridDivTwoColumn>
         <div>

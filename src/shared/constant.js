@@ -81,7 +81,7 @@ const APIUrl = {
     apiBaseURL,
     testBaseURL,
     localBaseURL,
-    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
+    activeBaseURL: isDevelopment() ? localBaseURL : localBaseURL
 };
 
 const LoginTypes = {
@@ -130,7 +130,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.facetizer];
+    const activelyDebuggingElementIds = [domIds.popup];
     if (!isDevelopment()) {
         return true;
     }
