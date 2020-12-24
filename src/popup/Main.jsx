@@ -141,7 +141,7 @@ export default () => {
   const btnElement = hasWhitelistedDomainVal ? <div>
     <FacetLabel text={`This domain (${url}) is whitelisted. `} />
     <FacetLink color={color.electricB} onClick={() => { removeWhitelistUrl(url) }} text="Click here" />
-    <FacetLabel text=" to remove it from the whitelist" />
+    <FacetLabel text=" to remove it from the whitelist." />
   </div> : <FacetButton onClick={() => { whiteListDomain(url) }} text={`Whitelist ${url}`} />;
 
   const loadingElement = <TopDiv>
@@ -181,7 +181,6 @@ export default () => {
         </div>
       </GridDivTwoColumn>
     </> : null}
-
   </TopDiv>;
 
   return (

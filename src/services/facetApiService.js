@@ -1,10 +1,11 @@
-import { HTTPMethods, APIUrl, storage, snackbar } from "../shared/constant";
-import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import { HTTPMethods, APIUrl, storage, snackbar, isPluginEnabled } from "../shared/constant";
+import { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import { api, LoginTypes } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
 import parsePath from "../shared/parsePath";
 import AmplifyService from "./AmplifyService";
+import triggerDOMReload from "../shared/popup/triggerDOMReload";
 
 /**
  * @param {domainId}
@@ -163,7 +164,6 @@ const addWhiteListedDomain = async (domain) => {
     } else {
         const currWhitelistedDomains = userResponse?.response?.attribute?.whitelistedDomain || [];
         let uniqDomainSet = new Set([...currWhitelistedDomains, domain]);
-
         whitelistedDomain = [...uniqDomainSet];
     }
     const email = await getKeyFromLocalStorage(storage.username);
@@ -172,6 +172,8 @@ const addWhiteListedDomain = async (domain) => {
     await postUser({
         email, workspaceId, id: userResponse?.response?.id, whitelistedDomain
     });
+    setKeyInLocalStorage(isPluginEnabled, true);
+    triggerDOMReload();
 };
 
 const removeWhitelistedDomain = async (domain) => {
