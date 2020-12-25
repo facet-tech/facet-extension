@@ -146,7 +146,7 @@ export default function FacetTreeSideBar() {
             }
             if (facetMap.has(newFacetName)) {
               enqueueSnackbar({
-                message: `A facet already exists with the given name. Please provide a unique name for your facet.`,
+                message: `A facet already exists with this name. Please give your facet a unique name.`,
                 variant: snackbar.error.text
               });
               return;

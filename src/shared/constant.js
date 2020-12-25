@@ -81,7 +81,7 @@ const APIUrl = {
     apiBaseURL,
     testBaseURL,
     localBaseURL,
-    activeBaseURL: isDevelopment() ? apiBaseURL : localBaseURL
+    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
 };
 
 const LoginTypes = {

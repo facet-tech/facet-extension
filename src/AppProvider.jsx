@@ -248,9 +248,6 @@ const AppProvider = ({ children }) => {
         variant: snackbar.success.text
       });
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
-      if (!isDevelopment()) {
-        window.location.reload();
-      }
     } catch (e) {
       console.log('[ERROR]', e);
     }
