@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
-import { performDOMTransformation, updateEvents } from './highlighter';
+import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
@@ -13,7 +13,6 @@ function App() {
   const { enqueueSnackbar } = useSnackbar();
   const { showSideBar, isPluginEnabled, setIsPluginEnabled,
     isDomainWhitelisted, facetMap, setFacetMap } = useContext(AppContext);
-  console.log('isDomainWhitelisted', isDomainWhitelisted);
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -21,16 +20,8 @@ function App() {
       window.location.reload();
     });
 
-  const loadLocalStorageValues = async () => {
-    const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
-    if (isPluginEnabledValue) {
-      setIsPluginEnabled(true);
-      performDOMTransformation();
-    }
-  }
-
   useEffect(() => {
-    loadLocalStorageValues();
+    // loadLocalStorageValues();
     if (!isPluginEnabled) {
       return;
     }

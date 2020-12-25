@@ -9,8 +9,8 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName } from './shared/constant';
-import { loadInitialStateInDOM } from './highlighter';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { loadInitialStateInDOM, performDOMTransformation } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -153,9 +153,15 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+
     async function loadDomainWhitelistedState() {
       const isDomainWhitelisted = await hasWhitelistedDomain(window.location.hostname);
       setIsDomainWhitelisted(isDomainWhitelisted);
+      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+      if (isPluginEnabledValue && isDomainWhitelisted) {
+        setIsPluginEnabled(true);
+        performDOMTransformation();
+      }
     }
     loadDomainWhitelistedState();
   }, [])
@@ -205,7 +211,9 @@ const AppProvider = ({ children }) => {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
         setFacetMap(new Map(fMap));
-        loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+        if (isDomainWhitelisted) {
+          loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+        }
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
         setNonRolledOutFacets([defaultFacetName]);

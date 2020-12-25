@@ -130,6 +130,7 @@ export default () => {
     await removeWhitelistedDomain(url);
     setHasWhitelistedDomainVal(false);
     setLoading(false);
+    triggerDOMReload()
   }
 
   const btnElement = hasWhitelistedDomainVal ? <div>
