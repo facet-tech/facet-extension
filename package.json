@@ -45,7 +45,6 @@
         "react-eva-icons": "^0.0.8",
         "react-hook-form": "^6.13.1",
         "react-router-dom": "^5.2.0",
-        "reactstrap": "^8.7.1",
         "style-loader": "2.0.0",
         "styled-components": "^5.2.1",
         "sw-precache-webpack-plugin": "1.0.0",

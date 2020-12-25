@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { setNonRolledOutFacetsHighlighter } from "../../../highlighter";
+import { defaultFacetName } from "../../constant";
 
-const useNonRolledOutFacets = (initialValue = []) => {
+const useNonRolledOutFacets = (initialValue = [defaultFacetName]) => {
     const [nonRolledOutFacets, setNonRolledOutFacets] = useState(initialValue);
 
     useEffect(() => {
         setNonRolledOutFacets(initialValue);
+        setNonRolledOutFacetsHighlighter(initialValue);
     }, []);
 
     let setNonRolledOutFacetsValue = (value) => {

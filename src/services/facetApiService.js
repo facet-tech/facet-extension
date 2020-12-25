@@ -1,10 +1,11 @@
-import { HTTPMethods, APIUrl, storage, snackbar } from "../shared/constant";
-import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import { HTTPMethods, APIUrl, storage, snackbar, isPluginEnabled } from "../shared/constant";
+import { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
 import parsePath from "../shared/parsePath";
 import AmplifyService from "./AmplifyService";
+import triggerDOMReload from "../shared/popup/triggerDOMReload";
 
 /**
  * @param {domainId}
@@ -12,7 +13,6 @@ import AmplifyService from "./AmplifyService";
  * @param {body} body the body of the request
  */
 const constructPayload = (domainId = '', urlPath = '', path = []) => {
-
     return {
         domainId,
         domElements: [
@@ -56,13 +56,26 @@ const triggerApiCall = async (method, urlSuffix = '', body) => {
     }
 }
 
-const createNewUser = (email, workspaceId) => {
+const postUser = async ({ email, id, workspaceId, whitelistedDomain }) => {
     const body = {
+        id,
         email,
-        workspaceId
+        workspaceId,
+        attribute: {
+            whitelistedDomain
+        }
     }
     const suffix = '/user';
     return triggerApiCall(HTTPMethods.POST, suffix, body);
+}
+
+const userExists = async ({ email, workspaceId }) => {
+    let suffix = `/user?email=${email}`;
+    const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+    if (getUserResponse && getUserResponse.status >= 400 && getUserResponse.status <= 500) {
+        return false;
+    }
+    return getUserResponse;
 }
 
 const deleteUser = async (email, workspaceId) => {
@@ -124,6 +137,56 @@ const getOrPostDomain = async (workspaceId) => {
     } catch (e) {
         console.log(`[ERROR] [getOrPostDomain] `, e);
     }
+}
+
+const getUser = async () => {
+    const email = await getKeyFromLocalStorage(storage.username);
+
+    let suffix = `/user?email=${email}`;
+    const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
+
+    return getUserResponse;
+};
+
+const hasWhitelistedDomain = async (domain) => {
+    const getUserResponse = await getUser();
+    const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
+    return whitelistedDomain?.includes(domain);
+}
+
+const addWhiteListedDomain = async (domain) => {
+    const userResponse = await getUser();
+    let whitelistedDomain;
+    if (!userResponse) {
+        whitelistedDomain = [domain]
+    } else {
+        const currWhitelistedDomains = userResponse?.response?.attribute?.whitelistedDomain || [];
+        let uniqDomainSet = new Set([...currWhitelistedDomains, domain]);
+        whitelistedDomain = [...uniqDomainSet];
+    }
+    const email = await getKeyFromLocalStorage(storage.username);
+    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
+
+    await postUser({
+        email, workspaceId, id: userResponse?.response?.id, whitelistedDomain
+    });
+    setKeyInLocalStorage(isPluginEnabled, true);
+    triggerDOMReload();
+};
+
+const removeWhitelistedDomain = async (domain) => {
+    const getUserResponse = await getUser();
+    const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
+    if (whitelistedDomain === null) {
+        whitelistedDomain = [];
+    }
+    const newArr = whitelistedDomain.filter(e => e !== domain);
+    const email = await getKeyFromLocalStorage(storage.username);
+    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
+
+    await postUser({
+        email, workspaceId, id: getUserResponse?.response?.id, whitelistedDomain: newArr
+    });
 }
 
 const getOrCreateWorkspace = async (email, readFromStorage = true) => {
@@ -264,6 +327,7 @@ const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar) => {
 export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
-    getOrCreateWorkspace, deleteUser, createNewUser,
-    saveFacets, convertGetFacetResponseToMap
+    getOrCreateWorkspace, deleteUser, postUser,
+    saveFacets, convertGetFacetResponseToMap, addWhiteListedDomain,
+    hasWhitelistedDomain, removeWhitelistedDomain
 };

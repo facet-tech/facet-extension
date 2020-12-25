@@ -4,9 +4,9 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import { color, color as colorConstant } from '../shared/constant.js';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton.jsx';
-import FacetMenu from '../shared/FacetMenu/index.jsx';
+import FacetMenu from '../shared/FacetMenu';
 import AppContext from '../AppContext.jsx';
-import FacetInput from '../shared/FacetInput/index.js';
+import FacetInput from '../shared/FacetInput';
 
 const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -80,7 +80,7 @@ function StyledTreeItem(props) {
             setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
         }}
         fill={colorConstant.grayA}
-        name={"eye-off-outline"} />;
+        name="eye-off-outline" />;
 
     const isEnabled = nonRolledOutFacets.includes(labelText);
     const defaultElement =

@@ -5,7 +5,6 @@ import { isPluginEnabled, LoginTypes, api, storage } from './constant';
 const facetKey = 'facet-settings';
 
 /**
- * 
  * @param {object} object containing workspaceId and domainId
  */
 const initSessionData = async ({ workspaceId, domainId }) => {

@@ -6,11 +6,11 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId } from './shared/constant';
-import { loadInitialStateInDOM } from './highlighter';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { loadInitialStateInDOM, performDOMTransformation } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -41,6 +41,7 @@ const AppProvider = ({ children }) => {
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
+  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false)
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -77,6 +78,8 @@ const AppProvider = ({ children }) => {
     facetMap.delete(facet);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
+
+    // base cases if no facets are present
     if (keys.length > 0) {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
@@ -92,7 +95,7 @@ const AppProvider = ({ children }) => {
   const [email, setEmail] = useState('');
   const [workspaceId, setWorkspaceId] = useState(undefined);
   const [jwt, setJwt] = useState('');
-  const [loadLogin, setLoadLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
   const login = async () => {
     const workspaceResponse = await getOrCreateWorkspace(email);
@@ -119,7 +122,7 @@ const AppProvider = ({ children }) => {
   }
 
   const onLoginClick = (val) => {
-    setLoadLogin(val);
+    setLoading(val);
   }
 
   const loadJWT = async () => {
@@ -148,6 +151,20 @@ const AppProvider = ({ children }) => {
       console.log('[ERROR][loadCopySnippet]', e);
     }
   };
+
+  useEffect(() => {
+
+    async function loadDomainWhitelistedState() {
+      const isDomainWhitelisted = await hasWhitelistedDomain(window.location.hostname);
+      setIsDomainWhitelisted(isDomainWhitelisted);
+      const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
+      if (isPluginEnabledValue && isDomainWhitelisted) {
+        setIsPluginEnabled(true);
+        performDOMTransformation();
+      }
+    }
+    loadDomainWhitelistedState();
+  }, [])
 
   useEffect(() => {
     nonRolledOutFacets.forEach(facetName => {
@@ -194,9 +211,12 @@ const AppProvider = ({ children }) => {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
         setFacetMap(new Map(fMap));
-        loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+        if (isDomainWhitelisted) {
+          loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+        }
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
+        setNonRolledOutFacets([defaultFacetName]);
       }
       setLoadingSideBar(false);
     })();
@@ -228,9 +248,6 @@ const AppProvider = ({ children }) => {
         variant: snackbar.success.text
       });
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
-      if (!isDevelopment()) {
-        window.location.reload();
-      }
     } catch (e) {
       console.log('[ERROR]', e);
     }
@@ -277,6 +294,7 @@ const AppProvider = ({ children }) => {
       addFacet(autoNumber + 1);
       return;
     }
+    setNonRolledOutFacets([...nonRolledOutFacets, newName]);
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
     setExpanded([newName]);
@@ -329,9 +347,11 @@ const AppProvider = ({ children }) => {
       onFacetClick,
       addFacet,
       persistLogin,
+      isDomainWhitelisted,
+      setIsDomainWhitelisted,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
-      workspaceId, email, setEmail, loadLogin, setLoadLogin, onLoginClick,
+      workspaceId, email, setEmail, loading, setLoading, onLoginClick,
       currAuthState, setCurrAuthState, jwt, setJwt, nonRolledOutFacets, setNonRolledOutFacets
     }}
     >

@@ -2,38 +2,27 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
 import { useSnackbar } from 'notistack';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Auth } from 'aws-amplify';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import {
-  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar,
+  api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar, LoginTypes, ChromeRequestType,
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import { createNewUser, deleteUser, getDomain } from '../services/facetApiService';
+import { getDomain, hasWhitelistedDomain, addWhiteListedDomain, removeWhitelistedDomain } from '../services/facetApiService';
 import AppContext from '../AppContext';
 import facetLogo from '../static/images/facet_typography.svg';
-import logoutLogo from '../static/images/facet_logout.svg';
 import FacetImage from '../shared/FacetImage';
-import settingsLogo from '../static/images/facet_settings.svg';
-import IconButton from '@material-ui/core/IconButton';
 import FacetLabel from '../shared/FacetLabel';
-import FacetCard from '../shared/FacetCard/FacetCard';
-import FacetInput from '../shared/FacetInput';
-import FacetImageButton from '../shared/FacetImageButton/FacetImageButton';
-import InviteIcon from '../static/images/facet_invite_person.svg';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
+import FacetButton from '../shared/FacetButton';
+import FacetLink from '../shared/FacetLink';
+import isDevelopment from '../utils/isDevelopment';
 
 const GridDiv = styled.div`
     display: grid;
-    grid-template-columns: 85% 15%;
+    grid-template-columns: 80% 10% 10%;
     align-items: center;
     justify-content: center;
 `;
@@ -69,32 +58,17 @@ padding: 1rem;
 `;
 
 export default () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const {
-    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState,
-  } = useContext(AppContext);
-  const [invitee, setInvitee] = useState('');
+  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading } = useContext(AppContext);
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+
+  const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
 
   const logout = () => {
     clearStorage();
     Auth.signOut();
     setCurrAuthState(authStateConstant.signingIn);
     setJwt(undefined);
-    window.close();
     triggerDOMReload();
-  };
-
-  const invite = async () => {
-    // TODO http call
-    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-    deleteUser(invitee, workspaceId);
-    createNewUser(invitee, workspaceId);
-
-    enqueueSnackbar({
-      message: 'Invite sent!',
-      variant: snackbar.success.text
-    });
   };
 
   const onEnablePluginCB = async (e) => {
@@ -117,6 +91,7 @@ export default () => {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const domainRes = await getDomain(loc.hostname, workspaceId);
+        setUrl(loc.hostname);
         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
         setTextToCopy(text);
       });
@@ -129,16 +104,69 @@ export default () => {
     loadCopySnippet();
   }, [url, setTextToCopy]);
 
-  const enableFacetizerElement = (
-    <TopDiv>
-      <GridDiv>
-        <div>
-          <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
-        </div>
-        <div>
-          <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
-        </div>
-      </GridDiv>
+  useEffect(() => {
+    setLoading(isDevelopment ? false : true);
+    async function loadState() {
+      chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
+        var currentTab = tabs[0]; // there will be only one in this array
+        const loc = new URL(currentTab.url);
+        const result = await hasWhitelistedDomain(loc.hostname);
+        setLoading(false);
+        setHasWhitelistedDomainVal(result);
+      });
+    }
+    loadState();
+  }, [])
+
+  const whiteListDomain = async (url) => {
+    setLoading(true);
+    await addWhiteListedDomain(url);
+    setHasWhitelistedDomainVal(true);
+    setLoading(false);
+  }
+
+  const removeWhitelistUrl = async (url) => {
+    setLoading(true);
+    await removeWhitelistedDomain(url);
+    setHasWhitelistedDomainVal(false);
+    setLoading(false);
+    triggerDOMReload();
+  }
+
+  const btnElement = hasWhitelistedDomainVal ? <div>
+    <FacetLabel text={`This domain (${url}) is whitelisted. `} />
+    <FacetLink color={color.electricB} onClick={() => { removeWhitelistUrl(url) }} text="Click here" />
+    <FacetLabel text=" to remove it from the whitelist." />
+  </div> : <FacetButton onClick={() => { whiteListDomain(url) }} text={`Whitelist ${url}`} />;
+
+  const loadingElement = <TopDiv>
+    <GridDiv>
+      <div>
+        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+      </div>
+    </GridDiv>
+    <MarginTop value=".5rem" />
+    <FacetLabel text=" Loading ..." />
+  </TopDiv>;
+
+  const coreElement = <TopDiv>
+    <GridDiv>
+      <div>
+        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+      </div>
+      <div>
+        <FacetIconButton title="info" name="info-outline" onClick={() => {
+          chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_WELCOME_PAGE });
+        }} />
+      </div>
+      <div>
+        <FacetIconButton title="logout" onClick={() => { logout() }} name="log-out-outline" size="large" />
+      </div>
+    </GridDiv>
+    <MarginTop value=".5rem" />
+    {btnElement}
+    {hasWhitelistedDomainVal ? <>
+      <MarginTop value=".5rem" />
       <GridDivTwoColumn>
         <div>
           <FacetLabel fontSize={fontSize.large} color={color.ice} text="Enable Plugin" />
@@ -147,38 +175,10 @@ export default () => {
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
         </div>
       </GridDivTwoColumn>
-    </TopDiv>
-  );
+    </> : null}
+  </TopDiv>;
 
-  const element = isPluginEnabled ? (
-    <div>
-      {enableFacetizerElement}
-      <Divider />
-      <Divider />
-      <PaddingDiv>
-        <FacetCard>
-          <CenteredDiv>
-            <FacetLabel fontSize={fontSize.medium} color={color.grayA} text="Send Invitation" />
-          </CenteredDiv>
-          <br />
-          <TwoGridDiv>
-            <div>
-              {/* setInvitee(e.target.value) */}
-              <FacetInput onChange={(e) => { setInvitee(e.target.value) }} placeholder="invite@email.com" />
-            </div>
-            <div>
-              <FacetImageButton onClick={() => invite()} color={color.ice} startIconSrc={InviteIcon} text="Invite" />
-            </div>
-          </TwoGridDiv>
-        </FacetCard>
-      </PaddingDiv>
-      <Divider />
-      <MarginTop value=".5rem" />
-    </div>
-  ) : enableFacetizerElement;
   return (
-    <div>
-      {element}
-    </div>
+    loading ? loadingElement : coreElement
   );
 };
