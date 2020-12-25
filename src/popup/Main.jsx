@@ -18,7 +18,6 @@ import FacetLabel from '../shared/FacetLabel';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
-import PopupProvider from './PopupProvider';
 
 const GridDiv = styled.div`
     display: grid;
@@ -58,11 +57,7 @@ padding: 1rem;
 `;
 
 export default () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const {
-    setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading
-  } = useContext(AppContext);
-  const [invitee, setInvitee] = useState('');
+  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading } = useContext(AppContext);
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(false);
@@ -137,7 +132,6 @@ export default () => {
     setLoading(false);
   }
 
-  console.log('hasWhitelistedDomainVal', hasWhitelistedDomainVal, 'for URL', url);
   const btnElement = hasWhitelistedDomainVal ? <div>
     <FacetLabel text={`This domain (${url}) is whitelisted. `} />
     <FacetLink color={color.electricB} onClick={() => { removeWhitelistUrl(url) }} text="Click here" />

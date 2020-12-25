@@ -11,8 +11,9 @@ import $ from 'jquery';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
-  const { showSideBar, isPluginEnabled, setIsPluginEnabled, selectedFacet, facetMap, setFacetMap } = useContext(AppContext);
-
+  const { showSideBar, isPluginEnabled, setIsPluginEnabled,
+    isDomainWhitelisted, facetMap, setFacetMap } = useContext(AppContext);
+  console.log('isDomainWhitelisted', isDomainWhitelisted);
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -51,7 +52,7 @@ function App() {
 
   return (
     <div style={{ height: '100%' }}>
-      {isPluginEnabled ? <FacetToolbar /> : null}
+      {isPluginEnabled && isDomainWhitelisted ? <FacetToolbar /> : null}
     </div >
   );
 }

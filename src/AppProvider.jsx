@@ -6,7 +6,7 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName } from './shared/constant';
@@ -41,6 +41,7 @@ const AppProvider = ({ children }) => {
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
+  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false)
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -150,6 +151,14 @@ const AppProvider = ({ children }) => {
       console.log('[ERROR][loadCopySnippet]', e);
     }
   };
+
+  useEffect(() => {
+    async function loadDomainWhitelistedState() {
+      const isDomainWhitelisted = await hasWhitelistedDomain(window.location.hostname);
+      setIsDomainWhitelisted(isDomainWhitelisted);
+    }
+    loadDomainWhitelistedState();
+  }, [])
 
   useEffect(() => {
     nonRolledOutFacets.forEach(facetName => {
@@ -333,6 +342,8 @@ const AppProvider = ({ children }) => {
       onFacetClick,
       addFacet,
       persistLogin,
+      isDomainWhitelisted,
+      setIsDomainWhitelisted,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,

@@ -1,6 +1,6 @@
 import { HTTPMethods, APIUrl, storage, snackbar, isPluginEnabled } from "../shared/constant";
 import { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage';
-import { api, LoginTypes } from '../shared/constant';
+import { api } from '../shared/constant';
 import MockService from './MockService'
 import isDevelopment from "../utils/isDevelopment";
 import parsePath from "../shared/parsePath";
@@ -13,7 +13,6 @@ import triggerDOMReload from "../shared/popup/triggerDOMReload";
  * @param {body} body the body of the request
  */
 const constructPayload = (domainId = '', urlPath = '', path = []) => {
-
     return {
         domainId,
         domElements: [
@@ -142,7 +141,6 @@ const getOrPostDomain = async (workspaceId) => {
 
 const getUser = async () => {
     const email = await getKeyFromLocalStorage(storage.username);
-    const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
 
     let suffix = `/user?email=${email}`;
     const getUserResponse = await triggerApiCall(HTTPMethods.GET, suffix);
@@ -179,6 +177,9 @@ const addWhiteListedDomain = async (domain) => {
 const removeWhitelistedDomain = async (domain) => {
     const getUserResponse = await getUser();
     const { whitelistedDomain } = getUserResponse?.response?.attribute || [];
+    if (whitelistedDomain === null) {
+        whitelistedDomain = [];
+    }
     const newArr = whitelistedDomain.filter(e => e !== domain);
     const email = await getKeyFromLocalStorage(storage.username);
     const { workspaceId } = await getKeyFromLocalStorage(storage.sessionData);
