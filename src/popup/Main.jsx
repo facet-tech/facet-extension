@@ -18,6 +18,7 @@ import FacetLabel from '../shared/FacetLabel';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
+import isDevelopment from '../utils/isDevelopment';
 
 const GridDiv = styled.div`
     display: grid;
@@ -60,7 +61,7 @@ export default () => {
   const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading } = useContext(AppContext);
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
-  const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(false);
+  const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
 
   const logout = () => {
     clearStorage();
@@ -104,13 +105,12 @@ export default () => {
   }, [url, setTextToCopy]);
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(isDevelopment ? false : true);
     async function loadState() {
       chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
         const result = await hasWhitelistedDomain(loc.hostname);
-        console.log('res', result);
         setLoading(false);
         setHasWhitelistedDomainVal(result);
       });
@@ -130,7 +130,7 @@ export default () => {
     await removeWhitelistedDomain(url);
     setHasWhitelistedDomainVal(false);
     setLoading(false);
-    triggerDOMReload()
+    triggerDOMReload();
   }
 
   const btnElement = hasWhitelistedDomainVal ? <div>
@@ -147,7 +147,7 @@ export default () => {
     </GridDiv>
     <MarginTop value=".5rem" />
     <FacetLabel text=" Loading ..." />
-  </TopDiv>
+  </TopDiv>;
 
   const coreElement = <TopDiv>
     <GridDiv>
