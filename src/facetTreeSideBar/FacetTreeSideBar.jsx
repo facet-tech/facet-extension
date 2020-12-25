@@ -20,7 +20,7 @@ import FacetImage from '../shared/FacetImage';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import FacetLabel from '../shared/FacetLabel';
+import Loading from '../shared/Loading'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -122,7 +122,10 @@ export default function FacetTreeSideBar() {
     $(path).css('cursor', 'unset');
   };
 
-  const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
+  const itemsElement = loadingSideBar ?
+    <div style={{ padding: '1rem' }}>
+      <Loading />
+    </div>
     : facetArray.map((facet) => {
       const { value } = facet;
 

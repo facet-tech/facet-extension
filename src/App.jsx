@@ -8,6 +8,7 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
+import isDevelopment from './utils/isDevelopment';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
@@ -33,17 +34,17 @@ function App() {
   }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
-  if (!isPluginEnabled) {
-    $("#facet-sidebar").css("width", "0");
-    $("#facetizer").css("width", "0");
-  } else {
+  if ((isPluginEnabled && isDomainWhitelisted) || isDevelopment()) {
     $("#facet-sidebar").css("width", '280px');
     $("#facetizer").css("width", "280px");
+  } else {
+    $("#facet-sidebar").css("width", "0");
+    $("#facetizer").css("width", "0");
   }
 
   return (
     <div style={{ height: '100%' }}>
-      {isPluginEnabled && isDomainWhitelisted ? <FacetToolbar /> : null}
+      {(isPluginEnabled && isDomainWhitelisted) || isDevelopment() ? <FacetToolbar /> : null}
     </div >
   );
 }

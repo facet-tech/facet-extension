@@ -41,7 +41,7 @@ const AppProvider = ({ children }) => {
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
-  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false)
+  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -70,12 +70,12 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const onDeleteFacet = (facet) => {
-    const facetValue = facetMap.get(facet);
+  const onDeleteFacet = (facetName) => {
+    const facetValue = facetMap.get(facetName);
     facetValue && facetValue.forEach((domElement) => {
       onDeleteDOMElement(domElement.path);
     });
-    facetMap.delete(facet);
+    facetMap.delete(facetName);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
 
@@ -247,6 +247,10 @@ const AppProvider = ({ children }) => {
         message: 'Facets reset.',
         variant: snackbar.success.text
       });
+      for (let [facet, _] of facetMap) {
+        onDeleteFacet(facet);
+      }
+
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
     } catch (e) {
       console.log('[ERROR]', e);
