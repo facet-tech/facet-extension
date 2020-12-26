@@ -246,7 +246,7 @@ export default function FacetTreeSideBar() {
               <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
             </div>
           </div>
-          <Divider />
+          <Divider style={{ backgroundColor: color.lightGray }} />
           <TreeView
             className={classes.treeView}
             defaultCollapseIcon={<ExpandMoreIcon />}
