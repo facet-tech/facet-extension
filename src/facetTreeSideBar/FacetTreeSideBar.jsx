@@ -199,9 +199,9 @@ export default function FacetTreeSideBar() {
   //{/* <FacetIconButton isSelected={true} name="keypad-outline"  title="Disable" aria-label="Disable" /> */ }
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetImage style={{ width: '8%' }} onClick={() => sideBarHandler()} src={facetLogoIce} title="Disable" />
+      <FacetIconButton isSelected name="edit-2-outline" onClick={() => sideBarHandler()} src={facetLogoIce} title="Disable" />
     ) : (
-      <FacetImage style={{ width: '8%' }} onClick={() => sideBarHandler()} src={facetLogo} title="Enable" aria-label="Enable" />
+      <FacetIconButton name="edit-2-outline" onClick={() => sideBarHandler()} src={facetLogo} title="Enable" aria-label="Enable" />
     );
 
   return (

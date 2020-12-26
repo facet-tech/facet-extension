@@ -4,8 +4,6 @@ import { fontSize, color } from '../constant';
 import FacetIconButton from '../FacetIconButton/FacetIconButton';
 import FacetLabel from '../FacetLabel';
 
-const defaultText = '<script src="https://api.facet.ninja/facet.ninja.js?id=DOMAIN~MjItMjQ5Ni00YWY5LWE5ZjUtMzJjNWViMTQ1ZjM4"></script>';
-
 const StyledDiv = styled.div`
     padding: .1rem;
     display: grid;
@@ -18,7 +16,7 @@ const StyledDiv = styled.div`
     word-break: break-all;
 `;
 
-export default ({ text = defaultText, onClick }) => {
+export default ({ text, onClick }) => {
     return <StyledDiv>
         <div style={{ userSelect: 'all', cursor: 'pointer', marginLeft: '.2rem' }} onClick={() => { }}>
             <FacetLabel color={color.ice} fontSize={fontSize.xSmall} text={text} />
