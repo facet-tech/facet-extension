@@ -58,7 +58,7 @@ export default () => {
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
 
   console.log('LOADING', loading);
-  
+
   const logout = () => {
     clearStorage();
     Auth.signOut();

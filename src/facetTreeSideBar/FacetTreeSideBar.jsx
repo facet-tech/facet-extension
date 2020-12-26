@@ -90,7 +90,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
-    setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets } = useContext(AppContext);
+    setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
@@ -198,9 +198,11 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton isSelected name="edit-2-outline" onClick={() => sideBarHandler()} src={facetLogoIce} title="Disable" />
+      <FacetIconButton isSelected name="edit-2-outline" onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} src={facetLogoIce} title="Disable" />
     ) : (
-      <FacetIconButton name="edit-2-outline" onClick={() => sideBarHandler()} src={facetLogo} title="Enable" aria-label="Enable" />
+      <FacetIconButton name="edit-2-outline" onClick={() => {
+        setLoadingSideBar(true); sideBarHandler();
+      }} src={facetLogo} title="Enable" aria-label="Enable" />
     );
 
   return (

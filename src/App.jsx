@@ -13,7 +13,7 @@ import isDevelopment from './utils/isDevelopment';
 function App() {
   const { enqueueSnackbar } = useSnackbar();
   const { showSideBar, isPluginEnabled, setIsPluginEnabled,
-    isDomainWhitelisted, facetMap, setFacetMap } = useContext(AppContext);
+    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar } = useContext(AppContext);
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -22,15 +22,24 @@ function App() {
     });
 
   useEffect(() => {
-    // loadLocalStorageValues();
+
     if (!isPluginEnabled) {
       return;
     }
-    if (showSideBar) {
-      updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
-    } else {
-      updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
+    // TODO Show big screen loader here...
+
+    async function load() {
+      if (showSideBar) {
+        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
+      } else {
+        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
+      }
+      setLoadingSideBar(false);
     }
+
+    load();
+
+
   }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
