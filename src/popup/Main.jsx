@@ -52,20 +52,12 @@ padding: 1rem;
 `;
 
 export default () => {
-  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading } = useContext(AppContext);
+  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading, logout } = useContext(AppContext);
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
 
   console.log('LOADING', loading);
-
-  const logout = () => {
-    clearStorage();
-    Auth.signOut();
-    setCurrAuthState(authStateConstant.signingIn);
-    setJwt(undefined);
-    triggerDOMReload();
-  };
 
   const onEnablePluginCB = async (e) => {
     chrome?.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
