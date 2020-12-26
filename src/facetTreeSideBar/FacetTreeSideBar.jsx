@@ -196,7 +196,6 @@ export default function FacetTreeSideBar() {
         </StyledTreeItem>
       );
     });
-  //{/* <FacetIconButton isSelected={true} name="keypad-outline"  title="Disable" aria-label="Disable" /> */ }
   const activateDeactivateElement = showSideBar
     ? (
       <FacetIconButton isSelected name="edit-2-outline" onClick={() => sideBarHandler()} src={facetLogoIce} title="Disable" />

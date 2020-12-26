@@ -19,6 +19,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import isDevelopment from '../utils/isDevelopment';
+import Loading from '../shared/Loading';
 
 const GridDiv = styled.div`
     display: grid;
@@ -32,13 +33,6 @@ const GridDivTwoColumn = styled.div`
     grid-template-columns: 75% 25%;
     align-items: center;
     justify-content: center;
-`;
-
-const TwoGridDiv = styled.div`
-    display: grid;
-    grid-template-columns: 60% 30%;
-    grid-gap: 5%;
-    align-items: center;
 `;
 
 const TopDiv = styled.div`
@@ -63,6 +57,8 @@ export default () => {
 
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
 
+  console.log('LOADING', loading);
+  
   const logout = () => {
     clearStorage();
     Auth.signOut();
@@ -146,7 +142,7 @@ export default () => {
       </div>
     </GridDiv>
     <MarginTop value=".5rem" />
-    <FacetLabel text=" Loading ..." />
+    <Loading />
   </TopDiv>;
 
   const coreElement = <TopDiv>

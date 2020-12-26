@@ -25,9 +25,6 @@ export default function FacetToolbar() {
       color: color.darkGray,
       fill: color.darkGray,
       backgroundColor: color.lightGray,
-      '&:hover': {
-        // backgroundColor: color.darkGray,
-      },
     },
     fabGrid: {
       height: '10%',
