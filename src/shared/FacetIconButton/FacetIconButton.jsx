@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default ({ name, size = "small", fill = color.lightGray,
+export default ({ name, size = "xsmall", fill = color.lightGray,
     isSelected = false, customHeight, width, children, ...other }) => {
     const classes = useStyles({ isSelected, width });
     useEffect(() => {

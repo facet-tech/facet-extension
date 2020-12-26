@@ -23,6 +23,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Loading from '../shared/Loading';
 import facetLogo from '../static/images/facet_main_logo.svg'
 import facetLogoIce from '../static/images/facet_ice_logo.svg';
+import CodeSnippet from '../shared/CodeSnippet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0px 2rem',
+    padding: '0px 3rem',
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
@@ -230,18 +231,19 @@ export default function FacetTreeSideBar() {
             </TopDiv>
             <br />
             <Divider style={{ backgroundColor: color.lightGray }} />
+            <CopyToClipboard text={textToCopy}>
+              <CodeSnippet onClick={() => {
+                enqueueSnackbar({
+                  message: `Copied snippet to clipboard!`,
+                  variant: snackbar.info.text
+                });
+              }} text={textToCopy} />
+            </CopyToClipboard>
+            <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
               <FacetIconButton name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" size="small" aria-label="Delete All" />
               <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
-              <CopyToClipboard text={textToCopy}>
-                <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {
-                  enqueueSnackbar({
-                    message: `Copied snippet to clipboard!`,
-                    variant: snackbar.info.text
-                  });
-                }} size="small" aria-label="Save" />
-              </CopyToClipboard>
             </div>
           </div>
           <Divider />

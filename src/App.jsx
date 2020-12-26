@@ -35,8 +35,8 @@ function App() {
 
   // removing width/height hack
   if ((isPluginEnabled && isDomainWhitelisted) || isDevelopment()) {
-    $("#facet-sidebar").css("width", '280px');
-    $("#facetizer").css("width", "280px");
+    $("#facet-sidebar").css("width", '300px');
+    $("#facetizer").css("width", "300px");
   } else {
     $("#facet-sidebar").css("width", "0");
     $("#facetizer").css("width", "0");

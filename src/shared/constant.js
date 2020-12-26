@@ -20,6 +20,8 @@ const authState = {
 };
 
 const fontSize = {
+    xxSmall: 'xx-small',
+    xSmall: 'x-small',
     small: 'small',
     medium: 'medium',
     large: 'large',
@@ -74,7 +76,7 @@ const authStorage = {
 };
 
 const styles = {
-    drawerWidth: 280
+    drawerWidth: 300
 };
 
 const APIUrl = {
