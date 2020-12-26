@@ -20,7 +20,9 @@ import FacetImage from '../shared/FacetImage';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Loading from '../shared/Loading'
+import Loading from '../shared/Loading';
+import facetLogo from '../static/images/facet_main_logo.svg'
+import facetLogoIce from '../static/images/facet_ice_logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -193,12 +195,12 @@ export default function FacetTreeSideBar() {
         </StyledTreeItem>
       );
     });
-
+  //{/* <FacetIconButton isSelected={true} name="keypad-outline"  title="Disable" aria-label="Disable" /> */ }
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton isSelected={true} name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
+      <FacetImage style={{ width: '8%' }} onClick={() => sideBarHandler()} src={facetLogoIce} title="Disable" />
     ) : (
-      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Enable" aria-label="Enable" />
+      <FacetImage style={{ width: '8%' }} onClick={() => sideBarHandler()} src={facetLogo} title="Enable" aria-label="Enable" />
     );
 
   return (
