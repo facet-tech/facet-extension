@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 export default ({ name, size = "small", fill = color.lightGray,
-    isSelected = false, customHeight, width, children, ...other }) => {
+    isSelected = false, customHeight, width, iconWidth, iconHeight, children, ...other }) => {
     const classes = useStyles({ isSelected, width });
     useEffect(() => {
         eva.replace();
@@ -28,7 +28,6 @@ export default ({ name, size = "small", fill = color.lightGray,
 
     return <IconButton
         {...other}
-        size="small"
         className={classes.iconButton}>
         <i
             style={{
@@ -38,6 +37,8 @@ export default ({ name, size = "small", fill = color.lightGray,
             fill={fill}
             data-eva={name}
             data-eva-hover="true"
+            data-eva-height={iconHeight ? iconHeight : '24'}
+            data-eva-width={iconWidth ? iconWidth : '24'}
         />
         {children}
     </IconButton>

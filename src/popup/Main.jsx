@@ -19,6 +19,7 @@ import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import isDevelopment from '../utils/isDevelopment';
+import Loading from '../shared/Loading';
 
 const GridDiv = styled.div`
     display: grid;
@@ -32,13 +33,6 @@ const GridDivTwoColumn = styled.div`
     grid-template-columns: 75% 25%;
     align-items: center;
     justify-content: center;
-`;
-
-const TwoGridDiv = styled.div`
-    display: grid;
-    grid-template-columns: 60% 30%;
-    grid-gap: 5%;
-    align-items: center;
 `;
 
 const TopDiv = styled.div`
@@ -58,19 +52,10 @@ padding: 1rem;
 `;
 
 export default () => {
-  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading } = useContext(AppContext);
+  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading, logout } = useContext(AppContext);
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
-
-  const logout = () => {
-    clearStorage();
-    Auth.signOut();
-    setCurrAuthState(authStateConstant.signingIn);
-    setJwt(undefined);
-    triggerDOMReload();
-  };
-
   const onEnablePluginCB = async (e) => {
     chrome?.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async () => {
@@ -146,7 +131,7 @@ export default () => {
       </div>
     </GridDiv>
     <MarginTop value=".5rem" />
-    <FacetLabel text=" Loading ..." />
+    <Loading />
   </TopDiv>;
 
   const coreElement = <TopDiv>

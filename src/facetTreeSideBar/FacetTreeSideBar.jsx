@@ -20,7 +20,10 @@ import FacetImage from '../shared/FacetImage';
 import styled from 'styled-components';
 import FacetIconButton from '../shared/FacetIconButton/FacetIconButton';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import FacetLabel from '../shared/FacetLabel';
+import Loading from '../shared/Loading';
+import facetLogo from '../static/images/facet_main_logo.svg'
+import facetLogoIce from '../static/images/facet_ice_logo.svg';
+import CodeSnippet from '../shared/CodeSnippet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0px 2rem',
+    padding: '0px 3rem',
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
@@ -87,7 +90,7 @@ export default function FacetTreeSideBar() {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
-    setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets } = useContext(AppContext);
+    setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
   useEffect(() => { setExpanded([defaultFacetName]); }, []);
@@ -122,7 +125,10 @@ export default function FacetTreeSideBar() {
     $(path).css('cursor', 'unset');
   };
 
-  const itemsElement = loadingSideBar ? <FacetLabel text="Loading..." />
+  const itemsElement = loadingSideBar ?
+    <div style={{ padding: '1rem' }}>
+      <Loading />
+    </div>
     : facetArray.map((facet) => {
       const { value } = facet;
 
@@ -190,12 +196,16 @@ export default function FacetTreeSideBar() {
         </StyledTreeItem>
       );
     });
-
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton isSelected={true} name="keypad-outline" onClick={() => sideBarHandler()} title="Disable" aria-label="Disable" />
+      <FacetIconButton isSelected name="edit-2-outline" onClick={() => {
+        setLoadingSideBar(true);
+        sideBarHandler();
+      }} iconWidth="30" iconHeight="30" src={facetLogoIce} title="Disable" />
     ) : (
-      <FacetIconButton name="keypad-outline" onClick={() => sideBarHandler()} title="Enable" aria-label="Enable" />
+      <FacetIconButton size="medium" name="edit-2-outline" onClick={() => {
+        setLoadingSideBar(true); sideBarHandler();
+      }} iconWidth="30" iconHeight="30" src={facetLogo} title="Enable" aria-label="Enable" />
     );
 
   return (
@@ -225,21 +235,22 @@ export default function FacetTreeSideBar() {
             </TopDiv>
             <br />
             <Divider style={{ backgroundColor: color.lightGray }} />
+            <CopyToClipboard text={textToCopy}>
+              <CodeSnippet onClick={() => {
+                enqueueSnackbar({
+                  message: `Copied snippet to clipboard!`,
+                  variant: snackbar.info.text
+                });
+              }} text={textToCopy} />
+            </CopyToClipboard>
+            <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" size="small" aria-label="Delete All" />
-              <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
-              <CopyToClipboard text={textToCopy}>
-                <FacetIconButton title="copy snippet" fill={color.ice} name="copy" onClick={() => {
-                  enqueueSnackbar({
-                    message: `Copied snippet to clipboard!`,
-                    variant: snackbar.info.text
-                  });
-                }} size="small" aria-label="Save" />
-              </CopyToClipboard>
+              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
+              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
             </div>
           </div>
-          <Divider />
+          <Divider style={{ backgroundColor: color.lightGray }} />
           <TreeView
             className={classes.treeView}
             defaultCollapseIcon={<ExpandMoreIcon />}

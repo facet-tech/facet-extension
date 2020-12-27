@@ -8,11 +8,12 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
 import $ from 'jquery';
+import isDevelopment from './utils/isDevelopment';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
   const { showSideBar, isPluginEnabled, setIsPluginEnabled,
-    isDomainWhitelisted, facetMap, setFacetMap } = useContext(AppContext);
+    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar } = useContext(AppContext);
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -21,29 +22,38 @@ function App() {
     });
 
   useEffect(() => {
-    // loadLocalStorageValues();
+
     if (!isPluginEnabled) {
       return;
     }
-    if (showSideBar) {
-      updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
-    } else {
-      updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
+    // TODO Show big screen loader here...
+
+    async function load() {
+      if (showSideBar) {
+        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
+      } else {
+        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
+      }
+      setLoadingSideBar(false);
     }
+
+    load();
+
+
   }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
-  if (!isPluginEnabled) {
+  if ((isPluginEnabled && isDomainWhitelisted) || isDevelopment()) {
+    $("#facet-sidebar").css("width", '300px');
+    $("#facetizer").css("width", "300px");
+  } else {
     $("#facet-sidebar").css("width", "0");
     $("#facetizer").css("width", "0");
-  } else {
-    $("#facet-sidebar").css("width", '280px');
-    $("#facetizer").css("width", "280px");
   }
 
   return (
     <div style={{ height: '100%' }}>
-      {isPluginEnabled && isDomainWhitelisted ? <FacetToolbar /> : null}
+      {(isPluginEnabled && isDomainWhitelisted) || isDevelopment() ? <FacetToolbar /> : null}
     </div >
   );
 }

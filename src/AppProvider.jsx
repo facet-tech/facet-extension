@@ -41,7 +41,16 @@ const AppProvider = ({ children }) => {
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
-  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false)
+  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false);
+
+  const [loggedInUser, setLoggedInUser] = useState({});
+  const [url, setUrl] = useState('');
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [workspaceId, setWorkspaceId] = useState(undefined);
+  const [jwt, setJwt] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -70,12 +79,12 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const onDeleteFacet = (facet) => {
-    const facetValue = facetMap.get(facet);
+  const onDeleteFacet = (facetName) => {
+    const facetValue = facetMap.get(facetName);
     facetValue && facetValue.forEach((domElement) => {
       onDeleteDOMElement(domElement.path);
     });
-    facetMap.delete(facet);
+    facetMap.delete(facetName);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
 
@@ -89,14 +98,6 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const [loggedInUser, setLoggedInUser] = useState({});
-  const [url, setUrl] = useState('');
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const [email, setEmail] = useState('');
-  const [workspaceId, setWorkspaceId] = useState(undefined);
-  const [jwt, setJwt] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
   const login = async () => {
     const workspaceResponse = await getOrCreateWorkspace(email);
     setIsUserAuthenticated(true);
@@ -211,7 +212,9 @@ const AppProvider = ({ children }) => {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
         setFacetMap(new Map(fMap));
-        if (isDomainWhitelisted) {
+        const hasDomainBeenWhitelisted = await hasWhitelistedDomain(window.location.hostname);
+        setIsDomainWhitelisted(hasDomainBeenWhitelisted);
+        if (hasDomainBeenWhitelisted) {
           loadInitialStateInDOM(fMap, setNonRolledOutFacets);
         }
       } else {
@@ -247,6 +250,10 @@ const AppProvider = ({ children }) => {
         message: 'Facets reset.',
         variant: snackbar.success.text
       });
+      for (let [facet, _] of facetMap) {
+        onDeleteFacet(facet);
+      }
+
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
     } catch (e) {
       console.log('[ERROR]', e);
@@ -284,8 +291,7 @@ const AppProvider = ({ children }) => {
     Auth.signOut();
     setCurrAuthState(authStateConstant.signingIn);
     setJwt(undefined);
-    window.close();
-    triggerDOMReload();
+    window.location.reload();
   };
 
   const addFacet = (autoNumber = facetMap.size + 1) => {

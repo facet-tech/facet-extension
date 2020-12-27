@@ -18,7 +18,7 @@ export default ({ children }) => {
     const [email, setEmail] = useState('');
     const [workspaceId, setWorkspaceId] = useState(undefined);
     const [jwt, setJwt] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
     const login = async () => {
         const workspaceResponse = await getOrCreateWorkspace(email);
