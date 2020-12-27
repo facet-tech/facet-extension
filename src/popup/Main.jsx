@@ -56,9 +56,6 @@ export default () => {
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
-
-  console.log('LOADING', loading);
-
   const onEnablePluginCB = async (e) => {
     chrome?.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async () => {

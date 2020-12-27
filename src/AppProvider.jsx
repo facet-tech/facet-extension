@@ -212,7 +212,9 @@ const AppProvider = ({ children }) => {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
         setFacetMap(new Map(fMap));
-        if (isDomainWhitelisted) {
+        const hasDomainBeenWhitelisted = await hasWhitelistedDomain(window.location.hostname);
+        setIsDomainWhitelisted(hasDomainBeenWhitelisted);
+        if (hasDomainBeenWhitelisted) {
           loadInitialStateInDOM(fMap, setNonRolledOutFacets);
         }
       } else {

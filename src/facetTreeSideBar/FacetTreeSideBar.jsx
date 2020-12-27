@@ -198,11 +198,14 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton isSelected name="edit-2-outline" onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} src={facetLogoIce} title="Disable" />
+      <FacetIconButton isSelected name="edit-2-outline" onClick={() => {
+        setLoadingSideBar(true);
+        sideBarHandler();
+      }} iconWidth="30" iconHeight="30" src={facetLogoIce} title="Disable" />
     ) : (
-      <FacetIconButton name="edit-2-outline" onClick={() => {
+      <FacetIconButton size="medium" name="edit-2-outline" onClick={() => {
         setLoadingSideBar(true); sideBarHandler();
-      }} src={facetLogo} title="Enable" aria-label="Enable" />
+      }} iconWidth="30" iconHeight="30" src={facetLogo} title="Enable" aria-label="Enable" />
     );
 
   return (
@@ -243,8 +246,8 @@ export default function FacetTreeSideBar() {
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" size="small" aria-label="Delete All" />
-              <FacetIconButton title="save" name="save-outline" onClick={() => { onSaveClick(); }} size="small" aria-label="add" />
+              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
+              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
             </div>
           </div>
           <Divider style={{ backgroundColor: color.lightGray }} />
