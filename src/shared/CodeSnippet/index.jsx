@@ -13,16 +13,17 @@ const StyledDiv = styled.div`
     align-items: center;
     justify-content: center;
     border: 1px solid ${color.ice};
+    background-color: ${color.ice};
     word-break: break-all;
 `;
 
 export default ({ text, onClick }) => {
     return <StyledDiv>
         <div style={{ userSelect: 'all', cursor: 'pointer', marginLeft: '.2rem' }} onClick={() => { }}>
-            <FacetLabel color={color.ice} fontSize={fontSize.xSmall} text={text} />
+            <FacetLabel color={color.black} fontSize={fontSize.xSmall} text={text} />
         </div>
         <div style={{ alignSelf: 'start' }}>
-            <FacetIconButton onClick={() => { if (onClick) { onClick() } }} customHeight=".8rem" name="clipboard" />
+            <FacetIconButton hoverColor={color.black} fill={color.black} onClick={() => { if (onClick) { onClick() } }} customHeight=".8rem" name="clipboard" />
         </div>
     </StyledDiv >
 }

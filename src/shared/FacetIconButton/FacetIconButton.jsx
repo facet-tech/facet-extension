@@ -14,14 +14,14 @@ const useStyles = makeStyles({
         display: 'grid',
         fill: props => props.isSelected ? color.electricB : '',
         "&:hover": {
-            fill: color.ice
+            fill: props => props.hoverColor,
         }
     }
 });
 
-export default ({ name, size = "small", fill = color.lightGray,
+export default ({ name, size = "small", fill = color.lightGray, hoverColor = color.ice,
     isSelected = false, customHeight, width, iconWidth, iconHeight, children, ...other }) => {
-    const classes = useStyles({ isSelected, width });
+    const classes = useStyles({ isSelected, width, hoverColor });
     useEffect(() => {
         eva.replace();
     }, [name]);
