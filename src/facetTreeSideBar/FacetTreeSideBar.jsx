@@ -86,6 +86,8 @@ const TopDiv = styled.div`
 const CustomIconButtonContainer = styled.div`
     cursor: pointer;
     display: grid;
+    padding: .25rem;
+    text-align: center;
 `;
 
 export default function FacetTreeSideBar() {
@@ -208,11 +210,11 @@ export default function FacetTreeSideBar() {
       //   sideBarHandler();
       // }} iconWidth="30" iconHeight="30" src={facetLogoIce} title="Disable" />
       <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Disable" >
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="30" height="30" title="facet" src={facetLogoIce} />
+        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
       </CustomIconButtonContainer>
     ) : (
       <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Enable">
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="30" height="30" title="facet" src={facetLogo} />
+        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="27" height="27" title="facet" src={facetLogo} />
       </CustomIconButtonContainer>
     );
 
