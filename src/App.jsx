@@ -29,6 +29,9 @@ function App() {
     // TODO Show big screen loader here...
 
     async function load() {
+      if (!isPluginEnabled || !isDomainWhitelisted) {
+        return;
+      }
       if (showSideBar) {
         await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
       } else {

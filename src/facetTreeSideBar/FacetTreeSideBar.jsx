@@ -205,10 +205,6 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      // <FacetIconButton isSelected onClick={() => {
-      //   setLoadingSideBar(true);
-      //   sideBarHandler();
-      // }} iconWidth="30" iconHeight="30" src={facetLogoIce} title="Disable" />
       <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Disable" >
         <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
       </CustomIconButtonContainer>
