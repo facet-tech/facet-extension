@@ -6,7 +6,7 @@
     "scripts": {
         "start": "webpack serve --open 'Google Chrome' --mode='development'",
         "build": "webpack --mode='production'",
-        "create-zip": "yarn build && mv build extension-chrome-facet-ninja && rm -rf extension-chrome-facet-ninja/build && zip -r extension-chrome-facet-ninja.zip ./extension-chrome-facet-ninja/"
+        "create-zip": "yarn build && mv build extension-chrome-facet && rm -rf extension-chrome-facet/build && zip -r extension-chrome-facet.zip ./extension-chrome-facet/"
     },
     "eslintConfig": {
         "extends": "react-app"
