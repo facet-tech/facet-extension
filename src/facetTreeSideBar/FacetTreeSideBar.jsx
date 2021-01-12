@@ -83,6 +83,13 @@ const TopDiv = styled.div`
     margin-top: 1rem;
 `;
 
+const CustomIconButtonContainer = styled.div`
+    cursor: pointer;
+    display: grid;
+    padding: .25rem;
+    text-align: center;
+`;
+
 export default function FacetTreeSideBar() {
   const classes = useStyles();
   const [open] = useState(true);
@@ -198,14 +205,13 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <FacetIconButton isSelected name="edit-2-outline" onClick={() => {
-        setLoadingSideBar(true);
-        sideBarHandler();
-      }} iconWidth="30" iconHeight="30" src={facetLogoIce} title="Disable" />
+      <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Disable" >
+        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
+      </CustomIconButtonContainer>
     ) : (
-      <FacetIconButton size="medium" name="edit-2-outline" onClick={() => {
-        setLoadingSideBar(true); sideBarHandler();
-      }} iconWidth="30" iconHeight="30" src={facetLogo} title="Enable" aria-label="Enable" />
+      <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Enable">
+        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="27" height="27" title="facet" src={facetLogo} />
+      </CustomIconButtonContainer>
     );
 
   return (
@@ -222,7 +228,7 @@ export default function FacetTreeSideBar() {
           <div className={classes.gridDiv}>
             <TopDiv>
               <div>
-                <FacetImage title="facet" href="https://facet.ninja/" src={facetTypography} />
+                <FacetImage title="facet" href="https://facet.ninja/" target="_blank" src={facetTypography} />
               </div>
               <div>
                 <FacetIconButton title="info" name="info-outline" onClick={() => {

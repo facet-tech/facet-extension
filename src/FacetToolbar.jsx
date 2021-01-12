@@ -35,9 +35,8 @@ export default function FacetToolbar() {
       marginRight: '1rem'
     },
     grid1: {
-      alignSelf: 'end',
+      alignSelf: 'center',
       justifySelf: 'center',
-      marginBottom: '.4rem'
     },
     grid2: {
       alignSelf: 'center',
@@ -65,13 +64,13 @@ export default function FacetToolbar() {
           <FacetTreeSideBar />
         </StyledDiv>
       </div>
-      <div onClick={() => addFacet()} className={classes.fabGrid}>
+      <div className={classes.fabGrid}>
         <div className={classes.grid1}>
           <FacetLabel text="© Facet 2021 - All rights reserved." />
         </div>
         <div className={classes.grid2}>
           <Fab size='small' className={classes.fabBtn} aria-label="add">
-            <AddIcon />
+            <AddIcon onClick={() => addFacet()} />
           </Fab>
         </div>
       </div>
