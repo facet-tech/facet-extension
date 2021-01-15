@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AppContext from '../../AppContext';
 import { withStyles } from '@material-ui/core';
 import { color } from '../constant';
+import FacetCheckBox from '../FacetCheckBox';
 
 const StyledMenu = withStyles({
   paper: {
@@ -31,7 +32,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function FacetMenu({ isOpen = false, onRenameClick, gotoClick, deleteClick }) {
+export default function FacetMenu({ isOpen = false, onGlobalCheckboxClick, isGlobal, onRenameClick, gotoClick, deleteClick }) {
   const { handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
   return (
     <div>
@@ -41,6 +42,9 @@ export default function FacetMenu({ isOpen = false, onRenameClick, gotoClick, de
         open={Boolean(menuAnchorEl && isOpen)}
         onClose={handleCloseMenuEl}
       >
+        <StyledMenuItem onClick={() => { onGlobalCheckboxClick() }}>
+          <FacetCheckBox checked={isGlobal} text="Global" />
+        </StyledMenuItem>
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>
       </StyledMenu>

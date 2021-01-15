@@ -59,6 +59,7 @@ const AppProvider = ({ children }) => {
   };
 
   const handleCloseMenuEl = () => {
+    console.log('@handleCloseMenuEl')
     setMenuAnchorEl(null);
   };
 
@@ -98,6 +99,22 @@ const AppProvider = ({ children }) => {
       setExpanded([defaultFacet]);
     }
   };
+
+  const onGlobalCheckboxClick = (selectedFacet) => {
+    if (globalFacets?.includes(selectedFacet)) {
+      setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));
+      enqueueSnackbar({
+        message: `${selectedFacet} visibility set to non-global`,
+        variant: snackbar.success.text
+      });
+    } else {
+      setGlobalFacets([...globalFacets, selectedFacet]);
+      enqueueSnackbar({
+        message: `${selectedFacet} visibility set to global`,
+        variant: snackbar.success.text
+      });
+    }
+  }
 
   const login = async () => {
     const workspaceResponse = await getOrCreateWorkspace(email);
@@ -359,6 +376,7 @@ const AppProvider = ({ children }) => {
       setIsDomainWhitelisted,
       globalFacets,
       setGlobalFacets,
+      onGlobalCheckboxClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,

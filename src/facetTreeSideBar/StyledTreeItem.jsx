@@ -37,7 +37,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     },
     labelRoot: {
         display: 'grid',
-        gridTemplateColumns: '55% 15% 15% 15%',
+        gridTemplateColumns: '70% 15% 15%',
         alignItems: 'center',
         marginRight: '.5rem',
     },
@@ -67,7 +67,7 @@ function StyledTreeItem(props) {
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
-        nonRolledOutFacets, setNonRolledOutFacets,
+        nonRolledOutFacets, setNonRolledOutFacets, onGlobalCheckboxClick,
         globalFacets, setGlobalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
@@ -83,29 +83,11 @@ function StyledTreeItem(props) {
             setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
         }} fill={colorConstant.grayA} name="eye-off-outline" />;
 
-    const globalFacetIconBtn = <FacetIconButton
-        key={labelText + 'global'}
-        fill={colorConstant.grayA}
-        name="droplet-outline"
-        title="Set to local"
-        onClick={(e) => {
-            setGlobalFacets(globalFacets?.filter(e => e !== labelText));
-        }} />;
-
-    const localFacetIconBtn = <FacetIconButton
-        key={labelText + 'local'}
-        fill={colorConstant.grayA}
-        title="Set to global"
-        name="droplet-off-outline"
-        onClick={(e) => {
-            setGlobalFacets([...globalFacets, labelText])
-        }} />;
-
     const isEnabled = nonRolledOutFacets.includes(labelText);
     const isGlobal = globalFacets.includes(labelText);
 
     const defaultElement =
-        <div key={labelText + isEnabled + isGlobal}>
+        <div key={labelText + isEnabled}>
             <div className={classes.labelRoot}>
                 <div>
                     <Typography
@@ -120,9 +102,6 @@ function StyledTreeItem(props) {
                 </div>
                 {props.isFacet ?
                     <>
-                        <div>
-                            {!globalFacets?.includes(labelText) ? localFacetIconBtn : globalFacetIconBtn}
-                        </div>
                         <div>
                             {!nonRolledOutFacets.includes(labelText) ? enableFacetIconBtn : disableFacetIconBtn}
                         </div>
@@ -144,6 +123,8 @@ function StyledTreeItem(props) {
                                         facetMap.get(selectedFacet)[0]?.path;
                                     onGotoClick(domPath);
                                 }}
+                                isGlobal={globalFacets.includes(selectedFacet)}
+                                onGlobalCheckboxClick={() => { onGlobalCheckboxClick(selectedFacet) }}
                                 deleteClick={() => { onDeleteFacet(selectedFacet) }}
                                 onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>

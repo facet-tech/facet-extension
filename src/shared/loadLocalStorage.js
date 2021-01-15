@@ -29,7 +29,6 @@ const initSessionData = async ({ workspaceId, domainId }) => {
  * @param {*} setIsPluginEnabled 
  * @param {*} setIsUserAuthenticated 
  */
-// TODO clean up
 const loadLocalStorage = async (setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId) => {
     chrome?.storage?.sync?.get(facetKey, function (obj) {
         try {
