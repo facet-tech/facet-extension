@@ -75,7 +75,7 @@ export default () => {
                     />
                 </div>
                 <div>
-                    <FacetLink color={color.electricB} text="Try it now!" />
+                    <FacetLink color={color.electricB} text="Close window" />
                 </div>
             </StyledDiv>
             <br />

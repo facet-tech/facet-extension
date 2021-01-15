@@ -1,7 +1,7 @@
 import React, { useRef, useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { useForm } from "react-hook-form";
-import { authState as authStateConstant, color } from '../shared/constant';
+import { authState as authStateConstant, color, storage, LoginTypes } from '../shared/constant';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
 import FacetLink from "../shared/FacetLink";
@@ -11,7 +11,7 @@ import FacetButton from "../shared/FacetButton";
 import FacetFormContainer from "../shared/FacetFormContainer";
 import FacetFormError from "../shared/FacetFormError";
 import MarginTop from "../shared/MarginTop";
-import { getOrCreateWorkspace, postUser } from "../services/facetApiService";
+import { setKeyInLocalStorage } from "../shared/loadLocalStorage";
 
 export default () => {
 
@@ -32,7 +32,6 @@ export default () => {
         ...authObject,
         email
       });
-      Auth.confirmSignUp()
       await Auth.signUp({
         username: email,
         password,
@@ -40,7 +39,9 @@ export default () => {
           email,
         }
       });
-      await getOrCreateWorkspace(email);
+      setKeyInLocalStorage(LoginTypes.email, email);
+      await setKeyInLocalStorage(storage.username, email);
+      await setKeyInLocalStorage(storage.password, password);
       setCurrAuthState(authStateConstant.confirmingSignup);
       setSubmitting(false);
     } catch (error) {

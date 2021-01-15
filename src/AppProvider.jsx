@@ -128,7 +128,9 @@ const AppProvider = ({ children }) => {
 
   const loadJWT = async () => {
     const jwt = await AmplifyService.getCurrentUserJTW();
-    setJwt(jwt);
+    if (jwt) {
+      setJwt(jwt);
+    }
   }
 
   const signInExistingUser = async () => {
