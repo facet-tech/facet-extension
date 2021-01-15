@@ -7,14 +7,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2.3.4
-      
-      - name: Installing dependencies
-        run: yarn
+      - name: fetch source code
+        uses: actions/checkout@v2.3.4
 
-      - name: Building the Application
+      - name: node cache
+        uses: actions/cache@v2
+        env:
+          cache-name: modules-node
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: build
+        run: yarn build
         env:
           CI: false
-        run: yarn build
 
   # todo run tests eventually
