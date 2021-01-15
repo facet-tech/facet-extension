@@ -71,11 +71,14 @@ function StyledTreeItem(props) {
         globalFacets, setGlobalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
-    const enableFacetIconBtn = <FacetIconButton name="eye-outline" onClick={() => {
-        setNonRolledOutFacets([...nonRolledOutFacets, labelText])
-    }} fill={colorConstant.grayA} />;
+    const enableFacetIconBtn = <FacetIconButton
+        title="Disable"
+        name="eye-outline" onClick={() => {
+            setNonRolledOutFacets([...nonRolledOutFacets, labelText])
+        }} fill={colorConstant.grayA} />;
 
     const disableFacetIconBtn = <FacetIconButton
+        title="Enable"
         onClick={() => {
             setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
         }} fill={colorConstant.grayA} name="eye-off-outline" />;
@@ -84,6 +87,7 @@ function StyledTreeItem(props) {
         key={labelText + 'global'}
         fill={colorConstant.grayA}
         name="droplet-outline"
+        title="Set to local"
         onClick={(e) => {
             setGlobalFacets(globalFacets?.filter(e => e !== labelText));
         }} />;
@@ -91,6 +95,7 @@ function StyledTreeItem(props) {
     const localFacetIconBtn = <FacetIconButton
         key={labelText + 'local'}
         fill={colorConstant.grayA}
+        title="Set to global"
         name="droplet-off-outline"
         onClick={(e) => {
             setGlobalFacets([...globalFacets, labelText])
@@ -126,6 +131,7 @@ function StyledTreeItem(props) {
                                 key={labelText}
                                 fill={colorConstant.grayA}
                                 name="more-vertical-outline"
+                                title="Settings"
                                 onClick={(e) => {
                                     handleClickMenuEl(e, labelText);
                                     setExpanded([labelText]);
