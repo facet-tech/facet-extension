@@ -69,6 +69,12 @@ const getLocalStorageObject = async () => {
     });
 }
 
+const printLocalStorage = async () => {
+    chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
+        console.log('[local storage]:', obj);
+    });
+}
+
 /**
  * @param {key} key stored in local storage for 'facet-settings'
  */
@@ -131,6 +137,6 @@ const clearStorage = () => {
     });
 }
 
-export { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage, initSessionData };
+export { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage, initSessionData, printLocalStorage };
 
 export default loadLocalStorage;

@@ -1,9 +1,7 @@
 import { Auth } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import PopupContext from "../popup/PopupContext";
 import { authState as authStateConstant, color, snackbar } from '../shared/constant';
-import { Input, InputLabel, Button, Link } from '@material-ui/core';
 import AppContext from "../AppContext";
 import Alert from '@material-ui/lab/Alert';
 import { useSnackbar } from 'notistack';
@@ -14,6 +12,7 @@ import FacetInput from "../shared/FacetInput";
 import FacetFormError from "../shared/FacetFormError";
 import FacetButton from "../shared/FacetButton";
 import MarginTop from "../shared/MarginTop";
+import { getOrCreateWorkspace } from "../services/facetApiService";
 
 export default () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -29,7 +28,8 @@ export default () => {
         try {
             setSubmitting(true);
             const { confirmationCode } = data;
-            const response = await Auth.confirmSignUp(authObject.email, confirmationCode);
+            await Auth.confirmSignUp(authObject.email, confirmationCode);
+            await getOrCreateWorkspace(authObject.email);
             await persistLogin(authObject.email, authObject.password);
             setCurrAuthState(authStateConstant.signedIn);
             setSubmitting(false);
@@ -41,7 +41,7 @@ export default () => {
 
     const resendConfirmationCode = async () => {
         try {
-            const response = await Auth.resendSignUp(authObject.email);
+            await Auth.resendSignUp(authObject.email);
             enqueueSnackbar({
                 message: `Confirmation code has been sent in your email.`,
                 variant: snackbar.success.text

@@ -33,7 +33,6 @@ class AmplifyService {
         })
     }
 
-    // TODO build retry logic here
     static getCurrentUserJTW = async () => {
         try {
             let ans = await AmplifyService.getCurrentSession();
