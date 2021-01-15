@@ -254,6 +254,16 @@ const convertGetFacetResponseToMap = (responseBody) => {
     return facetMap;
 }
 
+const getGlobalArrayFromFacetResponse = (responseBody) => {
+    let result = [];
+    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
+        if (facet.global) {
+            result.push(facet.name)
+        }
+    });
+    return result;
+}
+
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
@@ -278,12 +288,13 @@ const generateDomElements = (domElements) => {
     return result;
 }
 
-const extractFacetArray = (facetMap, nonRolledOutFacets) => {
+const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
         return facetArray.map(facet => {
             return {
                 enabled: nonRolledOutFacets.includes(facet.name),
+                global: globalFacets.includes(facet.name),
                 name: facet.name,
                 domElement: generateDomElements(facetMap.get(facet.name))
             }
@@ -292,24 +303,30 @@ const extractFacetArray = (facetMap, nonRolledOutFacets) => {
         console.log(`[ERROR] [extractFacetArray]`, e)
     }
 }
-
-const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId) => {
+/**
+ * 
+ * @param {*} facetMap 
+ * @param {*} nonRolledOutFacets 
+ * @param {*} domainId 
+ * @param {*} globalFacets
+ */
+const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId, globalFacets) => {
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
         domainId,
         urlPath: window.location.pathname,
-        facet: extractFacetArray(facetMap, nonRolledOutFacets),
+        facet: extractFacetArray(facetMap, nonRolledOutFacets, globalFacets),
         version: facetObjectVersion,
     }
     return body;
 }
 
-const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar) => {
+const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id);
+        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar({
             message: `Hooray ~ Configuration has been saved!`,
@@ -329,5 +346,5 @@ export {
     getDomain, getFacet, getOrPostDomain, deleteFacet,
     getOrCreateWorkspace, deleteUser, postUser,
     saveFacets, convertGetFacetResponseToMap, addWhiteListedDomain,
-    hasWhitelistedDomain, removeWhitelistedDomain
+    hasWhitelistedDomain, removeWhitelistedDomain, getGlobalArrayFromFacetResponse
 };

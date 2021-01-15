@@ -1,5 +1,4 @@
 import React from 'react';
-import { Input, InputAdornment, InputLabel } from '@material-ui/core';
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`

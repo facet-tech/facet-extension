@@ -6,7 +6,7 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
@@ -104,13 +104,13 @@ const AppProvider = ({ children }) => {
     if (globalFacets?.includes(selectedFacet)) {
       setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));
       enqueueSnackbar({
-        message: `${selectedFacet} visibility set to non-global`,
+        message: `${selectedFacet} set to non-global`,
         variant: snackbar.success.text
       });
     } else {
       setGlobalFacets([...globalFacets, selectedFacet]);
       enqueueSnackbar({
-        message: `${selectedFacet} visibility set to global`,
+        message: `${selectedFacet} set to global`,
         variant: snackbar.success.text
       });
     }
@@ -227,6 +227,8 @@ const AppProvider = ({ children }) => {
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
+        const globalFacetsArr = getGlobalArrayFromFacetResponse(getFacetRequest.response);
+        setGlobalFacets(globalFacetsArr);
         if (fMap.size > 0) {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
@@ -234,7 +236,7 @@ const AppProvider = ({ children }) => {
         const hasDomainBeenWhitelisted = await hasWhitelistedDomain(window.location.hostname);
         setIsDomainWhitelisted(hasDomainBeenWhitelisted);
         if (hasDomainBeenWhitelisted) {
-          loadInitialStateInDOM(fMap, setNonRolledOutFacets, setGlobalFacets);
+          loadInitialStateInDOM(fMap, setNonRolledOutFacets);
         }
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
@@ -246,7 +248,7 @@ const AppProvider = ({ children }) => {
 
   const onSaveClick = async () => {
     try {
-      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar);
+      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }

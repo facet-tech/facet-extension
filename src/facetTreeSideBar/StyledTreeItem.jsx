@@ -37,7 +37,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     },
     labelRoot: {
         display: 'grid',
-        gridTemplateColumns: '70% 15% 15%',
+        gridTemplateColumns: '80% 10% 10%',
         alignItems: 'center',
         marginRight: '.5rem',
     },
