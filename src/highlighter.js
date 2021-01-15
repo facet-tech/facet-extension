@@ -164,13 +164,17 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
  *  @param {*} facetMap
  *  @param {*} setNonRolledOutFacets
  */
-const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
+const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets, setGlobalFacets) => {
     let nonRolledOutFacets = [];
+    let globalFacets = [];
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
         const value = facet.value;
         if (value.enabled) {
             nonRolledOutFacets.push(facet.name);
+        }
+        if (value.global) {
+            globalFacets.push(facet.name);
         }
         value.forEach(val => {
             if (!val.enabled) {
@@ -182,6 +186,7 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
         })
     });
     setNonRolledOutFacets(nonRolledOutFacets);
+    setGlobalFacets(globalFacets);
 }
 
 /**

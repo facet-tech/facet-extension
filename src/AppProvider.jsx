@@ -51,6 +51,7 @@ const AppProvider = ({ children }) => {
   const [jwt, setJwt] = useState('');
   const [loading, setLoading] = useState(true);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
+  const [globalFacets, setGlobalFacets] = useState([])
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -209,7 +210,6 @@ const AppProvider = ({ children }) => {
       const getFacetRequest = await getFacet(domainId, window.location.pathname);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-        // TODO COMPUTE nonRolledOutFacets
         if (fMap.size > 0) {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
@@ -217,7 +217,7 @@ const AppProvider = ({ children }) => {
         const hasDomainBeenWhitelisted = await hasWhitelistedDomain(window.location.hostname);
         setIsDomainWhitelisted(hasDomainBeenWhitelisted);
         if (hasDomainBeenWhitelisted) {
-          loadInitialStateInDOM(fMap, setNonRolledOutFacets);
+          loadInitialStateInDOM(fMap, setNonRolledOutFacets, setGlobalFacets);
         }
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
@@ -357,6 +357,8 @@ const AppProvider = ({ children }) => {
       persistLogin,
       isDomainWhitelisted,
       setIsDomainWhitelisted,
+      globalFacets,
+      setGlobalFacets,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,
