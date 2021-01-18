@@ -227,7 +227,10 @@ const getFacet = async (domainId, urlPath) => {
     if (isDevelopment()) {
         return MockService.mockGetFacet();
     }
-    const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
+    let suffix = `/facet?domainId=${domainId}`;
+    if (urlPath) {
+        suffix += `&urlPath=${urlPath}`;
+    }
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;
 }
@@ -244,14 +247,37 @@ const convertDOMElement = (facet) => {
     })) || [];
 }
 
-const convertGetFacetResponseToMap = (responseBody) => {
+/**
+ * @param {*} responseBody
+ * 
+ * Parses the facet response and adds facets relevant to the page
+ */
+const convertGetFacetResponseToMap = (responseBodyArr) => {
     let facetMap = new Map();
-    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
-        const element = convertDOMElement(facet)
-        element.enabled = facet.enabled;
-        facetMap.set(facet.name, element || [])
+    responseBodyArr?.forEach(facetElement => {
+        facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
+            if (!facet.global && facetElement.urlPath !== window.location.pathname) {
+                return;
+            }
+            const element = convertDOMElement(facet)
+            element.enabled = facet.enabled;
+            facetMap.set(facet.name, element || [])
+        })
     })
     return facetMap;
+}
+
+const getGlobalArrayFromFacetResponse = (responseBodyArr) => {
+    let result = [];
+    responseBodyArr?.forEach(facetElement => {
+        facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
+            if (facet.global) {
+                result.push(facet.name)
+            }
+        });
+    })
+
+    return result;
 }
 
 // TODO browser issues fix
@@ -278,12 +304,13 @@ const generateDomElements = (domElements) => {
     return result;
 }
 
-const extractFacetArray = (facetMap, nonRolledOutFacets) => {
+const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
         return facetArray.map(facet => {
             return {
                 enabled: nonRolledOutFacets.includes(facet.name),
+                global: globalFacets.includes(facet.name),
                 name: facet.name,
                 domElement: generateDomElements(facetMap.get(facet.name))
             }
@@ -292,24 +319,30 @@ const extractFacetArray = (facetMap, nonRolledOutFacets) => {
         console.log(`[ERROR] [extractFacetArray]`, e)
     }
 }
-
-const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId) => {
+/**
+ * 
+ * @param {*} facetMap 
+ * @param {*} nonRolledOutFacets 
+ * @param {*} domainId 
+ * @param {*} globalFacets
+ */
+const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId, globalFacets) => {
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
         domainId,
         urlPath: window.location.pathname,
-        facet: extractFacetArray(facetMap, nonRolledOutFacets),
+        facet: extractFacetArray(facetMap, nonRolledOutFacets, globalFacets),
         version: facetObjectVersion,
     }
     return body;
 }
 
-const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar) => {
+const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id);
+        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar({
             message: `Hooray ~ Configuration has been saved!`,
@@ -329,5 +362,5 @@ export {
     getDomain, getFacet, getOrPostDomain, deleteFacet,
     getOrCreateWorkspace, deleteUser, postUser,
     saveFacets, convertGetFacetResponseToMap, addWhiteListedDomain,
-    hasWhitelistedDomain, removeWhitelistedDomain
+    hasWhitelistedDomain, removeWhitelistedDomain, getGlobalArrayFromFacetResponse
 };

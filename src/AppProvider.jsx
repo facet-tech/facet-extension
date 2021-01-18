@@ -6,10 +6,10 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { loadInitialStateInDOM, performDOMTransformation } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -51,6 +51,7 @@ const AppProvider = ({ children }) => {
   const [jwt, setJwt] = useState('');
   const [loading, setLoading] = useState(true);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
+  const [globalFacets, setGlobalFacets] = useState([])
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -84,19 +85,39 @@ const AppProvider = ({ children }) => {
     facetValue && facetValue.forEach((domElement) => {
       onDeleteDOMElement(domElement.path);
     });
+
     facetMap.delete(facetName);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
+
+    const newGlobalFacets = globalFacets.filter(e => e !== facetName);
+    setGlobalFacets(newGlobalFacets);
 
     // base cases if no facets are present
     if (keys.length > 0) {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
     } else {
-      setSelectedFacet(defaultFacet);
-      setExpanded([defaultFacet]);
+      setSelectedFacet(defaultFacetName);
+      setExpanded([defaultFacetName]);
     }
   };
+
+  const onGlobalCheckboxClick = (selectedFacet) => {
+    if (globalFacets?.includes(selectedFacet)) {
+      setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));
+      enqueueSnackbar({
+        message: `${selectedFacet} set to non-global`,
+        variant: snackbar.success.text
+      });
+    } else {
+      setGlobalFacets([...globalFacets, selectedFacet]);
+      enqueueSnackbar({
+        message: `${selectedFacet} set to global`,
+        variant: snackbar.success.text
+      });
+    }
+  }
 
   const login = async () => {
     const workspaceResponse = await getOrCreateWorkspace(email);
@@ -206,10 +227,11 @@ const AppProvider = ({ children }) => {
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
       await initSessionData({ workspaceId, domainId });
-      const getFacetRequest = await getFacet(domainId, window.location.pathname);
+      const getFacetRequest = await getFacet(domainId);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
-        // TODO COMPUTE nonRolledOutFacets
+        const globalFacetsArr = getGlobalArrayFromFacetResponse(getFacetRequest.response);
+        setGlobalFacets(globalFacetsArr);
         if (fMap.size > 0) {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
@@ -229,7 +251,7 @@ const AppProvider = ({ children }) => {
 
   const onSaveClick = async () => {
     try {
-      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar);
+      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
@@ -305,6 +327,7 @@ const AppProvider = ({ children }) => {
     setNonRolledOutFacets([...nonRolledOutFacets, newName]);
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
+    setGlobalFacets([...globalFacets, newName]);
     setExpanded([newName]);
   };
 
@@ -357,6 +380,9 @@ const AppProvider = ({ children }) => {
       persistLogin,
       isDomainWhitelisted,
       setIsDomainWhitelisted,
+      globalFacets,
+      setGlobalFacets,
+      onGlobalCheckboxClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,

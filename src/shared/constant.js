@@ -6,7 +6,6 @@ const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
 const localBaseURL = 'http://localhost:3000';
-const defaultFacet = 'Facet-1';
 
 const authState = {
     notSignedIn: 'NOT_LOGGED_IN',
@@ -144,7 +143,7 @@ const defaultFacetName = 'Facet-1';
 export {
     facetizerId, facetKey, isPluginEnabled, snackbar,
     storage, LoginTypes, api, HTTPMethods,
-    APIUrl, defaultFacet, styles, authState,
+    APIUrl, styles, authState,
     authStorage, ChromeRequestType, color, fontSize,
     isActivelyBeingDebugged, domIds, appId, defaultFacetName
 };

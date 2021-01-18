@@ -63,26 +63,29 @@ function StyledTreeItem(props) {
     const { labelText, labelIcon: LabelIcon, labelInfo,
         color, bgColor, onRenameItem, renamingFacet,
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
+
     const {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
-        nonRolledOutFacets, setNonRolledOutFacets,
-        selectedFacet, setSelectedFacet } = useContext(AppContext);
+        nonRolledOutFacets, setNonRolledOutFacets, onGlobalCheckboxClick,
+        globalFacets, setGlobalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
-    const enableFacetIconBtn = <FacetIconButton name="eye-outline" onClick={() => {
-        setNonRolledOutFacets([...nonRolledOutFacets, labelText])
-    }}
-        fill={colorConstant.grayA} />;
+    const enableFacetIconBtn = <FacetIconButton
+        title="Disable"
+        name="eye-outline" onClick={() => {
+            setNonRolledOutFacets([...nonRolledOutFacets, labelText])
+        }} fill={colorConstant.grayA} />;
 
     const disableFacetIconBtn = <FacetIconButton
+        title="Enable"
         onClick={() => {
             setNonRolledOutFacets(nonRolledOutFacets?.filter(e => e !== labelText));
-        }}
-        fill={colorConstant.grayA}
-        name="eye-off-outline" />;
+        }} fill={colorConstant.grayA} name="eye-off-outline" />;
 
     const isEnabled = nonRolledOutFacets.includes(labelText);
+    const isGlobal = globalFacets.includes(labelText);
+
     const defaultElement =
         <div key={labelText + isEnabled}>
             <div className={classes.labelRoot}>
@@ -97,7 +100,6 @@ function StyledTreeItem(props) {
                         {onRenameItem ? <b>{labelText}</b> : labelText}
                     </Typography>
                 </div>
-
                 {props.isFacet ?
                     <>
                         <div>
@@ -108,6 +110,7 @@ function StyledTreeItem(props) {
                                 key={labelText}
                                 fill={colorConstant.grayA}
                                 name="more-vertical-outline"
+                                title="Settings"
                                 onClick={(e) => {
                                     handleClickMenuEl(e, labelText);
                                     setExpanded([labelText]);
@@ -120,6 +123,8 @@ function StyledTreeItem(props) {
                                         facetMap.get(selectedFacet)[0]?.path;
                                     onGotoClick(domPath);
                                 }}
+                                isGlobal={globalFacets.includes(selectedFacet)}
+                                onGlobalCheckboxClick={() => { onGlobalCheckboxClick(selectedFacet) }}
                                 deleteClick={() => { onDeleteFacet(selectedFacet) }}
                                 onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>

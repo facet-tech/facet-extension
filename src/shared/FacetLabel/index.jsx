@@ -1,4 +1,3 @@
-import { Input, InputAdornment, InputLabel } from '@material-ui/core';
 import React from 'react';
 
 export default ({ text, color = '#A4A7AC', fontSize = 'small' }) => {
