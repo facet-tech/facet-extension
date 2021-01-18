@@ -6,8 +6,11 @@ Facet abstracts the rollout process that is commonly achieved by using feature f
 
 ### 2. What is a facet? <br/>
 
-A facet is a set elements that construe a feature. For instance, a login form could be considered a facet, with the elements being `username` and `password`.
-(//todo add image)
+A facet is a set elements that construe a feature. For instance, a login form could be considered a facet, with the elements being `email`, `password` and the login button.
+
+<a>
+    <img width="60%" src="./authentication.png">
+</a>
 
 ### 3. Is facet secure? <br/>
 
@@ -19,7 +22,11 @@ JS code is delivered at all times to the end user. The facet CDN script observes
 
 ### 5. My facet is declared in multiple pages (ie: menu). Can I declare a global facets?<br/>
 
-Not yet. WIP!
+~~Not yet. WIP!~~ Yes. By default, facets are declared global. You can change their visibility to non-global, which mean that their rules will be applied to the current domain (`pathname`). Click on the desired facet -> select the "more options button", and click on the "global" checkbox.
+
+<a>
+    <img src="./global_facet_declaration.png">
+</a>
 
 ### 6. How to hide a facet before rolling out to production?<br/>
 
