@@ -14,7 +14,7 @@ A facet is a set elements that construe a feature. For instance, a login form co
 
 ### 3. Is facet secure? <br/>
 
-At facet, Security is at the center of our priorities. We have integrated with multiple vendors who champion DevSecOps,including [Snyk](https://snyk.io/) and [Github](https://github.com/dependabot), to ensure secure codebases. We are also working on getting ISO, HIIPA and other security compliance licenses.
+At facet, Security is at the center of our priorities. We have integrated with multiple vendors who champion DevSecOps,including [Snyk](https://snyk.io/) and [Github](https://github.com/dependabot), to ensure secure codebases. We are also working on getting CCPA, GDPR, HIPAA, FERPA, PCI and other data privacy regulations.
 
 ### 4. Is JS/HTML code delivered at all after disabling a facet?<br/>
 
