@@ -50,7 +50,7 @@
         "sw-precache-webpack-plugin": "1.0.0",
         "typeface-roboto": "^1.1.13",
         "url-loader": "4.1.1",
-        "webpack": "^5.14.0",
+        "webpack": "^5.15.0",
         "webpack-dev-server": "^3.11.2",
         "webpack-manifest-plugin": "3.0.0"
     },
