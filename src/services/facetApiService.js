@@ -227,7 +227,10 @@ const getFacet = async (domainId, urlPath) => {
     if (isDevelopment()) {
         return MockService.mockGetFacet();
     }
-    const suffix = `/facet?domainId=${domainId}&urlPath=${urlPath}`;
+    let suffix = `/facet?domainId=${domainId}`;
+    if (urlPath) {
+        suffix += `&urlPath=${urlPath}`;
+    }
     const apiResponse = await triggerApiCall(HTTPMethods.GET, suffix);
     return apiResponse;
 }
@@ -244,13 +247,27 @@ const convertDOMElement = (facet) => {
     })) || [];
 }
 
-const convertGetFacetResponseToMap = (responseBody) => {
+/**
+ * @param {*} responseBody
+ * 
+ * Parses the facet response and adds facets relevant to the page
+ */
+const convertGetFacetResponseToMap = (responseBodyArr) => {
     let facetMap = new Map();
-    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
-        const element = convertDOMElement(facet)
-        element.enabled = facet.enabled;
-        facetMap.set(facet.name, element || [])
+    console.log('la[[a', responseBodyArr)
+    responseBodyArr?.forEach(facetElement => {
+        console.log("facetElement", facetElement)
+        facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
+            console.log('HEY', facetElement.urlPath, 'VS', window.location.pathname)
+            if (!facet.global && facetElement.urlPath !== window.location.pathname) {
+                return;
+            }
+            const element = convertDOMElement(facet)
+            element.enabled = facet.enabled;
+            facetMap.set(facet.name, element || [])
+        })
     })
+    console.log('PRDUCED', facetMap);
     return facetMap;
 }
 

@@ -9,7 +9,7 @@ import {
   getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacet, snackbar, domIds, appId, defaultFacetName, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { loadInitialStateInDOM, performDOMTransformation } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -59,7 +59,6 @@ const AppProvider = ({ children }) => {
   };
 
   const handleCloseMenuEl = () => {
-    console.log('@handleCloseMenuEl')
     setMenuAnchorEl(null);
   };
 
@@ -95,8 +94,8 @@ const AppProvider = ({ children }) => {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
     } else {
-      setSelectedFacet(defaultFacet);
-      setExpanded([defaultFacet]);
+      setSelectedFacet(defaultFacetName);
+      setExpanded([defaultFacetName]);
     }
   };
 
@@ -224,7 +223,7 @@ const AppProvider = ({ children }) => {
       const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
       const domainId = domainResponse?.response?.id;
       await initSessionData({ workspaceId, domainId });
-      const getFacetRequest = await getFacet(domainId, window.location.pathname);
+      const getFacetRequest = await getFacet(domainId);
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
         const globalFacetsArr = getGlobalArrayFromFacetResponse(getFacetRequest.response);
@@ -324,6 +323,7 @@ const AppProvider = ({ children }) => {
     setNonRolledOutFacets([...nonRolledOutFacets, newName]);
     setFacetMap(facetMap.set(newName, []));
     setSelectedFacet(newName);
+    setGlobalFacets([...globalFacets, newName]);
     setExpanded([newName]);
   };
 

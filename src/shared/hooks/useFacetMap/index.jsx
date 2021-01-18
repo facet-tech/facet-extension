@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { setFacetMapHighlighter } from "../../../highlighter";
+import { defaultFacetName } from '../../constant'
 
-const defaultVal = new Map([['Facet-1', []]]);
+const defaultVal = new Map([[defaultFacetName, []]]);
 
 const useSelectedFacet = (initialValue = new Map()) => {
     const [facetMap, setFacetMap] = useState(defaultVal);
