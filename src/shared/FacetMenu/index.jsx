@@ -32,7 +32,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function FacetMenu({ isOpen = false, onGlobalCheckboxClick, isGlobal, onRenameClick, gotoClick, deleteClick }) {
+export default function FacetMenu({ isOpen = false, onGlobalCheckboxClick, onDomRemoveFacetClick, isGlobal, isDomRemove, onRenameClick, gotoClick, deleteClick }) {
   const { handleCloseMenuEl, menuAnchorEl } = useContext(AppContext);
   return (
     <div>
@@ -44,6 +44,9 @@ export default function FacetMenu({ isOpen = false, onGlobalCheckboxClick, isGlo
       >
         <StyledMenuItem onClick={() => { onGlobalCheckboxClick() }}>
           <FacetCheckBox checked={isGlobal} text="Global" />
+        </StyledMenuItem>
+        <StyledMenuItem onClick={() => { onDomRemoveFacetClick() }}>
+          <FacetCheckBox checked={isDomRemove} text="DOM Remove" />
         </StyledMenuItem>
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>

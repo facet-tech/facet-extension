@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const StyledDiv = styled.div`
     display: grid;
     grid-template-columns: 80% 20%;
+    grid-gap: 5%;
 `;
 
 export default ({ text, checked }) => {

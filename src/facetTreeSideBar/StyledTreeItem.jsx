@@ -65,10 +65,10 @@ function StyledTreeItem(props) {
         onRenameCancelClick, onRenameSaveClick, ...other } = props;
 
     const {
-        handleClickMenuEl, onGotoClick, setExpanded,
-        onDeleteFacet, onFacetClick, facetMap,
+        handleClickMenuEl, onGotoClick, setExpanded, domRemoveFacets,
+        onDeleteFacet, onFacetClick, facetMap, onDomRemoveFacetClick,
         nonRolledOutFacets, setNonRolledOutFacets, onGlobalCheckboxClick,
-        globalFacets, setGlobalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
+        globalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
     const enableFacetIconBtn = <FacetIconButton
@@ -124,7 +124,9 @@ function StyledTreeItem(props) {
                                     onGotoClick(domPath);
                                 }}
                                 isGlobal={globalFacets.includes(selectedFacet)}
+                                isDomRemove={domRemoveFacets.includes(selectedFacet)}
                                 onGlobalCheckboxClick={() => { onGlobalCheckboxClick(selectedFacet) }}
+                                onDomRemoveFacetClick={() => { onDomRemoveFacetClick(selectedFacet) }}
                                 deleteClick={() => { onDeleteFacet(selectedFacet) }}
                                 onRenameClick={() => onRenameItem(selectedFacet)} />
                         </div>

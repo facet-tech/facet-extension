@@ -51,7 +51,8 @@ const AppProvider = ({ children }) => {
   const [jwt, setJwt] = useState('');
   const [loading, setLoading] = useState(true);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-  const [globalFacets, setGlobalFacets] = useState([])
+  const [globalFacets, setGlobalFacets] = useState([]);
+  const [domRemoveFacets, setDOMRemoveFacets] = useState([]);
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -93,6 +94,9 @@ const AppProvider = ({ children }) => {
     const newGlobalFacets = globalFacets.filter(e => e !== facetName);
     setGlobalFacets(newGlobalFacets);
 
+    const newDomRemoveFacets = domRemoveFacets.filter(e => e !== facetName);
+    setDOMRemoveFacets(newDomRemoveFacets);
+
     // base cases if no facets are present
     if (keys.length > 0) {
       setSelectedFacet();
@@ -103,15 +107,37 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const onDomRemoveFacetClick = (selectedFacet) => {
+    if (domRemoveFacets?.includes(selectedFacet)) {
+      setDOMRemoveFacets(domRemoveFacets?.filter(e => e !== selectedFacet));
+
+      enqueueSnackbar({
+        message: `${selectedFacet} set to DOM Hide`,
+        variant: snackbar.success.text
+      });
+    } else {
+      setDOMRemoveFacets([...domRemoveFacets, selectedFacet]);
+
+      enqueueSnackbar({
+        message: `${selectedFacet} set to DOM Remove`,
+        variant: snackbar.success.text
+      });
+    }
+  }
+
+  console.log('CHECK domRemoveFacets', domRemoveFacets);
+
   const onGlobalCheckboxClick = (selectedFacet) => {
     if (globalFacets?.includes(selectedFacet)) {
       setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));
+
       enqueueSnackbar({
         message: `${selectedFacet} set to non-global`,
         variant: snackbar.success.text
       });
     } else {
       setGlobalFacets([...globalFacets, selectedFacet]);
+
       enqueueSnackbar({
         message: `${selectedFacet} set to global`,
         variant: snackbar.success.text
@@ -383,6 +409,9 @@ const AppProvider = ({ children }) => {
       globalFacets,
       setGlobalFacets,
       onGlobalCheckboxClick,
+      domRemoveFacets,
+      setDOMRemoveFacets,
+      onDomRemoveFacetClick,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,
