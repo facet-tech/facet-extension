@@ -96,6 +96,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
+    globalFacets, setGlobalFacets,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
@@ -167,6 +168,12 @@ export default function FacetTreeSideBar() {
             const newNonRolledOutFacets = nonRolledOutFacets.filter(e => e !== facet.name);
             newNonRolledOutFacets.push(newFacetName);
             setNonRolledOutFacets(newNonRolledOutFacets);
+
+            const newGlobalFacets = globalFacets.filter(e => e !== facet.name);
+            newGlobalFacets.push(newFacetName);
+            setGlobalFacets(newGlobalFacets);
+
+
             facetMap.set(newFacetName, facetMap.get(facet.name));
             facetMap.delete(facet.name);
             setFacetMap(new Map(facetMap));

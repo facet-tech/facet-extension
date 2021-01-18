@@ -85,9 +85,13 @@ const AppProvider = ({ children }) => {
     facetValue && facetValue.forEach((domElement) => {
       onDeleteDOMElement(domElement.path);
     });
+
     facetMap.delete(facetName);
     setFacetMap(new Map(facetMap));
     const keys = [...facetMap.keys()];
+
+    const newGlobalFacets = globalFacets.filter(e => e !== facetName);
+    setGlobalFacets(newGlobalFacets);
 
     // base cases if no facets are present
     if (keys.length > 0) {

@@ -254,11 +254,8 @@ const convertDOMElement = (facet) => {
  */
 const convertGetFacetResponseToMap = (responseBodyArr) => {
     let facetMap = new Map();
-    console.log('la[[a', responseBodyArr)
     responseBodyArr?.forEach(facetElement => {
-        console.log("facetElement", facetElement)
         facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
-            console.log('HEY', facetElement.urlPath, 'VS', window.location.pathname)
             if (!facet.global && facetElement.urlPath !== window.location.pathname) {
                 return;
             }
@@ -267,17 +264,19 @@ const convertGetFacetResponseToMap = (responseBodyArr) => {
             facetMap.set(facet.name, element || [])
         })
     })
-    console.log('PRDUCED', facetMap);
     return facetMap;
 }
 
-const getGlobalArrayFromFacetResponse = (responseBody) => {
+const getGlobalArrayFromFacetResponse = (responseBodyArr) => {
     let result = [];
-    responseBody && responseBody.facet && responseBody.facet.forEach(facet => {
-        if (facet.global) {
-            result.push(facet.name)
-        }
-    });
+    responseBodyArr?.forEach(facetElement => {
+        facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
+            if (facet.global) {
+                result.push(facet.name)
+            }
+        });
+    })
+
     return result;
 }
 
