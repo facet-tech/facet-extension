@@ -42,3 +42,7 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
+
+# zip
+extension-chrome-facet.zip
+extension-chrome-facet
