@@ -280,6 +280,19 @@ const getGlobalArrayFromFacetResponse = (responseBodyArr) => {
     return result;
 }
 
+const getDOMRemoveArrayFromFacetResponse = (responseBodyArr) => {
+    let result = [];
+    responseBodyArr?.forEach(facetElement => {
+        facetElement && facetElement.facet && facetElement.facet.forEach(facet => {
+            if (facet.domRemove) {
+                result.push(facet.name)
+            }
+        });
+    })
+
+    return result;
+}
+
 // TODO browser issues fix
 const deleteFacet = async (body) => {
 
@@ -304,15 +317,16 @@ const generateDomElements = (domElements) => {
     return result;
 }
 
-const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets) => {
+const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets, domRemoveFacets) => {
     try {
         const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
         return facetArray.map(facet => {
             return {
                 enabled: nonRolledOutFacets.includes(facet.name),
-                global: globalFacets.includes(facet.name),
                 name: facet.name,
-                domElement: generateDomElements(facetMap.get(facet.name))
+                domElement: generateDomElements(facetMap.get(facet.name)),
+                global: globalFacets.includes(facet.name),
+                domRemove: domRemoveFacets.includes(facet.name)
             }
         });
     } catch (e) {
@@ -325,24 +339,25 @@ const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets) => {
  * @param {*} nonRolledOutFacets 
  * @param {*} domainId 
  * @param {*} globalFacets
+ * @param {*} domRemoveFacets
  */
-const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId, globalFacets) => {
+const generateRequestBodyFromFacetMap = (facetMap, nonRolledOutFacets, domainId, globalFacets, domRemoveFacets) => {
     const facetObjectVersion = api.facetObjectVersion;
     const body = {
         domainId,
         urlPath: window.location.pathname,
-        facet: extractFacetArray(facetMap, nonRolledOutFacets, globalFacets),
+        facet: extractFacetArray(facetMap, nonRolledOutFacets, globalFacets, domRemoveFacets),
         version: facetObjectVersion,
     }
     return body;
 }
 
-const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets) => {
+const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets, domRemoveFacets) => {
     try {
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets);
+        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets, domRemoveFacets);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
         enqueueSnackbar({
             message: `Hooray ~ Configuration has been saved!`,
@@ -360,7 +375,7 @@ const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalF
 export {
     constructPayload, triggerApiCall, createDomain,
     getDomain, getFacet, getOrPostDomain, deleteFacet,
-    getOrCreateWorkspace, deleteUser, postUser,
+    getOrCreateWorkspace, deleteUser, postUser, getDOMRemoveArrayFromFacetResponse,
     saveFacets, convertGetFacetResponseToMap, addWhiteListedDomain,
     hasWhitelistedDomain, removeWhitelistedDomain, getGlobalArrayFromFacetResponse
 };

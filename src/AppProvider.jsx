@@ -6,7 +6,9 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
+  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain,
+  triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain,
+  getGlobalArrayFromFacetResponse, getDOMRemoveArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
@@ -124,8 +126,6 @@ const AppProvider = ({ children }) => {
       });
     }
   }
-
-  console.log('CHECK domRemoveFacets', domRemoveFacets);
 
   const onGlobalCheckboxClick = (selectedFacet) => {
     if (globalFacets?.includes(selectedFacet)) {
@@ -258,6 +258,10 @@ const AppProvider = ({ children }) => {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
         const globalFacetsArr = getGlobalArrayFromFacetResponse(getFacetRequest.response);
         setGlobalFacets(globalFacetsArr);
+
+        const domRemoveFacetArr = getDOMRemoveArrayFromFacetResponse(getFacetRequest.response);
+        setDOMRemoveFacets(domRemoveFacetArr);
+
         if (fMap.size > 0) {
           setSelectedFacet(fMap.entries().next().value[0]);
         }
@@ -277,7 +281,7 @@ const AppProvider = ({ children }) => {
 
   const onSaveClick = async () => {
     try {
-      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);
+      await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets, domRemoveFacets);
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
