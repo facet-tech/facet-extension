@@ -212,6 +212,9 @@ const onMouseClickHandle = function (event) {
 }
 
 function getDomPath(el) {
+    if (!isElement(el)) {
+        return '';
+    }
     var stack = [];
     while (el.parentNode != null) {
         var sibCount = 1;
@@ -227,7 +230,7 @@ function getDomPath(el) {
         }
         if (el.hasAttribute('id') && el.id != '') {
             stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 1) {
+        } else if (sibCount > 2) {
             stack.unshift(el.nodeName.toLowerCase() + ':nth-child(' + sibIndex + ')');
         } else {
             stack.unshift(el.nodeName.toLowerCase());
@@ -238,6 +241,17 @@ function getDomPath(el) {
     var withoutSpaces = res.replace(/ /g, "");
     return withoutSpaces;
 }
+
+/**
+ * Returns whether a given element in an HTML element or not
+ *
+ * @param element
+ * @returns {boolean}
+ */
+function isElement(element) {
+    return element instanceof Element || element instanceof HTMLDocument;
+}
+
 
 /**
  * 
