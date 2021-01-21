@@ -1,4 +1,6 @@
 /* global chrome */
+console.log('LOADING');
+window.pgg322 = '2232';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -118,6 +120,8 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
     document.getElementById(domIds.popup),
   );
 } else if (document.getElementById(domIds.facetizer) && isActivelyBeingDebugged(domIds.facetizer)) {
+  console.log('LOADING2');
+  window.disableMutationObserverScript = true;
   ReactDOM.render(
     <React.StrictMode>
       <div style={{ width: `${styles.drawerWidth}px`, height: '100%' }} id="facet-sidebar">

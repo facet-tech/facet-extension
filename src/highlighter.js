@@ -212,10 +212,15 @@ const onMouseClickHandle = function (event) {
 }
 
 function getDomPath(el) {
+    if (!el) {
+        return;
+    }
     var stack = [];
+    var isShadow = false;
     while (el.parentNode != null) {
         var sibCount = 0;
         var sibIndex = 0;
+        // get sibling indexes
         for (var i = 0; i < el.parentNode.childNodes.length; i++) {
             var sib = el.parentNode.childNodes[i];
             if (sib.nodeName == el.nodeName) {
@@ -225,18 +230,24 @@ function getDomPath(el) {
                 sibCount++;
             }
         }
-        if (el.hasAttribute('id') && el.id != '') {
-            stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 1) {
-            stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
+        var nodeName = el.nodeName.toLowerCase();
+        if (isShadow) {
+            nodeName += "::shadow";
+            isShadow = false;
+        }
+        if (sibCount > 1) {
+            stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
         } else {
-            stack.unshift(el.nodeName.toLowerCase());
+            stack.unshift(nodeName);
         }
         el = el.parentNode;
+        if (el.nodeType === 11) { // for shadow dom, we
+            isShadow = true;
+            el = el.host;
+        }
     }
-    var res = stack.slice(1).join(' > '); // removes the html element
-    var withoutSpaces = res.replace(/ /g, "");
-    return withoutSpaces;
+    stack.splice(0, 1); // removes the html element
+    return stack.join(' > ').replace(/ /g, "");
 }
 
 /**

@@ -43,10 +43,10 @@ export default function FacetMenu({ isOpen = false, onGlobalCheckboxClick, onDom
         onClose={handleCloseMenuEl}
       >
         <StyledMenuItem onClick={() => { onGlobalCheckboxClick() }}>
-          <FacetCheckBox checked={isGlobal} text="Global" />
+          <FacetCheckBox checked={isGlobal} text="Global Scope" />
         </StyledMenuItem>
         <StyledMenuItem onClick={() => { onDomRemoveFacetClick() }}>
-          <FacetCheckBox checked={isDomRemove} text="DOM Remove" />
+          <FacetCheckBox checked={isDomRemove} text="Remove Layout" />
         </StyledMenuItem>
         <StyledMenuItem onClick={() => { onRenameClick(); handleCloseMenuEl(); }}>Rename</StyledMenuItem>
         <StyledMenuItem onClick={() => { deleteClick(); handleCloseMenuEl(); }}>Delete</StyledMenuItem>

@@ -334,7 +334,6 @@ const extractFacetArray = (facetMap, nonRolledOutFacets, globalFacets, domRemove
     }
 }
 /**
- * 
  * @param {*} facetMap 
  * @param {*} nonRolledOutFacets 
  * @param {*} domainId 

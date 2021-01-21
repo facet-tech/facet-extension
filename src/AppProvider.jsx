@@ -56,6 +56,7 @@ const AppProvider = ({ children }) => {
   const [globalFacets, setGlobalFacets] = useState([]);
   const [domRemoveFacets, setDOMRemoveFacets] = useState([]);
 
+  console.log("facetMap",facetMap);
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
     setFacetMenuLabel(facetName);
