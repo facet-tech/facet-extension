@@ -53,6 +53,9 @@ const AppProvider = ({ children }) => {
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
   const [globalFacets, setGlobalFacets] = useState([])
 
+  console.log('facetMap', facetMap);
+
+
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
     setFacetMenuLabel(facetName);

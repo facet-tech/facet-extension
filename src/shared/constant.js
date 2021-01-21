@@ -5,7 +5,7 @@ const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.ninja';
 const testBaseURL = 'https://test.api.facet.ninja';
-const localBaseURL = 'http://localhost:3000';
+const localBaseURL = 'http://localhost:3002';
 
 const authState = {
     notSignedIn: 'NOT_LOGGED_IN',
@@ -82,7 +82,7 @@ const APIUrl = {
     apiBaseURL,
     testBaseURL,
     localBaseURL,
-    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
+    activeBaseURL: isDevelopment() ? localBaseURL : localBaseURL
 };
 
 const LoginTypes = {
