@@ -13,12 +13,10 @@ async function injectScript(file_path, tag) {
         var node = document.getElementsByTagName('html')[0];
         var script = document.createElement('script');
         const val = Boolean(obj && obj['facet-settings'] && obj['facet-settings']['isPluginEnabled']);
-        console.log('CHECK!', val);
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', file_path);
         script.setAttribute('facet-extension-loaded', val);
         node.appendChild(script);
     });
-
 }
-injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body'); 
+injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body');
