@@ -8,11 +8,17 @@
  * @param  {type} tag The tag as string, where the script will be append (default: 'body').
  * @see    {@link http://stackoverflow.com/questions/20499994/access-window-variable-from-content-script}
  */
-function injectScript(file_path, tag) {
-    var node = document.getElementsByTagName('html')[0];
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', file_path);
-    node.appendChild(script);
+async function injectScript(file_path, tag) {
+    chrome.storage && chrome.storage.sync.get('facet-settings', function (obj) {
+        var node = document.getElementsByTagName('html')[0];
+        var script = document.createElement('script');
+        const val = Boolean(obj && obj['facet-settings'] && obj['facet-settings']['isPluginEnabled']);
+        console.log('CHECK!', val);
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', file_path);
+        script.setAttribute('facet-extension-loaded', val);
+        node.appendChild(script);
+    });
+
 }
-injectScript(chrome.extension.getURL('content.js'), 'body'); 
+injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body'); 

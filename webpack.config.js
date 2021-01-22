@@ -83,7 +83,7 @@ module.exports = (_, argv) => {
                     { from: "./public/welcome.html", to: "./" },
                     { from: "./public/background.js", to: "./" },
                     { from: "./public/mutationObserverVariableInjection.js", to: "./" },
-                    { from: "./public/content.js", to: "./" },
+                    { from: "./public/facet-extension-window-variable-content.js", to: "./" },
                 ],
             }),
             // fix "process is not defined" error: https://stackoverflow.com/a/64553486/1373465
