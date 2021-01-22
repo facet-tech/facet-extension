@@ -26,7 +26,12 @@ const computeWithOrWithoutFacetizer = (strPath, facetizerIsPresent = true) => {
     var matches = regExp.exec(secondPathSplit[1]);
     const currNumber = parseInt(matches[1]);
     const wantedNumber = facetizerIsPresent ? currNumber - 1 : currNumber + 1;
-    const result = `${secondPathSplit[0]}:nth-of-type(${wantedNumber})`;
+    let result;
+    if(wantedNumber<=1) {
+        result = `${secondPathSplit[0]}`;
+    } else {
+        result = `${secondPathSplit[0]}:nth-of-type(${wantedNumber})`;
+    }
     return result;
 }
 

@@ -103,6 +103,8 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  console.log('map', facetMap);
+
   const onGlobalCheckboxClick = (selectedFacet) => {
     if (globalFacets?.includes(selectedFacet)) {
       setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));

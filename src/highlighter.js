@@ -191,10 +191,10 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
 const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
-
     const setFacetMap = event.currentTarget.setFacetMap;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
+    console.log(domPath);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
     if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
@@ -212,34 +212,45 @@ const onMouseClickHandle = function (event) {
 }
 
 function getDomPath(el) {
-    if (!isElement(el)) {
+    if (!el || !isElement(el)) {
         return '';
     }
     var stack = [];
+    var isShadow = false;
     while (el.parentNode != null) {
-        var sibCount = 1;
-        var sibIndex = 1;
-        for (var i = 0; i < el.parentNode.childNodes.length; i++) {
+        var sibCount = 0;
+        var sibIndex = 0;
+        for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
             var sib = el.parentNode.childNodes[i];
-            if (sib.nodeName == el.nodeName) {
-                if (sib === el) {
+            if ( sib.nodeName == el.nodeName ) {
+                if ( sib === el ) {
                     sibIndex = sibCount;
                 }
                 sibCount++;
             }
         }
-        if (el.hasAttribute('id') && el.id != '') {
-            stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 2) {
-            stack.unshift(el.nodeName.toLowerCase() + ':nth-child(' + sibIndex + ')');
+        var nodeName = el.nodeName.toLowerCase();
+        if (isShadow) {
+            nodeName += "::shadow";
+            isShadow = false;
+        }
+        if ( sibCount > 1 ) {
+            if(sibIndex === 0) {
+                stack.unshift(nodeName);
+            } else {
+                stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
+            }
         } else {
-            stack.unshift(el.nodeName.toLowerCase());
+            stack.unshift(nodeName);
         }
         el = el.parentNode;
+        if (el.nodeType === 11) {
+            isShadow = true;
+            el = el.host;
+        }
     }
-    var res = stack.slice(1).join(' > '); // removes the html element
-    var withoutSpaces = res.replace(/ /g, "");
-    return withoutSpaces;
+    var res = stack.slice(1).join(' > ');
+    return res.replace(/ /g, "");
 }
 
 /**
@@ -251,7 +262,6 @@ function getDomPath(el) {
 function isElement(element) {
     return element instanceof Element || element instanceof HTMLDocument;
 }
-
 
 /**
  * 
