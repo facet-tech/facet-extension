@@ -126,10 +126,10 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
 }
 
 const convertToDomElementObject = (path, facet) => {
-    let name = getElementNameFromPath(path, facet);
-    if (facet.filter(e => e.name === name).length > 0) {
-        name = getIncreasedElementNameNumber(name, facet);
-    }
+    const name = getElementNameFromPath(path, facet);
+    // if (facet.filter(e => e.name === name).length > 0) {
+    //     name = getIncreasedElementNameNumber(name, facet);
+    // }
     return {
         name,
         path: path
@@ -212,10 +212,13 @@ const onMouseClickHandle = function (event) {
 }
 
 function getDomPath(el) {
+    if (!isElement(el)) {
+        return '';
+    }
     var stack = [];
     while (el.parentNode != null) {
-        var sibCount = 0;
-        var sibIndex = 0;
+        var sibCount = 1;
+        var sibIndex = 1;
         for (var i = 0; i < el.parentNode.childNodes.length; i++) {
             var sib = el.parentNode.childNodes[i];
             if (sib.nodeName == el.nodeName) {
@@ -227,8 +230,8 @@ function getDomPath(el) {
         }
         if (el.hasAttribute('id') && el.id != '') {
             stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 1) {
-            stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
+        } else if (sibCount > 2) {
+            stack.unshift(el.nodeName.toLowerCase() + ':nth-child(' + sibIndex + ')');
         } else {
             stack.unshift(el.nodeName.toLowerCase());
         }
@@ -238,6 +241,17 @@ function getDomPath(el) {
     var withoutSpaces = res.replace(/ /g, "");
     return withoutSpaces;
 }
+
+/**
+ * Returns whether a given element in an HTML element or not
+ *
+ * @param element
+ * @returns {boolean}
+ */
+function isElement(element) {
+    return element instanceof Element || element instanceof HTMLDocument;
+}
+
 
 /**
  * 
