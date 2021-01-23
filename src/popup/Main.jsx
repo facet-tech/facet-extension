@@ -160,6 +160,11 @@ export default () => {
           <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
         </div>
       </GridDivTwoColumn>
+      <div>
+        <FacetButton onClick={() => {
+          chrome.runtime.sendMessage({ data: ChromeRequestType.OPEN_PREVIEW_PAGE });
+        }} text="Save & Preview" />
+      </div>
     </> : null}
   </TopDiv>;
 

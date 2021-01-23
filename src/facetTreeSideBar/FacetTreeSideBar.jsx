@@ -23,6 +23,7 @@ import Loading from '../shared/Loading';
 import facetLogo from '../static/images/facet_main_logo.svg'
 import facetLogoIce from '../static/images/facet_ice_logo.svg';
 import CodeSnippet from '../shared/CodeSnippet';
+import FacetButton from '../shared/FacetButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDiv: {
     display: 'grid'
+  },
+  saveAndPreview: {
+    margin: '0 1rem 1rem 1rem'
   }
 }));
 
