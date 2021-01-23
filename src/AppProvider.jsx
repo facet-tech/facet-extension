@@ -195,7 +195,9 @@ const AppProvider = ({ children }) => {
       const facetArr = facetMap.get(facetName);
       facetArr?.forEach(element => {
         const domElement = document.querySelector(element.path);
-        domElement.style.setProperty('opacity', '0.3');
+        if(domElement) {
+          domElement.style.setProperty('opacity', '0.3');
+        }
       })
     });
   }, [nonRolledOutFacets]);

@@ -123,15 +123,19 @@ export default function FacetTreeSideBar() {
   // TODO duplicate, re-use function from highlighter
   const onMouseEnterHandle = function (path) {
     let element = document.querySelector(path);
-    element.style.outline = '5px ridge #c25d29';
-    element.style.cursor = 'cursor pointer';
+    if (element) {
+      element.style.outline = '5px ridge #c25d29';
+      element.style.cursor = 'cursor pointer';
+    }
   };
 
   // TODO duplicate, re-use function from highlighter
   const onMouseLeaveHandle = function (path) {
     let element = document.querySelector(path);
-    element.style.outline = 'unset';
-    element.style.cursor = 'unset';
+    if (element) {
+      element.style.outline = 'unset';
+      element.style.cursor = 'unset';
+    }
   };
 
   const itemsElement = loadingSideBar ?

@@ -275,8 +275,8 @@ function isElement(element) {
  */
 const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
+        // TODO Document this case
         if (!workspaceId) {
-            // TODO potentially not used?
             workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;
@@ -284,7 +284,9 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
             const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), true);
             properFacetArr && properFacetArr.forEach(path => {
                 const domElement = document.querySelector(path);
-                domElement.style.setProperty('opacity', 'unset');
+                if (domElement) {
+                    domElement.style.setProperty('opacity', 'unset');
+                }
             });
             enqueueSnackbar = eSBar;
         }
