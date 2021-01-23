@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getOrPostDomain } from './services/facetApiService';
+import { convertGetFacetResponseToMap, getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api, snackbar, styles } from './shared/constant';
 import get from 'lodash/get';
@@ -53,13 +53,15 @@ let setNonRolledOutFacetsHighlighter = (value) => {
 }
 
 const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
-
     // newly added values
     afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            $(element.path).css("opacity", "0.3", "important");
+            const domElement = document.querySelector(element.path);
+            if (domElement) {
+                domElement.style.setProperty("opacity", "0.3", "important");
+            }
         });
     });
 
@@ -68,7 +70,10 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            $(element.path).css("opacity", "unset");
+            const domElement = document.querySelector(element.path);
+            if (domElement) {
+                domElement.style.setProperty('opacity', 'unset');
+            }
         });
     });
 
@@ -177,7 +182,7 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
             if (!val.enabled) {
                 return;
             }
-            const path = parsePath([val.path], true);
+            const path = parsePath(val.path, true);
             $(path[0]).css("opacity", "0.3", "important");
             $(val.path).css("opacity", "0.3", "important");
         })
@@ -191,7 +196,6 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
 const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
-
     const setFacetMap = event.currentTarget.setFacetMap;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
@@ -212,13 +216,14 @@ const onMouseClickHandle = function (event) {
 }
 
 function getDomPath(el) {
-    if (!isElement(el)) {
+    if (!el || !isElement(el)) {
         return '';
     }
     var stack = [];
+    var isShadow = false;
     while (el.parentNode != null) {
-        var sibCount = 1;
-        var sibIndex = 1;
+        var sibCount = 0;
+        var sibIndex = 0;
         for (var i = 0; i < el.parentNode.childNodes.length; i++) {
             var sib = el.parentNode.childNodes[i];
             if (sib.nodeName == el.nodeName) {
@@ -228,18 +233,28 @@ function getDomPath(el) {
                 sibCount++;
             }
         }
-        if (el.hasAttribute('id') && el.id != '') {
-            stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-        } else if (sibCount > 2) {
-            stack.unshift(el.nodeName.toLowerCase() + ':nth-child(' + sibIndex + ')');
+        var nodeName = el.nodeName.toLowerCase();
+        if (isShadow) {
+            nodeName += "::shadow";
+            isShadow = false;
+        }
+        if (sibCount > 1) {
+            if (sibIndex === 0) {
+                stack.unshift(nodeName);
+            } else {
+                stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
+            }
         } else {
-            stack.unshift(el.nodeName.toLowerCase());
+            stack.unshift(nodeName);
         }
         el = el.parentNode;
+        if (el.nodeType === 11) {
+            isShadow = true;
+            el = el.host;
+        }
     }
-    var res = stack.slice(1).join(' > '); // removes the html element
-    var withoutSpaces = res.replace(/ /g, "");
-    return withoutSpaces;
+    var res = stack.slice(1).join(' > ');
+    return res.replace(/ /g, "");
 }
 
 /**
@@ -252,7 +267,6 @@ function isElement(element) {
     return element instanceof Element || element instanceof HTMLDocument;
 }
 
-
 /**
  * 
  * @param {*} addEventsFlag Determines whether events will be added or removed from the DOM
@@ -262,15 +276,7 @@ function isElement(element) {
 const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
         if (!workspaceId) {
-            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getOrPostDomain(workspaceId);
-            domainId = getDomainRes.response.id;
-            getFacetResponse = await getFacet(domainId);
-            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
-            properFacetArr && properFacetArr.forEach(ff => {
-                $(ff).css("opacity", "0.3", "important");
-            });
-            enqueueSnackbar = eSBar;
+            initializeSingletonValues();
         }
 
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
@@ -294,6 +300,14 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
+}
+
+const initializeSingletonValues = async () => {
+    workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    let getDomainRes = await getOrPostDomain(workspaceId);
+    domainId = getDomainRes.response.id;
+    getFacetResponse = await getFacet(domainId);
+    enqueueSnackbar = eSBar;
 }
 
 export {

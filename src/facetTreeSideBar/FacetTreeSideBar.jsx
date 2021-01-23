@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import $ from 'jquery';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
@@ -123,14 +122,20 @@ export default function FacetTreeSideBar() {
 
   // TODO duplicate, re-use function from highlighter
   const onMouseEnterHandle = function (path) {
-    $(path).css('outline', '5px ridge #c25d29');
-    $(path).css('cursor', 'pointer');
+    let element = document.querySelector(path);
+    if (element) {
+      element.style.outline = '5px ridge #c25d29';
+      element.style.cursor = 'cursor pointer';
+    }
   };
 
   // TODO duplicate, re-use function from highlighter
   const onMouseLeaveHandle = function (path) {
-    $(path).css('outline', 'unset');
-    $(path).css('cursor', 'unset');
+    let element = document.querySelector(path);
+    if (element) {
+      element.style.outline = 'unset';
+      element.style.cursor = 'unset';
+    }
   };
 
   const itemsElement = loadingSideBar ?

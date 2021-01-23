@@ -72,7 +72,7 @@ const AppProvider = ({ children }) => {
   const onDeleteDOMElement = (path) => {
     try {
       // TODO DOM-related stuff should be handled through highlighter
-      const parsedPath = parsePath([path], false);
+      const parsedPath = parsePath(path, false);
       const element = $(parsedPath[0])[0];
       element.style.setProperty('opacity', 'unset');
     } catch (e) {
@@ -194,7 +194,10 @@ const AppProvider = ({ children }) => {
     nonRolledOutFacets.forEach(facetName => {
       const facetArr = facetMap.get(facetName);
       facetArr?.forEach(element => {
-        $(element.path).css("opacity", "0.3", "important");
+        const domElement = document.querySelector(element.path);
+        if (domElement) {
+          domElement.style.setProperty('opacity', '0.3');
+        }
       })
     });
   }, [nonRolledOutFacets]);
@@ -267,8 +270,7 @@ const AppProvider = ({ children }) => {
       const domainRes = await getOrPostDomain(workspaceId);
 
       const body = {
-        domainId: domainRes.response.id,
-        urlPath: window.location.pathname,
+        domainId: domainRes.response.id
       };
       enqueueSnackbar({
         message: 'Facets reset.',
