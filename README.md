@@ -11,9 +11,9 @@
 
 Project demo: https://video.facet.ninja/mvp
 
-# Facetizer Chrome extension
+# facet-extension
 
-Control your release 🚀 lifecycle and embrace trunk based development with facet.ninja.
+Control your release 🚀 lifecycle and embrace trunk based development with Facet.
 
 ## Installation
 
@@ -35,7 +35,7 @@ Thanks for contributing! Read the guidelines in [CONTRIBUTING.md](./CONTRIBUTING
 
 ## Code of Conduct
 
-Facet ninja has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect project participants to adhere to it.
+Facet has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) as its Code of Conduct, and we expect project participants to adhere to it.
 Please read [the full text](/CODE_OF_CONDUCT.md).
 
 ## License
