@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { getFacet, getOrPostDomain } from './services/facetApiService';
+import { convertGetFacetResponseToMap, getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api, snackbar, styles } from './shared/constant';
 import get from 'lodash/get';
@@ -275,20 +275,8 @@ function isElement(element) {
  */
 const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
-        // TODO Document this case
         if (!workspaceId) {
-            workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-            let getDomainRes = await getOrPostDomain(workspaceId);
-            domainId = getDomainRes.response.id;
-            getFacetResponse = await getFacet(domainId);
-            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), true);
-            properFacetArr && properFacetArr.forEach(path => {
-                const domElement = document.querySelector(path);
-                if (domElement) {
-                    domElement.style.setProperty('opacity', 'unset');
-                }
-            });
-            enqueueSnackbar = eSBar;
+            initializeSingletonValues();
         }
 
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
@@ -312,6 +300,14 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     } catch (e) {
         console.log(`[ERROR] [updateEvents] `, e);
     }
+}
+
+const initializeSingletonValues = async () => {
+    workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    let getDomainRes = await getOrPostDomain(workspaceId);
+    domainId = getDomainRes.response.id;
+    getFacetResponse = await getFacet(domainId);
+    enqueueSnackbar = eSBar;
 }
 
 export {
