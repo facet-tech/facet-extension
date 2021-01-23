@@ -1,5 +1,6 @@
-alert('hi mannnn')
+// TODO remove?
 
+alert('hi mannnn')
 var node = document.getElementsByTagName('html')[0];
 var script = document.createElement('script');
 script.setAttribute('type', 'text/javascript');
