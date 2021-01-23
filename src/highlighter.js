@@ -53,13 +53,13 @@ let setNonRolledOutFacetsHighlighter = (value) => {
 }
 
 const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
-
     // newly added values
     afterVal.filter(e => !prevVal.includes(e)).forEach(val => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            $(element.path).css("opacity", "0.3", "important");
+            const domElement = document.querySelector(element.path);
+            domElement.style.setProperty('opacity', 'unset');
         });
     });
 
@@ -68,7 +68,8 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            $(element.path).css("opacity", "unset");
+            const domElement = document.querySelector(element.path);
+            domElement.style.setProperty('opacity', 'unset');
         });
     });
 
@@ -194,7 +195,6 @@ const onMouseClickHandle = function (event) {
     const setFacetMap = event.currentTarget.setFacetMap;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
-    console.log(domPath);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
     if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
@@ -220,10 +220,10 @@ function getDomPath(el) {
     while (el.parentNode != null) {
         var sibCount = 0;
         var sibIndex = 0;
-        for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
+        for (var i = 0; i < el.parentNode.childNodes.length; i++) {
             var sib = el.parentNode.childNodes[i];
-            if ( sib.nodeName == el.nodeName ) {
-                if ( sib === el ) {
+            if (sib.nodeName == el.nodeName) {
+                if (sib === el) {
                     sibIndex = sibCount;
                 }
                 sibCount++;
@@ -234,8 +234,8 @@ function getDomPath(el) {
             nodeName += "::shadow";
             isShadow = false;
         }
-        if ( sibCount > 1 ) {
-            if(sibIndex === 0) {
+        if (sibCount > 1) {
+            if (sibIndex === 0) {
                 stack.unshift(nodeName);
             } else {
                 stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
@@ -276,9 +276,11 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;
             getFacetResponse = await getFacet(domainId);
-            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), false);
-            properFacetArr && properFacetArr.forEach(ff => {
-                $(ff).css("opacity", "0.3", "important");
+            const properFacetArr = parsePath(get(getFacetResponse, 'response.domElement[0].path'), true);
+            properFacetArr && properFacetArr.forEach(path => {
+                const domElement = document.querySelector(path);
+                domElement.style.setProperty('opacity', 'unset');
+                // $(ff).css("opacity", "0.3", "important");
             });
             enqueueSnackbar = eSBar;
         }

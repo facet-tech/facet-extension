@@ -2,7 +2,9 @@
  * @param {arr} the array of paths
  * @param {withoutFacetizer} boolean variable
  */
-export default (arr, addFacetExtensionDiv = true) => {
+// TODO change to single input not array
+
+const parsePath = (arr, addFacetExtensionDiv = true) => {
     if (arr === null || !arr || arr.length === 0) {
         return [];
     }
@@ -13,19 +15,19 @@ export default (arr, addFacetExtensionDiv = true) => {
         split1[1] = secondPathWithoutFacetizer;
         newPayload.push(split1.join('>'));
     }
-    return newPayload;
+    return newPayload[0];
 }
 
-const computeWithOrWithoutFacetizer = (strPath, addFacetExtensionDiv = true) => {
+let computeWithOrWithoutFacetizer = (strPath, addFacetExtensionDiv = true) => {
     var splitStr = strPath.split('>');
     var secondPathSplit = (splitStr.length > 1 && splitStr[1].split(':nth-of-type')) || [];
-    if (secondPathSplit.length < 2 || !secondPathSplit[0].includes('div')) {
+    if ((secondPathSplit.length < 2 && !secondPathSplit[0].includes('div') && !addFacetExtensionDiv) || !secondPathSplit[0].includes('div')) {
         return splitStr[1];
     }
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(secondPathSplit[1]);
-    const currNumber = parseInt(matches[1]);
-    const wantedNumber = addFacetExtensionDiv ? currNumber - 1 : currNumber + 1;
+    const currNumber = matches ? parseInt(matches[1]) : 1;
+    const wantedNumber = addFacetExtensionDiv ? currNumber + 1 : currNumber - 1;
     let result;
     if (wantedNumber <= 1) {
         result = `${secondPathSplit[0]}`;
@@ -45,3 +47,4 @@ const getElementNameFromPath = (path) => {
 }
 
 export { getElementNameFromPath };
+export default parsePath;

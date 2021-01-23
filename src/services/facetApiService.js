@@ -242,7 +242,7 @@ const convertDOMElement = (facet) => {
     return (facet?.domElement?.map(domElement => {
         return {
             ...domElement,
-            withoutFacetizer: true
+            path: parsePath([domElement.path], true),
         }
     })) || [];
 }
@@ -298,9 +298,10 @@ const generateDomElements = (domElements) => {
     const result = (domElements && domElements.map(domElement => {
         return {
             name: domElement.name,
-            path: domElement.withoutFacetizer ? domElement.path : parsePath([domElement.path], true)[0]
+            path: parsePath([domElement.path], false)
         }
     })) || [];
+    console.log('RESULTARA', result);
     return result;
 }
 

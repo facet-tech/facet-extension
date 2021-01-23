@@ -196,7 +196,8 @@ const AppProvider = ({ children }) => {
     nonRolledOutFacets.forEach(facetName => {
       const facetArr = facetMap.get(facetName);
       facetArr?.forEach(element => {
-        $(element.path).css("opacity", "0.3", "important");
+        const domElement = document.querySelector(element.path);
+        domElement.style.setProperty('opacity', '0.3');
       })
     });
   }, [nonRolledOutFacets]);
@@ -269,8 +270,7 @@ const AppProvider = ({ children }) => {
       const domainRes = await getOrPostDomain(workspaceId);
 
       const body = {
-        domainId: domainRes.response.id,
-        urlPath: window.location.pathname,
+        domainId: domainRes.response.id
       };
       enqueueSnackbar({
         message: 'Facets reset.',
