@@ -242,7 +242,7 @@ const convertDOMElement = (facet) => {
     return (facet?.domElement?.map(domElement => {
         return {
             ...domElement,
-            path: parsePath([domElement.path], true),
+            path: parsePath(domElement.path, true),
         }
     })) || [];
 }
@@ -298,7 +298,7 @@ const generateDomElements = (domElements) => {
     const result = (domElements && domElements.map(domElement => {
         return {
             name: domElement.name,
-            path: parsePath([domElement.path], false)
+            path: parsePath(domElement.path, false)
         }
     })) || [];
     return result;

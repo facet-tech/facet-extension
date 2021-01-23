@@ -59,7 +59,9 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
             const domElement = document.querySelector(element.path);
-            domElement.style.setProperty('opacity', 'unset');
+            if (domElement) {
+                domElement.style.setProperty("opacity", "0.3", "important");
+            }
         });
     });
 
@@ -69,7 +71,9 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
             const domElement = document.querySelector(element.path);
-            domElement.style.setProperty('opacity', 'unset');
+            if (domElement) {
+                domElement.style.setProperty('opacity', 'unset');
+            }
         });
     });
 
@@ -178,7 +182,7 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
             if (!val.enabled) {
                 return;
             }
-            const path = parsePath([val.path], true);
+            const path = parsePath(val.path, true);
             $(path[0]).css("opacity", "0.3", "important");
             $(val.path).css("opacity", "0.3", "important");
         })
@@ -272,6 +276,7 @@ function isElement(element) {
 const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
         if (!workspaceId) {
+            // TODO potentially not used?
             workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
             let getDomainRes = await getOrPostDomain(workspaceId);
             domainId = getDomainRes.response.id;

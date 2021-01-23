@@ -1,21 +1,13 @@
 /**
- * @param {arr} the array of paths
- * @param {withoutFacetizer} boolean variable
+ * @param {path}
+ * @param {addFacetExtensionDiv} boolean
  */
-// TODO change to single input not array
 
-const parsePath = (arr, addFacetExtensionDiv = true) => {
-    if (arr === null || !arr || arr.length === 0) {
-        return [];
-    }
-    var newPayload = [];
-    for (var i = 0; i < arr.length; i++) {
-        var split1 = arr[i].split('>');
-        var secondPathWithoutFacetizer = computeWithOrWithoutFacetizer(arr[i], addFacetExtensionDiv);
-        split1[1] = secondPathWithoutFacetizer;
-        newPayload.push(split1.join('>'));
-    }
-    return newPayload[0];
+const parsePath = (path, addFacetExtensionDiv = true) => {
+    var split1 = path.split('>');
+    var secondPathWithoutFacetizer = computeWithOrWithoutFacetizer(path, addFacetExtensionDiv);
+    split1[1] = secondPathWithoutFacetizer;
+    return split1.join('>');
 }
 
 let computeWithOrWithoutFacetizer = (strPath, addFacetExtensionDiv = true) => {

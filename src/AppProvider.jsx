@@ -72,7 +72,7 @@ const AppProvider = ({ children }) => {
   const onDeleteDOMElement = (path) => {
     try {
       // TODO DOM-related stuff should be handled through highlighter
-      const parsedPath = parsePath([path], false);
+      const parsedPath = parsePath(path, false);
       const element = $(parsedPath[0])[0];
       element.style.setProperty('opacity', 'unset');
     } catch (e) {
@@ -102,7 +102,7 @@ const AppProvider = ({ children }) => {
       setExpanded([defaultFacetName]);
     }
   };
-  
+
   const onGlobalCheckboxClick = (selectedFacet) => {
     if (globalFacets?.includes(selectedFacet)) {
       setGlobalFacets(globalFacets?.filter(e => e !== selectedFacet));
