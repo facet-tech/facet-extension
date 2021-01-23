@@ -301,7 +301,6 @@ const generateDomElements = (domElements) => {
             path: parsePath([domElement.path], false)
         }
     })) || [];
-    console.log('RESULTARA', result);
     return result;
 }
 

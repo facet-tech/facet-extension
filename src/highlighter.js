@@ -280,7 +280,6 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
             properFacetArr && properFacetArr.forEach(path => {
                 const domElement = document.querySelector(path);
                 domElement.style.setProperty('opacity', 'unset');
-                // $(ff).css("opacity", "0.3", "important");
             });
             enqueueSnackbar = eSBar;
         }
