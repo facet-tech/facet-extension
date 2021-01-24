@@ -10,6 +10,7 @@ chrome.runtime.onMessage.addListener(
             });
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
+
             chrome.tabs.create({ url: request.config.href }, function (tab) {
                 chrome.tabs.executeScript(tab.id, {
                     code: `

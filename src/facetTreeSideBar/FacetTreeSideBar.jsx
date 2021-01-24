@@ -268,7 +268,8 @@ export default function FacetTreeSideBar() {
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.saveAndPreview}>
-              <FacetButton text="Save & Preview Page" onClick={() => {
+              <FacetButton text="Save & Preview Page" onClick={async () => {
+                await onSaveClick();
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
