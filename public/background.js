@@ -15,7 +15,6 @@ chrome.runtime.onMessage.addListener(
                     code: `
                         window.IN_PREVIEW = true;
                         document.getElementById('facetizer') && document.getElementById('facetizer').remove()
-                        var tmp = document.getElementsByTagName('html')[0]
                         var node = document.getElementsByTagName('html').item(0);
                         var script = document.createElement('script');
                         script.setAttribute('type', 'text/javascript');

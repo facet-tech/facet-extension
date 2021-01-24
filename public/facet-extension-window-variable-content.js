@@ -17,7 +17,6 @@ if (!window.IN_PREVIEW) {
         }
         if (script.attributes && script.attributes['facet-extension-loaded']) {
             window.disableMutationObserverScript = script.getAttribute("facet-extension-loaded") === "true" ? true : false;
-            console.log('CHECKME', disableMutationObserverScript);
         }
     })
 }
