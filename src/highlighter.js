@@ -58,9 +58,11 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            const domElement = document.querySelector(element.path);
-            if (domElement) {
-                domElement.style.setProperty("opacity", "0.3", "important");
+            if (isSelectorValid(element.path)) {
+                const domElement = document.querySelector(element.path);
+                if (domElement) {
+                    domElement.style.setProperty("opacity", "0.3", "important");
+                }
             }
         });
     });
@@ -70,13 +72,21 @@ const updatedDOMNonRolledOutFacets = (prevVal, afterVal) => {
         const facetMap = getFacetMap();
         const pathArr = facetMap.get(val);
         pathArr?.forEach(element => {
-            const domElement = document.querySelector(element.path);
-            if (domElement) {
-                domElement.style.setProperty('opacity', 'unset');
+            if (isSelectorValid(element.path)) {
+                const domElement = document.querySelector(element.path);
+                if (domElement) {
+                    domElement.style.setProperty('opacity', 'unset');
+                }
             }
         });
     });
+}
 
+const queryCheck = s => document.createDocumentFragment().querySelector(s)
+
+const isSelectorValid = selector => {
+    try { queryCheck(selector) } catch { return false }
+    return true
 }
 
 // facetMap & setFacetMap
@@ -276,7 +286,7 @@ function isElement(element) {
 const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     try {
         if (!workspaceId) {
-            initializeSingletonValues();
+            initializeSingletonValues(eSBar);
         }
 
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
@@ -302,7 +312,7 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
     }
 }
 
-const initializeSingletonValues = async () => {
+const initializeSingletonValues = async (eSBar) => {
     workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     let getDomainRes = await getOrPostDomain(workspaceId);
     domainId = getDomainRes.response.id;
@@ -313,5 +323,5 @@ const initializeSingletonValues = async () => {
 export {
     updateEvents, onMouseEnterHandle, loadInitialStateInDOM,
     performDOMTransformation, setSelectedFacetHighlighter,
-    setFacetMapHighlighter, setNonRolledOutFacetsHighlighter
+    setFacetMapHighlighter, setNonRolledOutFacetsHighlighter, isSelectorValid
 };

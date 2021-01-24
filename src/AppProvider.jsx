@@ -10,7 +10,7 @@ import {
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
-import { loadInitialStateInDOM, performDOMTransformation } from './highlighter';
+import { loadInitialStateInDOM, performDOMTransformation, isSelectorValid } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -51,7 +51,8 @@ const AppProvider = ({ children }) => {
   const [jwt, setJwt] = useState('');
   const [loading, setLoading] = useState(true);
   const [currAuthState, setCurrAuthState] = useState(authStateConstant.signingIn);
-  const [globalFacets, setGlobalFacets] = useState([])
+  const [globalFacets, setGlobalFacets] = useState([]);
+  const [jsUrl, setJSUrl] = useState('');
 
   const handleClickMenuEl = (event, facetName) => {
     setMenuAnchorEl(event.currentTarget);
@@ -176,8 +177,14 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  const getJSUrl = async () => {
+    const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
+    const domainRes = await getDomain(window.location.hostname, workspaceId);
+    const result = `${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}`;
+    setJSUrl(result);
+  }
 
+  useEffect(() => {
     async function loadDomainWhitelistedState() {
       const isDomainWhitelisted = await hasWhitelistedDomain(window.location.hostname);
       setIsDomainWhitelisted(isDomainWhitelisted);
@@ -194,9 +201,11 @@ const AppProvider = ({ children }) => {
     nonRolledOutFacets.forEach(facetName => {
       const facetArr = facetMap.get(facetName);
       facetArr?.forEach(element => {
-        const domElement = document.querySelector(element.path);
-        if (domElement) {
-          domElement.style.setProperty('opacity', '0.3');
+        if (isSelectorValid(element.path)) {
+          const domElement = document.querySelector(element.path);
+          if (domElement) {
+            domElement.style.setProperty('opacity', '0.3');
+          }
         }
       })
     });
@@ -207,6 +216,7 @@ const AppProvider = ({ children }) => {
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
     loadCopySnippet();
+    getJSUrl();
   }, [setJwt]);
 
   useEffect(() => {
@@ -385,6 +395,7 @@ const AppProvider = ({ children }) => {
       globalFacets,
       setGlobalFacets,
       onGlobalCheckboxClick,
+      jsUrl,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading, onLoginClick,

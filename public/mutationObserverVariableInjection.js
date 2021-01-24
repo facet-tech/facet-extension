@@ -16,6 +16,7 @@ async function injectScript(file_path, tag) {
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', file_path);
         script.setAttribute('facet-extension-loaded', val);
+        console.log('MO-INJECTION-SCRIPT', window.IS_PREVIEW);
         node.appendChild(script);
     });
 }

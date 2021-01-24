@@ -10,7 +10,7 @@ import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { styles, ChromeRequestType, snackbar, defaultFacetName } from '../shared/constant';
+import { styles, ChromeRequestType, snackbar, defaultFacetName, api } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
@@ -24,6 +24,7 @@ import facetLogo from '../static/images/facet_main_logo.svg'
 import facetLogoIce from '../static/images/facet_ice_logo.svg';
 import CodeSnippet from '../shared/CodeSnippet';
 import FacetButton from '../shared/FacetButton';
+import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid'
   },
   saveAndPreview: {
-    margin: '0 1rem 1rem 1rem'
+    margin: '1rem'
   }
 }));
 
@@ -99,7 +100,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    globalFacets, setGlobalFacets,
+    globalFacets, setGlobalFacets, jsUrl,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
@@ -134,7 +135,7 @@ export default function FacetTreeSideBar() {
   };
 
   // TODO duplicate, re-use function from highlighter
-  const onMouseLeaveHandle = function (path) {
+  const onMouseLeaveHandle = (path) => {
     let element = document.querySelector(path);
     if (element) {
       element.style.outline = 'unset';
@@ -266,6 +267,17 @@ export default function FacetTreeSideBar() {
               }} text={textToCopy} />
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
+            <div className={classes.saveAndPreview}>
+              <FacetButton text="Save & Preview Page" onClick={() => {
+                chrome.runtime.sendMessage({
+                  data: ChromeRequestType.OPEN_PREVIEW_PAGE,
+                  config: {
+                    jsUrl,
+                    href: window.location.href
+                  }
+                });
+              }} />
+            </div>
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
               <FacetIconButton iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
