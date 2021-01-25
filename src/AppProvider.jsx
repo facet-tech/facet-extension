@@ -169,7 +169,7 @@ const AppProvider = ({ children }) => {
   const loadCopySnippet = async () => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      const domainRes = await getDomain(window.location.hostname, workspaceId);
+      const domainRes = await getOrPostDomain(workspaceId);
       const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
       setTextToCopy(text);
     } catch (e) {
@@ -179,7 +179,7 @@ const AppProvider = ({ children }) => {
 
   const getJSUrl = async () => {
     const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-    const domainRes = await getDomain(window.location.hostname, workspaceId);
+    const domainRes = await getOrPostDomain(workspaceId);
     const result = `${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}`;
     setJSUrl(result);
   }
@@ -219,13 +219,13 @@ const AppProvider = ({ children }) => {
     getJSUrl();
   }, [setJwt]);
 
+  // TODO Need to initialize main state of the application (domain, workspace et.al)
   useEffect(() => {
     (async () => {
       // not loading facetizer for extension-related pages
       if (window.location.hostname === appId) {
         return;
       }
-      loadCopySnippet();
 
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
       // dirty quick fix
@@ -237,10 +237,11 @@ const AppProvider = ({ children }) => {
       const storageEmail = await getKeyFromLocalStorage(storage.username);
       const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
       const workspaceId = workspaceResponse?.response?.workspaceId;
-      const domainResponse = await getDomain(window.location.hostname, workspaceId, false);
+      const domainResponse = await getOrPostDomain(workspaceId);
       const domainId = domainResponse?.response?.id;
       await initSessionData({ workspaceId, domainId });
       const getFacetRequest = await getFacet(domainId);
+      loadCopySnippet();
       if (getFacetRequest.status === 200) {
         const fMap = convertGetFacetResponseToMap(getFacetRequest.response);
         const globalFacetsArr = getGlobalArrayFromFacetResponse(getFacetRequest.response);

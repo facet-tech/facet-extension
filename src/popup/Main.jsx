@@ -10,7 +10,7 @@ import {
 } from '../shared/constant';
 import FacetSwitch from '../FacetSwitch';
 import triggerDOMReload from '../shared/popup/triggerDOMReload';
-import { getDomain, hasWhitelistedDomain, addWhiteListedDomain, removeWhitelistedDomain } from '../services/facetApiService';
+import { getDomain, hasWhitelistedDomain, addWhiteListedDomain, removeWhitelistedDomain, getOrPostDomain } from '../services/facetApiService';
 import AppContext from '../AppContext';
 import facetLogo from '../static/images/facet_typography.svg';
 import FacetImage from '../shared/FacetImage';
@@ -75,7 +75,7 @@ export default () => {
       chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
-        const domainRes = await getDomain(loc.hostname, workspaceId);
+        const domainRes = await getOrPostDomain(workspaceId);
         setUrl(loc.hostname);
         const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
         setTextToCopy(text);

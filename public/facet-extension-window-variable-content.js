@@ -5,19 +5,18 @@
 window.disableMutationObserverScript = false;
 const scriptArr = document.querySelectorAll('script');
 let found = false;
-if (!window.IN_PREVIEW) {
-    scriptArr.forEach(script => {
-        if (found) {
-            return;
-        }
-        if (script.attributes && script.attributes['is-preview']) {
-            window.disableMutationObserverScript = false;
-            found = true;
-            return;
-        }
-        if (script.attributes && script.attributes['facet-extension-loaded']) {
-            window.disableMutationObserverScript = script.getAttribute("facet-extension-loaded") === "true" ? true : false;
-        }
-    })
-}
+scriptArr.forEach(script => {
+    if (found) {
+        return;
+    }
+    if (script.attributes && script.attributes['is-preview']) {
+        window.disableMutationObserverScript = false;
+        found = true;
+        console.log('Is-Preview True');
+        return;
+    }
+    if (script.attributes && script.attributes['facet-extension-loaded']) {
+        window.disableMutationObserverScript = script.getAttribute("facet-extension-loaded") === "true" ? true : false;
+    }
+})
 

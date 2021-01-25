@@ -14,6 +14,7 @@ chrome.runtime.onMessage.addListener(
             chrome.tabs.create({ url: request.config.href }, function (tab) {
                 chrome.tabs.executeScript(tab.id, {
                     code: `
+                        console.log('[Facet][Initiating Preview]');
                         window.IN_PREVIEW = true;
                         document.getElementById('facetizer') && document.getElementById('facetizer').remove()
                         var node = document.getElementsByTagName('html').item(0);

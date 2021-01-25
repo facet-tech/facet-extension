@@ -1,9 +1,8 @@
 import $ from 'jquery';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
-import { convertGetFacetResponseToMap, getFacet, getOrPostDomain } from './services/facetApiService';
+import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api, snackbar, styles } from './shared/constant';
-import get from 'lodash/get';
 import { getElementNameFromPath } from './shared/parsePath';
 import isDevelopment from './utils/isDevelopment';
 
