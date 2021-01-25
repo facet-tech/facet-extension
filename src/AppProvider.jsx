@@ -6,7 +6,7 @@ import { Auth } from 'aws-amplify';
 import AppContext from './AppContext';
 import isDevelopment from './utils/isDevelopment';
 import {
-  getFacet, getDomain, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
+  getFacet, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
@@ -23,7 +23,7 @@ import useNonRolledOutFacets from './shared/hooks/useNonRolledOutFacets';
 
 const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
-  // TODO these need to change during dev
+
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
@@ -31,7 +31,6 @@ const AppProvider = ({ children }) => {
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
   const [disabledFacets, setDisabledFacets] = useState([]);
-  const [addedElements, setAddedElements] = useState(new Map());
   const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
 
   const [expanded, setExpanded] = useState([]);
@@ -99,8 +98,11 @@ const AppProvider = ({ children }) => {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
     } else {
+      console.log('Delete Case');
       setSelectedFacet(defaultFacetName);
       setExpanded([defaultFacetName]);
+      setGlobalFacets([defaultFacetName]);
+      setNonRolledOutFacets([defaultFacetName]);
     }
   };
 
@@ -257,6 +259,9 @@ const AppProvider = ({ children }) => {
         }
       } else {
         setFacetMap(new Map([[defaultFacetName, []]]));
+        setSelectedFacet(defaultFacetName);
+        setExpanded([defaultFacetName]);
+        setGlobalFacets([defaultFacetName]);
         setNonRolledOutFacets([defaultFacetName]);
       }
       setLoadingSideBar(false);
@@ -344,17 +349,12 @@ const AppProvider = ({ children }) => {
     setExpanded([newName]);
   };
 
-  // sharing stuff among content script
-  window.addedElements = addedElements;
-  window.setAddedElements = setAddedElements;
   window.enqueueSnackbar = enqueueSnackbar;
   return (
     <AppContext.Provider value={{
       onFacetAdd,
       addedFacets,
       setAddedFacets,
-      addedElements,
-      setAddedElements,
       canDeleteElement,
       setCanDeleteElement,
       disabledFacets,

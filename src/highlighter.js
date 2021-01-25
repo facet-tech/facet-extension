@@ -27,7 +27,8 @@ const performDOMTransformation = () => {
     })
 }
 
-// TODO repetitive task; consider abstraction
+// getters  & setters from public context
+
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
@@ -42,7 +43,6 @@ let getFacetMap = (value) => {
 }
 let setFacetMapHighlighter = (value) => {
     facetMap = value;
-
 }
 
 let nonRolledOutFacetsHighlighter = [];
@@ -176,9 +176,9 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 
 /**
  *  @param {*} facetMap
- *  @param {*} setNonRolledOutFacets
+ *  @param {*} setNonRolledOutFacetsValue
  */
-const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
+const loadInitialStateInDOM = (facetMap, setNonRolledOutFacetsValue) => {
     let nonRolledOutFacets = [];
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
@@ -196,7 +196,7 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
             $(val.path).css("opacity", "0.3", "important");
         })
     });
-    setNonRolledOutFacets(nonRolledOutFacets);
+    setNonRolledOutFacetsValue(nonRolledOutFacets);
 }
 
 /**
@@ -206,9 +206,13 @@ const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
+    const setNonRolledOutFacets = event.currentTarget.setNonRolledOutFacets;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    if (facetMap.size === 0) {
+        setNonRolledOutFacets([selectedFacet])
+    }
     if (allPaths.includes(domPath)) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
         event.target.style.setProperty("opacity", "unset");
@@ -282,7 +286,7 @@ function isElement(element) {
  * @param {*} facetMap Map of facets
  * @param {*} enqueueSnackbar notification context
  */
-const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
+const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonRolledOutFacets) => {
     try {
         if (!workspaceId) {
             initializeSingletonValues(eSBar);
@@ -295,6 +299,7 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;
                     e.enqueueSnackbar = enqueueSnackbar;
+                    e.setNonRolledOutFacets = setNonRolledOutFacets;
                     if (addEventsFlag) {
                         e.addEventListener("click", onMouseClickHandle, false);
                         e.addEventListener("mouseenter", onMouseEnterHandle, false);

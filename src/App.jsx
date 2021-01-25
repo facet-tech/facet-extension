@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
-import { updateEvents } from './highlighter';
+import { setNonRolledOutFacetsHighlighter, updateEvents } from './highlighter';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
@@ -13,7 +13,7 @@ import isDevelopment from './utils/isDevelopment';
 function App() {
   const { enqueueSnackbar } = useSnackbar();
   const { showSideBar, isPluginEnabled, setIsPluginEnabled,
-    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar } = useContext(AppContext);
+    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -33,9 +33,9 @@ function App() {
         return;
       }
       if (showSideBar) {
-        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar);
+        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets);
       } else {
-        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar);
+        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets);
       }
       setLoadingSideBar(false);
     }
