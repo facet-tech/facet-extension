@@ -1,5 +1,3 @@
-// import { setKeyInLocalStorage } from "../src/shared/loadLocalStorage";
-
 chrome.runtime.onMessage.addListener(
     async function (request, sender, sendResponse) {
         // need to grab from shared
