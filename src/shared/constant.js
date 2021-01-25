@@ -96,12 +96,14 @@ const storage = {
     username: 'username',
     password: 'password',
     initiatingTabId: 'INITIATING_TAB_ID',
-    sessionData: 'SESSION_DATA'
+    sessionData: 'SESSION_DATA',
+    isPreview: 'IS_PREVIEW'
 };
 
 const ChromeRequestType = {
     GET_LOGGED_IN_USER: 'GET_LOGGED_IN_USER',
-    OPEN_WELCOME_PAGE: 'OPEN_WELCOME_PAGE'
+    OPEN_WELCOME_PAGE: 'OPEN_WELCOME_PAGE',
+    OPEN_PREVIEW_PAGE: 'OPEN_PREVIEW_PAGE'
 };
 
 const api = {

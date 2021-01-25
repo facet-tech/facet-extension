@@ -104,11 +104,12 @@ const createDomain = async (domain, workspaceId) => {
     return apiResponse;
 }
 
-const getDomain = async (domainName, workspaceId, readFromStorage = true) => {
+// TODO buggy
+const getDomain = async (domainName, workspaceId, readFromStorage = false) => {
     if (process.env.NODE_ENV === 'development') {
         return MockService.mockGetDomain();
     }
-    if (readFromStorage) {
+    if (false) {
         const { domainId } = await getKeyFromLocalStorage(storage.sessionData) || {};
         if (domainId) {
             const responseObject = {

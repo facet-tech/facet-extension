@@ -55,7 +55,7 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
 );
 
 // Adds facetizer into the client's DOM
-if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page')) {
+if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page') && !window.IN_PREVIEW) {
   const { body } = document;
   const facetDiv = document.createElement('div');
   facetDiv.setAttribute('style', `width: ${styles.drawerWidth}px !important`);
