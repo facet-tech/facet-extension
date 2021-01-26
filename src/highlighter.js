@@ -295,6 +295,7 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonR
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {
+                    console.log(e);
                     // attaching these parameters into the event
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;

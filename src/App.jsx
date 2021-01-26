@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import FacetToolbar from './FacetToolbar';
 import AppContext from './AppContext';
-import { setNonRolledOutFacetsHighlighter, updateEvents } from './highlighter';
+import { updateEvents } from './highlighter';
 import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
 import { useSnackbar } from 'notistack';
@@ -22,7 +22,6 @@ function App() {
     });
 
   useEffect(() => {
-
     if (!isPluginEnabled) {
       return;
     }

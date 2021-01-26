@@ -1,3 +1,5 @@
+import { storage } from "../shared/constant"
+
 /**
  * Class for mocking responses
  */
@@ -24,6 +26,14 @@ export default class MockService {
             response: {
                 id: MockService.getMockDomainId()
             }
+        }
+    }
+
+    static mockGetKeyFromLocalStorage = (key) => {
+        if (key === storage.username) {
+            return "layani.kamora@primaryale.com";
+        } else if (key === storage.password) {
+            return "layani.kamora@primaryale.com";
         }
     }
 

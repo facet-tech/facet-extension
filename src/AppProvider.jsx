@@ -27,6 +27,7 @@ const AppProvider = ({ children }) => {
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
   const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
+  const [isDomainWhitelisted, setIsDomainWhitelisted] = isDevelopment() ? useState(true) : useState(false);
 
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
@@ -40,7 +41,6 @@ const AppProvider = ({ children }) => {
   const [facetLabelMenu, setFacetMenuLabel] = useState(null);
   const [selectedFacet, setSelectedFacet] = useSelectedFacet();
   const [nonRolledOutFacets, setNonRolledOutFacets] = useNonRolledOutFacets();
-  const [isDomainWhitelisted, setIsDomainWhitelisted] = useState(false);
 
   const [loggedInUser, setLoggedInUser] = useState({});
   const [url, setUrl] = useState('');
@@ -98,7 +98,6 @@ const AppProvider = ({ children }) => {
       setSelectedFacet();
       setExpanded([keys[keys.length - 1]]);
     } else {
-      console.log('Delete Case');
       setSelectedFacet(defaultFacetName);
       setExpanded([defaultFacetName]);
       setGlobalFacets([defaultFacetName]);

@@ -10,7 +10,7 @@ import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { styles, ChromeRequestType, snackbar, defaultFacetName, api } from '../shared/constant';
+import { styles, ChromeRequestType, snackbar, defaultFacetName } from '../shared/constant';
 import StyledTreeItem from './StyledTreeItem';
 import AppContext from '../AppContext';
 import { color } from '../shared/constant.js';
@@ -24,7 +24,7 @@ import facetLogo from '../static/images/facet_main_logo.svg'
 import facetLogoIce from '../static/images/facet_ice_logo.svg';
 import CodeSnippet from '../shared/CodeSnippet';
 import FacetButton from '../shared/FacetButton';
-import { getKeyFromLocalStorage } from '../shared/loadLocalStorage';
+import isDevelopment from '../utils/isDevelopment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -222,11 +222,21 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Disable" >
+      <CustomIconButtonContainer onClick={() => {
+        if (!isDevelopment()) {
+          setLoadingSideBar(true);
+        }
+        sideBarHandler();
+      }} title="Disable" >
         <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
       </CustomIconButtonContainer>
     ) : (
-      <CustomIconButtonContainer onClick={() => { setLoadingSideBar(true); sideBarHandler(); }} title="Enable">
+      <CustomIconButtonContainer onClick={() => {
+        if (!isDevelopment()) {
+          setLoadingSideBar(true);
+        }
+        sideBarHandler();
+      }} title="Enable">
         <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="27" height="27" title="facet" src={facetLogo} />
       </CustomIconButtonContainer>
     );
