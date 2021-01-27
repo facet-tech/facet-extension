@@ -42,7 +42,7 @@ export default function SimpleModal() {
 
     const body =
         open ? <div style={modalStyle} className={classes.paper}>
-            <PreviewLoadingBar onComplete={() => { console.log('COMPLETE'); setOpen(false) }} />
+            <PreviewLoadingBar onComplete={() => { setOpen(false) }} />
         </div> : null;
 
     return (

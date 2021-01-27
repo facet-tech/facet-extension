@@ -10,7 +10,6 @@ scriptArr.forEach(script => {
         return;
     }
     if (script.attributes && script.attributes['is-preview']) {
-        console.log('QQ');
         window.disableMutationObserverScript = false;
         window.IN_PREVIEW = true;
         window.JSURL = script.attributes['src'];

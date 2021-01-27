@@ -17,10 +17,8 @@ export default function CustomizedProgressBars({ onComplete }) {
             return Math.min(oldProgress + diff, 100);
         });
     }, progress >= 100 ? null : 300);
-    console.log('progress', progress);
     if (progress >= 0) {
         // onComplete();
-        console.log('TRIGGERRING');
         var node = document.getElementsByTagName('html').item(0);
         node.style.visibility = "visible";
     }
