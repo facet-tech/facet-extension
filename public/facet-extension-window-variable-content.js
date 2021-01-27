@@ -12,7 +12,6 @@ scriptArr.forEach(script => {
     if (script.attributes && script.attributes['is-preview']) {
         window.disableMutationObserverScript = false;
         found = true;
-        console.log('Is-Preview True');
         return;
     }
     if (script.attributes && script.attributes['facet-extension-loaded']) {

@@ -92,7 +92,6 @@ const isSelectorValid = selector => {
 // singletons
 let domainId;
 let workspaceId;
-let getFacetResponse;
 let enqueueSnackbar;
 
 const onMouseEnterHandle = function (event) {
@@ -113,14 +112,14 @@ const onMouseLeaveHandle = function (event) {
  * 
  * Recursively iterates on existing domElements, and assigns the correct incremental suffix to the domElement
  * 
- * @param {*} elementName 
+ * @param {*} elementType 
  * @param {*} facet 
  * @param {*} currNumber 
  */
-const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
-    const nameArr = elementName.split('-');
+const getIncreasedElementNameNumber = (elementType, facet, currNumber = 1) => {
+    const nameArr = elementType.split('-');
     if (nameArr.length === 1) {
-        const result = `${elementName}-${currNumber}`;
+        const result = `${elementType}-${currNumber}`;
         if (facet.filter(e => e.name === result).length > 0) {
             return getIncreasedElementNameNumber(result, facet, currNumber + 1);
         } else {
@@ -139,13 +138,22 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
     return finalResult;
 }
 
+const getElementTypeFromName = (name) => {
+    const strSplit = name.split('>');
+    let elementType = strSplit[strSplit.length - 1];
+    const elementTypeSplit = elementType.split(':');
+    elementType = elementTypeSplit[0];
+    return elementType;
+}
+
 const convertToDomElementObject = (path, facet) => {
-    const name = getElementNameFromPath(path, facet);
-    // if (facet.filter(e => e.name === name).length > 0) {
-    //     name = getIncreasedElementNameNumber(name, facet);
-    // }
+    const elementType = getElementTypeFromName(path);
+    let elementName = elementType;
+    while (facet.filter(e => e.name === elementName).length > 0) {
+        elementName = getIncreasedElementNameNumber(elementType, facet);
+    }
     return {
-        name,
+        name: elementName,
         path: path
     }
 }
@@ -158,7 +166,7 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
     return facetArray.map(facet => facet.value.map(domElement => domElement.path)).flat();
 }
 
-const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
+const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet, enqueueSnackbar) => {
     facetMap && facetMap.forEach((facet, key) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
@@ -207,6 +215,7 @@ const onMouseClickHandle = function (event) {
     const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
     const setNonRolledOutFacets = event.currentTarget.setNonRolledOutFacets;
+    const enqueueSnackbar = event.currentTarget.enqueueSnackbar;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
@@ -214,7 +223,7 @@ const onMouseClickHandle = function (event) {
         setNonRolledOutFacets([selectedFacet])
     }
     if (allPaths.includes(domPath)) {
-        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
+        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet, enqueueSnackbar);
         event.target.style.setProperty("opacity", "unset");
     } else {
         const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
@@ -295,11 +304,10 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonR
         [...document.querySelectorAll('* > :not(#facetizer) * > :not(#popup) *')]
             .filter(e => ![...document.querySelectorAll("#facetizer *, #popup *, #facet-menu *")]
                 .includes(e)).forEach(e => {
-                    console.log(e);
                     // attaching these parameters into the event
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;
-                    e.enqueueSnackbar = enqueueSnackbar;
+                    e.enqueueSnackbar = eSBar;
                     e.setNonRolledOutFacets = setNonRolledOutFacets;
                     if (addEventsFlag) {
                         e.addEventListener("click", onMouseClickHandle, false);

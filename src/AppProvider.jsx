@@ -73,7 +73,7 @@ const AppProvider = ({ children }) => {
     try {
       // TODO DOM-related stuff should be handled through highlighter
       const parsedPath = parsePath(path, false);
-      const element = $(parsedPath[0])[0];
+      const element = $(path)[0];
       element.style.setProperty('opacity', 'unset');
     } catch (e) {
       console.log('[ERROR] onDeleteElement', e);

@@ -68,7 +68,7 @@ function StyledTreeItem(props) {
         handleClickMenuEl, onGotoClick, setExpanded,
         onDeleteFacet, onFacetClick, facetMap,
         nonRolledOutFacets, setNonRolledOutFacets, onGlobalCheckboxClick,
-        globalFacets, setGlobalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
+        globalFacets, selectedFacet, setSelectedFacet } = useContext(AppContext);
     const [renameValue, setRenameValue] = useState(labelText);
 
     const enableFacetIconBtn = <FacetIconButton
