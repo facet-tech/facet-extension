@@ -18,6 +18,7 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
+import TmpSimpleModal from './shared/TmpSimpleModal';
 
 Amplify.configure(awsExports);
 
@@ -53,6 +54,8 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     }
   },
 );
+
+console.log('CHECKME', window.IN_PREVIEW, window.JSURL);
 
 // Adds facetizer into the client's DOM
 if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page') && !window.IN_PREVIEW) {
@@ -157,6 +160,18 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
     document.getElementById(domIds.welcome),
   );
 } else if (document.getElementById(domIds.previewLoadingBar) && isActivelyBeingDebugged(domIds.previewLoadingBar)) {
-  var node = document.getElementsByTagName('html').item(0);
-  node.style.visibility = "visible";
+
+  (async () => {
+    try {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      await sleep(1000);
+
+      var node = document.getElementsByTagName('html').item(0);
+      node.style.visibility = "visible";
+    } catch (e) {
+      // Deal with the fact the chain failed
+    }
+  })();
 }
