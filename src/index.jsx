@@ -18,6 +18,7 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
+import PreviewLoadingBar from './shared/PreviewLoadingBar';
 
 Amplify.configure(awsExports);
 
@@ -155,5 +156,12 @@ if (document.getElementById(domIds.authentication) && isActivelyBeingDebugged(do
       <WelcomeAbroadStandalone />
     </React.StrictMode>,
     document.getElementById(domIds.welcome),
+  );
+} else if (document.getElementById(domIds.previewLoadingBar) && isActivelyBeingDebugged(domIds.previewLoadingBar)) {
+  ReactDOM.render(
+    <React.StrictMode>
+      <PreviewLoadingBar onComplete={() => { console.log('keepo') }} />
+    </React.StrictMode>,
+    document.getElementById(domIds.previewLoadingBar),
   );
 }

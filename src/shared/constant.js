@@ -125,7 +125,8 @@ const domIds = {
     popup: 'popup',
     authentication: 'authentication',
     facetizer: 'facetizer',
-    welcome: 'facet-welcome-page'
+    welcome: 'facet-welcome-page',
+    previewLoadingBar: 'facet-preview-loading-bar'
 };
 
 // chrome extension id
@@ -133,7 +134,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.facetizer];
+    const activelyDebuggingElementIds = [domIds.previewLoadingBar];
     if (!isDevelopment()) {
         return true;
     }
