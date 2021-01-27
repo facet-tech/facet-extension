@@ -31,7 +31,8 @@
                 "<all_urls>"
             ],
             "js": [
-                "mutationObserverVariableInjection.js"
+                "mutationObserverVariableInjection.js",
+                "bundle.js"
             ],
             "run_at": "document_start"
         }

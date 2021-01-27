@@ -10,12 +10,19 @@ scriptArr.forEach(script => {
         return;
     }
     if (script.attributes && script.attributes['is-preview']) {
+        console.log('QQ');
         window.disableMutationObserverScript = false;
+        window.IN_PREVIEW = true;
+        window.JSURL = script.attributes['src'];
         found = true;
+        var node = document.getElementsByTagName('html').item(0);
+        node.style.visibility = "hidden";
+        var previewNode = document.createElement('div');
+        previewNode.setAttribute('src', window.JSURL);
+        node.prepend(previewNode);
         return;
     }
     if (script.attributes && script.attributes['facet-extension-loaded']) {
         window.disableMutationObserverScript = script.getAttribute("facet-extension-loaded") === "true" ? true : false;
     }
 })
-

@@ -15,9 +15,8 @@ export default function CustomizedProgressBars({ onComplete }) {
         progressLabel: {
             position: "absolute",
             width: "100%",
-            height: "100%",
             zIndex: 1,
-            maxHeight: "75px", // borderlinearprogress root.height
+            maxHeight: "75px",
             textAlign: "center",
             display: "flex",
             alignItems: "center",
@@ -54,7 +53,7 @@ export default function CustomizedProgressBars({ onComplete }) {
             if (oldProgress === 100) {
                 return 100;
             }
-            const diff = 25;
+            const diff = 35;
             return Math.min(oldProgress + diff, 100);
         });
     }, progress >= 100 ? null : 300);
