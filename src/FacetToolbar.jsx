@@ -69,8 +69,8 @@ export default function FacetToolbar() {
           <FacetLabel text="© Facet 2021 - All rights reserved." />
         </div>
         <div className={classes.grid2}>
-          <Fab size='small' className={classes.fabBtn} aria-label="add">
-            <AddIcon onClick={() => addFacet()} />
+          <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
+            <AddIcon />
           </Fab>
         </div>
       </div>
