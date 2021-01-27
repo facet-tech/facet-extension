@@ -1,4 +1,5 @@
 /*global chrome*/
+import MockService from '../services/MockService';
 import isDevelopment from '../utils/isDevelopment';
 import { isPluginEnabled, LoginTypes, api, storage } from './constant';
 
@@ -79,7 +80,7 @@ const printLocalStorage = async () => {
  */
 const getKeyFromLocalStorage = async (key) => {
     if (isDevelopment()) {
-        return true;
+        return MockService.mockGetKeyFromLocalStorage(key);
     }
     return new Promise((resolve, reject) => {
         try {

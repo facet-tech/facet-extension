@@ -27,7 +27,8 @@ const performDOMTransformation = () => {
     })
 }
 
-// TODO repetitive task; consider abstraction
+// getters  & setters from public context
+
 let selectedFacet;
 const setSelectedFacetHighlighter = (value) => {
     selectedFacet = value;
@@ -42,7 +43,6 @@ let getFacetMap = (value) => {
 }
 let setFacetMapHighlighter = (value) => {
     facetMap = value;
-
 }
 
 let nonRolledOutFacetsHighlighter = [];
@@ -92,7 +92,6 @@ const isSelectorValid = selector => {
 // singletons
 let domainId;
 let workspaceId;
-let getFacetResponse;
 let enqueueSnackbar;
 
 const onMouseEnterHandle = function (event) {
@@ -113,14 +112,14 @@ const onMouseLeaveHandle = function (event) {
  * 
  * Recursively iterates on existing domElements, and assigns the correct incremental suffix to the domElement
  * 
- * @param {*} elementName 
+ * @param {*} elementType 
  * @param {*} facet 
  * @param {*} currNumber 
  */
-const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
-    const nameArr = elementName.split('-');
+const getIncreasedElementNameNumber = (elementType, facet, currNumber = 1) => {
+    const nameArr = elementType.split('-');
     if (nameArr.length === 1) {
-        const result = `${elementName}-${currNumber}`;
+        const result = `${elementType}-${currNumber}`;
         if (facet.filter(e => e.name === result).length > 0) {
             return getIncreasedElementNameNumber(result, facet, currNumber + 1);
         } else {
@@ -139,13 +138,22 @@ const getIncreasedElementNameNumber = (elementName, facet, currNumber = 1) => {
     return finalResult;
 }
 
+const getElementTypeFromName = (name) => {
+    const strSplit = name.split('>');
+    let elementType = strSplit[strSplit.length - 1];
+    const elementTypeSplit = elementType.split(':');
+    elementType = elementTypeSplit[0];
+    return elementType;
+}
+
 const convertToDomElementObject = (path, facet) => {
-    const name = getElementNameFromPath(path, facet);
-    // if (facet.filter(e => e.name === name).length > 0) {
-    //     name = getIncreasedElementNameNumber(name, facet);
-    // }
+    const elementType = getElementTypeFromName(path);
+    let elementName = elementType;
+    while (facet.filter(e => e.name === elementName).length > 0) {
+        elementName = getIncreasedElementNameNumber(elementType, facet);
+    }
     return {
-        name,
+        name: elementName,
         path: path
     }
 }
@@ -158,7 +166,7 @@ const extractAllDomElementPathsFromFacetMap = (facetMap) => {
     return facetArray.map(facet => facet.value.map(domElement => domElement.path)).flat();
 }
 
-const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
+const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet, enqueueSnackbar) => {
     facetMap && facetMap.forEach((facet, key) => {
         var newFacetArr = facet.filter(e => e.path !== domPath);
         if (facet.length !== newFacetArr.length) {
@@ -176,9 +184,9 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet) => {
 
 /**
  *  @param {*} facetMap
- *  @param {*} setNonRolledOutFacets
+ *  @param {*} setNonRolledOutFacetsValue
  */
-const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
+const loadInitialStateInDOM = (facetMap, setNonRolledOutFacetsValue) => {
     let nonRolledOutFacets = [];
     const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
     facetArray && facetArray.forEach(facet => {
@@ -196,7 +204,7 @@ const loadInitialStateInDOM = (facetMap, setNonRolledOutFacets) => {
             $(val.path).css("opacity", "0.3", "important");
         })
     });
-    setNonRolledOutFacets(nonRolledOutFacets);
+    setNonRolledOutFacetsValue(nonRolledOutFacets);
 }
 
 /**
@@ -206,11 +214,16 @@ const onMouseClickHandle = function (event) {
     const selectedFacet = getSelectedFacet();
     const facetMap = getFacetMap();
     const setFacetMap = event.currentTarget.setFacetMap;
+    const setNonRolledOutFacets = event.currentTarget.setNonRolledOutFacets;
+    const enqueueSnackbar = event.currentTarget.enqueueSnackbar;
     let selectedFacetName = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    if (facetMap.size === 0) {
+        setNonRolledOutFacets([selectedFacet])
+    }
     if (allPaths.includes(domPath)) {
-        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet);
+        removeDomPath(facetMap, domPath, setFacetMap, selectedFacet, enqueueSnackbar);
         event.target.style.setProperty("opacity", "unset");
     } else {
         const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
@@ -282,7 +295,7 @@ function isElement(element) {
  * @param {*} facetMap Map of facets
  * @param {*} enqueueSnackbar notification context
  */
-const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
+const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonRolledOutFacets) => {
     try {
         if (!workspaceId) {
             initializeSingletonValues(eSBar);
@@ -294,7 +307,8 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar) => {
                     // attaching these parameters into the event
                     e.facetMap = facetMap;
                     e.setFacetMap = setFacetMap;
-                    e.enqueueSnackbar = enqueueSnackbar;
+                    e.enqueueSnackbar = eSBar;
+                    e.setNonRolledOutFacets = setNonRolledOutFacets;
                     if (addEventsFlag) {
                         e.addEventListener("click", onMouseClickHandle, false);
                         e.addEventListener("mouseenter", onMouseEnterHandle, false);
