@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(
-    async function (request, sender, sendResponse) {
+    async function (request) {
         // need to grab from shared
         if (request.data === 'OPEN_WELCOME_PAGE') {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -14,7 +14,8 @@ chrome.runtime.onMessage.addListener(
                     code: `
                         console.log('[Facet][Initiating Preview]');
                         window.IN_PREVIEW = true;
-                        document.getElementById('facetizer') && document.getElementById('facetizer').remove()
+                        window.JSURL = "${request.config.jsUrl}";
+                        document.getElementById('facetizer') && document.getElementById('facetizer').remove();
                         var node = document.getElementsByTagName('html').item(0);
                         var script = document.createElement('script');
                         script.setAttribute('type', 'text/javascript');
@@ -22,6 +23,12 @@ chrome.runtime.onMessage.addListener(
                         script.setAttribute('facet-extension-loaded', false);
                         script.setAttribute('is-preview', true);
                         node.appendChild(script);
+
+                        node.style.visibility = "hidden";
+
+                        var previewNode = document.createElement('div');
+                        previewNode.setAttribute('id', 'facet-preview-loading-bar');
+                        node.appendChild(previewNode);
                     `,
                     runAt: 'document_start',
                 });
