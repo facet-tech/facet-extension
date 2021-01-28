@@ -145,8 +145,9 @@ const AppProvider = ({ children }) => {
     });
   }
 
+  // TODO is this needed?
   const onLoginClick = (val) => {
-    setLoading(val);
+    // setLoading(val);
   }
 
   const loadJWT = async () => {

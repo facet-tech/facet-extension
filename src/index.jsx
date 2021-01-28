@@ -54,8 +54,6 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
   },
 );
 
-console.log('CHECKME', window.IN_PREVIEW, window.JSURL);
-
 // Adds facetizer into the client's DOM
 if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page') && !window.IN_PREVIEW) {
   const { body } = document;

@@ -30,7 +30,7 @@ export default ({ children }) => {
     }
 
     const onLoginClick = (val) => {
-        setLoading(val);
+        // setLoading(val);
     }
 
     const loadJWT = async () => {

@@ -39,7 +39,7 @@ export default () => {
 
     const onLoginClick = () => {
         // todo open new tab with auth stuff
-        if (isDevelopment) {
+        if (isDevelopment()) {
             setHasUserLoggedIn(true);
             return;
         }
@@ -51,7 +51,7 @@ export default () => {
 
     const onRegisterClick = () => {
         // todo open new tab with auth stuff
-        if (isDevelopment) {
+        if (isDevelopment()) {
             setHasUserLoggedIn(true);
         }
         chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
