@@ -11,6 +11,7 @@ import FacetButton from '../shared/FacetButton';
 import FacetLink from '../shared/FacetLink';
 import StyledPopupDiv from './StyledPopupDiv';
 import { color } from '../shared/constant';
+import LoadingPopup from './LoadingPopup';
 
 const StyledDiv = styled.div`
     width: 25rem;
@@ -24,12 +25,14 @@ const InnerStyledDiv = styled.div`
 export default () => {
 
     const [hasUserLoggedIn, setHasUserLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Create an scoped async function in the hook
         async function loadState() {
             const userHasLoggedIn = await isUserLoggedIn();
             setHasUserLoggedIn(userHasLoggedIn);
+            setLoading(false);
         }
         loadState();
     }, []);
@@ -38,6 +41,7 @@ export default () => {
         // todo open new tab with auth stuff
         if (isDevelopment) {
             setHasUserLoggedIn(true);
+            return;
         }
         chrome?.tabs?.query({ active: true, currentWindow: true }, function (tabs) {
             var currTab = tabs[0];
@@ -56,7 +60,7 @@ export default () => {
         });
     }
 
-    const element = hasUserLoggedIn ? <Main /> : <StyledPopupDiv>
+    let element = hasUserLoggedIn ? <Main /> : <StyledPopupDiv>
         <InnerStyledDiv>
             <br />
             <img src={logo} />
@@ -67,6 +71,8 @@ export default () => {
             <FacetLink onClick={() => { onRegisterClick() }} color={color.electricB} underline="always" text="Sign up" />
         </InnerStyledDiv>
     </StyledPopupDiv>
+
+    element = loading ? <LoadingPopup /> : element;
 
     return <StyledDiv>
         {element}

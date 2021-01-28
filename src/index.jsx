@@ -18,7 +18,6 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
-import TmpSimpleModal from './shared/TmpSimpleModal';
 
 Amplify.configure(awsExports);
 
