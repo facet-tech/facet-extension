@@ -2,8 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useSnackbar } from 'notistack';
-import { Auth } from 'aws-amplify';
 import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
 import {
   api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar, LoginTypes, ChromeRequestType,
@@ -43,61 +41,37 @@ const MarginTop = styled.div`
     margin-top: ${(props) => props.value};
 `;
 
-const CenteredDiv = styled.div`
-text-align: center;
-`;
-
-const PaddingDiv = styled.div`
-padding: 1rem;
-`;
-
 export default () => {
-  const { setJwt, url, isPluginEnabled, setIsPluginEnabled, setCurrAuthState, setUrl, loading, setLoading, logout } = useContext(AppContext);
-  const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
-
+  const { url, setUrl, isPluginEnabled, setIsPluginEnabled, logout } = useContext(AppContext);
   const [hasWhitelistedDomainVal, setHasWhitelistedDomainVal] = useState(isDevelopment ? true : false);
+  const [loading, setLoading] = useState(true);
+
   const onEnablePluginCB = async (e) => {
+    setLoading(true);
     chrome?.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async () => {
         setKeyInLocalStorage(isPluginEnabledConstant, e);
         const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
         setKeyInLocalStorage(isPluginEnabledConstant, isPluginEnabledValue);
         setIsPluginEnabled(isPluginEnabledValue);
+        setLoading(false);
       });
     });
     setKeyInLocalStorage(isPluginEnabledConstant, e);
     setIsPluginEnabled(e);
   };
 
-  const loadCopySnippet = async () => {
-    try {
-      const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
-      chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
-        var currentTab = tabs[0]; // there will be only one in this array
-        const loc = new URL(currentTab.url);
-        const domainRes = await getOrPostDomain(workspaceId);
-        setUrl(loc.hostname);
-        const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
-        setTextToCopy(text);
-      });
-    } catch (e) {
-      console.log('[ERROR][loadCopySnippet]', e);
-    }
-  };
-
   useEffect(() => {
-    loadCopySnippet();
-  }, [url, setTextToCopy]);
-
-  useEffect(() => {
-    setLoading(isDevelopment ? false : true);
+    setLoading(isDevelopment() ? false : true);
     async function loadState() {
+
       chrome?.tabs?.query({ active: true, currentWindow: true }, async function (tabs) {
         var currentTab = tabs[0]; // there will be only one in this array
         const loc = new URL(currentTab.url);
+        setUrl(loc.hostname);
         const result = await hasWhitelistedDomain(loc.hostname);
-        setLoading(false);
         setHasWhitelistedDomainVal(result);
+        setLoading(false);
       });
     }
     loadState();
@@ -117,12 +91,11 @@ export default () => {
     setLoading(false);
     triggerDOMReload();
   }
-
   const btnElement = hasWhitelistedDomainVal ? <div>
-    <FacetLabel text={`This domain (${url}) is whitelisted. `} />
+    <FacetLabel text={`This domain (${url}) is included in the workspace. `} />
     <FacetLink color={color.electricB} onClick={() => { removeWhitelistUrl(url) }} text="Click here" />
-    <FacetLabel text=" to remove it from the whitelist." />
-  </div> : <FacetButton onClick={() => { whiteListDomain(url) }} text={`Whitelist ${url}`} />;
+    <FacetLabel text=" to remove it from the workspace." />
+  </div> : <FacetButton onClick={() => { whiteListDomain(url) }} text={`Add domain to workspace`} />;
 
   const loadingElement = <TopDiv>
     <GridDiv>
@@ -162,7 +135,6 @@ export default () => {
       </GridDivTwoColumn>
     </> : null}
   </TopDiv>;
-
   return (
     loading ? loadingElement : coreElement
   );

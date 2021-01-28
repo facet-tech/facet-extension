@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function CustomizedProgressBars() {
+export default function Loading() {
     const classes = useStyles();
 
     return (

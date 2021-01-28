@@ -29,10 +29,6 @@ export default ({ children }) => {
         triggerDOMReload();
     }
 
-    const onLoginClick = (val) => {
-        setLoading(val);
-    }
-
     const loadJWT = async () => {
         const jwt = await AmplifyService.getCurrentUserJTW();
         setJwt(jwt);
@@ -58,7 +54,7 @@ export default ({ children }) => {
     return <PopupContext.Provider value={{
         loggedInUser, setLoggedInUser, url, setUrl, isPluginEnabled,
         setIsPluginEnabled, login, isUserAuthenticated, setIsUserAuthenticated,
-        workspaceId, email, setEmail, loading, setLoading, onLoginClick,
+        workspaceId, email, setEmail, loading, setLoading,
         currAuthState, setCurrAuthState, jwt, setJwt
     }}>
         {children}

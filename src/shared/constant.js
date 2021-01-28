@@ -3,8 +3,8 @@ const facetizerId = 'facetizer';
 const facetKey = 'facet-settings'
 const isPluginEnabled = 'isPluginEnabled';
 const isUserAuthenticated = 'isUserAuthenticated';
-const apiBaseURL = 'https://api.facet.ninja';
-const testBaseURL = 'https://test.api.facet.ninja';
+const apiBaseURL = 'https://api.facet.run';
+const testBaseURL = 'https://test.api.facet.run';
 const localBaseURL = 'http://localhost:3002';
 
 const authState = {

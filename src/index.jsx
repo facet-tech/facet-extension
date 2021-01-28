@@ -18,7 +18,6 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
-import TmpSimpleModal from './shared/TmpSimpleModal';
 
 Amplify.configure(awsExports);
 
@@ -54,8 +53,6 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     }
   },
 );
-
-console.log('CHECKME', window.IN_PREVIEW, window.JSURL);
 
 // Adds facetizer into the client's DOM
 if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page') && !window.IN_PREVIEW) {

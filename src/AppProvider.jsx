@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
   const [disabledFacets, setDisabledFacets] = useState([]);
-  const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id={ID}"></script>`);
+  const [textToCopy, setTextToCopy] = useState(`<script src="${APIUrl.apiBaseURL}/js?id={ID}"></script>`);
 
   const [expanded, setExpanded] = useState([]);
   const [facetMap, setFacetMap] = useFacetMap();
@@ -145,10 +145,6 @@ const AppProvider = ({ children }) => {
     });
   }
 
-  const onLoginClick = (val) => {
-    setLoading(val);
-  }
-
   const loadJWT = async () => {
     const jwt = await AmplifyService.getCurrentUserJTW();
     if (jwt) {
@@ -171,7 +167,7 @@ const AppProvider = ({ children }) => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
       const domainRes = await getOrPostDomain(workspaceId);
-      const text = `<script src="${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}"></script>`;
+      const text = `<script src="${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}"></script>`;
       setTextToCopy(text);
     } catch (e) {
       console.log('[ERROR][loadCopySnippet]', e);
@@ -181,7 +177,7 @@ const AppProvider = ({ children }) => {
   const getJSUrl = async () => {
     const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     const domainRes = await getOrPostDomain(workspaceId);
-    const result = `${APIUrl.apiBaseURL}/facet.ninja.js?id=${domainRes.response.id}`;
+    const result = `${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}`;
     setJSUrl(result);
   }
 
@@ -398,7 +394,7 @@ const AppProvider = ({ children }) => {
       jsUrl,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
-      workspaceId, email, setEmail, loading, setLoading, onLoginClick,
+      workspaceId, email, setEmail, loading, setLoading,
       currAuthState, setCurrAuthState, jwt, setJwt, nonRolledOutFacets, setNonRolledOutFacets
     }}
     >
