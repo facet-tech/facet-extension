@@ -31,6 +31,6 @@ Last but not least, copy the snippet of code generated from the facet-extension.
 (//todo image)
 
 This will give you the single line that you need to paste into your `<head>` HTML code. The line looks like this:
-`<script src="https://api.facet.ninja/facet.ninja.js?id={ID}"></script>`
+`<script src="https://api.facet.run/js?id={ID}"></script>`
 
 The ID refers to the ID of your website. Once this line of code is integrated in your system, you will be able to see the configurations applied from the facet extension.
