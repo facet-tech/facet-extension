@@ -134,7 +134,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.previewLoadingBar];
+    const activelyDebuggingElementIds = [domIds.authentication];
     if (!isDevelopment()) {
         return true;
     }
