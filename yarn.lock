@@ -3989,10 +3989,10 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-chrome-webstore-upload@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/chrome-webstore-upload/-/chrome-webstore-upload-0.4.2.tgz#6f547d8aba80bafcf4f27ae51da410d32efbe210"
-  integrity sha512-KBgxUmXNyZdKhrt6ulFbBb601Bo6qIFOKIFar1b2t44uGGCuhgl4k294bM+XPHJW956PGwTsaPcK+A9IUzCd4A==
+chrome-webstore-upload@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/chrome-webstore-upload/-/chrome-webstore-upload-0.4.4.tgz#10be17b6eb558b571acbd7ea9a8fc034696339b7"
+  integrity sha512-2afVQYCVfLAwYPPuCqKLivDl/CZcaRbmxHOq8B6oG1CbOPWncKl7yJR0G9LOu2wPfRprIEv3QGVQw3qRxuiBEw==
   dependencies:
     got "11.5.2"
 
