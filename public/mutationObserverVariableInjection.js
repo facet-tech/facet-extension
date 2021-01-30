@@ -19,4 +19,6 @@ async function injectScript(file_path, tag) {
         node.appendChild(script);
     });
 }
+console.log("INJECTING TRUE");
+window.disableMutationObserverScript = true;
 injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body');

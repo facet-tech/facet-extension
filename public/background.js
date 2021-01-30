@@ -14,7 +14,9 @@ chrome.runtime.onMessage.addListener(
                         // needed for content-script state management
                         window.IN_PREVIEW = true;
                         window.JSURL = "${request.config.jsUrl}";
-                        window.disableMutationObserverScript = false;
+                        console.log('@BG',)
+                        window.disableMutationObserverScript = true;
+                        console.log('SETTING 4', window.disableMutationObserverScript);
                         console.log('[Facet][Initiating Preview]');
                         // not injecting the script for already-integrated applications
                         if (${request.config.alreadyIntegrated}) {
