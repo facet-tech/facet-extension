@@ -25,6 +25,7 @@ import facetLogoIce from '../static/images/facet_ice_logo.svg';
 import CodeSnippet from '../shared/CodeSnippet';
 import FacetButton from '../shared/FacetButton';
 import isDevelopment from '../utils/isDevelopment';
+import { scriptHasAlreadyBeenInjected } from '../highlighter.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -280,11 +281,13 @@ export default function FacetTreeSideBar() {
             <div className={classes.saveAndPreview}>
               <FacetButton text="Save & Preview Page" onClick={async () => {
                 await onSaveClick();
+                const alreadyIntegrated = scriptHasAlreadyBeenInjected();
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
                     jsUrl,
-                    href: window.location.href
+                    href: window.location.href,
+                    alreadyIntegrated
                   }
                 });
               }} />

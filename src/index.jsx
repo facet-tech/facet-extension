@@ -53,7 +53,7 @@ chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     }
   },
 );
-
+console.log('CHECKA', window.disableMutationObserverScript);
 // Adds facetizer into the client's DOM
 if (!document.getElementById('popup') && !document.getElementById('facet-welcome-page') && !window.IN_PREVIEW) {
   const { body } = document;
