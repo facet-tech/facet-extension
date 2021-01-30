@@ -13,7 +13,6 @@ scriptArr.forEach(script => {
     }
     if (script.attributes && script.attributes['is-preview']) {
         window.disableMutationObserverScript = false;
-        console.log('SETTING 2', window.disableMutationObserverScript)
         window.IN_PREVIEW = true;
         // not injecting the script for already-integrated applications
         if (script.getAttribute('already-integrated')) {

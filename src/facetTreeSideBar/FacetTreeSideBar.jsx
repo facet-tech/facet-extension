@@ -101,7 +101,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    globalFacets, setGlobalFacets, jsUrl,
+    globalFacets, setGlobalFacets, jsUrl, url,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
@@ -279,12 +279,14 @@ export default function FacetTreeSideBar() {
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.saveAndPreview}>
+
               <FacetButton text="Save & Preview Page" onClick={async () => {
                 await onSaveClick();
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
+                    url: window.location.origin,
                     jsUrl,
                     href: window.location.href,
                     alreadyIntegrated
