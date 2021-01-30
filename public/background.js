@@ -8,27 +8,41 @@ chrome.runtime.onMessage.addListener(
             });
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
-
             chrome.tabs.create({ url: request.config.href }, function (tab) {
                 chrome.tabs.executeScript(tab.id, {
                     code: `
-                        console.log('[Facet][Initiating Preview]');
+                        // needed for content-script state management
                         window.IN_PREVIEW = true;
                         window.JSURL = "${request.config.jsUrl}";
-                        document.getElementById('facetizer') && document.getElementById('facetizer').remove();
-                        var node = document.getElementsByTagName('html').item(0);
-                        var script = document.createElement('script');
-                        script.setAttribute('type', 'text/javascript');
-                        script.setAttribute('src', "${request.config.jsUrl}");
-                        script.setAttribute('facet-extension-loaded', false);
-                        script.setAttribute('is-preview', true);
-                        node.appendChild(script);
+                        window.disableMutationObserverScript = false;
+                        console.log('[Facet][Initiating Preview]');
+                        // not injecting the script for already-integrated applications
+                        if (${request.config.alreadyIntegrated}) {
+                            const scriptArr = document.querySelectorAll('script');
+ 
+                            var node = document.getElementsByTagName('html').item(0);
+                            var script = document.createElement('script');
+                            script.setAttribute('type', 'text/javascript');
+                            script.setAttribute('facet-extension-loaded', false);
+                            script.setAttribute('is-preview', "true");
+                            script.setAttribute('already-integrated', ${request.config.alreadyIntegrated});
+                            node.appendChild(script);
+                        } else {
+                            document.getElementById('facetizer') && document.getElementById('facetizer').remove();
+                            var node = document.getElementsByTagName('html').item(0);
+                            var script = document.createElement('script');
+                            script.setAttribute('type', 'text/javascript');
+                            script.setAttribute('src', "${request.config.jsUrl}");
+                            script.setAttribute('facet-extension-loaded', false);
+                            script.setAttribute('already-integrated', ${request.config.alreadyIntegrated});
+                            node.appendChild(script);
 
-                        node.style.visibility = "hidden";
+                            node.style.visibility = "hidden";
 
-                        var previewNode = document.createElement('div');
-                        previewNode.setAttribute('id', 'facet-preview-loading-bar');
-                        node.appendChild(previewNode);
+                            var previewNode = document.createElement('div');
+                            previewNode.setAttribute('id', 'facet-preview-loading-bar');
+                            node.appendChild(previewNode);
+                        }
                     `,
                     runAt: 'document_start',
                 });

@@ -5,6 +5,7 @@
 window.disableMutationObserverScript = false;
 const scriptArr = document.querySelectorAll('script');
 let found = false;
+let alreadyIntegrated = false;
 scriptArr.forEach(script => {
     if (found) {
         return;
@@ -12,6 +13,13 @@ scriptArr.forEach(script => {
     if (script.attributes && script.attributes['is-preview']) {
         window.disableMutationObserverScript = false;
         window.IN_PREVIEW = true;
+        // not injecting the script for already-integrated applications
+        if (script.getAttribute('already-integrated')) {
+            console.log('[Facet][Preview][Already Integrated]');
+            found = true;
+            alreadyIntegrated = true;
+            return;
+        }
         window.JSURL = script.attributes['src'];
         found = true;
         var node = document.getElementsByTagName('html').item(0);
@@ -24,4 +32,8 @@ scriptArr.forEach(script => {
     if (script.attributes && script.attributes['facet-extension-loaded']) {
         window.disableMutationObserverScript = script.getAttribute("facet-extension-loaded") === "true" ? true : false;
     }
-})
+});
+if (found || alreadyIntegrated) {
+    window.disableMutationObserverScript = false;
+}
+console.log('FINAL', window.disableMutationObserverScript);

@@ -12,14 +12,16 @@ import isDevelopment from './utils/isDevelopment';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
-  const { showSideBar, isPluginEnabled, setIsPluginEnabled,
-    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
+  const { showSideBar, isPluginEnabled, setIsPluginEnabled, isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
+
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
       await getKeyFromLocalStorage(isPluginEnabledConstant);
       window.location.reload();
     });
+
+  console.log(isPluginEnabled, isDomainWhitelisted, showSideBar);
 
   useEffect(() => {
     if (!isPluginEnabled) {
