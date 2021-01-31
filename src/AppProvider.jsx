@@ -25,7 +25,7 @@ const AppProvider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [isPluginEnabled, setIsPluginEnabled] = isDevelopment() ? useState(true) : useState(false);
-  const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(true);
+  const [showSideBar, setShowSideBar] = isDevelopment() ? useState(true) : useState(false);
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
   const [isDomainWhitelisted, setIsDomainWhitelisted] = isDevelopment() ? useState(true) : useState(false);
 

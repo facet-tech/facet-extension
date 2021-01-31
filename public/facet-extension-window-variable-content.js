@@ -21,8 +21,7 @@
     }
 
     const alreadyIntegrated = (getFacetExtensionCookie(keysObj["FACET_EXTENSION_ALREADY_INTEGRATED"]) === 'true');
-    // TODO change 
-    const scriptTagVal = getFacetExtensionCookie(keysObj['FACET_EXTENSION_INJECTING_SCRIPT_TAG']).replace("https://api.facet.run/", "http://localhost:3002/");;
+    const scriptTagVal = getFacetExtensionCookie(keysObj['FACET_EXTENSION_INJECTING_SCRIPT_TAG']);
     if (!alreadyIntegrated) {
         var node = document.getElementsByTagName('html').item(0);
         node.style.visibility = "hidden";
