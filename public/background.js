@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(
-    async function (request) {
+    async function (request, sender, sendResponse) {
         // need to grab from shared
         if (request.data === 'OPEN_WELCOME_PAGE') {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -9,60 +9,47 @@ chrome.runtime.onMessage.addListener(
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
             await chrome.tabs.create({ url: request.config.url }, function (tab) {
-                const value = {
-                    IN_PREVIEW: true,
-                    DISABLE_MO: false,
-                    TAB_ID: tab.id
-                };
+                console.log('SETTING COOKIES FOR ', request.config.url);
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_DISABLE_MO`,
+                    value: "false"
+                });
 
                 chrome.cookies.set({
                     url: request.config.url,
-                    name: "FACET",
-                    value: JSON.stringify(value)
-                }, (cookie) => {
-                    console.log(JSON.stringify(cookie));
-                    console.log(chrome.extension.lastError);
-                    console.log(chrome.runtime.lastError);
+                    name: `FACET_EXTENSION_PREVIEW_TAB_ID`,
+                    value: tab.id.toString()
                 });
-                // chrome.tabs.executeScript(tab.id, {
-                //     code: `
-                //         // needed for content-script state management
-                //         window.IN_PREVIEW = true;
-                //         window.JSURL = "${request.config.jsUrl}";
-                //         console.log('@BG',)
-                //         window.disableMutationObserverScript = true;
-                //         console.log('SETTING 4', window.disableMutationObserverScript);
-                //         console.log('[Facet][Initiating Preview]');
-                //         // not injecting the script for already-integrated applications
-                //         if (${request.config.alreadyIntegrated}) {
-                //             const scriptArr = document.querySelectorAll('script');
 
-                //             var node = document.getElementsByTagName('html').item(0);
-                //             var script = document.createElement('script');
-                //             script.setAttribute('type', 'text/javascript');
-                //             script.setAttribute('facet-extension-loaded', false);
-                //             script.setAttribute('is-preview', "true");
-                //             script.setAttribute('already-integrated', ${request.config.alreadyIntegrated});
-                //             node.appendChild(script);
-                //         } else {
-                //             document.getElementById('facetizer') && document.getElementById('facetizer').remove();
-                //             var node = document.getElementsByTagName('html').item(0);
-                //             var script = document.createElement('script');
-                //             script.setAttribute('type', 'text/javascript');
-                //             script.setAttribute('src', "${request.config.jsUrl}");
-                //             script.setAttribute('facet-extension-loaded', false);
-                //             script.setAttribute('already-integrated', ${request.config.alreadyIntegrated});
-                //             node.appendChild(script);
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_ALREADY_INTEGRATED`,
+                    value: request.config.alreadyIntegrated.toString()
+                });
 
-                //             node.style.visibility = "hidden";
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_INJECTING_SCRIPT_TAG`,
+                    value: request.config.injectingScriptTag
+                });
 
-                //             var previewNode = document.createElement('div');
-                //             previewNode.setAttribute('id', 'facet-preview-loading-bar');
-                //             node.appendChild(previewNode);
-                //         }
-                //     `,
-                //     runAt: 'document_start',
-                // });
+                chrome.tabs.executeScript(tab.id, {
+                    file: 'preview-click-content.js',
+                    runAt: 'document_start',
+                });
+            });
+        } else if (request.data === 'GET_CURRENT_TAB') {
+            if (sender.tab && sender.tab.id) {
+                sendResponse({ tabId: sender.tab.id });
+            } else {
+                sendResponse({ tabId: undefined });
+            }
+        } else if (request.data === 'SET_COOKIE_VALUE') {
+            chrome.cookies.set({
+                url: request.config.url,
+                name: request.config.name,
+                value: request.config.value
             });
         }
     },

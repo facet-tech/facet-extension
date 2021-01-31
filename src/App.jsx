@@ -21,8 +21,6 @@ function App() {
       window.location.reload();
     });
 
-  console.log(isPluginEnabled, isDomainWhitelisted, showSideBar);
-
   useEffect(() => {
     if (!isPluginEnabled) {
       return;

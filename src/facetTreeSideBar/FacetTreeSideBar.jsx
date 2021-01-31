@@ -287,7 +287,7 @@ export default function FacetTreeSideBar() {
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
                     url: window.location.origin,
-                    jsUrl,
+                    injectingScriptTag: jsUrl,
                     href: window.location.href,
                     alreadyIntegrated
                   }
