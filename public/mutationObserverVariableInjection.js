@@ -41,9 +41,7 @@
         data: 'GET_CURRENT_TAB'
     }, async (response) => {
         // response.tabId 
-        console.log('currTabId', response.tabId, 'VS', previewId);
         const val = response.tabId != previewId;
-        console.log('RESULT', val.toString())
         await chrome.runtime.sendMessage({
             data: 'SET_COOKIE_VALUE',
             config: {
@@ -54,8 +52,6 @@
         });
     });
 
-
-
-    console.log("INJECTING facet-extension-window-variable-content.js");
+    console.log("[FACET][mutationObserverVariableInjection] INJECTING facet-extension-window-variable-content.js");
     injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body');
 })();

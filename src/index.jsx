@@ -37,9 +37,7 @@ function getFacetExtensionCookie(key) {
     await chrome.runtime.sendMessage({
       data: ChromeRequestType.GET_CURRENT_TAB
     }, async (response) => {
-      console.log('pggg', document.getElementById('popup'));
       var node = document.getElementsByTagName('html').item(0);
-      console.log('RESPONSE!', response, 'VS', getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]));
       if (response.tabId !== undefined && response.tabId === getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"])) {
         console.log('[ON_PREVIEW][Not Displaying Facetizer]');
         function sleep(ms) {
@@ -198,20 +196,9 @@ function getFacetExtensionCookie(key) {
           document.getElementById(domIds.welcome),
         );
       }
-
-      // if (facetCookie.PREVIEW_TAB_ID === response.tabId) {
-      // function sleep(ms) {
-      //   return new Promise(resolve => setTimeout(resolve, ms));
-      // }
-      // await sleep(1000);
-
-      // var node = document.getElementsByTagName('html').item(0);
-      // node.style.visibility = "visible";
-      // }
     });
   } catch (e) {
-    // Deal with the fact the chain failed
+    console.log('[ERROR]', e)
   }
 })();
 
-console.log('PAME');

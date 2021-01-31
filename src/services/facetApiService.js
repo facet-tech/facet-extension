@@ -220,7 +220,7 @@ const getOrCreateWorkspace = async (email, readFromStorage = true) => {
         // user exists
         return getUserResponse;
     } catch (e) {
-        console.log('[error] getOrCreateWorkspace', e);
+        console.log('[error] [getOrCreateWorkspace]', e);
     }
 }
 

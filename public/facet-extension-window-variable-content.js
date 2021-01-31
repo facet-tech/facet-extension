@@ -25,7 +25,6 @@
     const scriptTagVal = getFacetExtensionCookie(keysObj['FACET_EXTENSION_INJECTING_SCRIPT_TAG']).replace("https://api.facet.run/", "http://localhost:3002/");;
     if (!alreadyIntegrated) {
         var node = document.getElementsByTagName('html').item(0);
-        console.log('node', node);
         node.style.visibility = "hidden";
 
         var scriptTag = document.createElement('script');
