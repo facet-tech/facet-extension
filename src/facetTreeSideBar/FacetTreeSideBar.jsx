@@ -223,23 +223,19 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <CustomIconButtonContainer onClick={() => {
+      <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="Enable" key="edit" fill={color.ice} name="edit" onClick={() => {
         if (!isDevelopment()) {
           setLoadingSideBar(true);
         }
         sideBarHandler();
-      }} title="Disable" >
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
-      </CustomIconButtonContainer>
+      }} />
     ) : (
-      <CustomIconButtonContainer onClick={() => {
+      <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="Disable" key="edit-outline" name="edit-outline" onClick={() => {
         if (!isDevelopment()) {
-          setLoadingSideBar(true);
+          setLoadingSideBar(false);
         }
         sideBarHandler();
-      }} title="Enable">
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="27" height="27" title="facet" src={facetLogo} />
-      </CustomIconButtonContainer>
+      }} />
     );
 
   return (
@@ -296,8 +292,8 @@ export default function FacetTreeSideBar() {
             </div>
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
-              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
+              <FacetIconButton key="trash-2-outline" iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
+              <FacetIconButton key="save" iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
             </div>
           </div>
           <Divider style={{ backgroundColor: color.lightGray }} />

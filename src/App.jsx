@@ -42,7 +42,7 @@ function App() {
     load();
 
 
-  }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
+  }, [setIsPluginEnabled, isDomainWhitelisted, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
   if ((isPluginEnabled && isDomainWhitelisted) || isDevelopment()) {

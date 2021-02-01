@@ -18,6 +18,7 @@ import 'typeface-roboto';
 import FacetSnackbar from './shared/FacetSnackbar';
 import AmplifyService from './services/AmplifyService';
 import WelcomeAbroadStandalone from './shared/WelcomeAbroad/WelcomeAbroadStandalone';
+import isDevelopment from './utils/isDevelopment';
 
 // duplicate code
 const keys = {
@@ -26,10 +27,53 @@ const keys = {
   'FACET_EXTENSION_ALREADY_INTEGRATED': 'FACET_EXTENSION_ALREADY_INTEGRATED',
 }
 
+
+const snackbarConfig = {
+  autoHideDuration: 5000,
+  vertical: 'bottom',
+  horizontal: 'left'
+};
+
 function getFacetExtensionCookie(key) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${key}=`);
   if (parts.length === 2) return JSON.parse(parts.pop().split(';').shift());
+}
+
+if (isDevelopment()) {
+  if (isActivelyBeingDebugged(domIds.facetizer)) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <div style={{ width: `${styles.drawerWidth}px`, height: '100%' }} id="facet-sidebar">
+          <SnackbarProvider
+            style={{ height: '100%' }}
+            maxSnack={4}
+            disableWindowBlurListener
+            autoHideDuration={snackbarConfig.autoHideDuration}
+            iconVariant={{
+              error: '✖️',
+              warning: '⚠️',
+            }}
+            anchorOrigin={{
+              vertical: snackbarConfig.vertical,
+              horizontal: snackbarConfig.horizontal,
+            }}
+            content={(key, message) => (
+              <FacetSnackbar id={key} {...message} />
+            )}
+          >
+            <AppProvider>
+              <CoreProvider>
+                <App />
+              </CoreProvider>
+            </AppProvider>
+          </SnackbarProvider>
+
+        </div>
+      </React.StrictMode >,
+      document.getElementById(domIds.facetizer),
+    );
+  }
 }
 
 (async () => {
@@ -60,12 +104,6 @@ function getFacetExtensionCookie(key) {
       node.style.visibility = "visible";
 
       Amplify.configure(awsExports);
-
-      const snackbarConfig = {
-        autoHideDuration: 5000,
-        vertical: 'bottom',
-        horizontal: 'left'
-      }
 
       // TODO fix duplication
       if (process.env.NODE_ENV !== 'development') {

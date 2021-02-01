@@ -334,7 +334,7 @@ const scriptHasAlreadyBeenInjected = () => {
         if (found) {
             return;
         }
-        if (script.getAttribute('src') && script.getAttribute('src').includes('facet.run')) {
+        if (script.getAttribute('src') && script.getAttribute('src').includes('https://api.facet.run/js')) {
             found = true;
         }
     });
@@ -345,7 +345,6 @@ const initializeSingletonValues = async (eSBar) => {
     workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     let getDomainRes = await getOrPostDomain(workspaceId);
     domainId = getDomainRes.response.id;
-    getFacetResponse = await getFacet(domainId);
     enqueueSnackbar = eSBar;
 }
 
