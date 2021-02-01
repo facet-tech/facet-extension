@@ -103,7 +103,16 @@ const storage = {
 const ChromeRequestType = {
     GET_LOGGED_IN_USER: 'GET_LOGGED_IN_USER',
     OPEN_WELCOME_PAGE: 'OPEN_WELCOME_PAGE',
-    OPEN_PREVIEW_PAGE: 'OPEN_PREVIEW_PAGE'
+    OPEN_PREVIEW_PAGE: 'OPEN_PREVIEW_PAGE',
+    GET_CURRENT_TAB: 'GET_CURRENT_TAB',
+    SET_COOKIE_VALUE: 'SET_COOKIE_VALUE'
+};
+
+const cookieKeys = {
+    FACET_EXTENSION_PREVIEW_TAB_ID: 'FACET_EXTENSION_PREVIEW_TAB_ID',
+    FACET_EXTENSION_DISABLE_MO: 'FACET_EXTENSION_DISABLE_MO',
+    FACET_EXTENSION_ALREADY_INTEGRATED: 'FACET_EXTENSION_ALREADY_INTEGRATED',
+    FACET_EXTENSION_INJECTING_SCRIPT_TAG: 'FACET_EXTENSION_INJECTING_SCRIPT_TAG',
 };
 
 const api = {
@@ -134,7 +143,7 @@ const appId = 'hpkpjkdhgldjhcopdkmljdgceeojoglh';
 
 // helper during local debugging
 const isActivelyBeingDebugged = (id) => {
-    const activelyDebuggingElementIds = [domIds.previewLoadingBar];
+    const activelyDebuggingElementIds = [domIds.facetizer];
     if (!isDevelopment()) {
         return true;
     }
@@ -146,7 +155,7 @@ const defaultFacetName = 'Facet-1';
 export {
     facetizerId, facetKey, isPluginEnabled, snackbar,
     storage, LoginTypes, api, HTTPMethods,
-    APIUrl, styles, authState,
+    APIUrl, styles, authState, cookieKeys,
     authStorage, ChromeRequestType, color, fontSize,
     isActivelyBeingDebugged, domIds, appId, defaultFacetName
 };

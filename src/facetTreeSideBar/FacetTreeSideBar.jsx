@@ -25,6 +25,7 @@ import facetLogoIce from '../static/images/facet_ice_logo.svg';
 import CodeSnippet from '../shared/CodeSnippet';
 import FacetButton from '../shared/FacetButton';
 import isDevelopment from '../utils/isDevelopment';
+import { scriptHasAlreadyBeenInjected } from '../highlighter.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,7 +101,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    globalFacets, setGlobalFacets, jsUrl,
+    globalFacets, setGlobalFacets, jsUrl, url,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
@@ -222,23 +223,19 @@ export default function FacetTreeSideBar() {
     });
   const activateDeactivateElement = showSideBar
     ? (
-      <CustomIconButtonContainer onClick={() => {
+      <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="Enable" key="edit" fill={color.ice} name="edit" onClick={() => {
         if (!isDevelopment()) {
           setLoadingSideBar(true);
         }
         sideBarHandler();
-      }} title="Disable" >
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogo }} onMouseOut={(e) => { e.currentTarget.src = facetLogoIce }} width="27" height="27" title="facet" src={facetLogoIce} />
-      </CustomIconButtonContainer>
+      }} />
     ) : (
-      <CustomIconButtonContainer onClick={() => {
+      <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="Disable" key="edit-outline" name="edit-outline" onClick={() => {
         if (!isDevelopment()) {
-          setLoadingSideBar(true);
+          setLoadingSideBar(false);
         }
         sideBarHandler();
-      }} title="Enable">
-        <FacetImage onMouseOver={(e) => { e.currentTarget.src = facetLogoIce }} onMouseOut={(e) => { e.currentTarget.src = facetLogo }} width="27" height="27" title="facet" src={facetLogo} />
-      </CustomIconButtonContainer>
+      }} />
     );
 
   return (
@@ -278,21 +275,25 @@ export default function FacetTreeSideBar() {
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.saveAndPreview}>
+
               <FacetButton text="Save & Preview Page" onClick={async () => {
                 await onSaveClick();
+                const alreadyIntegrated = scriptHasAlreadyBeenInjected();
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
-                    jsUrl,
-                    href: window.location.href
+                    url: window.location.origin,
+                    injectingScriptTag: jsUrl,
+                    href: window.location.href,
+                    alreadyIntegrated
                   }
                 });
               }} />
             </div>
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
-              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
-              <FacetIconButton iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
+              <FacetIconButton key="trash-2-outline" iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
+              <FacetIconButton key="save" iconWidth="30" iconHeight="30" size="medium" title="save" name="save-outline" onClick={() => { onSaveClick(); }} aria-label="add" />
             </div>
           </div>
           <Divider style={{ backgroundColor: color.lightGray }} />

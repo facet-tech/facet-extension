@@ -12,8 +12,8 @@ import isDevelopment from './utils/isDevelopment';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
-  const { showSideBar, isPluginEnabled, setIsPluginEnabled,
-    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
+  const { showSideBar, isPluginEnabled, setIsPluginEnabled, isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
+
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
     async function (message, sendResponse) {
@@ -42,7 +42,7 @@ function App() {
     load();
 
 
-  }, [setIsPluginEnabled, isPluginEnabled, showSideBar]);
+  }, [setIsPluginEnabled, isDomainWhitelisted, isPluginEnabled, showSideBar]);
 
   // removing width/height hack
   if ((isPluginEnabled && isDomainWhitelisted) || isDevelopment()) {

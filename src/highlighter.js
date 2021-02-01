@@ -3,7 +3,6 @@ import { getKeyFromLocalStorage } from './shared/loadLocalStorage';
 import { getFacet, getOrPostDomain } from './services/facetApiService';
 import parsePath from './shared/parsePath';
 import { api, snackbar, styles } from './shared/constant';
-import { getElementNameFromPath } from './shared/parsePath';
 import isDevelopment from './utils/isDevelopment';
 
 /**
@@ -325,16 +324,32 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonR
     }
 }
 
+/**
+ * Detects whether the facet script has already been injected in the DOM
+ */
+const scriptHasAlreadyBeenInjected = () => {
+    const scriptArr = document.querySelectorAll('script');
+    let found = false;
+    scriptArr.forEach(script => {
+        if (found) {
+            return;
+        }
+        if (script.getAttribute('src') && script.getAttribute('src').includes('https://api.facet.run/js')) {
+            found = true;
+        }
+    });
+    return found;
+}
+
 const initializeSingletonValues = async (eSBar) => {
     workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     let getDomainRes = await getOrPostDomain(workspaceId);
     domainId = getDomainRes.response.id;
-    getFacetResponse = await getFacet(domainId);
     enqueueSnackbar = eSBar;
 }
 
 export {
     updateEvents, onMouseEnterHandle, loadInitialStateInDOM,
-    performDOMTransformation, setSelectedFacetHighlighter,
+    performDOMTransformation, setSelectedFacetHighlighter, scriptHasAlreadyBeenInjected,
     setFacetMapHighlighter, setNonRolledOutFacetsHighlighter, isSelectorValid
 };

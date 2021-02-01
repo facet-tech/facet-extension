@@ -10,6 +10,10 @@ const ColorButton = withStyles(() => ({
         '&:hover': {
             backgroundColor: color.electricB,
         },
+        '&:disabled': {
+            backgroundColor: color.grayA,
+            color: color.white
+        }
     },
 }))(Button);
 
@@ -24,7 +28,6 @@ export default ({ onClick, text, disabled, ...props }) => {
             variant="contained"
             color="primary"
             disabled={disabled}
-            className={classes.margin}
             onClick={() => { onClick() }}
             variant="contained"
             color="primary"

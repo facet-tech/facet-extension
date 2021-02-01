@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(
-    async function (request) {
+    async function (request, sender, sendResponse) {
         // need to grab from shared
         if (request.data === 'OPEN_WELCOME_PAGE') {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -8,30 +8,48 @@ chrome.runtime.onMessage.addListener(
             });
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
+            await chrome.tabs.create({ url: request.config.url }, function (tab) {
+                console.log('[FACET][Background] SETTING COOKIES FOR ', request.config.url);
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_DISABLE_MO`,
+                    value: "false"
+                });
 
-            chrome.tabs.create({ url: request.config.href }, function (tab) {
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_PREVIEW_TAB_ID`,
+                    value: tab.id.toString()
+                });
+
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_ALREADY_INTEGRATED`,
+                    value: request.config.alreadyIntegrated.toString()
+                });
+
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_EXTENSION_INJECTING_SCRIPT_TAG`,
+                    value: request.config.injectingScriptTag
+                });
+
                 chrome.tabs.executeScript(tab.id, {
-                    code: `
-                        console.log('[Facet][Initiating Preview]');
-                        window.IN_PREVIEW = true;
-                        window.JSURL = "${request.config.jsUrl}";
-                        document.getElementById('facetizer') && document.getElementById('facetizer').remove();
-                        var node = document.getElementsByTagName('html').item(0);
-                        var script = document.createElement('script');
-                        script.setAttribute('type', 'text/javascript');
-                        script.setAttribute('src', "${request.config.jsUrl}");
-                        script.setAttribute('facet-extension-loaded', false);
-                        script.setAttribute('is-preview', true);
-                        node.appendChild(script);
-
-                        node.style.visibility = "hidden";
-
-                        var previewNode = document.createElement('div');
-                        previewNode.setAttribute('id', 'facet-preview-loading-bar');
-                        node.appendChild(previewNode);
-                    `,
+                    file: 'preview-click-content.js',
                     runAt: 'document_start',
                 });
+            });
+        } else if (request.data === 'GET_CURRENT_TAB') {
+            if (sender.tab && sender.tab.id) {
+                sendResponse({ tabId: sender.tab.id });
+            } else {
+                sendResponse({ tabId: undefined });
+            }
+        } else if (request.data === 'SET_COOKIE_VALUE') {
+            chrome.cookies.set({
+                url: request.config.url,
+                name: request.config.name,
+                value: request.config.value
             });
         }
     },
