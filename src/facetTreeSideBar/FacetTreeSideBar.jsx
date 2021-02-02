@@ -274,8 +274,7 @@ export default function FacetTreeSideBar() {
               }} text={textToCopy} />
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
-            <div className={classes.saveAndPreview}>
-
+            {!isAlreadyIntegrated ? <div className={classes.saveAndPreview}>
               <FacetButton text="Preview" onClick={async () => {
                 await onSaveClick();
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();
@@ -288,8 +287,8 @@ export default function FacetTreeSideBar() {
                     alreadyIntegrated
                   }
                 });
-              }} disabled={isAlreadyIntegrated} />
-            </div>
+              }} />
+            </div> : null}
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}
               <FacetIconButton key="trash-2-outline" iconWidth="30" iconHeight="30" size="medium" name="trash-2-outline" onClick={() => { reset(); }} title="Delete All" aria-label="Delete All" />
