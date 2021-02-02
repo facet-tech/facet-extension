@@ -38,7 +38,7 @@
         }
     ],
     "web_accessible_resources": [
-        "facet-extension-window-variable-content.js",
+        "facet-extension-add-mo-script.js",
         "preview-click-content.js"
     ],
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxfhoAGlzfRw1Tdn5cbu9XozL65aZM+lNzvQIDCJBbXVV7sdireo6C9e0p4MmUl/VlJGeBRSQFVeh5cNIcYb0/zdoAmOlXI6vr1vaMZFWgA9dpmTUEiz2jqUV2jsTvhLUjNH8Xr0y0xs66Av2tP2Fj3+0dcSMF7op8MSyTOIimZipW5ct8ORwgXDvqhL5SaBm49rRDlwHmlmdLbdpQFbMFE5ZlM1ah9W/fHErATHsffZfXWQyVBZCOCKCYkPOHZj3wViIJbSaeVZv+XVUZl/uhPkL5Txzkb4qXricAzyyvmA3O/8XijiHjw+VpxzBIpAj7P4Bbgsal2r3VJeOC67OYwIDAQAB",

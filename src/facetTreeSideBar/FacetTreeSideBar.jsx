@@ -101,7 +101,7 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    globalFacets, setGlobalFacets, jsUrl, url,
+    globalFacets, setGlobalFacets, jsUrl, url, isAlreadyIntegrated,
     facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
@@ -276,7 +276,7 @@ export default function FacetTreeSideBar() {
             <Divider style={{ backgroundColor: color.lightGray }} />
             <div className={classes.saveAndPreview}>
 
-              <FacetButton text="Save & Preview Page" onClick={async () => {
+              <FacetButton text="Preview" onClick={async () => {
                 await onSaveClick();
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();
                 chrome.runtime.sendMessage({
@@ -288,7 +288,7 @@ export default function FacetTreeSideBar() {
                     alreadyIntegrated
                   }
                 });
-              }} />
+              }} disabled={isAlreadyIntegrated} />
             </div>
             <div className={classes.drawerHeader}>
               {activateDeactivateElement}

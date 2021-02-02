@@ -25,6 +25,8 @@
         'FACET_EXTENSION_DISABLE_MO': 'FACET_EXTENSION_DISABLE_MO',
         'FACET_EXTENSION_PREVIEW_TAB_ID': 'FACET_EXTENSION_PREVIEW_TAB_ID',
         'FACET_EXTENSION_ALREADY_INTEGRATED': 'FACET_EXTENSION_ALREADY_INTEGRATED',
+        'DURING_PREVIEW': 'DURING_PREVIEW',
+        'FACET_EXTENSION_PREVIEW_TAB_ID': 'FACET_EXTENSION_PREVIEW_TAB_ID'
     }
 
     function getFacetExtensionCookie(key) {
@@ -35,23 +37,27 @@
         }
     }
 
-    const previewId = getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]);
+    const duringPreview = getFacetExtensionCookie(keys["DURING_PREVIEW"]) === 'true';
+    console.log('[FACET][duringPreview]', duringPreview);
 
     await chrome.runtime.sendMessage({
         data: 'GET_CURRENT_TAB'
     }, async (response) => {
-        // response.tabId 
-        const val = response.tabId != previewId;
-        await chrome.runtime.sendMessage({
-            data: 'SET_COOKIE_VALUE',
-            config: {
-                url: window.location.origin,
-                name: 'FACET_EXTENSION_DISABLE_MO',
-                value: val.toString()
-            }
-        });
+        console.log('ELA MALAQA', response, getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]));
+
+        if (duringPreview || response.tabId.toString() === getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"])) {
+            console.log("[FACET] [mutationObserverVariableInjection] INJECTING facet-extension-window-variable-content.js");
+            injectScript(chrome.extension.getURL('facet-extension-add-mo-script.js'), 'body');
+            console.log('RESETING DURING PREVIEW');
+            await chrome.runtime.sendMessage({
+                data: 'SET_COOKIE_VALUE',
+                config: {
+                    url: window.location.origin,
+                    name: keys["DURING_PREVIEW"],
+                    value: 'false'
+                }
+            });
+        }
     });
 
-    console.log("[FACET][mutationObserverVariableInjection] INJECTING facet-extension-window-variable-content.js");
-    injectScript(chrome.extension.getURL('facet-extension-window-variable-content.js'), 'body');
 })();

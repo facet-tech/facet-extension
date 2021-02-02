@@ -4,8 +4,9 @@
  */
 
 (async function () {
+    console.log('[facet-extension-add-mo-script]');
 
-    const keysObj = {
+    const keys = {
         FACET_EXTENSION_PREVIEW_TAB_ID: 'FACET_EXTENSION_PREVIEW_TAB_ID',
         FACET_EXTENSION_DISABLE_MO: 'FACET_EXTENSION_DISABLE_MO',
         FACET_EXTENSION_ALREADY_INTEGRATED: 'FACET_EXTENSION_ALREADY_INTEGRATED',
@@ -20,8 +21,12 @@
         }
     }
 
-    const alreadyIntegrated = (getFacetExtensionCookie(keysObj["FACET_EXTENSION_ALREADY_INTEGRATED"]) === 'true');
-    const scriptTagVal = getFacetExtensionCookie(keysObj['FACET_EXTENSION_INJECTING_SCRIPT_TAG']);
+    const scriptTagVal = getFacetExtensionCookie(keys['FACET_EXTENSION_INJECTING_SCRIPT_TAG']);
+    const alreadyIntegrated = (getFacetExtensionCookie(keys["FACET_EXTENSION_ALREADY_INTEGRATED"]) === 'true');
+    const previewId = getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]);
+
+    console.log('alreadyIntegrated', alreadyIntegrated, 'previewId', previewId);
+
     if (!alreadyIntegrated) {
         var node = document.getElementsByTagName('html').item(0);
         node.style.visibility = "hidden";

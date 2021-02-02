@@ -10,7 +10,7 @@ import {
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
 import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
-import { loadInitialStateInDOM, performDOMTransformation, isSelectorValid } from './highlighter';
+import { loadInitialStateInDOM, performDOMTransformation, isSelectorValid, scriptHasAlreadyBeenInjected } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
 import parsePath from './shared/parsePath';
@@ -29,6 +29,7 @@ const AppProvider = ({ children }) => {
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
   const [isDomainWhitelisted, setIsDomainWhitelisted] = isDevelopment() ? useState(true) : useState(false);
 
+  const [isAlreadyIntegrated, setIsAlreadyIntegrated] = useState(scriptHasAlreadyBeenInjected());
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
   const [canDeleteElement, setCanDeleteElement] = useState(false);
   const [disabledFacets, setDisabledFacets] = useState([]);
@@ -223,7 +224,6 @@ const AppProvider = ({ children }) => {
       if (window.location.hostname === appId) {
         return;
       }
-
       const isPluginEnabledVal = await getKeyFromLocalStorage(storage.isPluginEnabled);
       // dirty quick fix
       const isAuthenticationDOM = document.getElementById(domIds.authentication);
@@ -392,6 +392,8 @@ const AppProvider = ({ children }) => {
       setGlobalFacets,
       onGlobalCheckboxClick,
       jsUrl,
+      isAlreadyIntegrated,
+      setIsAlreadyIntegrated,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading,
