@@ -38,7 +38,6 @@
         }
     ],
     "web_accessible_resources": [
-        "facet-extension-add-mo-script.js",
         "preview-click-content.js",
         "facet-mutation-observer.js"
     ],

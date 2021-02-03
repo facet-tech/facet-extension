@@ -47,7 +47,6 @@
 
         if (duringPreview || response.tabId.toString() === getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"])) {
 
-            injectScript(chrome.extension.getURL('facet-extension-add-mo-script.js'), 'body');
             injectScript(chrome.extension.getURL('facet-mutation-observer.js'), 'body');
 
             await chrome.runtime.sendMessage({

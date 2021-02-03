@@ -83,7 +83,6 @@ module.exports = (_, argv) => {
                     { from: "./public/welcome.html", to: "./" },
                     { from: "./public/background.js", to: "./" },
                     { from: "./public/mutationObserverVariableInjection.js", to: "./" },
-                    { from: "./public/facet-extension-add-mo-script.js", to: "./" },
                     { from: "./public/preview-click-content.js", to: "./" },
                     { from: "./public/facet-mutation-observer.js", to: "./" },
                 ],
