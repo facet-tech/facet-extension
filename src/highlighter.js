@@ -215,9 +215,13 @@ const onMouseClickHandle = function (event) {
     const setFacetMap = event.currentTarget.setFacetMap;
     const setNonRolledOutFacets = event.currentTarget.setNonRolledOutFacets;
     const enqueueSnackbar = event.currentTarget.enqueueSnackbar;
-    let selectedFacetName = facetMap.get(selectedFacet) || [];
+    const setGlobalFacets = event.currentTarget.setGlobalFacets;
+    let facet = facetMap.get(selectedFacet) || [];
     const domPath = getDomPath(event.target);
     const allPaths = extractAllDomElementPathsFromFacetMap(facetMap);
+    if (facetMap.size === 0) {
+        setGlobalFacets([selectedFacet])
+    }
     if (facetMap.size === 0) {
         setNonRolledOutFacets([selectedFacet])
     }
@@ -225,9 +229,9 @@ const onMouseClickHandle = function (event) {
         removeDomPath(facetMap, domPath, setFacetMap, selectedFacet, enqueueSnackbar);
         event.target.style.setProperty("opacity", "unset");
     } else {
-        const domElementObj = convertToDomElementObject(domPath, selectedFacetName);
-        selectedFacetName.push(domElementObj);
-        setFacetMap(new Map(facetMap.set(selectedFacet, selectedFacetName)));
+        const domElementObj = convertToDomElementObject(domPath, facet);
+        facet.push(domElementObj);
+        setFacetMap(new Map(facetMap.set(selectedFacet, facet)));
         if (nonRolledOutFacetsHighlighter.includes(selectedFacet)) {
             event.target.style.setProperty("opacity", "0.3", "important");
         }
@@ -294,7 +298,7 @@ function isElement(element) {
  * @param {*} facetMap Map of facets
  * @param {*} enqueueSnackbar notification context
  */
-const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonRolledOutFacets) => {
+const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonRolledOutFacets, setGlobalFacets) => {
     try {
         if (!workspaceId) {
             initializeSingletonValues(eSBar);
@@ -308,6 +312,7 @@ const updateEvents = async (addEventsFlag, facetMap, setFacetMap, eSBar, setNonR
                     e.setFacetMap = setFacetMap;
                     e.enqueueSnackbar = eSBar;
                     e.setNonRolledOutFacets = setNonRolledOutFacets;
+                    e.setGlobalFacets = setGlobalFacets;
                     if (addEventsFlag) {
                         e.addEventListener("click", onMouseClickHandle, false);
                         e.addEventListener("mouseenter", onMouseEnterHandle, false);
