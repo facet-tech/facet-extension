@@ -177,7 +177,6 @@ const AppProvider = ({ children }) => {
   };
 
   const getJSUrl = async () => {
-    console.log('@getJSUrl');
     const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     const domainRes = await getOrPostDomain(workspaceId);
     const result = `${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}`;
@@ -293,7 +292,6 @@ const AppProvider = ({ children }) => {
     })();
   }, []);
 
-  console.log('!!!computedFacetMap', computedFacetMap);
   const onSaveClick = async () => {
     try {
       await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);

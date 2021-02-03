@@ -156,23 +156,7 @@
     const targetNode = document;
     const config = { subtree: true, childList: true, attributes: true };
 
-    const previewTabId = getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]);
-    const disableMO = getFacetExtensionCookie(keys["FACET_EXTENSION_DISABLE_MO"]) === 'true';
-    const alreadyIntegrated = getFacetExtensionCookie(keys["FACET_EXTENSION_ALREADY_INTEGRATED"]) === 'true';
+    const observer = new MutationObserver(callback);
+    observer.observe(targetNode, config);
 
-    console.log('disableMO', disableMO);
-    console.log('previewTabId', previewTabId);
-    console.log('alreadyIntegrated', alreadyIntegrated);
-
-    /*
-     * disableMutationObserver can be passed through the facet-extension to override this behavior
-     */
-    if (!disableMO) {
-        console.log('TRIGGERING MO');
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, config);
-    } else {
-        console.log('[Facet Script] Facet extension is enabled. Blocking script execution.');
-    }
 })();
-

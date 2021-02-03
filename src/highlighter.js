@@ -335,7 +335,6 @@ const scriptHasAlreadyBeenInjected = () => {
             return;
         }
         if (script.getAttribute('src') && script.getAttribute('src').includes('https://api.facet.run/js')) {
-            console.log('EURIKA', script);
             found = true;
         }
     });

@@ -44,31 +44,11 @@
     await chrome.runtime.sendMessage({
         data: 'GET_CURRENT_TAB'
     }, async (response) => {
-        console.log('ELA MALAQA', response, getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"]));
 
         if (duringPreview || response.tabId.toString() === getFacetExtensionCookie(keys["FACET_EXTENSION_PREVIEW_TAB_ID"])) {
 
-            console.log("[FACET] [mutationObserverVariableInjection] INJECTING facet-extension-window-variable-content.js");
-
-            //PREPARE FACETMAP AS A COOKIE
-
-            async function getComputedFacetMap() {
-                try {
-                    console.log('EE', getFacetExtensionCookie(keys["FACET_EXTENSION_INJECTING_SCRIPT_TAG"]));
-                    const domainId = getFacetExtensionCookie(keys["FACET_EXTENSION_INJECTING_SCRIPT_TAG"]).split('=')[1];
-                    console.log('DOMAINid', domainId);
-                    const url = `http://localhost:3002/js/computefacetmap?id=${domainId}`;
-                    const res = await fetch(url);
-                    const result = await res.json();
-                    return result;
-                } catch (e) {
-                    return undefined;
-                }
-            }
-
             injectScript(chrome.extension.getURL('facet-extension-add-mo-script.js'), 'body');
             injectScript(chrome.extension.getURL('facet-mutation-observer.js'), 'body');
-            console.log('RESETING DURING PREVIEW');
 
             await chrome.runtime.sendMessage({
                 data: 'SET_COOKIE_VALUE',
