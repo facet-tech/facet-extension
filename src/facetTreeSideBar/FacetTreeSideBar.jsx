@@ -101,8 +101,8 @@ export default function FacetTreeSideBar() {
   const {
     facetMap, setFacetMap, loadingSideBar, logout,
     showSideBar, setShowSideBar, reset, onSaveClick, textToCopy, handleCloseMenuEl,
-    globalFacets, setGlobalFacets, jsUrl, url, isAlreadyIntegrated,
-    facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
+    globalFacets, setGlobalFacets, jsUrl, url, isAlreadyIntegrated, computedFacetMap, getComputedFacetMap,
+    setComputedFacetMap, facetLabelMenu, expanded, setExpanded, onDeleteDOMElement, enqueueSnackbar,
     setSelectedFacet, onGotoClick, nonRolledOutFacets, setNonRolledOutFacets, setLoadingSideBar } = useContext(AppContext);
   const [renamingFacet, setRenamingFacet] = useState(false);
   const facetArray = Array.from(facetMap, ([name, value]) => ({ name, value }));
@@ -277,14 +277,17 @@ export default function FacetTreeSideBar() {
             {!isAlreadyIntegrated ? <div className={classes.saveAndPreview}>
               <FacetButton text="Preview" onClick={async () => {
                 await onSaveClick();
+                let fComputedMap = await getComputedFacetMap(jsUrl);
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();
+                console.log('computedFacetMap', fComputedMap);
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
                     url: window.location.origin,
                     injectingScriptTag: jsUrl,
                     href: window.location.href,
-                    alreadyIntegrated
+                    alreadyIntegrated,
+                    facetMapPreview: fComputedMap
                   }
                 });
               }} />

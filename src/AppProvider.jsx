@@ -9,7 +9,7 @@ import {
   getFacet, convertGetFacetResponseToMap, getOrPostDomain, triggerApiCall, saveFacets, getOrCreateWorkspace, hasWhitelistedDomain, getGlobalArrayFromFacetResponse,
 } from './services/facetApiService';
 import loadLocalStorage, { clearStorage, getKeyFromLocalStorage, initSessionData, setKeyInLocalStorage } from './shared/loadLocalStorage';
-import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant } from './shared/constant';
+import { api, storage, HTTPMethods, authState as authStateConstant, APIUrl, defaultFacetName, snackbar, domIds, appId, isPluginEnabled as isPluginEnabledConstant, ChromeRequestType, cookieKeys } from './shared/constant';
 import { loadInitialStateInDOM, performDOMTransformation, isSelectorValid, scriptHasAlreadyBeenInjected } from './highlighter';
 import AmplifyService from './services/AmplifyService';
 import triggerDOMReload from './shared/popup/triggerDOMReload';
@@ -28,6 +28,7 @@ const AppProvider = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(true);
   const [loadingSideBar, setLoadingSideBar] = isDevelopment() ? useState(false) : useState(true);
   const [isDomainWhitelisted, setIsDomainWhitelisted] = isDevelopment() ? useState(true) : useState(false);
+  const [computedFacetMap, setComputedFacetMap] = useState({});
 
   const [isAlreadyIntegrated, setIsAlreadyIntegrated] = useState(scriptHasAlreadyBeenInjected());
   const [addedFacets, setAddedFacets] = useState(['Default-Facet']);
@@ -176,10 +177,36 @@ const AppProvider = ({ children }) => {
   };
 
   const getJSUrl = async () => {
+    console.log('@getJSUrl');
     const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     const domainRes = await getOrPostDomain(workspaceId);
     const result = `${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}`;
     setJSUrl(result);
+    return result;
+  }
+
+  const getComputedFacetMap = async (jsUrl) => {
+    try {
+      const domainId = jsUrl.split('=')[1];
+      const url = `http://localhost:3002/js/computefacetmap?id=${domainId}`;
+      const res = await fetch(url);
+      const result = await res.json();
+
+      await chrome.runtime.sendMessage({
+        data: ChromeRequestType.SET_COOKIE_VALUE,
+        config: {
+          url: window.location.origin,
+          name: 'FACET_MAP_PREVIEW',
+          value: JSON.stringify(result)
+        }
+      });
+
+      setComputedFacetMap(result);
+      return result;
+    } catch (e) {
+      return undefined;
+    }
+
   }
 
   useEffect(() => {
@@ -209,7 +236,7 @@ const AppProvider = ({ children }) => {
     });
   }, [nonRolledOutFacets]);
 
-  useEffect(() => {
+  useEffect(async () => {
     loadJWT();
     signInExistingUser();
     loadLocalStorage(setIsPluginEnabled, setIsUserAuthenticated, setWorkspaceId);
@@ -233,6 +260,9 @@ const AppProvider = ({ children }) => {
       }
       const storageEmail = await getKeyFromLocalStorage(storage.username);
       const workspaceResponse = await getOrCreateWorkspace(storageEmail, false);
+      const ff = await getJSUrl();
+      getComputedFacetMap(ff);
+
       const workspaceId = workspaceResponse?.response?.workspaceId;
       const domainResponse = await getOrPostDomain(workspaceId);
       const domainId = domainResponse?.response?.id;
@@ -263,9 +293,15 @@ const AppProvider = ({ children }) => {
     })();
   }, []);
 
+  console.log('!!!computedFacetMap', computedFacetMap);
   const onSaveClick = async () => {
     try {
       await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);
+      await getComputedFacetMap(jsUrl);
+      enqueueSnackbar({
+        message: `Hooray ~ Configuration has been saved!`,
+        variant: "success"
+      });
     } catch (e) {
       console.log('[ERROR] [onSaveClick] ', e);
     }
@@ -283,15 +319,18 @@ const AppProvider = ({ children }) => {
       const body = {
         domainId: domainRes.response.id
       };
-      enqueueSnackbar({
-        message: 'Facets reset.',
-        variant: snackbar.success.text
-      });
+
       for (let [facet, _] of facetMap) {
         onDeleteFacet(facet);
       }
 
       await triggerApiCall(HTTPMethods.DELETE, '/facet', body);
+      await getComputedFacetMap(jsUrl);
+
+      enqueueSnackbar({
+        message: 'Facets reset.',
+        variant: snackbar.success.text
+      });
     } catch (e) {
       console.log('[ERROR]', e);
     }
@@ -394,6 +433,9 @@ const AppProvider = ({ children }) => {
       jsUrl,
       isAlreadyIntegrated,
       setIsAlreadyIntegrated,
+      computedFacetMap,
+      setComputedFacetMap,
+      getComputedFacetMap,
 
       loggedInUser, setLoggedInUser, url, setUrl, login, isUserAuthenticated, setIsUserAuthenticated,
       workspaceId, email, setEmail, loading, setLoading,

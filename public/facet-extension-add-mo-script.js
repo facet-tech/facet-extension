@@ -33,7 +33,7 @@
 
         var scriptTag = document.createElement('script');
         scriptTag.setAttribute('type', 'text/javascript');
-        scriptTag.setAttribute('src', scriptTagVal);
-        node.prepend(scriptTag);
+        scriptTag.setAttribute('src', 'facet-mutation-observer.js');
+        // node.prepend(scriptTag);
     }
 })();

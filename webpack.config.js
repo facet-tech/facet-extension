@@ -85,6 +85,7 @@ module.exports = (_, argv) => {
                     { from: "./public/mutationObserverVariableInjection.js", to: "./" },
                     { from: "./public/facet-extension-add-mo-script.js", to: "./" },
                     { from: "./public/preview-click-content.js", to: "./" },
+                    { from: "./public/facet-mutation-observer.js", to: "./" },
                 ],
             }),
             // fix "process is not defined" error: https://stackoverflow.com/a/64553486/1373465

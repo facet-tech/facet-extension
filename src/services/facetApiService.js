@@ -345,10 +345,6 @@ const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalF
         let getDomainRes = await getOrPostDomain(workspaceId);
         const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
-        enqueueSnackbar({
-            message: `Hooray ~ Configuration has been saved!`,
-            variant: "success"
-        });
     } catch (e) {
         enqueueSnackbar({
             message: `Apologies, something went wrong. Please try again later.`,
