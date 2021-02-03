@@ -279,7 +279,6 @@ export default function FacetTreeSideBar() {
                 await onSaveClick();
                 let fComputedMap = await getComputedFacetMap(jsUrl);
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();
-                console.log('computedFacetMap', fComputedMap);
                 chrome.runtime.sendMessage({
                   data: ChromeRequestType.OPEN_PREVIEW_PAGE,
                   config: {
