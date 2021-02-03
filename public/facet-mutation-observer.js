@@ -83,22 +83,13 @@
         }
     }
 
-    //You cannot make HTTP call
-    async function getComputedFacetMap() {
-        try {
-            const url = `http://localhost:3002/js/computefacetmap?id=${getFacetExtensionCookie(keys["FACET_EXTENSION_INJECTING_SCRIPT_TAG"])}`;
-            const res = await fetch(url);
-            const result = await res.json();
-            return result;
-        } catch (e) {
-            return undefined;
-        }
-    }
-
     const globalFacetKey = 'GLOBAL-FACET-DECLARATION';
     // TODO COME FROM TEMPLATE
-    const data = JSON.parse(getFacetExtensionCookie(keys["FACET_MAP_PREVIEW"]));
+    const facetCookieData = getFacetExtensionCookie(keys["FACET_MAP_PREVIEW"]);
+    const data = JSON.parse(JSON.parse(facetCookieData));
+
     let nodesToRemove = (data[window.location.pathname] || []).concat(data[globalFacetKey] || []) || [];
+    console.log('[PREVIEW][FACETMAP]', nodesToRemove);
 
     /**
      * Computes whether the element's path is in the nodesToRemove array
