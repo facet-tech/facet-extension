@@ -1,5 +1,8 @@
 on:
   push:
+    paths:
+      # trigger change only when release.yml changes
+      - ".github/workflows/release.yml"
     branches: [master]
     tags:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
