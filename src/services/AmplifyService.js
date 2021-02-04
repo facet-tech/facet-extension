@@ -44,7 +44,7 @@ class AmplifyService {
 
         } catch (e) {
             console.log('[ERROR][getCurrentUserJTW]', e)
-            return undefined;
+            throw e;
         }
     }
 
@@ -54,8 +54,8 @@ class AmplifyService {
             const jwtToken = result?.accessToken?.jwtToken;
             return jwtToken;
         } catch (e) {
-            console.log('[ERROR][getCurrentUserJTW]', e)
-            return undefined;
+            console.log('[ERROR][getCurrentSession]', e);
+            throw e;
         }
     }
 }

@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
             await chrome.tabs.create({ url: request.config.url }, async function (tab) {
-                console.log('[FACET][Background] SETTING COOKIES FOR ', request.config, ":", request.config);
+                console.log('[FACET][Background][SETTING SETUP]', request.config, ":", request.config);
 
                 chrome.cookies.set({
                     url: request.config.url,

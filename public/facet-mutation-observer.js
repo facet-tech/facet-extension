@@ -67,29 +67,13 @@
         }
     }
 
-    function extractDomainId() {
-        try {
-            let domainId = getFacetExtensionCookie(keys["FACET_EXTENSION_INJECTING_SCRIPT_TAG"]);
-            console.log('DOMAINid', domainId)
-            if (domainId) {
-                let splitArr = domainId.split('~');
-                console.log('[extractDomainId] RETURNING', splitArr[1]);
-                return splitArr[1];
-            }
-            return undefined;
-        } catch (e) {
-            console.log('[extractDomainId] [err]', e);
-            return undefined;
-        }
-    }
-
     const globalFacetKey = 'GLOBAL-FACET-DECLARATION';
     // TODO COME FROM TEMPLATE
     const facetCookieData = getFacetExtensionCookie(keys["FACET_MAP_PREVIEW"]);
     const data = JSON.parse(JSON.parse(facetCookieData));
 
     let nodesToRemove = (data[window.location.pathname] || []).concat(data[globalFacetKey] || []) || [];
-    console.log('[PREVIEW][FACETMAP]', nodesToRemove);
+    console.log('[PREVIEW][FacetMap]', nodesToRemove);
 
     /**
      * Computes whether the element's path is in the nodesToRemove array

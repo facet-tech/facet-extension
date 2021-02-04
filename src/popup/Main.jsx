@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getKeyFromLocalStorage, setKeyInLocalStorage, clearStorage } from '../shared/loadLocalStorage';
+import { getKeyFromLocalStorage, setKeyInLocalStorage } from '../shared/loadLocalStorage';
 import {
   api, APIUrl, isPluginEnabled as isPluginEnabledConstant, authState as authStateConstant, color, fontSize, snackbar, LoginTypes, ChromeRequestType,
 } from '../shared/constant';
@@ -123,17 +123,15 @@ export default () => {
     </GridDiv>
     <MarginTop value=".5rem" />
     {btnElement}
-    {hasWhitelistedDomainVal ? <>
-      <MarginTop value=".5rem" />
-      <GridDivTwoColumn>
-        <div>
-          <FacetLabel fontSize={fontSize.large} color={color.ice} text="Enable Plugin" />
-        </div>
-        <div>
-          <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
-        </div>
-      </GridDivTwoColumn>
-    </> : null}
+    <MarginTop value=".5rem" />
+    <GridDivTwoColumn>
+      <div>
+        <FacetLabel fontSize={fontSize.large} color={color.ice} text="Enable Plugin" />
+      </div>
+      <div>
+        <FacetSwitch labelOn="On" labelOff="Off" callBack={onEnablePluginCB} value={isPluginEnabled} />
+      </div>
+    </GridDivTwoColumn>
   </TopDiv>;
   return (
     loading ? loadingElement : coreElement

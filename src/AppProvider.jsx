@@ -162,6 +162,8 @@ const AppProvider = ({ children }) => {
       setCurrAuthState(authStateConstant.signedIn);
     } catch (e) {
       console.log('[ERROR][signInExistingUser]', e);
+      setCurrAuthState(authStateConstant.signingIn);
+      setLoading(false);
     }
   }
 
