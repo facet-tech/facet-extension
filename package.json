@@ -1,6 +1,5 @@
 {
     "name": "react-content-script",
-    "version": "0.1.0",
     "homepage": "https://github.com/facets-io/facet-extension",
     "private": true,
     "scripts": {

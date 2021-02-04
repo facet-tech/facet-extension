@@ -35,8 +35,7 @@ export default function FacetToolbar() {
       marginRight: '1rem'
     },
     grid1: {
-      alignSelf: 'center',
-      justifySelf: 'center',
+      marginLeft: '.5rem'
     },
     grid2: {
       alignSelf: 'center',
@@ -66,14 +65,13 @@ export default function FacetToolbar() {
       </div>
       <div className={classes.fabGrid}>
         <div className={classes.grid1}>
-          <a href={`${APIUrl.websiteURL}/contact/`} target="_blank">
-            <FacetLabel text="Contact us" />
-          </a>
-          <br />
           <FacetLabel text="© Facet Ninja Technologies, 2021" />
           <br />
           <FacetLabel text="All rights reserved" />
-
+          <br />
+          <a style={{ textDecoration: 'none' }} href={`${APIUrl.websiteURL}/contact/`} target="_blank">
+            <FacetLabel color={color.ice} text="Contact us" />
+          </a>
         </div>
         <div className={classes.grid2}>
           <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">
