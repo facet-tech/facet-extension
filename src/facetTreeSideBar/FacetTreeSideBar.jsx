@@ -252,7 +252,7 @@ export default function FacetTreeSideBar() {
           <div className={classes.gridDiv}>
             <TopDiv>
               <div>
-                <FacetImage title="facet" href="https://facet.ninja/" target="_blank" src={facetTypography} />
+                <FacetImage title="facet" href="https://facet.run/" target="_blank" src={facetTypography} />
               </div>
               <div>
                 <FacetIconButton title="info" name="info-outline" onClick={() => {

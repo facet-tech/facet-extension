@@ -25,7 +25,7 @@ yarn build
 ### See changes in chrome:
 
 2. `yarn build`
-3. Click the reload button next to the facet.ninja plugin and you are settled.
+3. Click the reload button next to the facet-extension plugin and you are settled.
 
 ![Facetizer](./readme_assets/chrome_installation.png)
 

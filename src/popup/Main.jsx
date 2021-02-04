@@ -100,7 +100,7 @@ export default () => {
   const loadingElement = <TopDiv>
     <GridDiv>
       <div>
-        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+        <FacetImage title="facet" href="https://facet.run/" src={facetLogo} />
       </div>
     </GridDiv>
     <MarginTop value=".5rem" />
@@ -110,7 +110,7 @@ export default () => {
   const coreElement = <TopDiv>
     <GridDiv>
       <div>
-        <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+        <FacetImage title="facet" href="https://facet.run/" src={facetLogo} />
       </div>
       <div>
         <FacetIconButton title="info" name="info-outline" onClick={() => {

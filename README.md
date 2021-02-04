@@ -40,4 +40,4 @@ Please read [the full text](/CODE_OF_CONDUCT.md).
 
 ## License
 
-facet.ninja [MIT](./LICENSE)
+Facet [MIT](./LICENSE)

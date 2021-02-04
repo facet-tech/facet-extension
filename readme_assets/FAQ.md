@@ -46,4 +46,4 @@ The roadmap for facet-extension can be tracked through our [Github board](https:
 
 ### 10. How to contact? <br/>
 
-You can open [github issue](https://github.com/facets-io/facet-extension/issues) or email us at support@facet.ninja.
+You can open [github issue](https://github.com/facets-io/facet-extension/issues) or email us at support@facet.run.

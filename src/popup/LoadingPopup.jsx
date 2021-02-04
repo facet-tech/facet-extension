@@ -19,7 +19,7 @@ export default () => {
     return <TopDiv>
         <GridDiv>
             <div>
-                <FacetImage title="facet" href="https://facet.ninja/" src={facetLogo} />
+                <FacetImage title="facet" href="https://facet.run/" src={facetLogo} />
             </div>
         </GridDiv>
         <MarginTop value=".5rem" />

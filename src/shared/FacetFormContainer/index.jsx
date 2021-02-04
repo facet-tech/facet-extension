@@ -24,7 +24,7 @@ export default ({ children }) => {
     return <>
         <MarginTop value="2rem" />
         <div style={{ textAlign: 'center' }}>
-            <FacetImage title="facet" href="https://facet.ninja/" fill={color.ice} src={facetLogo} />
+            <FacetImage title="facet" href="https://facet.run/" fill={color.ice} src={facetLogo} />
         </div>
         <br />
         <BorderDiv>
@@ -32,7 +32,7 @@ export default ({ children }) => {
         </BorderDiv>
         <br />
         <div className={classes.center}>
-            <FacetImage title="facet" href="https://facet.ninja/" src={facetTypographyIcon} />
+            <FacetImage title="facet" href="https://facet.run/" src={facetTypographyIcon} />
         </div>
         <MarginTop value="2rem" />
     </>;
