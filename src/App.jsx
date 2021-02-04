@@ -12,7 +12,9 @@ import isDevelopment from './utils/isDevelopment';
 
 function App() {
   const { enqueueSnackbar } = useSnackbar();
-  const { showSideBar, isPluginEnabled, setIsPluginEnabled, isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar, setNonRolledOutFacets } = useContext(AppContext);
+  const { showSideBar, isPluginEnabled, setIsPluginEnabled,
+    isDomainWhitelisted, facetMap, setFacetMap, setLoadingSideBar,
+    globalFacets, setGlobalFacets, setNonRolledOutFacets } = useContext(AppContext);
 
   // TODO potential need of refactor
   chrome && chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(
@@ -32,9 +34,9 @@ function App() {
         return;
       }
       if (showSideBar) {
-        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets);
+        await updateEvents(true, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets, setGlobalFacets);
       } else {
-        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets);
+        await updateEvents(false, facetMap, setFacetMap, enqueueSnackbar, setNonRolledOutFacets, setGlobalFacets);
       }
       setLoadingSideBar(false);
     }

@@ -8,8 +8,9 @@ chrome.runtime.onMessage.addListener(
             });
             return;
         } else if (request.data === 'OPEN_PREVIEW_PAGE') {
-            await chrome.tabs.create({ url: request.config.url }, function (tab) {
-                console.log('[FACET][Background] SETTING COOKIES FOR ', request.config.url);
+            await chrome.tabs.create({ url: request.config.url }, async function (tab) {
+                console.log('[FACET][Background] SETTING COOKIES FOR ', request.config, ":", request.config);
+
                 chrome.cookies.set({
                     url: request.config.url,
                     name: `FACET_EXTENSION_DISABLE_MO`,
@@ -32,6 +33,18 @@ chrome.runtime.onMessage.addListener(
                     url: request.config.url,
                     name: `FACET_EXTENSION_INJECTING_SCRIPT_TAG`,
                     value: request.config.injectingScriptTag
+                });
+
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `DURING_PREVIEW`,
+                    value: "true"
+                });
+
+                chrome.cookies.set({
+                    url: request.config.url,
+                    name: `FACET_MAP_PREVIEW`,
+                    value: JSON.stringify(request.config.facetMapPreview)
                 });
 
                 chrome.tabs.executeScript(tab.id, {
