@@ -187,7 +187,7 @@ const AppProvider = ({ children }) => {
   const getComputedFacetMap = async (jsUrl) => {
     try {
       const domainId = jsUrl.split('=')[1];
-      const url = `http://localhost:3002/js/facetmap?id=${domainId}`;
+      const url = `${APIUrl.apiBaseURL}/js/facetmap?id=${domainId}`;
       const res = await fetch(url);
       const result = await res.json();
       await chrome.runtime.sendMessage({
