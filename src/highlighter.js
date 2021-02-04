@@ -171,7 +171,7 @@ const removeDomPath = (facetMap, domPath, setFacetMap, selectedFacet, enqueueSna
         if (facet.length !== newFacetArr.length) {
             if (key !== selectedFacet) {
                 enqueueSnackbar({
-                    message: `Element was moved from the "${key}" facet.`,
+                    message: `Element was moved to ${key} from ${selectedFacet}`,
                     variant: snackbar.info.text
                 });
             }

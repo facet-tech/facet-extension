@@ -275,7 +275,7 @@ export default function FacetTreeSideBar() {
             </CopyToClipboard>
             <Divider style={{ backgroundColor: color.lightGray }} />
             {!isAlreadyIntegrated ? <div className={classes.saveAndPreview}>
-              <FacetButton text="Preview" onClick={async () => {
+              <FacetButton text="Save and preview" onClick={async () => {
                 await onSaveClick();
                 let fComputedMap = await getComputedFacetMap(jsUrl);
                 const alreadyIntegrated = scriptHasAlreadyBeenInjected();

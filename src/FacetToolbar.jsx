@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppContext from './AppContext';
 import FacetTreeSideBar from './facetTreeSideBar/FacetTreeSideBar';
 import { Fab } from '@material-ui/core';
-import { color } from './shared/constant';
+import { APIUrl, color } from './shared/constant';
 import AddIcon from '@material-ui/icons/Add';
 import FacetLabel from './shared/FacetLabel';
 
@@ -66,7 +66,14 @@ export default function FacetToolbar() {
       </div>
       <div className={classes.fabGrid}>
         <div className={classes.grid1}>
-          <FacetLabel text="© Facet 2021 - All rights reserved." />
+          <a href={`${APIUrl.websiteURL}/contact/`} target="_blank">
+            <FacetLabel text="Contact us" />
+          </a>
+          <br />
+          <FacetLabel text="© Facet Ninja Technologies, 2021" />
+          <br />
+          <FacetLabel text="All rights reserved" />
+
         </div>
         <div className={classes.grid2}>
           <Fab onClick={() => addFacet()} size='small' className={classes.fabBtn} aria-label="add">

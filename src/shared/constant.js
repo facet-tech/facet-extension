@@ -6,6 +6,7 @@ const isUserAuthenticated = 'isUserAuthenticated';
 const apiBaseURL = 'https://api.facet.run';
 const testBaseURL = 'https://test.api.facet.run';
 const localBaseURL = 'http://localhost:3002';
+const websiteURL = 'https://facet.run';
 
 const authState = {
     notSignedIn: 'NOT_LOGGED_IN',
@@ -82,7 +83,8 @@ const APIUrl = {
     apiBaseURL,
     testBaseURL,
     localBaseURL,
-    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL
+    activeBaseURL: isDevelopment() ? localBaseURL : apiBaseURL,
+    websiteURL
 };
 
 const LoginTypes = {

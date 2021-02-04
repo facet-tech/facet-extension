@@ -298,7 +298,7 @@ const AppProvider = ({ children }) => {
       await saveFacets(facetMap, nonRolledOutFacets, enqueueSnackbar, globalFacets);
       await getComputedFacetMap(jsUrl);
       enqueueSnackbar({
-        message: `Hooray ~ Configuration has been saved!`,
+        message: `Configuration saved.`,
         variant: "success"
       });
     } catch (e) {
