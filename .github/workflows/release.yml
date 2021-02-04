@@ -1,7 +1,7 @@
+# This action is triggered only when this file changes
 on:
   push:
     paths:
-      # trigger change only when release.yml changes
       - ".github/workflows/release.yml"
     branches: [master]
     tags:
@@ -22,10 +22,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: 0.4.2
-          release_name: 0.4.2
+          tag_name: 0.4.3
+          release_name: 0.4.3
           body: |
-            - Fixed popup AUTH bug
-            - Renamed references facet.ninja -> facet.run
+            - Documentation changes
           draft: false
           prerelease: false
