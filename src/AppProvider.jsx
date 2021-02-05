@@ -192,6 +192,7 @@ const AppProvider = ({ children }) => {
       const url = `${APIUrl.apiBaseURL}/js/facetmap?id=${domainId}`;
       const res = await fetch(url);
       const result = await res.json();
+      
       await chrome.runtime.sendMessage({
         data: ChromeRequestType.SET_COOKIE_VALUE,
         config: {
