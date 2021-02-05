@@ -90,8 +90,8 @@ password: layani.kamora@primaryale.com
 ## Cookie Structure
 
 ```
-FACET_EXTENSION_PREVIEW_TAB_ID: The TabID of Preview tab; updated onClick and on tab close consequently
-FACET_EXTENSION_DISABLE_MO:  Disables/enables the MO
+FACET_EXTENSION_PREVIEW_TAB_ID: The TabID of Preview tab; updated onClick and on tab close consequently - Used by `facet-mutation-observer.js`
+FACET_EXTENSION_DISABLE_MO:  Disables/enables the MO in an already integrated website - Used by the API's mutation observer script.
 FACET_EXTENSION_ALREADY_INTEGRATED:  Domain is already integrated with facet.run
 FACET_EXTENSION_INJECTING_SCRIPT_TAG:  script tag that ought to be injected
 ```

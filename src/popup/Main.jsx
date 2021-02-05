@@ -47,8 +47,15 @@ export default () => {
   const [loading, setLoading] = useState(true);
 
   const onEnablePluginCB = async (e) => {
-    setLoading(true);
-    chrome?.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome?.tabs?.query({ active: true, currentWindow: true }, async (tabs) => {
+      const urlOrigin = new URL(tabs[0].url).origin;
+      await chrome.cookies.set({
+        url: urlOrigin,
+        name: `FACET_EXTENSION_DISABLE_MO`,
+        value: Boolean(!isPluginEnabled).toString()
+      });
+      setLoading(true);
+
       chrome.tabs.sendMessage(tabs[0].id, { [isPluginEnabledConstant]: e }, async () => {
         setKeyInLocalStorage(isPluginEnabledConstant, e);
         const isPluginEnabledValue = await getKeyFromLocalStorage(isPluginEnabledConstant);
@@ -56,9 +63,9 @@ export default () => {
         setIsPluginEnabled(isPluginEnabledValue);
         setLoading(false);
       });
+      setKeyInLocalStorage(isPluginEnabledConstant, e);
+      setIsPluginEnabled(e);
     });
-    setKeyInLocalStorage(isPluginEnabledConstant, e);
-    setIsPluginEnabled(e);
   };
 
   useEffect(() => {
