@@ -143,20 +143,20 @@
     events "^3.1.0"
     sinon "^7.5.0"
 
-"@aws-amplify/ui-components@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-components/-/ui-components-1.0.1.tgz#e5090306821be293e0cdd4b7c4a5d61c789cf9b5"
-  integrity sha512-lWOInyHs2kfTDu0obTO9Us0eWzRcY8GDqst2dtEkLa4ugPGn+kmuIJOwmW2wlVwMu7evrgosLa+A9+Ty7n+m4A==
+"@aws-amplify/ui-components@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-components/-/ui-components-1.0.2.tgz#18ab284452c38727708b6b29f3cf2d8b4443491b"
+  integrity sha512-RHNk3FrAiH42ohwNxUIrdX+kzIRvoauatxLWdN3qsdmzQTwN+emg34nHr9jQPTqHPZOnDhfPRUdpYh0SKLZAWg==
   dependencies:
     qrcode "^1.4.4"
     uuid "^8.2.0"
 
-"@aws-amplify/ui-react@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react/-/ui-react-1.0.1.tgz#0d2435f8decf1cb1b7e6513daba7617c7e426b9c"
-  integrity sha512-zbvXqWkk1GTm1kZVn5CwCvmorsc5qRXZ/U+Vh8W5aK+LsHjCaQVzgXVPVztMViR3J88PSy7RPqce5V1wSPAlTA==
+"@aws-amplify/ui-react@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react/-/ui-react-1.0.2.tgz#5c5f722ed77c38aa37a2804f0842dbdc75392bbf"
+  integrity sha512-bX/6XHzGPs7D5VESmvgnbMvHswSsU7MW2eQ6V2lXx7jhPnezhxql5+3ekKBMnJkapNrDD2nYN+ph21mDbXV/fQ==
   dependencies:
-    "@aws-amplify/ui-components" "1.0.1"
+    "@aws-amplify/ui-components" "1.0.2"
 
 "@aws-amplify/ui@2.0.2":
   version "2.0.2"
@@ -5925,10 +5925,10 @@ html-minifier-terser@^5.0.1:
     relateurl "^0.2.7"
     terser "^4.6.3"
 
-html-webpack-plugin@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.1.0.tgz#1c11bbe01ab9d1262c4b601edebcf394364b1f60"
-  integrity sha512-2axkp+2NHmvHUWrKe1dY4LyM3WatQEdFChr42OY7R/Ad7f0AQzaKscGCcqN/FtQBxo8rdfJP7M3RMFDttqok3g==
+html-webpack-plugin@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.2.0.tgz#d675ad0027a89de6b3d9950e0b57656dcfd97fbf"
+  integrity sha512-0wkVlJKq7edCN793gdLgdAm5m196qI2vb5SGXy4AtGOFB/lYKyS10+3Vkhe6Bo0acddAW3QVw+0ysgWoko/IEQ==
   dependencies:
     "@types/html-minifier-terser" "^5.0.0"
     html-minifier-terser "^5.0.1"
@@ -7411,10 +7411,10 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lodash@~2.4.1:
   version "2.4.2"
