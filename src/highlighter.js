@@ -349,7 +349,7 @@ const scriptHasAlreadyBeenInjected = () => {
 const initializeSingletonValues = async (eSBar) => {
     workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     let getDomainRes = await getOrPostDomain(workspaceId);
-    domainId = getDomainRes.response.id;
+    domainId = getDomainRes.response[0].id;
     enqueueSnackbar = eSBar;
 }
 

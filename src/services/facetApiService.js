@@ -128,7 +128,7 @@ const getDomain = async (domainName, workspaceId, readFromStorage = false) => {
 const getOrPostDomain = async (workspaceId) => {
     try {
         let domainRes = await getDomain(window.location.hostname, workspaceId);
-        const domainExists = domainRes && domainRes.response.id !== undefined;
+        const domainExists = Boolean(domainRes?.response[0]?.id);
         // create domain if it doesn't exist
         if (domainExists) {
             return domainRes;
@@ -343,7 +343,7 @@ const saveFacets = async (facetMap, nonRolledOutFacets, enqueueSnackbar, globalF
         // check if domain exists
         const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
         let getDomainRes = await getOrPostDomain(workspaceId);
-        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response.id, globalFacets);
+        const body = generateRequestBodyFromFacetMap(facetMap, nonRolledOutFacets, getDomainRes.response[0].id, globalFacets);
         await triggerApiCall(HTTPMethods.POST, '/facet', body);
     } catch (e) {
         enqueueSnackbar({

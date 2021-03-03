@@ -171,7 +171,7 @@ const AppProvider = ({ children }) => {
     try {
       const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
       const domainRes = await getOrPostDomain(workspaceId);
-      const text = `<script src="${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}"></script>`;
+      const text = `<script src="${APIUrl.apiBaseURL}/js?id=${domainRes?.response[0]?.id}"></script>`;
       setTextToCopy(text);
     } catch (e) {
       console.log('[ERROR][loadCopySnippet]', e);
@@ -181,7 +181,7 @@ const AppProvider = ({ children }) => {
   const getJSUrl = async () => {
     const workspaceId = await getKeyFromLocalStorage(api.workspace.workspaceId);
     const domainRes = await getOrPostDomain(workspaceId);
-    const result = `${APIUrl.apiBaseURL}/js?id=${domainRes.response.id}`;
+    const result = `${APIUrl.apiBaseURL}/js?id=${domainRes?.response[0]?.id}`;
     setJSUrl(result);
     return result;
   }
@@ -192,7 +192,7 @@ const AppProvider = ({ children }) => {
       const url = `${APIUrl.apiBaseURL}/js/facetmap?id=${domainId}`;
       const res = await fetch(url);
       const result = await res.json();
-      
+
       await chrome.runtime.sendMessage({
         data: ChromeRequestType.SET_COOKIE_VALUE,
         config: {
@@ -266,7 +266,7 @@ const AppProvider = ({ children }) => {
 
       const workspaceId = workspaceResponse?.response?.workspaceId;
       const domainResponse = await getOrPostDomain(workspaceId);
-      const domainId = domainResponse?.response?.id;
+      const domainId = domainResponse?.response[0]?.id;
       await initSessionData({ workspaceId, domainId });
       const getFacetRequest = await getFacet(domainId);
       loadCopySnippet();

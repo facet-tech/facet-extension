@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Facet",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "description": "Facet | No-code feature rollouts",
     "icons": {
         "512": "facet_logo_512x512.png"
